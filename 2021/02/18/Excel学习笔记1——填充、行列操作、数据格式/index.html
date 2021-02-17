@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"snowmoon.top","root":"/","images":"/images","scheme":"Pisces","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}};
+  </script>
+<meta name="description" content="行列填充 序列填充：填充-等差数列 设置步长与终止值后填充 填充：   向右：Ctrl + R 向下：Ctrl + D 在选中单元格附近悬停，出现黑色十字后双击 若要下方单元格填充与上方一样的内容则选择时候选中含有数据的单元格   快速填充：Ctrl + E  快速填充非常好用，能用来将旁边的内容中你需要的部分提取出来，或者在每行&#x2F;列对应的数据组合成你想要的目标内容后放到几个目标格子中然后Ctrl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:url" content="https://snowmoon.top/2021/02/18/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/index.html">
+<meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:description" content="行列填充 序列填充：填充-等差数列 设置步长与终止值后填充 填充：   向右：Ctrl + R 向下：Ctrl + D 在选中单元格附近悬停，出现黑色十字后双击 若要下方单元格填充与上方一样的内容则选择时候选中含有数据的单元格   快速填充：Ctrl + E  快速填充非常好用，能用来将旁边的内容中你需要的部分提取出来，或者在每行&#x2F;列对应的数据组合成你想要的目标内容后放到几个目标格子中然后Ctrl">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-17T17:04:48.698Z">
+<meta property="article:modified_time" content="2021-02-17T17:15:03.774Z">
+<meta property="article:author" content="Zheng Haoyu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://snowmoon.top/2021/02/18/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title> | SnowMoon-Haoyu's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="SnowMoon-Haoyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">SnowMoon-Haoyu's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录成长，变得更强！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%A1%AB%E5%85%85"><span class="nav-number">1.</span> <span class="nav-text">行列填充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">行列操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">数据格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%97%B6%E9%97%B4%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">常用时间代码示例</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Zheng Haoyu</p>
+  <div class="site-description" itemprop="description">本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://snowmoon.top/2021/02/18/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Zheng Haoyu">
+      <meta itemprop="description" content="本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SnowMoon-Haoyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-02-18 01:04:48 / 修改时间：01:15:03" itemprop="dateCreated datePublished" datetime="2021-02-18T01:04:48+08:00">2021-02-18</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="行列填充"><a href="#行列填充" class="headerlink" title="行列填充"></a>行列填充</h3><ul>
+<li><strong>序列填充</strong>：填充-等差数列 设置步长与终止值后填充</li>
+<li><strong>填充</strong>：</li>
+</ul>
+<ol>
+<li>向右：Ctrl + R</li>
+<li>向下：Ctrl + D</li>
+<li>在选中单元格附近悬停，出现黑色十字后双击</li>
+<li>若要下方单元格填充与上方一样的内容则选择时候选中含有数据的单元格</li>
+</ol>
+<ul>
+<li><p><strong>快速填充</strong>：Ctrl + E</p>
+<blockquote>
+<p>快速填充非常好用，能用来将旁边的内容中你需要的部分提取出来，或者在每行/列对应的数据组合成你想要的目标内容后放到几个目标格子中然后Ctrl + E就能快速的把附近的单元格填充好</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="行列操作"><a href="#行列操作" class="headerlink" title="行列操作"></a>行列操作</h3><ul>
+<li><strong>自动调整列宽/行高</strong>：选中整个行/列（一定要是行/列）后移动到两行/两列之间直至出现双箭头然后双击即可自动调整行列宽</li>
+</ul>
+<a id="more"></a>
+
+<ul>
+<li><strong>移动并复制列和行</strong>：选中后Ctrl+shift拖动列行</li>
+<li><strong>移动</strong>：选中后按Shift拖动</li>
+<li><strong>添加行/列</strong>：Ctrl + Shift + =</li>
+<li><strong>删除行/列</strong>：Ctrl + -</li>
+</ul>
+<h3 id="数据格式"><a href="#数据格式" class="headerlink" title="数据格式"></a>数据格式</h3><ul>
+<li><p><strong>设置数据格式的快捷键</strong>：Ctrl + 1</p>
+<blockquote>
+<p>文本默认是左对齐的，数字默认是右对齐的</p>
+<p>当输入数字超过11位时，数字格式默认使用科学计数法，超过15位时，末尾默认补为0</p>
+</blockquote>
+</li>
+<li><p><strong>将数字直接输入为文本：</strong></p>
+</li>
+</ul>
+<ol>
+<li>将单元格默认格式改为文本</li>
+<li>输入时在数字前方加入一个英文的’</li>
+<li></li>
+</ol>
+<ul>
+<li><strong>数字各位补0</strong>：设置单元格格式时候选自定义格式，要用几位输入几个0，即1-&gt;0001只需要在自定义格式中输入0000</li>
+<li><strong>在数字后方加单位</strong>：选中单元格，自定义格式，然后在同时格式后面输入”单位”，引号必须用英文的。</li>
+<li><strong>在文本前/后统一加入特定词语</strong>：自定义格式时输入   <em>想添加的字词@</em>  即原本为   <em>好用</em>   ，设置后变为   <em>想添加的字词好用</em>   ，@为原单元格数据的通配符</li>
+<li><strong>转换数据格式方法（万能）</strong>：选中单元格后在菜单栏 数据-分列-下一步-下一步-<em>选择好需要的目标格式</em>-完成</li>
+</ul>
+<ul>
+<li><strong>将单元格设置后为能快速输入男/女等字词的格式</strong>：自定义单元格格式，输入**[=1]”男”;[=0]”女”**</li>
+</ul>
+<ul>
+<li><strong>人民币面值转大写公式：</strong></li>
+</ul>
+<p><code>=RIGHT(TEXT(A1*100,&quot;[DBNum2]0仟0佰0拾0万0仟0佰0拾0元0角0分&quot;),(LEN(A1*100))*2)</code></p>
+<h4 id="常用时间代码示例"><a href="#常用时间代码示例" class="headerlink" title="常用时间代码示例"></a>常用时间代码示例</h4><table>
+<thead>
+<tr>
+<th>代码1</th>
+<th>示例1</th>
+<th>代码2</th>
+<th>示例3</th>
+<th>代码4</th>
+<th>示例5</th>
+<th>代码6</th>
+<th>示例7</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Y（年）</td>
+<td>17</td>
+<td>YY</td>
+<td>17</td>
+<td>YYY</td>
+<td>2017</td>
+<td>YYYY</td>
+<td>2017</td>
+</tr>
+<tr>
+<td>M（月）</td>
+<td>1</td>
+<td>MM</td>
+<td>1</td>
+<td>MMM</td>
+<td>Jan</td>
+<td>MMMM</td>
+<td>January</td>
+</tr>
+<tr>
+<td>D（日/星期）</td>
+<td>1</td>
+<td>DD</td>
+<td>1</td>
+<td>DDD</td>
+<td>Sun</td>
+<td>DDDD</td>
+<td>Sunday</td>
+</tr>
+<tr>
+<td>A（星期）</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>AAA</td>
+<td>日</td>
+<td>AAAA</td>
+<td>星期日</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>代码</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>h:mm</td>
+<td>12:34:00</td>
+</tr>
+<tr>
+<td>h:mm:ss</td>
+<td>12:34:56</td>
+</tr>
+<tr>
+<td>mm:ss</td>
+<td>10时56分00秒</td>
+</tr>
+<tr>
+<td>h”时”mm”分”ss”秒”</td>
+<td>12时34分56秒</td>
+</tr>
+<tr>
+<td>yyyy/m/d h:mm</td>
+<td>2017/1/1 12:34</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>代码符号</th>
+<th>符号的含义和作用</th>
+<th>通过示例来理解</th>
+<th>备注</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自定义格式代码</td>
+<td>原始数值</td>
+<td>自定义格式后显示值</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>m</td>
+<td>使用没有前导零的数字来显示月份（1～12）     使用没有前导零的数字来显示分钟（0～59）</td>
+<td>m</td>
+<td>2009/2/2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>m</td>
+<td>0.626793981</td>
+<td>15:2</td>
+<td>注意：要与h或者hh配合设置，否则单独设置m或者mm，会默认为显示为月份</td>
+<td></td>
+</tr>
+<tr>
+<td>mm</td>
+<td>使用有前导零的数字来显示分钟（01～12）     使用有前导零的数字来显示月份（00～59）</td>
+<td>mm</td>
+<td>0.626793981</td>
+<td>15:02</td>
+</tr>
+<tr>
+<td>mm</td>
+<td>2009/2/12</td>
+<td>02</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>mmm</td>
+<td>使用英文缩写来显示月份（Jan～Dec）</td>
+<td>mmm</td>
+<td>2009/2/12</td>
+<td>Feb</td>
+</tr>
+<tr>
+<td>mmmm</td>
+<td>使用英文全称来显示月份（January～December）</td>
+<td>mmmm</td>
+<td>2009/2/12</td>
+<td>February</td>
+</tr>
+<tr>
+<td>mmmmm</td>
+<td>显示月份的英文首字母（J～D）</td>
+<td>mmmmm</td>
+<td>2009/2/12</td>
+<td>F</td>
+</tr>
+<tr>
+<td>d</td>
+<td>使用没有前导零的数字来显示日期（1～31）</td>
+<td>d</td>
+<td>2009/2/2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>使用有前导零的数字来显示日期（01～31）</td>
+<td>dd</td>
+<td>2009/2/2</td>
+<td>02</td>
+</tr>
+<tr>
+<td>ddd</td>
+<td>使用英文缩写来显示星期几（Sun～Sat）</td>
+<td>ddd</td>
+<td>2009/2/12</td>
+<td>Thu</td>
+</tr>
+<tr>
+<td>dddd</td>
+<td>使用英文全称来显示星期几（Sunday～Saturday）</td>
+<td>dddd</td>
+<td>2009/2/12</td>
+<td>Thursday</td>
+</tr>
+<tr>
+<td>aaa</td>
+<td>使用中文简称显示星期几（一～日），不显示“星期”两字</td>
+<td>aaa</td>
+<td>2009/2/12</td>
+<td>四</td>
+</tr>
+<tr>
+<td>aaaa</td>
+<td>使用中文全称来显示星期几（星期一～星期日）</td>
+<td>aaaa</td>
+<td>2009/2/12</td>
+<td>星期四</td>
+</tr>
+<tr>
+<td>y/yy</td>
+<td>使用两位数显示年份（00～99）</td>
+<td>y/yy</td>
+<td>2009/2/12</td>
+<td>09</td>
+</tr>
+<tr>
+<td>yyyy</td>
+<td>使用4位数显示年份（1900～9999）</td>
+<td>yyyy</td>
+<td>2009/2/12</td>
+<td>2009</td>
+</tr>
+<tr>
+<td>e</td>
+<td>使用4位数显示年份（1900～10000）</td>
+<td>e</td>
+<td>2009/2/12</td>
+<td>2009</td>
+</tr>
+<tr>
+<td><strong>常用格式</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>格式代码</th>
+<th>数字</th>
+<th>TEXT(数字,格式代码)</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>G/通用格式</td>
+<td>10</td>
+<td>10</td>
+<td>常规格式</td>
+</tr>
+<tr>
+<td>“000.0”</td>
+<td>10.25</td>
+<td>“010.3”</td>
+<td>小数点前面不够三位以0补齐，保留1位小数，不足一位以0补齐</td>
+</tr>
+<tr>
+<td>####</td>
+<td>10.00</td>
+<td>10</td>
+<td>没用的0一律不显示</td>
+</tr>
+<tr>
+<td>00.##</td>
+<td>1.253</td>
+<td>01.25</td>
+<td>小数点前不足两位以0补齐，保留两位，不足两位不补位</td>
+</tr>
+<tr>
+<td>正数；负数；零</td>
+<td>1</td>
+<td>正数</td>
+<td>大于0，显示为“正数”</td>
+</tr>
+<tr>
+<td>正数；负数；零</td>
+<td>0</td>
+<td>零</td>
+<td>等于0，显示为“零”</td>
+</tr>
+<tr>
+<td>正数；负数；零</td>
+<td>-1</td>
+<td>负数</td>
+<td>小于0，显示为“负数”</td>
+</tr>
+<tr>
+<td>0000-00-00</td>
+<td>19820506</td>
+<td>1982-05-06</td>
+<td>按所示形式表示日期</td>
+</tr>
+<tr>
+<td>0000年00月00日</td>
+<td>19820506</td>
+<td>1982年05月06日</td>
+<td></td>
+</tr>
+<tr>
+<td>dddd</td>
+<td>2007/12/31</td>
+<td>Monday</td>
+<td>显示为英文星期几全称</td>
+</tr>
+<tr>
+<td>[&gt;=90]优秀；[&gt;=60]及格；不及格</td>
+<td>90</td>
+<td>优秀</td>
+<td>大于等于90，显示为“优秀”</td>
+</tr>
+<tr>
+<td>[&gt;=90]优秀；[&gt;=60]及格；不及格</td>
+<td>60</td>
+<td>及格</td>
+<td>大于等于60，小于90，显示为“及格”</td>
+</tr>
+<tr>
+<td>[&gt;=90]优秀；[&gt;=60]及格；不及格</td>
+<td>59</td>
+<td>不及格</td>
+<td>小于60，显示为“不及格”</td>
+</tr>
+<tr>
+<td>[DBNum1][$-804]G/通用格式</td>
+<td>125</td>
+<td>一百二十五</td>
+<td>中文小写数字</td>
+</tr>
+<tr>
+<td>[DBNum2][$-804]G/通用格式元整</td>
+<td>125</td>
+<td>壹佰贰拾伍元整</td>
+<td>中文大写数字，并加入“元整”字尾</td>
+</tr>
+<tr>
+<td>[DBNum3][$-804]G/通用格式</td>
+<td>125</td>
+<td>１百２十５</td>
+<td>中文小写数字</td>
+</tr>
+<tr>
+<td>[DBNum1][$-804]G/通用格式</td>
+<td>19</td>
+<td>一十九</td>
+<td>中文小写数字，11-19无设置</td>
+</tr>
+<tr>
+<td>[&gt;20][DBNum1];[DBNum1]d</td>
+<td>19</td>
+<td>十九</td>
+<td>中文小写数字，11-显示为十一而不是一十一</td>
+</tr>
+<tr>
+<td>0.00,K</td>
+<td>12536</td>
+<td>12.54K</td>
+<td>以千为单位</td>
+</tr>
+<tr>
+<td>#!.0000万元</td>
+<td>12536</td>
+<td>1.2536万元</td>
+<td>以万元为单位，保留4位小数</td>
+</tr>
+<tr>
+<td>#!.0,万元</td>
+<td>12536</td>
+<td>1.3万元</td>
+<td>以万元为单位，保留1位小数</td>
+</tr>
+<tr>
+<td>14000</td>
+<td></td>
+<td>1.40万元</td>
+<td>以万元为单位，保留二位小数。只能靠公式的形式解决</td>
+</tr>
+<tr>
+<td>#-99-##</td>
+<td>12345</td>
+<td>123-99-45</td>
+<td>在指定的数字中间差入指定的数字</td>
+</tr>
+<tr>
+<td>;#[红色]</td>
+<td>1000</td>
+<td>1000</td>
+<td>把负数变成正数并用红色显示，注意用TEXT函数不能实现数字变红，只能放在单元格中用自定义格式来实现目的。TEXT也不支持包含  * 的格式。</td>
+</tr>
+<tr>
+<td>[=1]”男”;[=2]”女”;”录入错误”;</td>
+<td>1</td>
+<td>男</td>
+<td>条件格式一般只可以写三项</td>
+</tr>
+<tr>
+<td>[=1]”男”;[=2]”女”;”录入错误”;</td>
+<td>2</td>
+<td>女</td>
+<td></td>
+</tr>
+<tr>
+<td>#-##-##</td>
+<td>20100108</td>
+<td>2010-01-08</td>
+<td>把不规范的时间格式以正确的时间格式显示出来</td>
+</tr>
+<tr>
+<td>“第”[DBNum1][$-804]G/通用格式”中学”</td>
+<td>35</td>
+<td>第三十五中学</td>
+<td></td>
+</tr>
+<tr>
+<td>???,???.???</td>
+<td>2345.789</td>
+<td>2,345.789</td>
+<td>小数点对齐</td>
+</tr>
+<tr>
+<td>???,???.???</td>
+<td>2.4</td>
+<td>2.4</td>
+<td>小数点对齐</td>
+</tr>
+<tr>
+<td>0.00_)”kg”;<a href="0.00">红色</a></td>
+<td>78</td>
+<td>78.00 kg</td>
+<td>_下划线，代表后面加一个和）一样宽度的空格</td>
+</tr>
+<tr>
+<td>0.00_)”kg”;<a href="0.00">红色</a></td>
+<td>(78.00)</td>
+<td>(78.00)</td>
+<td>负数变红并且自动在数字外面套上（）</td>
+</tr>
+<tr>
+<td><a href="mailto:"999999999"@">“999999999”@</a></td>
+<td>999999999785</td>
+<td>785</td>
+<td>必须是以文本形式储存的数字才有效.TEXT不支持文本数值的转换。</td>
+</tr>
+<tr>
+<td>0*-</td>
+<td>785———–</td>
+<td>785</td>
+<td>TEXT不支持* 用*把重复的一直显示到列宽</td>
+</tr>
+<tr>
+<td>G/通用格式;-G/通用格式;-</td>
+<td>-</td>
+<td></td>
+<td>把有0的单元格显示为-，其它不变</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/18/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheng Haoyu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
