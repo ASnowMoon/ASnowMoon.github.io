@@ -1,298 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Excel学习笔记3——函数求和及常见函数</title>
-    <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略》时的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
-</blockquote>
-<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><ul>
-<li>输入函数名的前几个字母后若要选择Excel联想的函数需使用小键盘的箭头，然后使用TAB键来选择联想的函数</li>
-</ul>
-<h3 id="相对引用与绝对引用"><a href="#相对引用与绝对引用" class="headerlink" title="相对引用与绝对引用"></a>相对引用与绝对引用</h3><p>  使用$可进行绝对引用，$位于列前则将列进行绝对引用，行前将行绝对引用</p>
-<p><strong>例：</strong>$A$2表示只使用A2这个单元格，$A2表示使用A列，但对应的行则使用相对的行，A$2表示使用第二行，对应的行根据相对关系使用</p>
-<p><strong>PS：按下F4可以切换引用的模式</strong></p>
-<h2 id="求和函数"><a href="#求和函数" class="headerlink" title="求和函数"></a>求和函数</h2><p><strong>快速求和</strong>：Alt + = 会直接智能地将求和结果放到选中区域或智能将列区域求和放到列的下方</p>
-<p><strong>定位求和</strong>：Ctrl + G定位空值后进行求和</p>
-<p><strong>合并单元格的求和</strong>：将合计栏选中，在第一格中输入sum(要求和的目标栏第一格:最后一格）-sum(合计栏单元格第二格：最后一格)</p>
-<p><strong>多表求和</strong>：</p>
-<ol>
-<li>输入SUM后选择要求和的目标表格的目标单元格，选择的每个单元格使用英文逗号隔开</li>
-</ol>
-<a id="more"></a>
-
-<ol start="2">
-<li><p>或者输入SUM后先按住Shift选中要求和的表格，再选择要求和的目标单元格</p>
-</li>
-<li><p>合并计算：数据-合并计算-引用位置-选择好每个表格的数据的位置后点击添加，记得将标签的首行和最左列选中然后进行合并计算</p>
-</li>
-</ol>
-<p><strong>条件求和：</strong> </p>
-<ol>
-<li>SUMIF函数（条件区域，条件，求和区域）</li>
-</ol>
-<ul>
-<li><p>条件注意要加上引号，区域绝对引用</p>
-<ul>
-<li>可用通配符查找：”*“</li>
-<li>条件的目标是中文则需要用英文引号引住</li>
-<li>更好用的方法是将条件(即要求的目标)做成新单元格后当做条件来求和</li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li><p>SUMIFS函数</p>
-<p>（求和区域，条件区域1，条件1，条件区域2，条件2，……）</p>
-</li>
-</ol>
-<ul>
-<li>这个函数能使用更多的条件，上一个函数只能使用一个条件</li>
-</ul>
-<ol start="3">
-<li><p>SUMPRODUCT函数</p>
-<p>①求乘积（区域1，区域2，区域3，……）</p>
-</li>
-</ol>
-<ul>
-<li><p>每个区域大小一致</p>
-<p>②多条件求和</p>
-<p>（条件1*条件2*……*条件n*求和区域）</p>
-</li>
-<li><p>区域不能采取整列引用，比如A：A</p>
-</li>
-<li><p>公式拖拽填充时，要考虑绝对引用</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>SUBTOTAL函数</th>
-<th></th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>包含隐藏值</td>
-<td>不包含隐藏值</td>
-<td align="center">作用</td>
-</tr>
-<tr>
-<td>1</td>
-<td>101</td>
-<td align="center">平均值</td>
-</tr>
-<tr>
-<td>2</td>
-<td>102</td>
-<td align="center">非空数值计算</td>
-</tr>
-<tr>
-<td>3</td>
-<td>103</td>
-<td align="center">非空单元格计数</td>
-</tr>
-<tr>
-<td>4</td>
-<td>104</td>
-<td align="center">最大值</td>
-</tr>
-<tr>
-<td>5</td>
-<td>105</td>
-<td align="center">最小值</td>
-</tr>
-<tr>
-<td>6</td>
-<td>106</td>
-<td align="center">乘积</td>
-</tr>
-<tr>
-<td>7</td>
-<td>107</td>
-<td align="center">标准偏差</td>
-</tr>
-<tr>
-<td>8</td>
-<td>108</td>
-<td align="center">总体标准偏差</td>
-</tr>
-<tr>
-<td>9</td>
-<td>109</td>
-<td align="center">求和</td>
-</tr>
-<tr>
-<td>10</td>
-<td>110</td>
-<td align="center">方差</td>
-</tr>
-<tr>
-<td>11</td>
-<td>111</td>
-<td align="center">总体方差</td>
-</tr>
-</tbody></table>
-<h2 id="平均值"><a href="#平均值" class="headerlink" title="平均值"></a>平均值</h2><ol>
-<li>【平均值】：<strong>AVERAGE</strong>（数字1，数字2，……，数字n）或者</li>
-</ol>
-<p>AVERAGE（数字区域）</p>
-<ol start="2">
-<li>【条件平均值】：<strong>AVERAGEIF</strong>（条件区域，条件，求平均值区域）</li>
-</ol>
-<ul>
-<li>注意绝对引用</li>
-</ul>
-<h2 id="最值"><a href="#最值" class="headerlink" title="最值"></a>最值</h2><ol>
-<li>【最大值】：MAX（数字1，数字2，……，数字n）或者<br>MAX（数字区域）</li>
-<li>【最小值】：MIN，参数同上<br>MAX常结合数组来使用<br>比如最新的个税公式：<br>=ROUND(MAX((A4-5000)*{0.03;0.1;0.2;0.25;0.3;0.35;0.45}-{0;210;1410;2660;4410;7160;15160},0),2)</li>
-</ol>
-<h2 id="四舍五入、绝对值函数"><a href="#四舍五入、绝对值函数" class="headerlink" title="四舍五入、绝对值函数"></a>四舍五入、绝对值函数</h2><ol>
-<li>【四舍五入】：ROUND（数字，保留小数位数）<blockquote>
-<p>1表示保留小数点后1位，0表示保留整数，-1表示保留到十位，以此类推</p>
-</blockquote>
-</li>
-<li>【直接舍去】：ROUNDDOWN（数字，保留小数位数）</li>
-<li>【向上取整】：ROUNDUP（数字，保留小数位数）</li>
-<li>【只保留整数】：INT（数字）</li>
-<li>【取绝对值】：ABS（数字）</li>
-</ol>
-<h2 id="随机数"><a href="#随机数" class="headerlink" title="随机数"></a>随机数</h2><ol>
-<li>【随机整数】：=RANDBETWEEN（0,100）</li>
-<li>【0-1随机小数】：=RAND()</li>
-<li>【n1~n2随机小数】：公式 =n1+RAND()<em>(n2-n1)<br>例如”3~50随机小数“<br>=3+RAND()</em>(50-3)<br>按F9或者有编辑操作该函数会时时刷新，选择性粘贴为数值可固定数值<h2 id="计数函数"><a href="#计数函数" class="headerlink" title="计数函数"></a>计数函数</h2></li>
-<li>【统计数字个数】：COUNT（区域1，区域2，……）</li>
-<li>【非空单元格数量】：COUNTA（区域1，区域2，……）</li>
-<li>【空单元格数量】：COUNTBLANK（区域1，区域2，……）</li>
-<li>【条件计数】COUNTIF（计数区域，计数条件）<h2 id="求余数："><a href="#求余数：" class="headerlink" title="求余数："></a>求余数：</h2>MOD（被除数，除数）<br>返回结果为余数，例如：<br>=MOD（28,5），结果为3<br>=MOD（3,5），结果仍为3<br>判断奇偶：=IF(MOD(A84,2)=0,”偶数”,”奇数”)</li>
-</ol>
-]]></content>
-      <categories>
-        <category>办公类软件</category>
-      </categories>
-      <tags>
-        <tag>Excel</tag>
-        <tag>办公学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Excel学习笔记2——定位、查找、排序、筛选</title>
-    <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
-</blockquote>
-<h1 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h1><h2 id="数据定位"><a href="#数据定位" class="headerlink" title="数据定位"></a>数据定位</h2><ul>
-<li><p><strong>找出两栏中的不同数据</strong>： Ctrl + \</p>
-</li>
-<li><p><strong>快速调出定位功能</strong>：Ctrl + G    或    F5</p>
-</li>
-<li><p><strong>空值充0</strong>：定位后在一个空值格中输入0，然后Ctrl + Enter</p>
-<blockquote>
-<p>在做数据处理的过程中空值会无法处理，所以缺少的值一般用0填充</p>
-</blockquote>
-</li>
-<li><p><strong>选中可见单元格</strong>：选中含有隐藏单元格的区域后按Alt + ;</p>
-</li>
-<li><p><strong>将合并的单元格分开填充（方便检索）</strong>：先选择合并后居中，再定位空格，后输入 = B2(合并后的第一格)，再按Ctrl + Enter</p>
-</li>
-<li><p><strong>批量删除空行</strong>：选中区域，定位空值，选择一个空行右键删除，选择整行</p>
-</li>
-<li><p><strong>定位不同的四个方法：</strong></p>
-<ol>
-<li>Ctrl + \ 定位</li>
-</ol>
-</li>
-</ul>
-<a id="more"></a>
-
-<ol start="2">
-<li><p>开始 - 条件格式 - 突出显示单元格规则 - 重复值</p>
-</li>
-<li><p>函数COUNTIF</p>
-<blockquote>
-<p>参数有两个，第一个选中查找的单元格（能选一堆），第二个选中查找的值（只能选一个）选择完成后可以显示后值在前述单元格中的数量，若为零即没有该值</p>
-</blockquote>
-</li>
-<li><p>选择性粘贴后选择减（只适用于多行且多列的情况，对比两个表格内容的差距）</p>
-</li>
-</ol>
-<h1 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h1><ul>
-<li><p><strong>删除每个单元格中的换行符</strong>：查找内容为 Alt + 1 + 0（只能小键盘输入，此为换行符）替换内容不填入。</p>
-</li>
-<li><p><strong>精确查找与模糊查找</strong>： 查找时 ? 是单个字符的通配符，* 是多个字符的通配符**<em>若要进行转义则使用  ~**</em></p>
-</li>
-<li><p><strong>通过格式查找</strong>：查找 - 格式 - 从单元格选择格式然后吸取想要查找的内容即可查找</p>
-<blockquote>
-<p>若要进行求和等运算则需要在查找完成后在公式 - 名称管理器 -新建名称将这些内容保存为一个名称，在进行计算的时候可以直接输入名称即可</p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li><p><strong>批量删除某个字</strong>：查找该字并替换为空值</p>
-</li>
-<li><p><strong>批量添加某字</strong>：在旁边的单元格处输入 = 选择原单元格 &amp; “想加入的字”，再复制后粘贴数值</p>
-</li>
-<li><h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><h3 id="常规排序"><a href="#常规排序" class="headerlink" title="常规排序"></a>常规排序</h3><ol>
-<li>以当前选定区域排序：只会重排当前区域</li>
-<li>拓展的选定区域排序：以当前区域为标的，对所有区域进行重排</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li><p><strong>按字符数排序</strong>：选择一列添加辅助列，然后使用LEN函数计算要排序的目标列，然后下拉后将排序的条件改为辅助列的字符数</p>
-</li>
-<li><p><strong>自定义排序</strong>：选择目标列排序然后自定义序列输入序列依据（王者 钻石 铂金 黄金 白银 青铜）每一个占一行，后点击排序</p>
-<h1 id="筛选"><a href="#筛选" class="headerlink" title="筛选"></a>筛选</h1><p>常规筛选逻辑和功能与查找定位十分相似，基本的通配符也是相同的 ? 和 *</p>
-<h3 id="高级筛选"><a href="#高级筛选" class="headerlink" title="高级筛选"></a>高级筛选</h3><p>点击高级筛选，在条件单元格中输入需要的条件，同一行表示需要同时满足，非同一行则只需要满足其中之一</p>
-<h3 id="数据验证"><a href="#数据验证" class="headerlink" title="数据验证"></a>数据验证</h3><p>筛选里面很好用的功能，数据验证出现了</p>
-<p>数据验证最大的作用为限制输入的数据格式，或者制作下拉菜单</p>
-<p>常规的限制输入格式功能很简单，基本上需要什么功能都可以通过直接看着数据验证的表格即可实现</p>
-<p>需要用函数实现的：</p>
-</li>
-</ul>
-<ol>
-<li><p><strong>单行中的数据限定为两种长度：</strong>选择后使用数据验证-文本长度-等于-输入以下代码。</p>
-<p><code>=OR(LEN($F2)=15,LEN($F2)=18)</code></p>
-<blockquote>
-<p>OR表示其中二者之一成立即可，LEN表示判断单元格字符长度，其中，LEN的参数需要自己重新选择</p>
-</blockquote>
-</li>
-<li><p><strong>限定输入中不能有空格：</strong>数据验证-自定义-介于-输入以下代码</p>
-<p> <code>=LEN(C2)=LEN(SUBSTITUTE(C2,&quot; &quot;,&quot;&quot;))</code></p>
-<blockquote>
-<p>以上代码表示原单元格去除空格后长度仍然等于原单元格，即原单元格不含有空格。<br>在使用时C2需要自己重新选自自己需要的单元格 </p>
-</blockquote>
-</li>
-<li><p><strong>限定输入值不能重复：</strong>数据验证-自定义-介于-输入以下代码</p>
-<p><code>=COUNTIF(A:A,A2)=1</code></p>
-<blockquote>
-<p>其中，A:A表示在A列中，COUNTIF函数用于计算该值在A列中是否只含一个值</p>
-</blockquote>
-</li>
-</ol>
-<h4 id="下拉菜单的制作"><a href="#下拉菜单的制作" class="headerlink" title="下拉菜单的制作"></a>下拉菜单的制作</h4><p><strong>单级下拉菜单</strong></p>
-<p>数据验证-序列-介于-    男,女 </p>
-<p>其中，每个词之间必须要用英文逗号分隔开</p>
-<p>也可以将来源选择为自己输入的一个序列表格</p>
-<p>若要让下拉菜单的内容随自己输入的序列表格改变，需要先选中源数据表，后按下Ctrl + T再创建序列即可</p>
-<p><strong>二级下拉菜单</strong></p>
-<p>用定位选择源数据，然后公式 - 根据所选内容创建 - 首行 - 确定</p>
-<blockquote>
-<p>该步骤的意义为使用首行 的名称创建几个Excel中的 “名称”,名称的意义与C语言中的数组的意义基本一致，此步骤创建的“名称”数组的名称即为首行对每列标注的名称，数组的内容即为各列中的内容</p>
-</blockquote>
-<p>在一列中使用一级下拉菜单需要选择 数据验证-序列-介于- 来源选择刚刚制作名称的表头</p>
-<p>在第二列中使用第二级下拉菜单将来源输入为以下函数</p>
-<p><code>=INDIRECT($A2)</code></p>
-<p>其中，A2为使用了一级下拉菜单的那一列的对应单元格，选择的时候需要先选中，再将A与2之间的$删除</p>
-]]></content>
-      <categories>
-        <category>办公类软件</category>
-      </categories>
-      <tags>
-        <tag>Excel</tag>
-        <tag>办公学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Excel学习笔记1——填充、行列操作、数据格式</title>
     <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/</url>
     <content><![CDATA[<h3 id="行列填充"><a href="#行列填充" class="headerlink" title="行列填充"></a>行列填充</h3><ul>
@@ -790,6 +498,298 @@
 <td>把有0的单元格显示为-，其它不变</td>
 </tr>
 </tbody></table>
+]]></content>
+      <categories>
+        <category>办公类软件</category>
+      </categories>
+      <tags>
+        <tag>Excel</tag>
+        <tag>办公学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Excel学习笔记2——定位、查找、排序、筛选</title>
+    <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
+</blockquote>
+<h1 id="定位"><a href="#定位" class="headerlink" title="定位"></a>定位</h1><h2 id="数据定位"><a href="#数据定位" class="headerlink" title="数据定位"></a>数据定位</h2><ul>
+<li><p><strong>找出两栏中的不同数据</strong>： Ctrl + \</p>
+</li>
+<li><p><strong>快速调出定位功能</strong>：Ctrl + G    或    F5</p>
+</li>
+<li><p><strong>空值充0</strong>：定位后在一个空值格中输入0，然后Ctrl + Enter</p>
+<blockquote>
+<p>在做数据处理的过程中空值会无法处理，所以缺少的值一般用0填充</p>
+</blockquote>
+</li>
+<li><p><strong>选中可见单元格</strong>：选中含有隐藏单元格的区域后按Alt + ;</p>
+</li>
+<li><p><strong>将合并的单元格分开填充（方便检索）</strong>：先选择合并后居中，再定位空格，后输入 = B2(合并后的第一格)，再按Ctrl + Enter</p>
+</li>
+<li><p><strong>批量删除空行</strong>：选中区域，定位空值，选择一个空行右键删除，选择整行</p>
+</li>
+<li><p><strong>定位不同的四个方法：</strong></p>
+<ol>
+<li>Ctrl + \ 定位</li>
+</ol>
+</li>
+</ul>
+<a id="more"></a>
+
+<ol start="2">
+<li><p>开始 - 条件格式 - 突出显示单元格规则 - 重复值</p>
+</li>
+<li><p>函数COUNTIF</p>
+<blockquote>
+<p>参数有两个，第一个选中查找的单元格（能选一堆），第二个选中查找的值（只能选一个）选择完成后可以显示后值在前述单元格中的数量，若为零即没有该值</p>
+</blockquote>
+</li>
+<li><p>选择性粘贴后选择减（只适用于多行且多列的情况，对比两个表格内容的差距）</p>
+</li>
+</ol>
+<h1 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h1><ul>
+<li><p><strong>删除每个单元格中的换行符</strong>：查找内容为 Alt + 1 + 0（只能小键盘输入，此为换行符）替换内容不填入。</p>
+</li>
+<li><p><strong>精确查找与模糊查找</strong>： 查找时 ? 是单个字符的通配符，* 是多个字符的通配符**<em>若要进行转义则使用  ~**</em></p>
+</li>
+<li><p><strong>通过格式查找</strong>：查找 - 格式 - 从单元格选择格式然后吸取想要查找的内容即可查找</p>
+<blockquote>
+<p>若要进行求和等运算则需要在查找完成后在公式 - 名称管理器 -新建名称将这些内容保存为一个名称，在进行计算的时候可以直接输入名称即可</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p><strong>批量删除某个字</strong>：查找该字并替换为空值</p>
+</li>
+<li><p><strong>批量添加某字</strong>：在旁边的单元格处输入 = 选择原单元格 &amp; “想加入的字”，再复制后粘贴数值</p>
+</li>
+<li><h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><h3 id="常规排序"><a href="#常规排序" class="headerlink" title="常规排序"></a>常规排序</h3><ol>
+<li>以当前选定区域排序：只会重排当前区域</li>
+<li>拓展的选定区域排序：以当前区域为标的，对所有区域进行重排</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><p><strong>按字符数排序</strong>：选择一列添加辅助列，然后使用LEN函数计算要排序的目标列，然后下拉后将排序的条件改为辅助列的字符数</p>
+</li>
+<li><p><strong>自定义排序</strong>：选择目标列排序然后自定义序列输入序列依据（王者 钻石 铂金 黄金 白银 青铜）每一个占一行，后点击排序</p>
+<h1 id="筛选"><a href="#筛选" class="headerlink" title="筛选"></a>筛选</h1><p>常规筛选逻辑和功能与查找定位十分相似，基本的通配符也是相同的 ? 和 *</p>
+<h3 id="高级筛选"><a href="#高级筛选" class="headerlink" title="高级筛选"></a>高级筛选</h3><p>点击高级筛选，在条件单元格中输入需要的条件，同一行表示需要同时满足，非同一行则只需要满足其中之一</p>
+<h3 id="数据验证"><a href="#数据验证" class="headerlink" title="数据验证"></a>数据验证</h3><p>筛选里面很好用的功能，数据验证出现了</p>
+<p>数据验证最大的作用为限制输入的数据格式，或者制作下拉菜单</p>
+<p>常规的限制输入格式功能很简单，基本上需要什么功能都可以通过直接看着数据验证的表格即可实现</p>
+<p>需要用函数实现的：</p>
+</li>
+</ul>
+<ol>
+<li><p><strong>单行中的数据限定为两种长度：</strong>选择后使用数据验证-文本长度-等于-输入以下代码。</p>
+<p><code>=OR(LEN($F2)=15,LEN($F2)=18)</code></p>
+<blockquote>
+<p>OR表示其中二者之一成立即可，LEN表示判断单元格字符长度，其中，LEN的参数需要自己重新选择</p>
+</blockquote>
+</li>
+<li><p><strong>限定输入中不能有空格：</strong>数据验证-自定义-介于-输入以下代码</p>
+<p> <code>=LEN(C2)=LEN(SUBSTITUTE(C2,&quot; &quot;,&quot;&quot;))</code></p>
+<blockquote>
+<p>以上代码表示原单元格去除空格后长度仍然等于原单元格，即原单元格不含有空格。<br>在使用时C2需要自己重新选自自己需要的单元格 </p>
+</blockquote>
+</li>
+<li><p><strong>限定输入值不能重复：</strong>数据验证-自定义-介于-输入以下代码</p>
+<p><code>=COUNTIF(A:A,A2)=1</code></p>
+<blockquote>
+<p>其中，A:A表示在A列中，COUNTIF函数用于计算该值在A列中是否只含一个值</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="下拉菜单的制作"><a href="#下拉菜单的制作" class="headerlink" title="下拉菜单的制作"></a>下拉菜单的制作</h4><p><strong>单级下拉菜单</strong></p>
+<p>数据验证-序列-介于-    男,女 </p>
+<p>其中，每个词之间必须要用英文逗号分隔开</p>
+<p>也可以将来源选择为自己输入的一个序列表格</p>
+<p>若要让下拉菜单的内容随自己输入的序列表格改变，需要先选中源数据表，后按下Ctrl + T再创建序列即可</p>
+<p><strong>二级下拉菜单</strong></p>
+<p>用定位选择源数据，然后公式 - 根据所选内容创建 - 首行 - 确定</p>
+<blockquote>
+<p>该步骤的意义为使用首行 的名称创建几个Excel中的 “名称”,名称的意义与C语言中的数组的意义基本一致，此步骤创建的“名称”数组的名称即为首行对每列标注的名称，数组的内容即为各列中的内容</p>
+</blockquote>
+<p>在一列中使用一级下拉菜单需要选择 数据验证-序列-介于- 来源选择刚刚制作名称的表头</p>
+<p>在第二列中使用第二级下拉菜单将来源输入为以下函数</p>
+<p><code>=INDIRECT($A2)</code></p>
+<p>其中，A2为使用了一级下拉菜单的那一列的对应单元格，选择的时候需要先选中，再将A与2之间的$删除</p>
+]]></content>
+      <categories>
+        <category>办公类软件</category>
+      </categories>
+      <tags>
+        <tag>Excel</tag>
+        <tag>办公学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Excel学习笔记3——函数求和及常见函数</title>
+    <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略》时的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
+</blockquote>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><ul>
+<li>输入函数名的前几个字母后若要选择Excel联想的函数需使用小键盘的箭头，然后使用TAB键来选择联想的函数</li>
+</ul>
+<h3 id="相对引用与绝对引用"><a href="#相对引用与绝对引用" class="headerlink" title="相对引用与绝对引用"></a>相对引用与绝对引用</h3><p>  使用$可进行绝对引用，$位于列前则将列进行绝对引用，行前将行绝对引用</p>
+<p><strong>例：</strong>$A$2表示只使用A2这个单元格，$A2表示使用A列，但对应的行则使用相对的行，A$2表示使用第二行，对应的行根据相对关系使用</p>
+<p><strong>PS：按下F4可以切换引用的模式</strong></p>
+<h2 id="求和函数"><a href="#求和函数" class="headerlink" title="求和函数"></a>求和函数</h2><p><strong>快速求和</strong>：Alt + = 会直接智能地将求和结果放到选中区域或智能将列区域求和放到列的下方</p>
+<p><strong>定位求和</strong>：Ctrl + G定位空值后进行求和</p>
+<p><strong>合并单元格的求和</strong>：将合计栏选中，在第一格中输入sum(要求和的目标栏第一格:最后一格）-sum(合计栏单元格第二格：最后一格)</p>
+<p><strong>多表求和</strong>：</p>
+<ol>
+<li>输入SUM后选择要求和的目标表格的目标单元格，选择的每个单元格使用英文逗号隔开</li>
+</ol>
+<a id="more"></a>
+
+<ol start="2">
+<li><p>或者输入SUM后先按住Shift选中要求和的表格，再选择要求和的目标单元格</p>
+</li>
+<li><p>合并计算：数据-合并计算-引用位置-选择好每个表格的数据的位置后点击添加，记得将标签的首行和最左列选中然后进行合并计算</p>
+</li>
+</ol>
+<p><strong>条件求和：</strong> </p>
+<ol>
+<li>SUMIF函数（条件区域，条件，求和区域）</li>
+</ol>
+<ul>
+<li><p>条件注意要加上引号，区域绝对引用</p>
+<ul>
+<li>可用通配符查找：”*“</li>
+<li>条件的目标是中文则需要用英文引号引住</li>
+<li>更好用的方法是将条件(即要求的目标)做成新单元格后当做条件来求和</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><p>SUMIFS函数</p>
+<p>（求和区域，条件区域1，条件1，条件区域2，条件2，……）</p>
+</li>
+</ol>
+<ul>
+<li>这个函数能使用更多的条件，上一个函数只能使用一个条件</li>
+</ul>
+<ol start="3">
+<li><p>SUMPRODUCT函数</p>
+<p>①求乘积（区域1，区域2，区域3，……）</p>
+</li>
+</ol>
+<ul>
+<li><p>每个区域大小一致</p>
+<p>②多条件求和</p>
+<p>（条件1*条件2*……*条件n*求和区域）</p>
+</li>
+<li><p>区域不能采取整列引用，比如A：A</p>
+</li>
+<li><p>公式拖拽填充时，要考虑绝对引用</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>SUBTOTAL函数</th>
+<th></th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>包含隐藏值</td>
+<td>不包含隐藏值</td>
+<td align="center">作用</td>
+</tr>
+<tr>
+<td>1</td>
+<td>101</td>
+<td align="center">平均值</td>
+</tr>
+<tr>
+<td>2</td>
+<td>102</td>
+<td align="center">非空数值计算</td>
+</tr>
+<tr>
+<td>3</td>
+<td>103</td>
+<td align="center">非空单元格计数</td>
+</tr>
+<tr>
+<td>4</td>
+<td>104</td>
+<td align="center">最大值</td>
+</tr>
+<tr>
+<td>5</td>
+<td>105</td>
+<td align="center">最小值</td>
+</tr>
+<tr>
+<td>6</td>
+<td>106</td>
+<td align="center">乘积</td>
+</tr>
+<tr>
+<td>7</td>
+<td>107</td>
+<td align="center">标准偏差</td>
+</tr>
+<tr>
+<td>8</td>
+<td>108</td>
+<td align="center">总体标准偏差</td>
+</tr>
+<tr>
+<td>9</td>
+<td>109</td>
+<td align="center">求和</td>
+</tr>
+<tr>
+<td>10</td>
+<td>110</td>
+<td align="center">方差</td>
+</tr>
+<tr>
+<td>11</td>
+<td>111</td>
+<td align="center">总体方差</td>
+</tr>
+</tbody></table>
+<h2 id="平均值"><a href="#平均值" class="headerlink" title="平均值"></a>平均值</h2><ol>
+<li>【平均值】：<strong>AVERAGE</strong>（数字1，数字2，……，数字n）或者</li>
+</ol>
+<p>AVERAGE（数字区域）</p>
+<ol start="2">
+<li>【条件平均值】：<strong>AVERAGEIF</strong>（条件区域，条件，求平均值区域）</li>
+</ol>
+<ul>
+<li>注意绝对引用</li>
+</ul>
+<h2 id="最值"><a href="#最值" class="headerlink" title="最值"></a>最值</h2><ol>
+<li>【最大值】：MAX（数字1，数字2，……，数字n）或者<br>MAX（数字区域）</li>
+<li>【最小值】：MIN，参数同上<br>MAX常结合数组来使用<br>比如最新的个税公式：<br>=ROUND(MAX((A4-5000)*{0.03;0.1;0.2;0.25;0.3;0.35;0.45}-{0;210;1410;2660;4410;7160;15160},0),2)</li>
+</ol>
+<h2 id="四舍五入、绝对值函数"><a href="#四舍五入、绝对值函数" class="headerlink" title="四舍五入、绝对值函数"></a>四舍五入、绝对值函数</h2><ol>
+<li>【四舍五入】：ROUND（数字，保留小数位数）<blockquote>
+<p>1表示保留小数点后1位，0表示保留整数，-1表示保留到十位，以此类推</p>
+</blockquote>
+</li>
+<li>【直接舍去】：ROUNDDOWN（数字，保留小数位数）</li>
+<li>【向上取整】：ROUNDUP（数字，保留小数位数）</li>
+<li>【只保留整数】：INT（数字）</li>
+<li>【取绝对值】：ABS（数字）</li>
+</ol>
+<h2 id="随机数"><a href="#随机数" class="headerlink" title="随机数"></a>随机数</h2><ol>
+<li>【随机整数】：=RANDBETWEEN（0,100）</li>
+<li>【0-1随机小数】：=RAND()</li>
+<li>【n1~n2随机小数】：公式 =n1+RAND()<em>(n2-n1)<br>例如”3~50随机小数“<br>=3+RAND()</em>(50-3)<br>按F9或者有编辑操作该函数会时时刷新，选择性粘贴为数值可固定数值<h2 id="计数函数"><a href="#计数函数" class="headerlink" title="计数函数"></a>计数函数</h2></li>
+<li>【统计数字个数】：COUNT（区域1，区域2，……）</li>
+<li>【非空单元格数量】：COUNTA（区域1，区域2，……）</li>
+<li>【空单元格数量】：COUNTBLANK（区域1，区域2，……）</li>
+<li>【条件计数】COUNTIF（计数区域，计数条件）<h2 id="求余数："><a href="#求余数：" class="headerlink" title="求余数："></a>求余数：</h2>MOD（被除数，除数）<br>返回结果为余数，例如：<br>=MOD（28,5），结果为3<br>=MOD（3,5），结果仍为3<br>判断奇偶：=IF(MOD(A84,2)=0,”偶数”,”奇数”)</li>
+</ol>
 ]]></content>
       <categories>
         <category>办公类软件</category>
