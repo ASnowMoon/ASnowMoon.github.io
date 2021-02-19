@@ -441,10 +441,10 @@
 <script>
 NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
-    new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":"149.28.11.86","placeholder":"在此输入您的留言","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":false,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
+    new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":null,"placeholder":"无需输入头像 昵称 网址 即可评论(*^▽^*)&#10valine评论不一定能及时看到，如果需要回复可以戳我主页的联系方式(～￣▽￣)～","avatar":"robohash","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
       el: '#valine-comments',
       path: "/archives/2021/",
-      serverURLs: "149.28.11.86"
+      serverURLs: "https://3kooisaa.api.lncldglobal.com"
     }));
   }, window.Valine);
 });
