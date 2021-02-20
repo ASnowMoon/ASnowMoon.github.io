@@ -517,6 +517,34 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo踩坑记录</title>
+    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑</p>
+</blockquote>
+<h1>使用了live2d时不蒜子访客统计无法显示</h1>
+<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本\themes\next\layout_partials\footer.njk 代码如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;%- if theme.busuanzi_count.total_visitors %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_container_site_pv&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Visitors</span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;site-uv&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_visitors&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_value_site_uv&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">&#123;%- endif %&#125;</span><br></pre></td></tr></table></figure>
+<p>发现这个标签<code>&lt;span id=&quot;busuanzi_container_site_pv&quot; style=&quot;display: none;&quot;&gt;</code>中出现了个诡异的<code>style=&quot;display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
+<a id="more"></a>
+<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
+<h1>markdown-it美元符号$无法显示的问题</h1>
+<p>在使用markdown写文章时，美元符号\$在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示，最后使用了双反斜杆\对美元符号\$进行转义，最终才能正常显示。</p>
+<p>实现方法2：将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</p>
+<h1>valine评论框中占位符无法换行的问题</h1>
+<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
+<p>解决方案：输入了<code>&amp;#10</code>完成了换行</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>个人博客</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Excel学习笔记3——函数求和及常见函数</title>
     <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<blockquote>
@@ -527,8 +555,8 @@
 <li>输入函数名的前几个字母后若要选择Excel联想的函数需使用小键盘的箭头，然后使用TAB键来选择联想的函数</li>
 </ul>
 <h3 id="相对引用与绝对引用"><a class="header-anchor" href="#相对引用与绝对引用">¶</a>相对引用与绝对引用</h3>
-<p>使用\$可进行绝对引用，\$位于列前则将列进行绝对引用，行前将行绝对引用</p>
-<p><strong>例：</strong>\$A\$2表示只使用A2这个单元格，\$A2表示使用A列，但对应的行则使用相对的行，A\$2表示使用第二行，对应的行根据相对关系使用</p>
+<p>使用<code>$</code>可进行绝对引用，<code>$</code>位于列前则将列进行绝对引用，行前将行绝对引用</p>
+<p><strong>例：</strong><code>$A$2</code>表示只使用A2这个单元格，<code>$A2</code>表示使用A列，但对应的行则使用相对的行，<code>A$2</code>表示使用第二行，对应的行根据相对关系使用</p>
 <p><strong>PS：按下F4可以切换引用的模式</strong></p>
 <h2 id="求和函数"><a class="header-anchor" href="#求和函数">¶</a>求和函数</h2>
 <p><strong>快速求和</strong>：Alt + = 会直接智能地将求和结果放到选中区域或智能将列区域求和放到列的下方</p>
@@ -723,18 +751,6 @@ MAX常结合数组来使用<br>
       <tags>
         <tag>Excel</tag>
         <tag>办公学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>opcv学习笔记1——</title>
-    <url>/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>计算机视觉</category>
-      </categories>
-      <tags>
-        <tag>计算机视觉</tag>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
