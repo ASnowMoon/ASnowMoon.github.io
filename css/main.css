@@ -1985,6 +1985,10 @@ pre code {
   font-family: Lato, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   overflow-wrap: break-word;
 }
+.post-body a {
+  color: #428bca;
+  font-weight: bold;
+}
 @media (min-width: 1200px) {
   .post-body {
     font-size: 1.125em;
