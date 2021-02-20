@@ -517,203 +517,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Excel学习笔记2——定位、查找、排序、筛选</title>
-    <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
-</blockquote>
-<h1>定位</h1>
-<h2 id="数据定位"><a class="header-anchor" href="#数据定位">¶</a>数据定位</h2>
-<ul>
-<li>
-<p><strong>找出两栏中的不同数据</strong>： Ctrl + \</p>
-</li>
-<li>
-<p><strong>快速调出定位功能</strong>：Ctrl + G    或    F5</p>
-</li>
-<li>
-<p><strong>空值充0</strong>：定位后在一个空值格中输入0，然后Ctrl + Enter</p>
-<blockquote>
-<p>在做数据处理的过程中空值会无法处理，所以缺少的值一般用0填充</p>
-</blockquote>
-</li>
-<li>
-<p><strong>选中可见单元格</strong>：选中含有隐藏单元格的区域后按Alt + ;</p>
-</li>
-<li>
-<p><strong>将合并的单元格分开填充（方便检索）</strong>：先选择合并后居中，再定位空格，后输入 = B2(合并后的第一格)，再按Ctrl + Enter</p>
-</li>
-<li>
-<p><strong>批量删除空行</strong>：选中区域，定位空值，选择一个空行右键删除，选择整行</p>
-</li>
-<li>
-<p><strong>定位不同的四个方法：</strong></p>
-<ol>
-<li>Ctrl + \ 定位</li>
-</ol>
-</li>
-</ul>
-<a id="more"></a>
-<ol start="2">
-<li>
-<p>开始 - 条件格式 - 突出显示单元格规则 - 重复值</p>
-</li>
-<li>
-<p>函数COUNTIF</p>
-<blockquote>
-<p>参数有两个，第一个选中查找的单元格（能选一堆），第二个选中查找的值（只能选一个）选择完成后可以显示后值在前述单元格中的数量，若为零即没有该值</p>
-</blockquote>
-</li>
-<li>
-<p>选择性粘贴后选择减（只适用于多行且多列的情况，对比两个表格内容的差距）</p>
-</li>
-</ol>
-<h1>查找</h1>
-<ul>
-<li>
-<p><strong>删除每个单元格中的换行符</strong>：查找内容为 Alt + 1 + 0（只能小键盘输入，此为换行符）替换内容不填入。</p>
-</li>
-<li>
-<p><strong>精确查找与模糊查找</strong>： 查找时 ? 是单个字符的通配符，* 是多个字符的通配符<em><strong>若要进行转义则使用  ~</strong></em></p>
-</li>
-<li>
-<p><strong>通过格式查找</strong>：查找 - 格式 - 从单元格选择格式然后吸取想要查找的内容即可查找</p>
-<blockquote>
-<p>若要进行求和等运算则需要在查找完成后在公式 - 名称管理器 -新建名称将这些内容保存为一个名称，在进行计算的时候可以直接输入名称即可</p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li>
-<p><strong>批量删除某个字</strong>：查找该字并替换为空值</p>
-</li>
-<li>
-<p><strong>批量添加某字</strong>：在旁边的单元格处输入 = 选择原单元格 &amp; “想加入的字”，再复制后粘贴数值</p>
-</li>
-<li>
-<h1>排序</h1>
-<h3 id="常规排序"><a class="header-anchor" href="#常规排序">¶</a>常规排序</h3>
-<ol>
-<li>以当前选定区域排序：只会重排当前区域</li>
-<li>拓展的选定区域排序：以当前区域为标的，对所有区域进行重排</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li>
-<p><strong>按字符数排序</strong>：选择一列添加辅助列，然后使用LEN函数计算要排序的目标列，然后下拉后将排序的条件改为辅助列的字符数</p>
-</li>
-<li>
-<p><strong>自定义排序</strong>：选择目标列排序然后自定义序列输入序列依据（王者 钻石 铂金 黄金 白银 青铜）每一个占一行，后点击排序</p>
-<h1>筛选</h1>
-<p>常规筛选逻辑和功能与查找定位十分相似，基本的通配符也是相同的 ? 和 *</p>
-<h3 id="高级筛选"><a class="header-anchor" href="#高级筛选">¶</a>高级筛选</h3>
-<p>点击高级筛选，在条件单元格中输入需要的条件，同一行表示需要同时满足，非同一行则只需要满足其中之一</p>
-<h3 id="数据验证"><a class="header-anchor" href="#数据验证">¶</a>数据验证</h3>
-<p>筛选里面很好用的功能，数据验证出现了</p>
-<p>数据验证最大的作用为限制输入的数据格式，或者制作下拉菜单</p>
-<p>常规的限制输入格式功能很简单，基本上需要什么功能都可以通过直接看着数据验证的表格即可实现</p>
-<p>需要用函数实现的：</p>
-</li>
-</ul>
-<ol>
-<li>
-<p>**单行中的数据限定为两种长度：**选择后使用数据验证-文本长度-等于-输入以下代码。</p>
-<p><code>=OR(LEN($F2)=15,LEN($F2)=18)</code></p>
-<blockquote>
-<p>OR表示其中二者之一成立即可，LEN表示判断单元格字符长度，其中，LEN的参数需要自己重新选择</p>
-</blockquote>
-</li>
-<li>
-<p>**限定输入中不能有空格：**数据验证-自定义-介于-输入以下代码</p>
-<p><code>=LEN(C2)=LEN(SUBSTITUTE(C2,&quot; &quot;,&quot;&quot;))</code></p>
-<blockquote>
-<p>以上代码表示原单元格去除空格后长度仍然等于原单元格，即原单元格不含有空格。<br>
-在使用时C2需要自己重新选自自己需要的单元格</p>
-</blockquote>
-</li>
-<li>
-<p>**限定输入值不能重复：**数据验证-自定义-介于-输入以下代码</p>
-<p><code>=COUNTIF(A:A,A2)=1</code></p>
-<blockquote>
-<p>其中，A:A表示在A列中，COUNTIF函数用于计算该值在A列中是否只含一个值</p>
-</blockquote>
-</li>
-</ol>
-<h4 id="下拉菜单的制作"><a class="header-anchor" href="#下拉菜单的制作">¶</a>下拉菜单的制作</h4>
-<p><strong>单级下拉菜单</strong></p>
-<p>数据验证-序列-介于-    男,女</p>
-<p>其中，每个词之间必须要用英文逗号分隔开</p>
-<p>也可以将来源选择为自己输入的一个序列表格</p>
-<p>若要让下拉菜单的内容随自己输入的序列表格改变，需要先选中源数据表，后按下Ctrl + T再创建序列即可</p>
-<p><strong>二级下拉菜单</strong></p>
-<p>用定位选择源数据，然后公式 - 根据所选内容创建 - 首行 - 确定</p>
-<blockquote>
-<p>该步骤的意义为使用首行 的名称创建几个Excel中的 “名称”,名称的意义与C语言中的数组的意义基本一致，此步骤创建的“名称”数组的名称即为首行对每列标注的名称，数组的内容即为各列中的内容</p>
-</blockquote>
-<p>在一列中使用一级下拉菜单需要选择 数据验证-序列-介于- 来源选择刚刚制作名称的表头</p>
-<p>在第二列中使用第二级下拉菜单将来源输入为以下函数</p>
-<p><code>=INDIRECT($A2)</code></p>
-<p>其中，A2为使用了一级下拉菜单的那一列的对应单元格，选择的时候需要先选中，再将A与2之间的$删除</p>
-]]></content>
-      <categories>
-        <category>办公类软件</category>
-        <category>Excel</category>
-      </categories>
-      <tags>
-        <tag>Excel</tag>
-        <tag>办公学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo踩坑记录</title>
-    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑<br>
-hexo版本：hexo: 5.3.0<br>
-hexo-cli: 4.2.0<br>
-os: Windows_NT 10.0.19042 win32 x64<br>
-Next主题版本: NexT version 8.2.1</p>
-</blockquote>
-<h1>使用了live2d时不蒜子访客统计无法显示</h1>
-<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;%- if theme.busuanzi_count.total_visitors %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_container_site_pv&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Visitors</span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;site-uv&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_visitors&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_value_site_uv&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">&#123;%- endif %&#125;</span><br></pre></td></tr></table></figure>
-<p>发现这个标签<code>&lt;span id=&quot;busuanzi_container_site_pv&quot; style=&quot;display: none;&quot;&gt;</code>中出现了个诡异的<code>style=&quot;display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
-<a id="more"></a>
-<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
-<h1>markdown-it美元符号$无法显示的问题</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>在使用markdown写文章时，美元符号\$在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<ol>
-<li>
-<p>使用双反斜杠\对美元符号\$进行转义</p>
-</li>
-<li>
-<p>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</p>
-</li>
-</ol>
-<h1>valine评论框中占位符无法换行的问题</h1>
-<h2 id="问题描述-v2"><a class="header-anchor" href="#问题描述-v2">¶</a>问题描述</h2>
-<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
-<h2 id="解决方案-v2"><a class="header-anchor" href="#解决方案-v2">¶</a>解决方案</h2>
-<p>输入了<code>&amp;#10</code>完成了换行</p>
-<h1>字数统计后阅读时间计算参数修改</h1>
-<h2 id="问题描述-v3"><a class="header-anchor" href="#问题描述-v3">¶</a>问题描述</h2>
-<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
-<h2 id="解决方案-v3"><a class="header-anchor" href="#解决方案-v3">¶</a>解决方案</h2>
-<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>个人博客</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Excel学习笔记3——函数求和及常见函数</title>
     <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<blockquote>
@@ -923,6 +726,203 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
+    <title>Excel学习笔记2——定位、查找、排序、筛选</title>
+    <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
+</blockquote>
+<h1>定位</h1>
+<h2 id="数据定位"><a class="header-anchor" href="#数据定位">¶</a>数据定位</h2>
+<ul>
+<li>
+<p><strong>找出两栏中的不同数据</strong>： Ctrl + \</p>
+</li>
+<li>
+<p><strong>快速调出定位功能</strong>：Ctrl + G    或    F5</p>
+</li>
+<li>
+<p><strong>空值充0</strong>：定位后在一个空值格中输入0，然后Ctrl + Enter</p>
+<blockquote>
+<p>在做数据处理的过程中空值会无法处理，所以缺少的值一般用0填充</p>
+</blockquote>
+</li>
+<li>
+<p><strong>选中可见单元格</strong>：选中含有隐藏单元格的区域后按Alt + ;</p>
+</li>
+<li>
+<p><strong>将合并的单元格分开填充（方便检索）</strong>：先选择合并后居中，再定位空格，后输入 = B2(合并后的第一格)，再按Ctrl + Enter</p>
+</li>
+<li>
+<p><strong>批量删除空行</strong>：选中区域，定位空值，选择一个空行右键删除，选择整行</p>
+</li>
+<li>
+<p><strong>定位不同的四个方法：</strong></p>
+<ol>
+<li>Ctrl + \ 定位</li>
+</ol>
+</li>
+</ul>
+<a id="more"></a>
+<ol start="2">
+<li>
+<p>开始 - 条件格式 - 突出显示单元格规则 - 重复值</p>
+</li>
+<li>
+<p>函数COUNTIF</p>
+<blockquote>
+<p>参数有两个，第一个选中查找的单元格（能选一堆），第二个选中查找的值（只能选一个）选择完成后可以显示后值在前述单元格中的数量，若为零即没有该值</p>
+</blockquote>
+</li>
+<li>
+<p>选择性粘贴后选择减（只适用于多行且多列的情况，对比两个表格内容的差距）</p>
+</li>
+</ol>
+<h1>查找</h1>
+<ul>
+<li>
+<p><strong>删除每个单元格中的换行符</strong>：查找内容为 Alt + 1 + 0（只能小键盘输入，此为换行符）替换内容不填入。</p>
+</li>
+<li>
+<p><strong>精确查找与模糊查找</strong>： 查找时 ? 是单个字符的通配符，* 是多个字符的通配符<em><strong>若要进行转义则使用  ~</strong></em></p>
+</li>
+<li>
+<p><strong>通过格式查找</strong>：查找 - 格式 - 从单元格选择格式然后吸取想要查找的内容即可查找</p>
+<blockquote>
+<p>若要进行求和等运算则需要在查找完成后在公式 - 名称管理器 -新建名称将这些内容保存为一个名称，在进行计算的时候可以直接输入名称即可</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>
+<p><strong>批量删除某个字</strong>：查找该字并替换为空值</p>
+</li>
+<li>
+<p><strong>批量添加某字</strong>：在旁边的单元格处输入 = 选择原单元格 &amp; “想加入的字”，再复制后粘贴数值</p>
+</li>
+<li>
+<h1>排序</h1>
+<h3 id="常规排序"><a class="header-anchor" href="#常规排序">¶</a>常规排序</h3>
+<ol>
+<li>以当前选定区域排序：只会重排当前区域</li>
+<li>拓展的选定区域排序：以当前区域为标的，对所有区域进行重排</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>
+<p><strong>按字符数排序</strong>：选择一列添加辅助列，然后使用LEN函数计算要排序的目标列，然后下拉后将排序的条件改为辅助列的字符数</p>
+</li>
+<li>
+<p><strong>自定义排序</strong>：选择目标列排序然后自定义序列输入序列依据（王者 钻石 铂金 黄金 白银 青铜）每一个占一行，后点击排序</p>
+<h1>筛选</h1>
+<p>常规筛选逻辑和功能与查找定位十分相似，基本的通配符也是相同的 ? 和 *</p>
+<h3 id="高级筛选"><a class="header-anchor" href="#高级筛选">¶</a>高级筛选</h3>
+<p>点击高级筛选，在条件单元格中输入需要的条件，同一行表示需要同时满足，非同一行则只需要满足其中之一</p>
+<h3 id="数据验证"><a class="header-anchor" href="#数据验证">¶</a>数据验证</h3>
+<p>筛选里面很好用的功能，数据验证出现了</p>
+<p>数据验证最大的作用为限制输入的数据格式，或者制作下拉菜单</p>
+<p>常规的限制输入格式功能很简单，基本上需要什么功能都可以通过直接看着数据验证的表格即可实现</p>
+<p>需要用函数实现的：</p>
+</li>
+</ul>
+<ol>
+<li>
+<p>**单行中的数据限定为两种长度：**选择后使用数据验证-文本长度-等于-输入以下代码。</p>
+<p><code>=OR(LEN($F2)=15,LEN($F2)=18)</code></p>
+<blockquote>
+<p>OR表示其中二者之一成立即可，LEN表示判断单元格字符长度，其中，LEN的参数需要自己重新选择</p>
+</blockquote>
+</li>
+<li>
+<p>**限定输入中不能有空格：**数据验证-自定义-介于-输入以下代码</p>
+<p><code>=LEN(C2)=LEN(SUBSTITUTE(C2,&quot; &quot;,&quot;&quot;))</code></p>
+<blockquote>
+<p>以上代码表示原单元格去除空格后长度仍然等于原单元格，即原单元格不含有空格。<br>
+在使用时C2需要自己重新选自自己需要的单元格</p>
+</blockquote>
+</li>
+<li>
+<p>**限定输入值不能重复：**数据验证-自定义-介于-输入以下代码</p>
+<p><code>=COUNTIF(A:A,A2)=1</code></p>
+<blockquote>
+<p>其中，A:A表示在A列中，COUNTIF函数用于计算该值在A列中是否只含一个值</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="下拉菜单的制作"><a class="header-anchor" href="#下拉菜单的制作">¶</a>下拉菜单的制作</h4>
+<p><strong>单级下拉菜单</strong></p>
+<p>数据验证-序列-介于-    男,女</p>
+<p>其中，每个词之间必须要用英文逗号分隔开</p>
+<p>也可以将来源选择为自己输入的一个序列表格</p>
+<p>若要让下拉菜单的内容随自己输入的序列表格改变，需要先选中源数据表，后按下Ctrl + T再创建序列即可</p>
+<p><strong>二级下拉菜单</strong></p>
+<p>用定位选择源数据，然后公式 - 根据所选内容创建 - 首行 - 确定</p>
+<blockquote>
+<p>该步骤的意义为使用首行 的名称创建几个Excel中的 “名称”,名称的意义与C语言中的数组的意义基本一致，此步骤创建的“名称”数组的名称即为首行对每列标注的名称，数组的内容即为各列中的内容</p>
+</blockquote>
+<p>在一列中使用一级下拉菜单需要选择 数据验证-序列-介于- 来源选择刚刚制作名称的表头</p>
+<p>在第二列中使用第二级下拉菜单将来源输入为以下函数</p>
+<p><code>=INDIRECT($A2)</code></p>
+<p>其中，A2为使用了一级下拉菜单的那一列的对应单元格，选择的时候需要先选中，再将A与2之间的$删除</p>
+]]></content>
+      <categories>
+        <category>办公类软件</category>
+        <category>Excel</category>
+      </categories>
+      <tags>
+        <tag>Excel</tag>
+        <tag>办公学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo踩坑记录</title>
+    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑<br>
+hexo版本：hexo: 5.3.0<br>
+hexo-cli: 4.2.0<br>
+os: Windows_NT 10.0.19042 win32 x64<br>
+Next主题版本: NexT version 8.2.1</p>
+</blockquote>
+<h1>使用了live2d时不蒜子访客统计无法显示</h1>
+<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;%- if theme.busuanzi_count.total_visitors %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_container_site_pv&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Visitors</span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;site-uv&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_visitors&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_value_site_uv&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">&#123;%- endif %&#125;</span><br></pre></td></tr></table></figure>
+<p>发现这个标签<code>&lt;span id=&quot;busuanzi_container_site_pv&quot; style=&quot;display: none;&quot;&gt;</code>中出现了个诡异的<code>style=&quot;display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
+<a id="more"></a>
+<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
+<h1>markdown-it美元符号$无法显示的问题</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>在使用markdown写文章时，美元符号\$在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<ol>
+<li>
+<p>使用双反斜杠\对美元符号\$进行转义</p>
+</li>
+<li>
+<p>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</p>
+</li>
+</ol>
+<h1>valine评论框中占位符无法换行的问题</h1>
+<h2 id="问题描述-v2"><a class="header-anchor" href="#问题描述-v2">¶</a>问题描述</h2>
+<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
+<h2 id="解决方案-v2"><a class="header-anchor" href="#解决方案-v2">¶</a>解决方案</h2>
+<p>输入了<code>&amp;#10</code>完成了换行</p>
+<h1>字数统计后阅读时间计算参数修改</h1>
+<h2 id="问题描述-v3"><a class="header-anchor" href="#问题描述-v3">¶</a>问题描述</h2>
+<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
+<h2 id="解决方案-v3"><a class="header-anchor" href="#解决方案-v3">¶</a>解决方案</h2>
+<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>个人博客</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>next主题中超链接颜色的修改</title>
     <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
     <content><![CDATA[<h1>修改超链接样式</h1>
@@ -935,7 +935,7 @@ MAX常结合数组来使用<br>
 <p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
 <p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
 <figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:not</span>(.btn)&#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#3296FA</span>;</span><br><span class="line">  <span class="attribute">border-bottom</span>: none;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">	<span class="attribute">color</span>: <span class="number">#0593d3</span>;</span><br><span class="line">	<span class="attribute">font-weight</span>: bold;</span><br><span class="line">	<span class="attribute">text-decoration</span>: underline;</span><br><span class="line">  		  &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>成功将<a href="">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
+<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
 ]]></content>
       <categories>
         <category>网站建设</category>
