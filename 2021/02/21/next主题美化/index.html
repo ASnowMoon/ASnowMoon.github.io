@@ -25,22 +25,23 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作  定位 ¶数据定位   找出两栏中的不同数据： Ctrl + \   快速调出定位功能：Ctrl + G    或    F5   空值充0：定位后在一个空值格中输入0，然后Ctrl + Enter  在做数据处理的过程中空值会无法处理，所以缺少的值">
+<meta name="description" content="前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片 next版本：8.2.1  添加背景图片 把想设置的背景放入.&#x2F;themes&#x2F;next&#x2F;source&#x2F;images中，命名为background.jpg。在根目录的source文件夹下新建文件夹_data与style文件source&#x2F;_data&#x2F;styles.styl，输入以下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Excel学习笔记2——定位、查找、排序、筛选">
-<meta property="og:url" content="https://snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/index.html">
+<meta property="og:title" content="next主题美化——背景图片、动画">
+<meta property="og:url" content="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作  定位 ¶数据定位   找出两栏中的不同数据： Ctrl + \   快速调出定位功能：Ctrl + G    或    F5   空值充0：定位后在一个空值格中输入0，然后Ctrl + Enter  在做数据处理的过程中空值会无法处理，所以缺少的值">
+<meta property="og:description" content="前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片 next版本：8.2.1  添加背景图片 把想设置的背景放入.&#x2F;themes&#x2F;next&#x2F;source&#x2F;images中，命名为background.jpg。在根目录的source文件夹下新建文件夹_data与style文件source&#x2F;_data&#x2F;styles.styl，输入以下">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-16T12:38:03.000Z">
-<meta property="article:modified_time" content="2021-02-21T08:47:45.229Z">
+<meta property="article:published_time" content="2021-02-21T04:10:13.000Z">
+<meta property="article:modified_time" content="2021-02-21T15:59:15.809Z">
 <meta property="article:author" content="Zheng Haoyu">
-<meta property="article:tag" content="Excel">
-<meta property="article:tag" content="办公学习">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="个人博客">
+<meta property="article:tag" content="next">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/">
+<link rel="canonical" href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/">
 
 
 <script class="page-configurations">
@@ -52,7 +53,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>Excel学习笔记2——定位、查找、排序、筛选 | SnowMoon-Haoyu's Blog</title>
+<title>next主题美化——背景图片、动画 | SnowMoon-Haoyu's Blog</title>
   
 
 
@@ -193,7 +194,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.1.</span> <span class="nav-text">数据定位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%84%E6%8E%92%E5%BA%8F"><span class="nav-number">3.1.</span> <span class="nav-text">常规排序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">筛选</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%AD%9B%E9%80%89"><span class="nav-number">4.1.</span> <span class="nav-text">高级筛选</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%AA%8C%E8%AF%81"><span class="nav-number">4.2.</span> <span class="nav-text">数据验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E6%8B%89%E8%8F%9C%E5%8D%95%E7%9A%84%E5%88%B6%E4%BD%9C"><span class="nav-number">4.2.1.</span> <span class="nav-text">下拉菜单的制作</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">添加背景图片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">博客内容透明化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">添加圆角</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">添加阴影效果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">动画</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C"><span class="nav-number">5.1.</span> <span class="nav-text">动画效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E7%9A%84%E6%8C%81%E7%BB%AD%E9%80%9F%E5%BA%A6"><span class="nav-number">5.2.</span> <span class="nav-text">动画的持续速度</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -259,7 +260,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/">
+    <link itemprop="mainEntityOfPage" href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/Avatar.jpg">
@@ -272,7 +273,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Excel学习笔记2——定位、查找、排序、筛选
+          next主题美化——背景图片、动画
         </h1>
 
         <div class="post-meta-container">
@@ -282,27 +283,21 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-02-16 20:38:03" itemprop="dateCreated datePublished" datetime="2021-02-16T20:38:03+08:00">2021-02-16</time>
+      <time title="创建时间：2021-02-21 12:10:13 / 修改时间：23:59:15" itemprop="dateCreated datePublished" datetime="2021-02-21T12:10:13+08:00">2021-02-21</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-21 16:47:45" itemprop="dateModified" datetime="2021-02-21T16:47:45+08:00">2021-02-21</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">办公类软件</span></a>
+          <a href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" itemprop="url" rel="index"><span itemprop="name">网站建设</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/Excel/" itemprop="url" rel="index"><span itemprop="name">Excel</span></a>
+          <a href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">个人博客</span></a>
         </span>
     </span>
 
@@ -314,7 +309,7 @@
       <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
-    <span id="/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/" class="post-meta-item leancloud_visitors" data-flag-title="Excel学习笔记2——定位、查找、排序、筛选" title="阅读次数">
+    <span id="/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/" class="post-meta-item leancloud_visitors" data-flag-title="next主题美化——背景图片、动画" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -329,14 +324,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.8k</span>
+      <span>2.8k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
+      <span>7 分钟</span>
     </span>
 </div>
 
@@ -348,137 +343,104 @@
     
     <div class="post-body" itemprop="articleBody">
         <blockquote>
-<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
+<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
+<p>next版本：8.2.1</p>
 </blockquote>
-<h1>定位</h1>
-<h2 id="数据定位"><a class="header-anchor" href="#数据定位">¶</a>数据定位</h2>
-<ul>
-<li>
-<p><strong>找出两栏中的不同数据</strong>： Ctrl + \</p>
-</li>
-<li>
-<p><strong>快速调出定位功能</strong>：Ctrl + G    或    F5</p>
-</li>
-<li>
-<p><strong>空值充0</strong>：定位后在一个空值格中输入0，然后Ctrl + Enter</p>
-<blockquote>
-<p>在做数据处理的过程中空值会无法处理，所以缺少的值一般用0填充</p>
-</blockquote>
-</li>
-<li>
-<p><strong>选中可见单元格</strong>：选中含有隐藏单元格的区域后按Alt + ;</p>
-</li>
-<li>
-<p><strong>将合并的单元格分开填充（方便检索）</strong>：先选择合并后居中，再定位空格，后输入 = B2(合并后的第一格)，再按Ctrl + Enter</p>
-</li>
-<li>
-<p><strong>批量删除空行</strong>：选中区域，定位空值，选择一个空行右键删除，选择整行</p>
-</li>
-<li>
-<p><strong>定位不同的四个方法：</strong></p>
-<ol>
-<li>Ctrl + \ 定位</li>
-</ol>
-</li>
-</ul>
+<h1>添加背景图片</h1>
+<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token selector">body <span class="token punctuation">&#123;</span></span>
+ 	<span class="token property-declaration"><span class="token property">background</span><span class="token punctuation">:</span><span class="token url">url(/images/background.jpg)</span><span class="token punctuation">;</span></span>
+ 	<span class="token property-declaration"><span class="token property">background-repeat</span><span class="token punctuation">:</span> no-repeat<span class="token punctuation">;</span></span>
+    <span class="token property-declaration"><span class="token property">background-attachment</span><span class="token punctuation">:</span>fixed<span class="token punctuation">;</span></span>
+    <span class="token property-declaration"><span class="token property">background-position</span><span class="token punctuation">:</span><span class="token number">100</span><span class="token unit">%</span> <span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">;</span></span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
+<code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
+<code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
+<code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
+<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
 <a id="more"></a>
-<ol start="2">
-<li>
-<p>开始 - 条件格式 - 突出显示单元格规则 - 重复值</p>
-</li>
-<li>
-<p>函数COUNTIF</p>
-<blockquote>
-<p>参数有两个，第一个选中查找的单元格（能选一堆），第二个选中查找的值（只能选一个）选择完成后可以显示后值在前述单元格中的数量，若为零即没有该值</p>
-</blockquote>
-</li>
-<li>
-<p>选择性粘贴后选择减（只适用于多行且多列的情况，对比两个表格内容的差距）</p>
-</li>
-</ol>
-<h1>查找</h1>
-<ul>
-<li>
-<p><strong>删除每个单元格中的换行符</strong>：查找内容为 Alt + 1 + 0（只能小键盘输入，此为换行符）替换内容不填入。</p>
-</li>
-<li>
-<p><strong>精确查找与模糊查找</strong>： 查找时 ? 是单个字符的通配符，* 是多个字符的通配符<em><strong>若要进行转义则使用  ~</strong></em></p>
-</li>
-<li>
-<p><strong>通过格式查找</strong>：查找 - 格式 - 从单元格选择格式然后吸取想要查找的内容即可查找</p>
-<blockquote>
-<p>若要进行求和等运算则需要在查找完成后在公式 - 名称管理器 -新建名称将这些内容保存为一个名称，在进行计算的时候可以直接输入名称即可</p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li>
-<p><strong>批量删除某个字</strong>：查找该字并替换为空值</p>
-</li>
-<li>
-<p><strong>批量添加某字</strong>：在旁边的单元格处输入 = 选择原单元格 &amp; “想加入的字”，再复制后粘贴数值</p>
-</li>
-</ul>
-<h1>排序</h1>
-<h2 id="常规排序"><a class="header-anchor" href="#常规排序">¶</a>常规排序</h2>
-<ol>
-<li>以当前选定区域排序：只会重排当前区域</li>
-<li>拓展的选定区域排序：以当前区域为标的，对所有区域进行重排</li>
-</ol>
-<ul>
-<li>
-<p><strong>按字符数排序</strong>：选择一列添加辅助列，然后使用LEN函数计算要排序的目标列，然后下拉后将排序的条件改为辅助列的字符数</p>
-</li>
-<li>
-<p><strong>自定义排序</strong>：选择目标列排序然后自定义序列输入序列依据（王者 钻石 铂金 黄金 白银 青铜）每一个占一行，后点击排序</p>
-</li>
-</ul>
-<h1>筛选</h1>
-<p>常规筛选逻辑和功能与查找定位十分相似，基本的通配符也是相同的 ? 和 *</p>
-<h2 id="高级筛选"><a class="header-anchor" href="#高级筛选">¶</a>高级筛选</h2>
-<p>点击高级筛选，在条件单元格中输入需要的条件，同一行表示需要同时满足，非同一行则只需要满足其中之一</p>
-<h2 id="数据验证"><a class="header-anchor" href="#数据验证">¶</a>数据验证</h2>
-<p>筛选里面很好用的功能，数据验证出现了</p>
-<p>数据验证最大的作用为限制输入的数据格式，或者制作下拉菜单</p>
-<p>常规的限制输入格式功能很简单，基本上需要什么功能都可以通过直接看着数据验证的表格即可实现</p>
-<p>需要用函数实现的：</p>
-<ol>
-<li>**单行中的数据限定为两种长度：**选择后使用数据验证-文本长度-等于-输入以下代码。</li>
-</ol>
-<p><code>=OR(LEN($F2)=15,LEN($F2)=18)</code></p>
-<blockquote>
-<p>OR表示其中二者之一成立即可，LEN表示判断单元格字符长度，其中，LEN的参数需要自己重新选择</p>
-</blockquote>
-<ol start="2">
-<li>**限定输入中不能有空格：**数据验证-自定义-介于-输入以下代码</li>
-</ol>
-<p><code>=LEN(C2)=LEN(SUBSTITUTE(C2,&quot; &quot;,&quot;&quot;))</code></p>
-<blockquote>
-<p>以上代码表示原单元格去除空格后长度仍然等于原单元格，即原单元格不含有空格。<br>
-在使用时C2需要自己重新选自自己需要的单元格</p>
-</blockquote>
-<ol start="3">
-<li>**限定输入值不能重复：**数据验证-自定义-介于-输入以下代码</li>
-</ol>
-<p><code>=COUNTIF(A:A,A2)=1</code></p>
-<blockquote>
-<p>其中，A:A表示在A列中，COUNTIF函数用于计算该值在A列中是否只含一个值</p>
-</blockquote>
-<h3 id="下拉菜单的制作"><a class="header-anchor" href="#下拉菜单的制作">¶</a>下拉菜单的制作</h3>
-<p><strong>单级下拉菜单</strong></p>
-<p>数据验证-序列-介于-    男,女</p>
-<p>其中，每个词之间必须要用英文逗号分隔开</p>
-<p>也可以将来源选择为自己输入的一个序列表格</p>
-<p>若要让下拉菜单的内容随自己输入的序列表格改变，需要先选中源数据表，后按下Ctrl + T再创建序列即可</p>
-<p><strong>二级下拉菜单</strong></p>
-<p>用定位选择源数据，然后公式 - 根据所选内容创建 - 首行 - 确定</p>
-<blockquote>
-<p>该步骤的意义为使用首行 的名称创建几个Excel中的 “名称”,名称的意义与C语言中的数组的意义基本一致，此步骤创建的“名称”数组的名称即为首行对每列标注的名称，数组的内容即为各列中的内容</p>
-</blockquote>
-<p>在一列中使用一级下拉菜单需要选择 数据验证-序列-介于- 来源选择刚刚制作名称的表头</p>
-<p>在第二列中使用第二级下拉菜单将来源输入为以下函数</p>
-<p><code>=INDIRECT($A2)</code></p>
-<p>其中，A2为使用了一级下拉菜单的那一列的对应单元格，选择的时候需要先选中，再将A与2之间的$删除</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">custom_file_path</span><span class="token punctuation">:</span>
+  <span class="token comment">#head: source/_data/head.swig</span>
+  <span class="token comment">#header: source/_data/header.swig</span>
+  <span class="token comment">#sidebar: source/_data/sidebar.swig</span>
+  <span class="token comment">#postMeta: source/_data/post-meta.swig</span>
+  <span class="token comment">#postBodyEnd: source/_data/post-body-end.swig</span>
+  <span class="token comment">#footer: source/_data/footer.swig</span>
+  <span class="token comment">#bodyEnd: source/_data/body-end.swig</span>
+  <span class="token comment">#variable: source/_data/variables.styl</span>
+  <span class="token comment">#mixin: source/_data/mixins.styl</span>
+  <span class="token comment">#style: source/_data/styles.styl</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>再将对应的#去除就可以了</p>
+<h1>博客内容透明化</h1>
+<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token selector"><span class="token comment">//博客内容透明化</span>
+<span class="token comment">//文章内容的透明度设置</span>
+.content-wrap <span class="token punctuation">&#123;</span></span>
+  <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
+<span class="token punctuation">&#125;</span>
+<span class="token selector">.main-inner <span class="token punctuation">&#123;</span></span> 
+   <span class="token comment">// margin-top: 60px;</span>
+   <span class="token comment">// padding: 60px 60px 60px 60px;</span>
+
+    <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
+<span class="token punctuation">&#125;</span>
+<span class="token selector"><span class="token comment">//侧边框的透明度设置</span>
+.sidebar <span class="token punctuation">&#123;</span></span>
+  <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token selector"><span class="token comment">//菜单栏的透明度设置</span>
+.header-inner <span class="token punctuation">&#123;</span></span>
+  <span class="token property-declaration"><span class="token property">background</span><span class="token punctuation">:</span> <span class="token func"><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0.8</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token selector"><span class="token comment">//搜索框（local-search）的透明度设置</span>
+.popup <span class="token punctuation">&#123;</span></span>
+  <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>添加圆角</h1>
+<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token comment">// 圆角设置</span>
+<span class="token variable-declaration"><span class="token variable">$border-radius-inner</span>     <span class="token operator">=</span> <span class="token number">20</span><span class="token unit">px</span> <span class="token number">20</span><span class="token unit">px</span> <span class="token number">20</span><span class="token unit">px</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
+<span class="token variable-declaration"><span class="token variable">$border-radius</span>           <span class="token operator">=</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token property-declaration"><span class="token property">custom_file_path</span><span class="token punctuation">:</span>
+  variable<span class="token punctuation">:</span> source<span class="token operator">/</span>_data<span class="token operator">/</span>variables.styl</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h1>添加阴影效果</h1>
+<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">	<span class="token comment">// 主页文章添加阴影效果</span>
+<span class="token selector">.post <span class="token punctuation">&#123;</span></span>
+   <span class="token property-declaration"><span class="token property">margin-top</span><span class="token punctuation">:</span> <span class="token number">60</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
+   <span class="token property-declaration"><span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
+   <span class="token property-declaration"><span class="token property">margin-bottom</span><span class="token punctuation">:</span> <span class="token number">60</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
+   <span class="token property-declaration"><span class="token property">-webkit-box-shadow</span><span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">5</span><span class="token unit">px</span> <span class="token func"><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">114</span><span class="token punctuation">,</span> <span class="token number">1.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></span>
+   <span class="token property-declaration"><span class="token property">-moz-box-shadow</span><span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">5</span><span class="token unit">px</span> <span class="token func"><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">202</span><span class="token punctuation">,</span> <span class="token number">203</span><span class="token punctuation">,</span> <span class="token number">204</span><span class="token punctuation">,</span> <span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>动画</h1>
+<h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
+<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># Use Animate.css to animate everything.</span>
+<span class="token comment"># Use velocity to animate everything.</span>
+<span class="token key atrule">motion</span><span class="token punctuation">:</span>
+  <span class="token key atrule">enable</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">async</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
+  <span class="token key atrule">transition</span><span class="token punctuation">:</span>
+    <span class="token comment"># Transition variants:</span>
+    <span class="token comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span>
+    <span class="token comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span>
+    <span class="token comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span>
+    <span class="token comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span>
+    <span class="token comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span>
+    <span class="token comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span>
+    <span class="token key atrule">post_block</span><span class="token punctuation">:</span> fadeIn
+    <span class="token key atrule">post_header</span><span class="token punctuation">:</span> slideDownIn
+    <span class="token key atrule">post_body</span><span class="token punctuation">:</span> slideDownIn
+    <span class="token key atrule">coll_header</span><span class="token punctuation">:</span> slideLeftIn
+    <span class="token comment"># Only for Pisces | Gemini.</span>
+    <span class="token key atrule">sidebar</span><span class="token punctuation">:</span> slideDownBigOut<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
+<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
 
     </div>
 
@@ -533,22 +495,20 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/Excel/" rel="tag"><i class="fas fa-tag"></i> Excel</a>
-              <a href="/tags/%E5%8A%9E%E5%85%AC%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fas fa-tag"></i> 办公学习</a>
+              <a href="/tags/hexo/" rel="tag"><i class="fas fa-tag"></i> hexo</a>
+              <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag"><i class="fas fa-tag"></i> 个人博客</a>
+              <a href="/tags/next/" rel="tag"><i class="fas fa-tag"></i> next</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" rel="prev" title="Excel学习笔记1——填充、行列操作、数据格式">
-                  <i class="fa fa-chevron-left"></i> Excel学习笔记1——填充、行列操作、数据格式
+                <a href="/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/" rel="prev" title="next主题中超链接颜色的修改">
+                  <i class="fa fa-chevron-left"></i> next主题中超链接颜色的修改
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/" rel="next" title="Excel学习笔记3——函数求和及常见函数">
-                  Excel学习笔记3——函数求和及常见函数 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -746,7 +706,7 @@ NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
     new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":null,"placeholder":"无需输入头像 昵称 网址 即可评论(*^▽^*)&#10valine评论不一定能及时看到，如果需要回复可以戳我主页的联系方式(～￣▽￣)～","avatar":"robohash","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
       el: '#valine-comments',
-      path: "/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/",
+      path: "/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/",
       serverURLs: "https://3kooisaa.api.lncldglobal.com"
     }));
   }, window.Valine);
