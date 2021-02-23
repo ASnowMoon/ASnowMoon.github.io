@@ -2,23 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</loc>
+    
+    <lastmod>2021-02-23</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.snowmoon.top/essay/index.html</loc>
     
     <lastmod>2021-02-23</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.snowmoon.top/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2021-02-23</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</loc>
-    
-    <lastmod>2021-02-22</lastmod>
     
   </url>
   
@@ -136,20 +129,6 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://www.snowmoon.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/</loc>
-    <lastmod>2021-02-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.snowmoon.top/tags/python/</loc>
-    <lastmod>2021-02-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   
   <url>
@@ -175,13 +154,6 @@
   
   <url>
     <loc>https://www.snowmoon.top/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2021-02-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.snowmoon.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/</loc>
     <lastmod>2021-02-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
