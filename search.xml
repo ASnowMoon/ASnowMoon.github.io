@@ -1,151 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Excel学习笔记2——定位、查找、排序、筛选</title>
-    <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
-</blockquote>
-<h1>定位</h1>
-<h2 id="数据定位"><a class="header-anchor" href="#数据定位">¶</a>数据定位</h2>
-<ul>
-<li>
-<p><strong>找出两栏中的不同数据</strong>： Ctrl + \</p>
-</li>
-<li>
-<p><strong>快速调出定位功能</strong>：Ctrl + G    或    F5</p>
-</li>
-<li>
-<p><strong>空值充0</strong>：定位后在一个空值格中输入0，然后Ctrl + Enter</p>
-<blockquote>
-<p>在做数据处理的过程中空值会无法处理，所以缺少的值一般用0填充</p>
-</blockquote>
-</li>
-<li>
-<p><strong>选中可见单元格</strong>：选中含有隐藏单元格的区域后按Alt + ;</p>
-</li>
-<li>
-<p><strong>将合并的单元格分开填充（方便检索）</strong>：先选择合并后居中，再定位空格，后输入 = B2(合并后的第一格)，再按Ctrl + Enter</p>
-</li>
-<li>
-<p><strong>批量删除空行</strong>：选中区域，定位空值，选择一个空行右键删除，选择整行</p>
-</li>
-<li>
-<p><strong>定位不同的四个方法：</strong></p>
-<ol>
-<li>Ctrl + \ 定位</li>
-</ol>
-</li>
-</ul>
-<a id="more"></a>
-<ol start="2">
-<li>
-<p>开始 - 条件格式 - 突出显示单元格规则 - 重复值</p>
-</li>
-<li>
-<p>函数COUNTIF</p>
-<blockquote>
-<p>参数有两个，第一个选中查找的单元格（能选一堆），第二个选中查找的值（只能选一个）选择完成后可以显示后值在前述单元格中的数量，若为零即没有该值</p>
-</blockquote>
-</li>
-<li>
-<p>选择性粘贴后选择减（只适用于多行且多列的情况，对比两个表格内容的差距）</p>
-</li>
-</ol>
-<h1>查找</h1>
-<ul>
-<li>
-<p><strong>删除每个单元格中的换行符</strong>：查找内容为 Alt + 1 + 0（只能小键盘输入，此为换行符）替换内容不填入。</p>
-</li>
-<li>
-<p><strong>精确查找与模糊查找</strong>： 查找时 ? 是单个字符的通配符，* 是多个字符的通配符<em><strong>若要进行转义则使用  ~</strong></em></p>
-</li>
-<li>
-<p><strong>通过格式查找</strong>：查找 - 格式 - 从单元格选择格式然后吸取想要查找的内容即可查找</p>
-<blockquote>
-<p>若要进行求和等运算则需要在查找完成后在公式 - 名称管理器 -新建名称将这些内容保存为一个名称，在进行计算的时候可以直接输入名称即可</p>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li>
-<p><strong>批量删除某个字</strong>：查找该字并替换为空值</p>
-</li>
-<li>
-<p><strong>批量添加某字</strong>：在旁边的单元格处输入 = 选择原单元格 &amp; “想加入的字”，再复制后粘贴数值</p>
-</li>
-</ul>
-<h1>排序</h1>
-<h2 id="常规排序"><a class="header-anchor" href="#常规排序">¶</a>常规排序</h2>
-<ol>
-<li>以当前选定区域排序：只会重排当前区域</li>
-<li>拓展的选定区域排序：以当前区域为标的，对所有区域进行重排</li>
-</ol>
-<ul>
-<li>
-<p><strong>按字符数排序</strong>：选择一列添加辅助列，然后使用LEN函数计算要排序的目标列，然后下拉后将排序的条件改为辅助列的字符数</p>
-</li>
-<li>
-<p><strong>自定义排序</strong>：选择目标列排序然后自定义序列输入序列依据（王者 钻石 铂金 黄金 白银 青铜）每一个占一行，后点击排序</p>
-</li>
-</ul>
-<h1>筛选</h1>
-<p>常规筛选逻辑和功能与查找定位十分相似，基本的通配符也是相同的 ? 和 *</p>
-<h2 id="高级筛选"><a class="header-anchor" href="#高级筛选">¶</a>高级筛选</h2>
-<p>点击高级筛选，在条件单元格中输入需要的条件，同一行表示需要同时满足，非同一行则只需要满足其中之一</p>
-<h2 id="数据验证"><a class="header-anchor" href="#数据验证">¶</a>数据验证</h2>
-<p>筛选里面很好用的功能，数据验证出现了</p>
-<p>数据验证最大的作用为限制输入的数据格式，或者制作下拉菜单</p>
-<p>常规的限制输入格式功能很简单，基本上需要什么功能都可以通过直接看着数据验证的表格即可实现</p>
-<p>需要用函数实现的：</p>
-<ol>
-<li>**单行中的数据限定为两种长度：**选择后使用数据验证-文本长度-等于-输入以下代码。</li>
-</ol>
-<p><code>=OR(LEN($F2)=15,LEN($F2)=18)</code></p>
-<blockquote>
-<p>OR表示其中二者之一成立即可，LEN表示判断单元格字符长度，其中，LEN的参数需要自己重新选择</p>
-</blockquote>
-<ol start="2">
-<li>**限定输入中不能有空格：**数据验证-自定义-介于-输入以下代码</li>
-</ol>
-<p><code>=LEN(C2)=LEN(SUBSTITUTE(C2,&quot; &quot;,&quot;&quot;))</code></p>
-<blockquote>
-<p>以上代码表示原单元格去除空格后长度仍然等于原单元格，即原单元格不含有空格。<br>
-在使用时C2需要自己重新选自自己需要的单元格</p>
-</blockquote>
-<ol start="3">
-<li>**限定输入值不能重复：**数据验证-自定义-介于-输入以下代码</li>
-</ol>
-<p><code>=COUNTIF(A:A,A2)=1</code></p>
-<blockquote>
-<p>其中，A:A表示在A列中，COUNTIF函数用于计算该值在A列中是否只含一个值</p>
-</blockquote>
-<h3 id="下拉菜单的制作"><a class="header-anchor" href="#下拉菜单的制作">¶</a>下拉菜单的制作</h3>
-<p><strong>单级下拉菜单</strong></p>
-<p>数据验证-序列-介于-    男,女</p>
-<p>其中，每个词之间必须要用英文逗号分隔开</p>
-<p>也可以将来源选择为自己输入的一个序列表格</p>
-<p>若要让下拉菜单的内容随自己输入的序列表格改变，需要先选中源数据表，后按下Ctrl + T再创建序列即可</p>
-<p><strong>二级下拉菜单</strong></p>
-<p>用定位选择源数据，然后公式 - 根据所选内容创建 - 首行 - 确定</p>
-<blockquote>
-<p>该步骤的意义为使用首行 的名称创建几个Excel中的 “名称”,名称的意义与C语言中的数组的意义基本一致，此步骤创建的“名称”数组的名称即为首行对每列标注的名称，数组的内容即为各列中的内容</p>
-</blockquote>
-<p>在一列中使用一级下拉菜单需要选择 数据验证-序列-介于- 来源选择刚刚制作名称的表头</p>
-<p>在第二列中使用第二级下拉菜单将来源输入为以下函数</p>
-<p><code>=INDIRECT($A2)</code></p>
-<p>其中，A2为使用了一级下拉菜单的那一列的对应单元格，选择的时候需要先选中，再将A与2之间的$删除</p>
-]]></content>
-      <categories>
-        <category>办公类软件</category>
-        <category>Excel</category>
-      </categories>
-      <tags>
-        <tag>Excel</tag>
-        <tag>办公学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Excel学习笔记1——填充、行列操作、数据格式</title>
     <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/</url>
     <content><![CDATA[<h3 id="行列填充"><a class="header-anchor" href="#行列填充">¶</a>行列填充</h3>
@@ -662,45 +517,148 @@
       </tags>
   </entry>
   <entry>
-    <title>next主题中超链接颜色的修改</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1>修改超链接样式</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
-而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token selector">a <span class="token punctuation">&#123;</span></span>  
-  <span class="token property-declaration"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#428BCA</span><span class="token punctuation">;</span></span>
-  <span class="token property-declaration"><span class="token property">font-weight</span><span class="token punctuation">:</span> bold<span class="token punctuation">;</span></span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
-<a id="more"></a>
-<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token selector">a:not(.btn)<span class="token punctuation">&#123;</span></span>
-  <span class="token property-declaration"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#f89fa0</span><span class="token punctuation">;</span></span>
-  <span class="token property-declaration"><span class="token property">border-bottom</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span></span>
-  <span class="token selector">&amp;:hover <span class="token punctuation">&#123;</span></span>
-	<span class="token property-declaration"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#ff7a7a</span><span class="token punctuation">;</span></span>
-	<span class="token property-declaration"><span class="token property">font-weight</span><span class="token punctuation">:</span> bold<span class="token punctuation">;</span></span>
-	<span class="token property-declaration"><span class="token property">text-decoration</span><span class="token punctuation">:</span> underline<span class="token punctuation">;</span></span>
-  		  <span class="token punctuation">&#125;</span>
-  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
-<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
-<p>睡一觉起来它就好了。。。真是玄学🌝</p>
-<blockquote>
-<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
+    <title>Excel学习笔记2——定位、查找、排序、筛选</title>
+    <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略时》的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p>
 </blockquote>
+<h1>定位</h1>
+<h2 id="数据定位"><a class="header-anchor" href="#数据定位">¶</a>数据定位</h2>
+<ul>
+<li>
+<p><strong>找出两栏中的不同数据</strong>： Ctrl + \</p>
+</li>
+<li>
+<p><strong>快速调出定位功能</strong>：Ctrl + G    或    F5</p>
+</li>
+<li>
+<p><strong>空值充0</strong>：定位后在一个空值格中输入0，然后Ctrl + Enter</p>
+<blockquote>
+<p>在做数据处理的过程中空值会无法处理，所以缺少的值一般用0填充</p>
+</blockquote>
+</li>
+<li>
+<p><strong>选中可见单元格</strong>：选中含有隐藏单元格的区域后按Alt + ;</p>
+</li>
+<li>
+<p><strong>将合并的单元格分开填充（方便检索）</strong>：先选择合并后居中，再定位空格，后输入 = B2(合并后的第一格)，再按Ctrl + Enter</p>
+</li>
+<li>
+<p><strong>批量删除空行</strong>：选中区域，定位空值，选择一个空行右键删除，选择整行</p>
+</li>
+<li>
+<p><strong>定位不同的四个方法：</strong></p>
+<ol>
+<li>Ctrl + \ 定位</li>
+</ol>
+</li>
+</ul>
+<a id="more"></a>
+<ol start="2">
+<li>
+<p>开始 - 条件格式 - 突出显示单元格规则 - 重复值</p>
+</li>
+<li>
+<p>函数COUNTIF</p>
+<blockquote>
+<p>参数有两个，第一个选中查找的单元格（能选一堆），第二个选中查找的值（只能选一个）选择完成后可以显示后值在前述单元格中的数量，若为零即没有该值</p>
+</blockquote>
+</li>
+<li>
+<p>选择性粘贴后选择减（只适用于多行且多列的情况，对比两个表格内容的差距）</p>
+</li>
+</ol>
+<h1>查找</h1>
+<ul>
+<li>
+<p><strong>删除每个单元格中的换行符</strong>：查找内容为 Alt + 1 + 0（只能小键盘输入，此为换行符）替换内容不填入。</p>
+</li>
+<li>
+<p><strong>精确查找与模糊查找</strong>： 查找时 ? 是单个字符的通配符，* 是多个字符的通配符<em><strong>若要进行转义则使用  ~</strong></em></p>
+</li>
+<li>
+<p><strong>通过格式查找</strong>：查找 - 格式 - 从单元格选择格式然后吸取想要查找的内容即可查找</p>
+<blockquote>
+<p>若要进行求和等运算则需要在查找完成后在公式 - 名称管理器 -新建名称将这些内容保存为一个名称，在进行计算的时候可以直接输入名称即可</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>
+<p><strong>批量删除某个字</strong>：查找该字并替换为空值</p>
+</li>
+<li>
+<p><strong>批量添加某字</strong>：在旁边的单元格处输入 = 选择原单元格 &amp; “想加入的字”，再复制后粘贴数值</p>
+</li>
+</ul>
+<h1>排序</h1>
+<h2 id="常规排序"><a class="header-anchor" href="#常规排序">¶</a>常规排序</h2>
+<ol>
+<li>以当前选定区域排序：只会重排当前区域</li>
+<li>拓展的选定区域排序：以当前区域为标的，对所有区域进行重排</li>
+</ol>
+<ul>
+<li>
+<p><strong>按字符数排序</strong>：选择一列添加辅助列，然后使用LEN函数计算要排序的目标列，然后下拉后将排序的条件改为辅助列的字符数</p>
+</li>
+<li>
+<p><strong>自定义排序</strong>：选择目标列排序然后自定义序列输入序列依据（王者 钻石 铂金 黄金 白银 青铜）每一个占一行，后点击排序</p>
+</li>
+</ul>
+<h1>筛选</h1>
+<p>常规筛选逻辑和功能与查找定位十分相似，基本的通配符也是相同的 ? 和 *</p>
+<h2 id="高级筛选"><a class="header-anchor" href="#高级筛选">¶</a>高级筛选</h2>
+<p>点击高级筛选，在条件单元格中输入需要的条件，同一行表示需要同时满足，非同一行则只需要满足其中之一</p>
+<h2 id="数据验证"><a class="header-anchor" href="#数据验证">¶</a>数据验证</h2>
+<p>筛选里面很好用的功能，数据验证出现了</p>
+<p>数据验证最大的作用为限制输入的数据格式，或者制作下拉菜单</p>
+<p>常规的限制输入格式功能很简单，基本上需要什么功能都可以通过直接看着数据验证的表格即可实现</p>
+<p>需要用函数实现的：</p>
+<ol>
+<li>**单行中的数据限定为两种长度：**选择后使用数据验证-文本长度-等于-输入以下代码。</li>
+</ol>
+<p><code>=OR(LEN($F2)=15,LEN($F2)=18)</code></p>
+<blockquote>
+<p>OR表示其中二者之一成立即可，LEN表示判断单元格字符长度，其中，LEN的参数需要自己重新选择</p>
+</blockquote>
+<ol start="2">
+<li>**限定输入中不能有空格：**数据验证-自定义-介于-输入以下代码</li>
+</ol>
+<p><code>=LEN(C2)=LEN(SUBSTITUTE(C2,&quot; &quot;,&quot;&quot;))</code></p>
+<blockquote>
+<p>以上代码表示原单元格去除空格后长度仍然等于原单元格，即原单元格不含有空格。<br>
+在使用时C2需要自己重新选自自己需要的单元格</p>
+</blockquote>
+<ol start="3">
+<li>**限定输入值不能重复：**数据验证-自定义-介于-输入以下代码</li>
+</ol>
+<p><code>=COUNTIF(A:A,A2)=1</code></p>
+<blockquote>
+<p>其中，A:A表示在A列中，COUNTIF函数用于计算该值在A列中是否只含一个值</p>
+</blockquote>
+<h3 id="下拉菜单的制作"><a class="header-anchor" href="#下拉菜单的制作">¶</a>下拉菜单的制作</h3>
+<p><strong>单级下拉菜单</strong></p>
+<p>数据验证-序列-介于-    男,女</p>
+<p>其中，每个词之间必须要用英文逗号分隔开</p>
+<p>也可以将来源选择为自己输入的一个序列表格</p>
+<p>若要让下拉菜单的内容随自己输入的序列表格改变，需要先选中源数据表，后按下Ctrl + T再创建序列即可</p>
+<p><strong>二级下拉菜单</strong></p>
+<p>用定位选择源数据，然后公式 - 根据所选内容创建 - 首行 - 确定</p>
+<blockquote>
+<p>该步骤的意义为使用首行 的名称创建几个Excel中的 “名称”,名称的意义与C语言中的数组的意义基本一致，此步骤创建的“名称”数组的名称即为首行对每列标注的名称，数组的内容即为各列中的内容</p>
+</blockquote>
+<p>在一列中使用一级下拉菜单需要选择 数据验证-序列-介于- 来源选择刚刚制作名称的表头</p>
+<p>在第二列中使用第二级下拉菜单将来源输入为以下函数</p>
+<p><code>=INDIRECT($A2)</code></p>
+<p>其中，A2为使用了一级下拉菜单的那一列的对应单元格，选择的时候需要先选中，再将A与2之间的$删除</p>
 ]]></content>
       <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
+        <category>办公类软件</category>
+        <category>Excel</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
-        <tag>个人博客</tag>
-        <tag>next</tag>
+        <tag>Excel</tag>
+        <tag>办公学习</tag>
       </tags>
   </entry>
   <entry>
@@ -913,6 +871,47 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
+    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
+    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
+    <content><![CDATA[<blockquote>
+<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误</p>
+</blockquote>
+<h1>TOC定向错误</h1>
+<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code>的代码</p>
+<p>现在会被编译为<code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
+<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
+<h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
+<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$title<span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// $title.children('a').remove();</span>
+<span class="token comment">// $title.html( '&lt;span id="' + id + '">' + $title.html() + '&lt;/span>' );</span>
+<span class="token comment">// $title.removeAttr('id');</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是我的hexo中并没有找到这个目录</p>
+<p>所以我找了另外的</p>
+<h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
+<a id="more"></a>
+<p>首先安装<code>markdown-it-named-headings</code>插件</p>
+<pre class="line-numbers language-none"><code class="language-none">npm install markdown-it-named-headings --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">parser<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'markdown-it-named-headings'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>尝试以上两种方法，均未成功</p>
+<p>时间不早了，后面有时间再解决</p>
+<blockquote>
+<p>参考文章:</p>
+<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a>  <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>网站建设</tag>
+        <tag>个人博客</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo踩坑记录</title>
     <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<blockquote>
@@ -964,8 +963,8 @@ Next主题版本: NexT version 8.2.1</p>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>个人博客</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -977,57 +976,57 @@ Next主题版本: NexT version 8.2.1</p>
 </blockquote>
 <h1>添加背景图片</h1>
 <p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token selector">body <span class="token punctuation">&#123;</span></span>
- 	<span class="token property-declaration"><span class="token property">background</span><span class="token punctuation">:</span><span class="token url">url(/images/background.jpg)</span><span class="token punctuation">;</span></span>
- 	<span class="token property-declaration"><span class="token property">background-repeat</span><span class="token punctuation">:</span> no-repeat<span class="token punctuation">;</span></span>
-    <span class="token property-declaration"><span class="token property">background-attachment</span><span class="token punctuation">:</span>fixed<span class="token punctuation">;</span></span>
-    <span class="token property-declaration"><span class="token property">background-position</span><span class="token punctuation">:</span><span class="token number">100</span><span class="token unit">%</span> <span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">;</span></span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">body &#123;
+ 	background:url(&#x2F;images&#x2F;background.jpg);
+ 	background-repeat: no-repeat;
+    background-attachment:fixed;
+    background-position:100% 100%;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
 <code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
 <code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
 <code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
 <p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
 <a id="more"></a>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">custom_file_path</span><span class="token punctuation">:</span>
-  <span class="token comment">#head: source/_data/head.swig</span>
-  <span class="token comment">#header: source/_data/header.swig</span>
-  <span class="token comment">#sidebar: source/_data/sidebar.swig</span>
-  <span class="token comment">#postMeta: source/_data/post-meta.swig</span>
-  <span class="token comment">#postBodyEnd: source/_data/post-body-end.swig</span>
-  <span class="token comment">#footer: source/_data/footer.swig</span>
-  <span class="token comment">#bodyEnd: source/_data/body-end.swig</span>
-  <span class="token comment">#variable: source/_data/variables.styl</span>
-  <span class="token comment">#mixin: source/_data/mixins.styl</span>
-  <span class="token comment">#style: source/_data/styles.styl</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">custom_file_path:
+  #head: source&#x2F;_data&#x2F;head.swig
+  #header: source&#x2F;_data&#x2F;header.swig
+  #sidebar: source&#x2F;_data&#x2F;sidebar.swig
+  #postMeta: source&#x2F;_data&#x2F;post-meta.swig
+  #postBodyEnd: source&#x2F;_data&#x2F;post-body-end.swig
+  #footer: source&#x2F;_data&#x2F;footer.swig
+  #bodyEnd: source&#x2F;_data&#x2F;body-end.swig
+  #variable: source&#x2F;_data&#x2F;variables.styl
+  #mixin: source&#x2F;_data&#x2F;mixins.styl
+  #style: source&#x2F;_data&#x2F;styles.styl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>再将对应的#去除就可以了</p>
 <h1>博客内容透明化</h1>
 <p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token selector"><span class="token comment">//博客内容透明化</span>
-<span class="token comment">//文章内容的透明度设置</span>
-.content-wrap <span class="token punctuation">&#123;</span></span>
-  <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
-<span class="token punctuation">&#125;</span>
-<span class="token selector">.main-inner <span class="token punctuation">&#123;</span></span> 
-   <span class="token comment">// margin-top: 60px;</span>
-   <span class="token comment">// padding: 60px 60px 60px 60px;</span>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">&#x2F;&#x2F;博客内容透明化
+&#x2F;&#x2F;文章内容的透明度设置
+.content-wrap &#123;
+  opacity: 0.8;
+&#125;
+.main-inner &#123; 
+   &#x2F;&#x2F; margin-top: 60px;
+   &#x2F;&#x2F; padding: 60px 60px 60px 60px;
 
-    <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
-<span class="token punctuation">&#125;</span>
-<span class="token selector"><span class="token comment">//侧边框的透明度设置</span>
-.sidebar <span class="token punctuation">&#123;</span></span>
-  <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
-<span class="token punctuation">&#125;</span>
+    opacity: 0.8;
+&#125;
+&#x2F;&#x2F;侧边框的透明度设置
+.sidebar &#123;
+  opacity: 0.8;
+&#125;
 
-<span class="token selector"><span class="token comment">//菜单栏的透明度设置</span>
-.header-inner <span class="token punctuation">&#123;</span></span>
-  <span class="token property-declaration"><span class="token property">background</span><span class="token punctuation">:</span> <span class="token func"><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0.8</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></span>
-<span class="token punctuation">&#125;</span>
+&#x2F;&#x2F;菜单栏的透明度设置
+.header-inner &#123;
+  background: rgba(255,255,255,0.8);
+&#125;
 
-<span class="token selector"><span class="token comment">//搜索框（local-search）的透明度设置</span>
-.popup <span class="token punctuation">&#123;</span></span>
-  <span class="token property-declaration"><span class="token property">opacity</span><span class="token punctuation">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span></span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#x2F;&#x2F;搜索框（local-search）的透明度设置
+.popup &#123;
+  opacity: 0.8;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
 <p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">.</span>post<span class="token operator">-</span>block <span class="token punctuation">&#123;</span>
@@ -1050,44 +1049,44 @@ Next主题版本: NexT version 8.2.1</p>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h1>添加圆角</h1>
 <p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token comment">// 圆角设置</span>
-<span class="token variable-declaration"><span class="token variable">$border-radius-inner</span>     <span class="token operator">=</span> <span class="token number">20</span><span class="token unit">px</span> <span class="token number">20</span><span class="token unit">px</span> <span class="token number">20</span><span class="token unit">px</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
-<span class="token variable-declaration"><span class="token variable">$border-radius</span>           <span class="token operator">=</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">&#x2F;&#x2F; 圆角设置
+$border-radius-inner     &#x3D; 20px 20px 20px 20px;
+$border-radius           &#x3D; 20px;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus"><span class="token property-declaration"><span class="token property">custom_file_path</span><span class="token punctuation">:</span>
-  variable<span class="token punctuation">:</span> source<span class="token operator">/</span>_data<span class="token operator">/</span>variables.styl</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">custom_file_path:
+  variable: source&#x2F;_data&#x2F;variables.styl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <h1>添加阴影效果</h1>
 <p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">	<span class="token comment">// 主页文章添加阴影效果</span>
-<span class="token selector">.post <span class="token punctuation">&#123;</span></span>
-   <span class="token property-declaration"><span class="token property">margin-top</span><span class="token punctuation">:</span> <span class="token number">60</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
-   <span class="token property-declaration"><span class="token property">padding</span><span class="token punctuation">:</span> <span class="token number">20</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
-   <span class="token property-declaration"><span class="token property">margin-bottom</span><span class="token punctuation">:</span> <span class="token number">60</span><span class="token unit">px</span><span class="token punctuation">;</span></span>
-   <span class="token property-declaration"><span class="token property">-webkit-box-shadow</span><span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">5</span><span class="token unit">px</span> <span class="token func"><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">120</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">114</span><span class="token punctuation">,</span> <span class="token number">1.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></span>
-   <span class="token property-declaration"><span class="token property">-moz-box-shadow</span><span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">0</span> <span class="token number">5</span><span class="token unit">px</span> <span class="token func"><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">202</span><span class="token punctuation">,</span> <span class="token number">203</span><span class="token punctuation">,</span> <span class="token number">204</span><span class="token punctuation">,</span> <span class="token number">.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">	&#x2F;&#x2F; 主页文章添加阴影效果
+.post &#123;
+   margin-top: 60px;
+   padding: 20px;
+   margin-bottom: 60px;
+   -webkit-box-shadow: 0 0 5px rgba(120, 128, 114, 1.5);
+   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h1>动画</h1>
 <h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
 <p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># Use Animate.css to animate everything.</span>
-<span class="token comment"># Use velocity to animate everything.</span>
-<span class="token key atrule">motion</span><span class="token punctuation">:</span>
-  <span class="token key atrule">enable</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-  <span class="token key atrule">async</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-  <span class="token key atrule">transition</span><span class="token punctuation">:</span>
-    <span class="token comment"># Transition variants:</span>
-    <span class="token comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span>
-    <span class="token comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span>
-    <span class="token comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span>
-    <span class="token comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span>
-    <span class="token comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span>
-    <span class="token comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span>
-    <span class="token key atrule">post_block</span><span class="token punctuation">:</span> fadeIn
-    <span class="token key atrule">post_header</span><span class="token punctuation">:</span> slideDownIn
-    <span class="token key atrule">post_body</span><span class="token punctuation">:</span> slideDownIn
-    <span class="token key atrule">coll_header</span><span class="token punctuation">:</span> slideLeftIn
-    <span class="token comment"># Only for Pisces | Gemini.</span>
-    <span class="token key atrule">sidebar</span><span class="token punctuation">:</span> slideDownBigOut<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"># Use Animate.css to animate everything.
+# Use velocity to animate everything.
+motion:
+  enable: true
+  async: false
+  transition:
+    # Transition variants:
+    # fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut
+    # swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut
+    # bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut
+    # slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut
+    # slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut
+    # perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut
+    post_block: fadeIn
+    post_header: slideDownIn
+    post_body: slideDownIn
+    coll_header: slideLeftIn
+    # Only for Pisces | Gemini.
+    sidebar: slideDownBigOut<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
 <p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
 ]]></content>
@@ -1096,9 +1095,51 @@ Next主题版本: NexT version 8.2.1</p>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>个人博客</tag>
         <tag>next</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题中超链接颜色的修改</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1>修改超链接样式</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
+而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
+  color: #428BCA;
+  font-weight: bold;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
+<a id="more"></a>
+<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
+  color: #f89fa0;
+  border-bottom: none;
+  &amp;:hover &#123;
+	color: #ff7a7a;
+	font-weight: bold;
+	text-decoration: underline;
+  		  &#125;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
+<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
+<p>睡一觉起来它就好了。。。真是玄学🌝</p>
+<blockquote>
+<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>next</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
 </search>

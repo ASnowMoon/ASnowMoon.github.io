@@ -27,22 +27,23 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="¶行列填充  序列填充：填充-等差数列 设置步长与终止值后填充 填充：   向右：Ctrl + R 向下：Ctrl + D 在选中单元格附近悬停，出现黑色十字后双击 若要下方单元格填充与上方一样的内容则选择时候选中含有数据的单元格    快速填充：Ctrl + E  快速填充非常好用，能用来将旁边的内容中你需要的部分提取出来，或者在每行&#x2F;列对应的数据组合成你想要的目标内容后放到几个目标格子中然后C">
+<meta name="description" content="前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误  TOC定向错误 分析原因： 经过排查，发现原本会被编译为h2 id&#x3D;&quot;title&quot;&gt;title&lt;&#x2F;h2&gt;的代码 现在会被编译为&lt;h2&gt;&lt;span id&#x3D;&quot;title&amp;q">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Excel学习笔记1——填充、行列操作、数据格式">
-<meta property="og:url" content="https://www.snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/index.html">
+<meta property="og:title" content="next踩坑记录——markdown-it引擎渲染导致标题TOC错误">
+<meta property="og:url" content="https://www.snowmoon.top/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="¶行列填充  序列填充：填充-等差数列 设置步长与终止值后填充 填充：   向右：Ctrl + R 向下：Ctrl + D 在选中单元格附近悬停，出现黑色十字后双击 若要下方单元格填充与上方一样的内容则选择时候选中含有数据的单元格    快速填充：Ctrl + E  快速填充非常好用，能用来将旁边的内容中你需要的部分提取出来，或者在每行&#x2F;列对应的数据组合成你想要的目标内容后放到几个目标格子中然后C">
+<meta property="og:description" content="前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误  TOC定向错误 分析原因： 经过排查，发现原本会被编译为h2 id&#x3D;&quot;title&quot;&gt;title&lt;&#x2F;h2&gt;的代码 现在会被编译为&lt;h2&gt;&lt;span id&#x3D;&quot;title&amp;q">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-02-16T09:22:33.000Z">
-<meta property="article:modified_time" content="2021-02-20T16:08:41.320Z">
+<meta property="article:published_time" content="2021-03-03T12:42:53.000Z">
+<meta property="article:modified_time" content="2021-03-03T15:50:23.166Z">
 <meta property="article:author" content="Zheng Haoyu">
-<meta property="article:tag" content="Excel">
-<meta property="article:tag" content="办公学习">
+<meta property="article:tag" content="网站建设">
+<meta property="article:tag" content="个人博客">
+<meta property="article:tag" content="next">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://www.snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/">
+<link rel="canonical" href="https://www.snowmoon.top/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/">
 
 
 <script class="page-configurations">
@@ -54,7 +55,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>Excel学习笔记1——填充、行列操作、数据格式 | SnowMoon-Haoyu's Blog</title>
+<title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误 | SnowMoon-Haoyu's Blog</title>
   
 
 
@@ -195,7 +196,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%A1%AB%E5%85%85"><span class="nav-number">1.</span> <span class="nav-text">行列填充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">行列操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">数据格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%97%B6%E9%97%B4%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">常用时间代码示例</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">TOC定向错误</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%951"><span class="nav-number">1.1.</span> <span class="nav-text">方法1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%952"><span class="nav-number">1.2.</span> <span class="nav-text">方法2</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -270,7 +271,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/Avatar.jpg">
@@ -283,7 +284,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Excel学习笔记1——填充、行列操作、数据格式
+          next踩坑记录——markdown-it引擎渲染导致标题TOC错误
         </h1>
 
         <div class="post-meta-container">
@@ -293,27 +294,21 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-02-16 17:22:33" itemprop="dateCreated datePublished" datetime="2021-02-16T17:22:33+08:00">2021-02-16</time>
+      <time title="创建时间：2021-03-03 20:42:53 / 修改时间：23:50:23" itemprop="dateCreated datePublished" datetime="2021-03-03T20:42:53+08:00">2021-03-03</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-21 00:08:41" itemprop="dateModified" datetime="2021-02-21T00:08:41+08:00">2021-02-21</time>
-      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">办公类软件</span></a>
+          <a href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" itemprop="url" rel="index"><span itemprop="name">网站建设</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/Excel/" itemprop="url" rel="index"><span itemprop="name">Excel</span></a>
+          <a href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">个人博客</span></a>
         </span>
     </span>
 
@@ -325,7 +320,7 @@
       <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
-    <span id="/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title="Excel学习笔记1——填充、行列操作、数据格式" title="阅读次数">
+    <span id="/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/" class="post-meta-item leancloud_visitors" data-flag-title="next踩坑记录——markdown-it引擎渲染导致标题TOC错误" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -340,14 +335,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.1k</span>
+      <span>798</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -358,509 +353,33 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="行列填充"><a class="header-anchor" href="#行列填充">¶</a>行列填充</h3>
-<ul>
-<li><strong>序列填充</strong>：填充-等差数列 设置步长与终止值后填充</li>
-<li><strong>填充</strong>：</li>
-</ul>
-<ol>
-<li>向右：Ctrl + R</li>
-<li>向下：Ctrl + D</li>
-<li>在选中单元格附近悬停，出现黑色十字后双击</li>
-<li>若要下方单元格填充与上方一样的内容则选择时候选中含有数据的单元格</li>
-</ol>
-<ul>
-<li>
-<p><strong>快速填充</strong>：Ctrl + E</p>
-<blockquote>
-<p>快速填充非常好用，能用来将旁边的内容中你需要的部分提取出来，或者在每行/列对应的数据组合成你想要的目标内容后放到几个目标格子中然后Ctrl + E就能快速的把附近的单元格填充好</p>
+        <blockquote>
+<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误</p>
 </blockquote>
-</li>
-</ul>
-<h3 id="行列操作"><a class="header-anchor" href="#行列操作">¶</a>行列操作</h3>
-<ul>
-<li><strong>自动调整列宽/行高</strong>：选中整个行/列（一定要是行/列）后移动到两行/两列之间直至出现双箭头然后双击即可自动调整行列宽</li>
-</ul>
+<h1>TOC定向错误</h1>
+<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code>的代码</p>
+<p>现在会被编译为<code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
+<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
+<h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
+<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$title<span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// $title.children('a').remove();</span>
+<span class="token comment">// $title.html( '&lt;span id="' + id + '">' + $title.html() + '&lt;/span>' );</span>
+<span class="token comment">// $title.removeAttr('id');</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是我的hexo中并没有找到这个目录</p>
+<p>所以我找了另外的</p>
+<h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
 <a id="more"></a>
-<ul>
-<li><strong>移动并复制列和行</strong>：选中后Ctrl+shift拖动列行</li>
-<li><strong>移动</strong>：选中后按Shift拖动</li>
-<li><strong>添加行/列</strong>：Ctrl + Shift + =</li>
-<li><strong>删除行/列</strong>：Ctrl + -</li>
-</ul>
-<h3 id="数据格式"><a class="header-anchor" href="#数据格式">¶</a>数据格式</h3>
-<ul>
-<li>
-<p><strong>设置数据格式的快捷键</strong>：Ctrl + 1</p>
+<p>首先安装<code>markdown-it-named-headings</code>插件</p>
+<pre class="line-numbers language-none"><code class="language-none">npm install markdown-it-named-headings --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">parser<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'markdown-it-named-headings'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>尝试以上两种方法，均未成功</p>
+<p>时间不早了，后面有时间再解决</p>
 <blockquote>
-<p>文本默认是左对齐的，数字默认是右对齐的</p>
-<p>当输入数字超过11位时，数字格式默认使用科学计数法，超过15位时，末尾默认补为0</p>
+<p>参考文章:</p>
+<p><a target="_blank" rel="noopener" href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a>  <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
 </blockquote>
-</li>
-<li>
-<p><strong>将数字直接输入为文本：</strong></p>
-</li>
-</ul>
-<ol>
-<li>将单元格默认格式改为文本</li>
-<li>输入时在数字前方加入一个英文的’</li>
-<li></li>
-</ol>
-<ul>
-<li><strong>数字各位补0</strong>：设置单元格格式时候选自定义格式，要用几位输入几个0，即1-&gt;0001只需要在自定义格式中输入0000</li>
-<li><strong>在数字后方加单位</strong>：选中单元格，自定义格式，然后在同时格式后面输入&quot;单位&quot;，引号必须用英文的。</li>
-<li><strong>在文本前/后统一加入特定词语</strong>：自定义格式时输入   <em>想添加的字词@</em>  即原本为   <em>好用</em>   ，设置后变为   <em>想添加的字词好用</em>   ，@为原单元格数据的通配符</li>
-<li><strong>转换数据格式方法（万能）</strong>：选中单元格后在菜单栏 数据-分列-下一步-下一步-<em>选择好需要的目标格式</em>-完成</li>
-</ul>
-<ul>
-<li><strong>将单元格设置后为能快速输入男/女等字词的格式</strong>：自定义单元格格式，输入**[=1]“男”;[=0]“女”**</li>
-</ul>
-<ul>
-<li><strong>人民币面值转大写公式：</strong></li>
-</ul>
-<p><code>=RIGHT(TEXT(A1*100,&quot;[DBNum2]0仟0佰0拾0万0仟0佰0拾0元0角0分&quot;),(LEN(A1*100))*2)</code></p>
-<h4 id="常用时间代码示例"><a class="header-anchor" href="#常用时间代码示例">¶</a>常用时间代码示例</h4>
-<table>
-<thead>
-<tr>
-<th>代码1</th>
-<th>示例1</th>
-<th>代码2</th>
-<th>示例3</th>
-<th>代码4</th>
-<th>示例5</th>
-<th>代码6</th>
-<th>示例7</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Y（年）</td>
-<td>17</td>
-<td>YY</td>
-<td>17</td>
-<td>YYY</td>
-<td>2017</td>
-<td>YYYY</td>
-<td>2017</td>
-</tr>
-<tr>
-<td>M（月）</td>
-<td>1</td>
-<td>MM</td>
-<td>1</td>
-<td>MMM</td>
-<td>Jan</td>
-<td>MMMM</td>
-<td>January</td>
-</tr>
-<tr>
-<td>D（日/星期）</td>
-<td>1</td>
-<td>DD</td>
-<td>1</td>
-<td>DDD</td>
-<td>Sun</td>
-<td>DDDD</td>
-<td>Sunday</td>
-</tr>
-<tr>
-<td>A（星期）</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>AAA</td>
-<td>日</td>
-<td>AAAA</td>
-<td>星期日</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>代码</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>h:mm</td>
-<td>12:34:00</td>
-</tr>
-<tr>
-<td>h:mm:ss</td>
-<td>12:34:56</td>
-</tr>
-<tr>
-<td>mm:ss</td>
-<td>10时56分00秒</td>
-</tr>
-<tr>
-<td>h&quot;时&quot;mm&quot;分&quot;ss&quot;秒&quot;</td>
-<td>12时34分56秒</td>
-</tr>
-<tr>
-<td>yyyy/m/d h:mm</td>
-<td>2017/1/1 12:34</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>代码符号</th>
-<th>符号的含义和作用</th>
-<th>通过示例来理解</th>
-<th>备注</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>自定义格式代码</td>
-<td>原始数值</td>
-<td>自定义格式后显示值</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>m</td>
-<td>使用没有前导零的数字来显示月份（1～12）     使用没有前导零的数字来显示分钟（0～59）</td>
-<td>m</td>
-<td>2009/2/2</td>
-<td>2</td>
-</tr>
-<tr>
-<td>m</td>
-<td>0.626793981</td>
-<td>15:2</td>
-<td>注意：要与h或者hh配合设置，否则单独设置m或者mm，会默认为显示为月份</td>
-<td></td>
-</tr>
-<tr>
-<td>mm</td>
-<td>使用有前导零的数字来显示分钟（01～12）     使用有前导零的数字来显示月份（00～59）</td>
-<td>mm</td>
-<td>0.626793981</td>
-<td>15:02</td>
-</tr>
-<tr>
-<td>mm</td>
-<td>2009/2/12</td>
-<td>02</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>mmm</td>
-<td>使用英文缩写来显示月份（Jan～Dec）</td>
-<td>mmm</td>
-<td>2009/2/12</td>
-<td>Feb</td>
-</tr>
-<tr>
-<td>mmmm</td>
-<td>使用英文全称来显示月份（January～December）</td>
-<td>mmmm</td>
-<td>2009/2/12</td>
-<td>February</td>
-</tr>
-<tr>
-<td>mmmmm</td>
-<td>显示月份的英文首字母（J～D）</td>
-<td>mmmmm</td>
-<td>2009/2/12</td>
-<td>F</td>
-</tr>
-<tr>
-<td>d</td>
-<td>使用没有前导零的数字来显示日期（1～31）</td>
-<td>d</td>
-<td>2009/2/2</td>
-<td>2</td>
-</tr>
-<tr>
-<td>dd</td>
-<td>使用有前导零的数字来显示日期（01～31）</td>
-<td>dd</td>
-<td>2009/2/2</td>
-<td>02</td>
-</tr>
-<tr>
-<td>ddd</td>
-<td>使用英文缩写来显示星期几（Sun～Sat）</td>
-<td>ddd</td>
-<td>2009/2/12</td>
-<td>Thu</td>
-</tr>
-<tr>
-<td>dddd</td>
-<td>使用英文全称来显示星期几（Sunday～Saturday）</td>
-<td>dddd</td>
-<td>2009/2/12</td>
-<td>Thursday</td>
-</tr>
-<tr>
-<td>aaa</td>
-<td>使用中文简称显示星期几（一～日），不显示“星期”两字</td>
-<td>aaa</td>
-<td>2009/2/12</td>
-<td>四</td>
-</tr>
-<tr>
-<td>aaaa</td>
-<td>使用中文全称来显示星期几（星期一～星期日）</td>
-<td>aaaa</td>
-<td>2009/2/12</td>
-<td>星期四</td>
-</tr>
-<tr>
-<td>y/yy</td>
-<td>使用两位数显示年份（00～99）</td>
-<td>y/yy</td>
-<td>2009/2/12</td>
-<td>09</td>
-</tr>
-<tr>
-<td>yyyy</td>
-<td>使用4位数显示年份（1900～9999）</td>
-<td>yyyy</td>
-<td>2009/2/12</td>
-<td>2009</td>
-</tr>
-<tr>
-<td>e</td>
-<td>使用4位数显示年份（1900～10000）</td>
-<td>e</td>
-<td>2009/2/12</td>
-<td>2009</td>
-</tr>
-</tbody>
-</table>
-<p><strong>常用格式</strong></p>
-<table>
-<thead>
-<tr>
-<th>格式代码</th>
-<th>数字</th>
-<th>TEXT(数字,格式代码)</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>G/通用格式</td>
-<td>10</td>
-<td>10</td>
-<td>常规格式</td>
-</tr>
-<tr>
-<td>“000.0”</td>
-<td>10.25</td>
-<td>“010.3”</td>
-<td>小数点前面不够三位以0补齐，保留1位小数，不足一位以0补齐</td>
-</tr>
-<tr>
-<td>####</td>
-<td>10.00</td>
-<td>10</td>
-<td>没用的0一律不显示</td>
-</tr>
-<tr>
-<td>00.##</td>
-<td>1.253</td>
-<td>01.25</td>
-<td>小数点前不足两位以0补齐，保留两位，不足两位不补位</td>
-</tr>
-<tr>
-<td>正数；负数；零</td>
-<td>1</td>
-<td>正数</td>
-<td>大于0，显示为“正数”</td>
-</tr>
-<tr>
-<td>正数；负数；零</td>
-<td>0</td>
-<td>零</td>
-<td>等于0，显示为“零”</td>
-</tr>
-<tr>
-<td>正数；负数；零</td>
-<td>-1</td>
-<td>负数</td>
-<td>小于0，显示为“负数”</td>
-</tr>
-<tr>
-<td>0000-00-00</td>
-<td>19820506</td>
-<td>1982-05-06</td>
-<td>按所示形式表示日期</td>
-</tr>
-<tr>
-<td>0000年00月00日</td>
-<td>19820506</td>
-<td>1982年05月06日</td>
-<td></td>
-</tr>
-<tr>
-<td>dddd</td>
-<td>2007/12/31</td>
-<td>Monday</td>
-<td>显示为英文星期几全称</td>
-</tr>
-<tr>
-<td>[&gt;=90]优秀；[&gt;=60]及格；不及格</td>
-<td>90</td>
-<td>优秀</td>
-<td>大于等于90，显示为“优秀”</td>
-</tr>
-<tr>
-<td>[&gt;=90]优秀；[&gt;=60]及格；不及格</td>
-<td>60</td>
-<td>及格</td>
-<td>大于等于60，小于90，显示为“及格”</td>
-</tr>
-<tr>
-<td>[&gt;=90]优秀；[&gt;=60]及格；不及格</td>
-<td>59</td>
-<td>不及格</td>
-<td>小于60，显示为“不及格”</td>
-</tr>
-<tr>
-<td>[DBNum1][$-804]G/通用格式</td>
-<td>125</td>
-<td>一百二十五</td>
-<td>中文小写数字</td>
-</tr>
-<tr>
-<td>[DBNum2][$-804]G/通用格式元整</td>
-<td>125</td>
-<td>壹佰贰拾伍元整</td>
-<td>中文大写数字，并加入“元整”字尾</td>
-</tr>
-<tr>
-<td>[DBNum3][$-804]G/通用格式</td>
-<td>125</td>
-<td>１百２十５</td>
-<td>中文小写数字</td>
-</tr>
-<tr>
-<td>[DBNum1][$-804]G/通用格式</td>
-<td>19</td>
-<td>一十九</td>
-<td>中文小写数字，11-19无设置</td>
-</tr>
-<tr>
-<td>[&gt;20][DBNum1];[DBNum1]d</td>
-<td>19</td>
-<td>十九</td>
-<td>中文小写数字，11-显示为十一而不是一十一</td>
-</tr>
-<tr>
-<td>0.00,K</td>
-<td>12536</td>
-<td>12.54K</td>
-<td>以千为单位</td>
-</tr>
-<tr>
-<td>#!.0000万元</td>
-<td>12536</td>
-<td>1.2536万元</td>
-<td>以万元为单位，保留4位小数</td>
-</tr>
-<tr>
-<td>#!.0,万元</td>
-<td>12536</td>
-<td>1.3万元</td>
-<td>以万元为单位，保留1位小数</td>
-</tr>
-<tr>
-<td>14000</td>
-<td></td>
-<td>1.40万元</td>
-<td>以万元为单位，保留二位小数。只能靠公式的形式解决</td>
-</tr>
-<tr>
-<td>#-99-##</td>
-<td>12345</td>
-<td>123-99-45</td>
-<td>在指定的数字中间差入指定的数字</td>
-</tr>
-<tr>
-<td>;#[红色]</td>
-<td>1000</td>
-<td>1000</td>
-<td>把负数变成正数并用红色显示，注意用TEXT函数不能实现数字变红，只能放在单元格中用自定义格式来实现目的。TEXT也不支持包含  * 的格式。</td>
-</tr>
-<tr>
-<td>[=1]“男”;[=2]“女”;“录入错误”;</td>
-<td>1</td>
-<td>男</td>
-<td>条件格式一般只可以写三项</td>
-</tr>
-<tr>
-<td>[=1]“男”;[=2]“女”;“录入错误”;</td>
-<td>2</td>
-<td>女</td>
-<td></td>
-</tr>
-<tr>
-<td>#-##-##</td>
-<td>20100108</td>
-<td>2010-01-08</td>
-<td>把不规范的时间格式以正确的时间格式显示出来</td>
-</tr>
-<tr>
-<td>“第”[DBNum1][$-804]G/通用格式&quot;中学&quot;</td>
-<td>35</td>
-<td>第三十五中学</td>
-<td></td>
-</tr>
-<tr>
-<td>???,???.???</td>
-<td>2345.789</td>
-<td>2,345.789</td>
-<td>小数点对齐</td>
-</tr>
-<tr>
-<td>???,???.???</td>
-<td>2.4</td>
-<td>2.4</td>
-<td>小数点对齐</td>
-</tr>
-<tr>
-<td>0.00_)“kg”;<a href="0.00">红色</a></td>
-<td>78</td>
-<td>78.00 kg</td>
-<td>_下划线，代表后面加一个和）一样宽度的空格</td>
-</tr>
-<tr>
-<td>0.00_)“kg”;<a href="0.00">红色</a></td>
-<td>(78.00)</td>
-<td>(78.00)</td>
-<td>负数变红并且自动在数字外面套上（）</td>
-</tr>
-<tr>
-<td><a href="mailto:%22999999999%22@">“999999999”@</a></td>
-<td>999999999785</td>
-<td>785</td>
-<td>必须是以文本形式储存的数字才有效.TEXT不支持文本数值的转换。</td>
-</tr>
-<tr>
-<td>0*-</td>
-<td>785-----------</td>
-<td>785</td>
-<td>TEXT不支持* 用*把重复的一直显示到列宽</td>
-</tr>
-<tr>
-<td>G/通用格式;-G/通用格式;-</td>
-<td>-</td>
-<td></td>
-<td>把有0的单元格显示为-，其它不变</td>
-</tr>
-</tbody>
-</table>
 
     </div>
 
@@ -896,7 +415,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://www.snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" title="Excel学习笔记1——填充、行列操作、数据格式">https://www.snowmoon.top/2021/02/16/Excel学习笔记1——填充、行列操作、数据格式/</a>
+      <a href="https://www.snowmoon.top/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/" title="next踩坑记录——markdown-it引擎渲染导致标题TOC错误">https://www.snowmoon.top/2021/03/03/next踩坑记录——markdown-it引擎渲染导致标题TOC错误/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -905,19 +424,20 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/Excel/" rel="tag"><i class="fas fa-tag"></i> Excel</a>
-              <a href="/tags/%E5%8A%9E%E5%85%AC%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fas fa-tag"></i> 办公学习</a>
+              <a href="/tags/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" rel="tag"><i class="fas fa-tag"></i> 网站建设</a>
+              <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag"><i class="fas fa-tag"></i> 个人博客</a>
+              <a href="/tags/next/" rel="tag"><i class="fas fa-tag"></i> next</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/" rel="prev" title="next主题美化——背景图片、动画">
+                  <i class="fa fa-chevron-left"></i> next主题美化——背景图片、动画
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%AE%9A%E4%BD%8D%E3%80%81%E6%9F%A5%E6%89%BE%E3%80%81%E6%8E%92%E5%BA%8F%E3%80%81%E7%AD%9B%E9%80%89/" rel="next" title="Excel学习笔记2——定位、查找、排序、筛选">
-                  Excel学习笔记2——定位、查找、排序、筛选 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -1115,7 +635,7 @@ NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
     new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":null,"placeholder":"无需输入头像 昵称 网址 即可评论(*^▽^*)&#10valine评论不一定能及时看到，如果需要回复可以戳我主页的联系方式(～￣▽￣)～","avatar":"robohash","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
       el: '#valine-comments',
-      path: "/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/",
+      path: "/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/",
       serverURLs: "https://3kooisaa.api.lncldglobal.com"
     }));
   }, window.Valine);

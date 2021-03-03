@@ -27,15 +27,15 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="读取">
+<meta name="description" content="图像的基础操作 ¶图像加载 IMREAD_UNCHANGED  加载原图，不做任何改变  输入图像默认读进来的方式RGB，但是三个通道的排序是BGR  IMREAD_GRAYSCALE 把原图加载为灰度图 IMREAD_COLOR  把原图作为RGB图像加载进来 Mat src &#x3D; imread(&quot;E:&#x2F;OpenCV&#x2F;testimage&#x2F;test.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="opcv学习笔记1——">
+<meta property="og:title" content="基于C++的opcv学习笔记">
 <meta property="og:url" content="https://www.snowmoon.top/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="读取">
+<meta property="og:description" content="图像的基础操作 ¶图像加载 IMREAD_UNCHANGED  加载原图，不做任何改变  输入图像默认读进来的方式RGB，但是三个通道的排序是BGR  IMREAD_GRAYSCALE 把原图加载为灰度图 IMREAD_COLOR  把原图作为RGB图像加载进来 Mat src &#x3D; imread(&quot;E:&#x2F;OpenCV&#x2F;testimage&#x2F;test.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-02-19T11:19:51.000Z">
-<meta property="article:modified_time" content="2021-02-24T03:13:20.450Z">
+<meta property="article:modified_time" content="2021-02-28T03:44:20.174Z">
 <meta property="article:author" content="Zheng Haoyu">
 <meta property="article:tag" content="计算机视觉">
 <meta property="article:tag" content="python">
@@ -54,7 +54,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>opcv学习笔记1—— | SnowMoon-Haoyu's Blog</title><meta name="robots" content="noindex">
+<title>基于C++的opcv学习笔记 | SnowMoon-Haoyu's Blog</title><meta name="robots" content="noindex">
   
 
 
@@ -195,7 +195,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">读取</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">图像的基础操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.1.</span> <span class="nav-text">图像加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA"><span class="nav-number">1.2.</span> <span class="nav-text">图像显示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.3.</span> <span class="nav-text">色彩空间转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%9D%E5%AD%98"><span class="nav-number">1.4.</span> <span class="nav-text">保存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">矩阵的掩膜操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">核心公式：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E6%93%8D%E4%BD%9CAPI"><span class="nav-number">2.2.</span> <span class="nav-text">基本的操作API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%9B%BE%E5%83%8F%E5%83%8F%E7%B4%A0%E6%8C%87%E9%92%88"><span class="nav-number">2.2.1.</span> <span class="nav-text">获取图像像素指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%83%8F%E7%B4%A0%E8%8C%83%E5%9B%B4%E5%A4%84%E7%90%86saturate-cast-uchar"><span class="nav-number">2.2.2.</span> <span class="nav-text">像素范围处理saturate_cast</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,7 +211,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -224,7 +224,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -283,7 +283,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          opcv学习笔记1——
+          基于C++的opcv学习笔记
         </h1>
 
         <div class="post-meta-container">
@@ -301,7 +301,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-02-24 11:13:20" itemprop="dateModified" datetime="2021-02-24T11:13:20+08:00">2021-02-24</time>
+        <time title="修改时间：2021-02-28 11:44:20" itemprop="dateModified" datetime="2021-02-28T11:44:20+08:00">2021-02-28</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,7 +321,7 @@
       <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
-    <span id="/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/" class="post-meta-item leancloud_visitors" data-flag-title="opcv学习笔记1——" title="阅读次数">
+    <span id="/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/" class="post-meta-item leancloud_visitors" data-flag-title="基于C++的opcv学习笔记" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -336,14 +336,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2</span>
+      <span>1.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -354,7 +354,70 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1>读取</h1>
+        <h1>图像的基础操作</h1>
+<h2 id="图像加载"><a class="header-anchor" href="#图像加载">¶</a>图像加载</h2>
+<p>IMREAD_UNCHANGED  加载原图，不做任何改变</p>
+<blockquote>
+<p>输入图像默认读进来的方式RGB，但是三个通道的排序是BGR</p>
+</blockquote>
+<p>IMREAD_GRAYSCALE 把原图加载为灰度图</p>
+<p>IMREAD_COLOR  把原图作为RGB图像加载进来</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">Mat src &#x3D; imread(&quot;E:&#x2F;OpenCV&#x2F;testimage&#x2F;test.png&quot;, IMREAD_GRAYSCALE); &#x2F;&#x2F;载入灰度图像<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>判断图像是否为的方法：</p>
+<ol>
+<li>!src.data == true //数据为空值 = true</li>
+<li>src.empty() == true // 判断空值函数</li>
+</ol>
+</blockquote>
+<h2 id="图像显示"><a class="header-anchor" href="#图像显示">¶</a>图像显示</h2>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">namedWindow(&quot;test opencv setup&quot;, WINDOW_AUTOSIZE); &#x2F;&#x2F;创建窗口，自动大小
+imshow(&quot;test opencv setup&quot;, src); &#x2F;&#x2F;窗口名，图像名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>CV_WINDOW_AUTOSIZE 会自动根据图像大小，显示窗口大小，不能人为改变窗口大小</p>
+<h2 id="色彩空间转换"><a class="header-anchor" href="#色彩空间转换">¶</a>色彩空间转换</h2>
+<pre class="line-numbers language-none"><code class="language-none">cvtColor( image, gray_image, COLOR_BGR2GRAY );
+namedWindow(&quot;output windows&quot;, CV_WINDOW_AUTOSIZE);
+Mat output_image;
+cvtColor(src, output_image, CV_BGR2HLS); &#x2F;&#x2F;修改图像为某色彩空间
+imshow(&quot;output windows&quot;, output_image);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>COLOR_BGR2HLS // BGR 空间转为 亮度饱和度通道</p>
+<p>COLOR_BGR2GRAY // BGR 空间转为 灰度</p>
+<h2 id="保存"><a class="header-anchor" href="#保存">¶</a>保存</h2>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">imwrite(&quot;E:&#x2F;my.tif&quot;,output_image); &#x2F;&#x2F;保存位置，要保存的图片<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h1>矩阵的掩膜操作</h1>
+<h2 id="核心公式："><a class="header-anchor" href="#核心公式：">¶</a>核心公式：</h2>
+<p>$I(i,j) = 5 * I(i,j)-[I(i-1,j)+I(i,j-1)+I(i+1,j)+I(i,j+1)]$</p>
+<h2 id="基本的操作API"><a class="header-anchor" href="#基本的操作API">¶</a>基本的操作API</h2>
+<h3 id="获取图像像素指针"><a class="header-anchor" href="#获取图像像素指针">¶</a>获取图像像素指针</h3>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="http://docs.opencv.org/3.1.0/db/de0/group__core__utils.html">CV_Assert</a>(myImage.depth() == <a target="_blank" rel="noopener" href="http://docs.opencv.org/3.1.0/db/de0/group__core__utils.html">CV_8U</a>);</p>
+</li>
+<li>
+<p>Mat.ptr<uchar>(int i=0) 获取像素矩阵的指针，索引i表示第几行，从0开始计行数。</p>
+</li>
+<li>
+<p>获得当前行指针const uchar* current= myImage.ptr<uchar>(row );</p>
+</li>
+<li>
+<p>获取当前像素点P(row, col)的像素值 p(row, col) =current[col]</p>
+</li>
+</ul>
+<h3 id="像素范围处理saturate-cast-uchar"><a class="header-anchor" href="#像素范围处理saturate-cast-uchar">¶</a>像素范围处理saturate_cast<uchar></h3>
+<ul>
+<li>
+<p>saturate_cast<uchar>（-100），返回 0。</p>
+</li>
+<li>
+<p>saturate_cast<uchar>（288），返回255</p>
+</li>
+<li>
+<p>saturate_cast<uchar>（100），返回100</p>
+</li>
+<li>
+<p>这个函数的功能是确保RGB值得范围在0~255之间</p>
+</li>
+</ul>
 <!-- flag of hidden posts -->
     </div>
 
@@ -390,7 +453,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://www.snowmoon.top/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/" title="opcv学习笔记1——">https://www.snowmoon.top/2021/02/19/opcv学习/</a>
+      <a href="https://www.snowmoon.top/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/" title="基于C++的opcv学习笔记">https://www.snowmoon.top/2021/02/19/opcv学习/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -458,14 +521,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">12k</span>
+    <span title="站点总字数">13k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">30 分钟</span>
+    <span title="站点阅读时长">33 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
