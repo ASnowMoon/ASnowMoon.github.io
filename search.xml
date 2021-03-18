@@ -871,56 +871,45 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
-    <title>hexo博客部署到云服务器</title>
-    <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：我的国外服务器最近IP被封锁了，于是就打算把本地的服务器部署到另外的服务器上</p>
+    <title>next主题中超链接颜色的修改</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1>修改超链接样式</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
+而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
+  color: #428BCA;
+  font-weight: bold;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
+<a id="more"></a>
+<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
+  color: #f89fa0;
+  border-bottom: none;
+  &amp;:hover &#123;
+	color: #ff7a7a;
+	font-weight: bold;
+	text-decoration: underline;
+  		  &#125;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
+<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
+<p>睡一觉起来它就好了。。。真是玄学🌝</p>
+<blockquote>
+<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
 </blockquote>
-<h1>Git安装及配置</h1>
-<p>使用xshell远程连接服务器后先安装git依赖的库</p>
-<h2 id="安装依赖库及编译工具"><a class="header-anchor" href="#安装依赖库及编译工具">¶</a>安装依赖库及编译工具</h2>
-<ol>
-<li>
-<p>安装依赖库：</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel 
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li>
-<p>安装编译工具：</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install gcc perl-ExtUtils-MakeMaker package 
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-</ol>
-<h2 id="二、安装Git"><a class="header-anchor" href="#二、安装Git">¶</a>二、安装Git</h2>
-<p>先删除系统自带的旧版本git<br>
-切换到root用户</p>
-<pre class="line-numbers language-none"><code class="language-none">sudo su root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>再删除旧版本git</p>
-<pre class="line-numbers language-none"><code class="language-none">yum remove git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>安装git</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
-<p>2、创建个人账户</p>
-<p>在命令框输入（下面不做重复提示了）</p>
-<pre class="line-numbers language-none"><code class="language-none">adduser ZHY<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>3、添加个人账户权限</p>
-<pre class="line-numbers language-none"><code class="language-none">chmod 740 &#x2F;etc&#x2F;sudoers
-vim &#x2F;etc&#x2F;sudoers<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>输入上面的命令，回车之后，进入编辑界面。</p>
-<p>点击 I 键进入编辑模式，找到要修改的地方</p>
-<pre class="line-numbers language-none"><code class="language-none">## Allow root to run any commands anywhere
-root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>添加以下内容</p>
-<pre class="line-numbers language-none"><code class="language-none">ZHY     ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>参考博客</p>
-<p>https://hjxlog.com/posts/20191130a1.html</p>
 ]]></content>
       <categories>
         <category>网站建设</category>
+        <category>个人博客</category>
       </categories>
       <tags>
-        <tag>网站建设</tag>
-        <tag>博客部署</tag>
+        <tag>hexo</tag>
+        <tag>个人博客</tag>
+        <tag>next</tag>
       </tags>
   </entry>
   <entry>
@@ -975,91 +964,66 @@ Next主题版本: NexT version 8.2.1</p>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>个人博客</tag>
         <tag>hexo</tag>
+        <tag>个人博客</tag>
       </tags>
   </entry>
   <entry>
-    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
-    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
+    <title>HEXO博客部署到github并将个人域名解析至github</title>
+    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
     <content><![CDATA[<blockquote>
-<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误</p>
+<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
 </blockquote>
-<h1>TOC定向错误</h1>
-<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code>的代码</p>
-<p>现在会被编译为<code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
-<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
-<h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
-<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$title<span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// $title.children('a').remove();</span>
-<span class="token comment">// $title.html( '&lt;span id="' + id + '">' + $title.html() + '&lt;/span>' );</span>
-<span class="token comment">// $title.removeAttr('id');</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>但是我的hexo中并没有找到这个目录</p>
-<p>所以我找了另外的</p>
-<h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
+<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
+<h1>部署到github</h1>
+<p>首先在github中新建一个repository</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
+<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
+<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
+<pre class="line-numbers language-none"><code class="language-none">npm install hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
+<p>找到<code>deploy</code>并配置以下内容</p>
 <a id="more"></a>
-<p>首先安装<code>markdown-it-named-headings</code>插件</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install markdown-it-named-headings --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">parser<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'markdown-it-named-headings'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>尝试以上两种方法，均未成功</p>
-<p>时间不早了，后面有时间再解决</p>
-<blockquote>
-<p>参考文章:</p>
-<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a>  <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
-</blockquote>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">#部署
+# Deployment
+## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;one-command-deployment
+deploy:
+  - type: git
+    repo: git@github.com:ASnowMoon&#x2F;ASnowMoon.github.io.git   #用户名@服务器Ip:git仓库位置
+    branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中git仓库位置需要改为你自己新建的</p>
+<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
+<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
+<h1>域名注册和解析到github</h1>
+<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
+<h2 id="解析域名"><a class="header-anchor" href="#解析域名">¶</a>解析域名</h2>
+<p>进入控制台，点击解析-添加记录</p>
+<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<h2 id="添加CNAME文件"><a class="header-anchor" href="#添加CNAME文件">¶</a>添加CNAME文件</h2>
+<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
+<p>退出后<em><strong>删除.txt后缀文件名</strong></em></p>
+<p>最终CNAME的配置效果：</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886"></p>
+<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
+<p>这时候已经配置好了，再次部署到github上</p>
+<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
+<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
+<h1>参考文章</h1>
+<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
+<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
+<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
 ]]></content>
       <categories>
         <category>网站建设</category>
         <category>个人博客</category>
       </categories>
       <tags>
+        <tag>个人博客</tag>
         <tag>网站建设</tag>
-        <tag>个人博客</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>next主题中超链接颜色的修改</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1>修改超链接样式</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
-而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
-  color: #428BCA;
-  font-weight: bold;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
-<a id="more"></a>
-<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
-  color: #f89fa0;
-  border-bottom: none;
-  &amp;:hover &#123;
-	color: #ff7a7a;
-	font-weight: bold;
-	text-decoration: underline;
-  		  &#125;
-  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
-<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
-<p>睡一觉起来它就好了。。。真是玄学🌝</p>
-<blockquote>
-<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>hexo</tag>
-        <tag>next</tag>
       </tags>
   </entry>
   <entry>
@@ -1190,9 +1154,50 @@ motion:
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>个人博客</tag>
         <tag>hexo</tag>
+        <tag>个人博客</tag>
         <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
+    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
+    <content><![CDATA[<blockquote>
+<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误</p>
+</blockquote>
+<h1>TOC定向错误</h1>
+<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code>的代码</p>
+<p>现在会被编译为<code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
+<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
+<h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
+<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$title<span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// $title.children('a').remove();</span>
+<span class="token comment">// $title.html( '&lt;span id="' + id + '">' + $title.html() + '&lt;/span>' );</span>
+<span class="token comment">// $title.removeAttr('id');</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是我的hexo中并没有找到这个目录</p>
+<p>所以我找了另外的</p>
+<h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
+<a id="more"></a>
+<p>首先安装<code>markdown-it-named-headings</code>插件</p>
+<pre class="line-numbers language-none"><code class="language-none">npm install markdown-it-named-headings --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">parser<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'markdown-it-named-headings'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>尝试以上两种方法，均未成功</p>
+<p>时间不早了，后面有时间再解决</p>
+<blockquote>
+<p>参考文章:</p>
+<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a>  <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>next</tag>
+        <tag>网站建设</tag>
       </tags>
   </entry>
 </search>
