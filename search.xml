@@ -662,6 +662,115 @@
       </tags>
   </entry>
   <entry>
+    <title>hexo博客部署到云服务器</title>
+    <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：我的国外服务器最近IP被封锁了，于是就打算把本地的服务器部署到另外的服务器上</p>
+</blockquote>
+<h1>Git安装及配置</h1>
+<p>使用xshell远程连接服务器后先安装git依赖的库</p>
+<h2 id="安装依赖库及编译工具"><a class="header-anchor" href="#安装依赖库及编译工具">¶</a>安装依赖库及编译工具</h2>
+<ol>
+<li>
+<p>安装依赖库：</p>
+<pre class="line-numbers language-none"><code class="language-none">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel 
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p>安装编译工具：</p>
+<pre class="line-numbers language-none"><code class="language-none">yum install gcc perl-ExtUtils-MakeMaker package 
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ol>
+<h2 id="二、安装Git"><a class="header-anchor" href="#二、安装Git">¶</a>二、安装Git</h2>
+<p>先删除系统自带的旧版本git<br>
+切换到root用户</p>
+<pre class="line-numbers language-none"><code class="language-none">sudo su root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>再删除旧版本git</p>
+<pre class="line-numbers language-none"><code class="language-none">yum remove git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>安装git</p>
+<pre class="line-numbers language-none"><code class="language-none">yum install git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
+<p>2、创建个人账户</p>
+<p>在命令框输入（下面不做重复提示了）</p>
+<pre class="line-numbers language-none"><code class="language-none">adduser ZHY<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>3、添加个人账户权限</p>
+<pre class="line-numbers language-none"><code class="language-none">chmod 740 &#x2F;etc&#x2F;sudoers
+vim &#x2F;etc&#x2F;sudoers<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>输入上面的命令，回车之后，进入编辑界面。</p>
+<p>点击 I 键进入编辑模式，找到要修改的地方</p>
+<pre class="line-numbers language-none"><code class="language-none">## Allow root to run any commands anywhere
+root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>添加以下内容</p>
+<pre class="line-numbers language-none"><code class="language-none">ZHY     ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>参考博客</p>
+<p>https://hjxlog.com/posts/20191130a1.html</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+      </categories>
+      <tags>
+        <tag>网站建设</tag>
+        <tag>博客部署</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo踩坑记录</title>
+    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑<br>
+hexo版本：hexo: 5.3.0<br>
+hexo-cli: 4.2.0<br>
+os: Windows_NT 10.0.19042 win32 x64<br>
+Next主题版本: NexT version 8.2.1</p>
+</blockquote>
+<h1>使用了live2d时不蒜子访客统计无法显示</h1>
+<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">&#123;%- if theme.busuanzi_count.total_visitors %&#125;
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>busuanzi_container_site_pv<span class="token punctuation">"</span></span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">display</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post-meta-item-icon<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span> Visitors
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>site-uv<span class="token punctuation">"</span></span> <span class="token attr-name">title</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123;&#123; __(<span class="token punctuation">'</span>footer.total_visitors<span class="token punctuation">'</span>) &#125;&#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>busuanzi_value_site_uv<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+&#123;%- endif %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>发现这个标签<code>&lt;span id=&quot;busuanzi_container_site_pv&quot; style=&quot;display: none;&quot;&gt;</code>中出现了个诡异的<code>style=&quot;display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
+<a id="more"></a>
+<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
+<h1>markdown-it美元符号$无法显示的问题</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>在使用markdown写文章时，美元符号\$在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<ol>
+<li>
+<p>使用双反斜杠\对美元符号\$进行转义</p>
+</li>
+<li>
+<p>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</p>
+</li>
+</ol>
+<h1>valine评论框中占位符无法换行的问题</h1>
+<h2 id="问题描述-v2"><a class="header-anchor" href="#问题描述-v2">¶</a>问题描述</h2>
+<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
+<h2 id="解决方案-v2"><a class="header-anchor" href="#解决方案-v2">¶</a>解决方案</h2>
+<p>输入了<code>&amp;#10</code>完成了换行</p>
+<h1>字数统计后阅读时间计算参数修改</h1>
+<h2 id="问题描述-v3"><a class="header-anchor" href="#问题描述-v3">¶</a>问题描述</h2>
+<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
+<h2 id="解决方案-v3"><a class="header-anchor" href="#解决方案-v3">¶</a>解决方案</h2>
+<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Excel学习笔记3——函数求和及常见函数</title>
     <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<blockquote>
@@ -871,157 +980,6 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
-    <title>hexo博客部署到云服务器</title>
-    <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：我的国外服务器最近IP被封锁了，于是就打算把本地的服务器部署到另外的服务器上</p>
-</blockquote>
-<h1>Git安装及配置</h1>
-<p>使用xshell远程连接服务器后先安装git依赖的库</p>
-<h2 id="安装依赖库及编译工具"><a class="header-anchor" href="#安装依赖库及编译工具">¶</a>安装依赖库及编译工具</h2>
-<ol>
-<li>
-<p>安装依赖库：</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel 
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li>
-<p>安装编译工具：</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install gcc perl-ExtUtils-MakeMaker package 
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-</ol>
-<h2 id="二、安装Git"><a class="header-anchor" href="#二、安装Git">¶</a>二、安装Git</h2>
-<p>先删除系统自带的旧版本git<br>
-切换到root用户</p>
-<pre class="line-numbers language-none"><code class="language-none">sudo su root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>再删除旧版本git</p>
-<pre class="line-numbers language-none"><code class="language-none">yum remove git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>安装git</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
-<p>2、创建个人账户</p>
-<p>在命令框输入（下面不做重复提示了）</p>
-<pre class="line-numbers language-none"><code class="language-none">adduser ZHY<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>3、添加个人账户权限</p>
-<pre class="line-numbers language-none"><code class="language-none">chmod 740 &#x2F;etc&#x2F;sudoers
-vim &#x2F;etc&#x2F;sudoers<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>输入上面的命令，回车之后，进入编辑界面。</p>
-<p>点击 I 键进入编辑模式，找到要修改的地方</p>
-<pre class="line-numbers language-none"><code class="language-none">## Allow root to run any commands anywhere
-root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>添加以下内容</p>
-<pre class="line-numbers language-none"><code class="language-none">ZHY     ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>参考博客</p>
-<p>https://hjxlog.com/posts/20191130a1.html</p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-      </categories>
-      <tags>
-        <tag>网站建设</tag>
-        <tag>博客部署</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo踩坑记录</title>
-    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑<br>
-hexo版本：hexo: 5.3.0<br>
-hexo-cli: 4.2.0<br>
-os: Windows_NT 10.0.19042 win32 x64<br>
-Next主题版本: NexT version 8.2.1</p>
-</blockquote>
-<h1>使用了live2d时不蒜子访客统计无法显示</h1>
-<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html">&#123;%- if theme.busuanzi_count.total_visitors %&#125;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>busuanzi_container_site_pv<span class="token punctuation">"</span></span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">display</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post-meta-item-icon<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span> Visitors
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>site-uv<span class="token punctuation">"</span></span> <span class="token attr-name">title</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123;&#123; __(<span class="token punctuation">'</span>footer.total_visitors<span class="token punctuation">'</span>) &#125;&#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>busuanzi_value_site_uv<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-&#123;%- endif %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>发现这个标签<code>&lt;span id=&quot;busuanzi_container_site_pv&quot; style=&quot;display: none;&quot;&gt;</code>中出现了个诡异的<code>style=&quot;display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
-<a id="more"></a>
-<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
-<h1>markdown-it美元符号$无法显示的问题</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>在使用markdown写文章时，美元符号\$在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<ol>
-<li>
-<p>使用双反斜杠\对美元符号\$进行转义</p>
-</li>
-<li>
-<p>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</p>
-</li>
-</ol>
-<h1>valine评论框中占位符无法换行的问题</h1>
-<h2 id="问题描述-v2"><a class="header-anchor" href="#问题描述-v2">¶</a>问题描述</h2>
-<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
-<h2 id="解决方案-v2"><a class="header-anchor" href="#解决方案-v2">¶</a>解决方案</h2>
-<p>输入了<code>&amp;#10</code>完成了换行</p>
-<h1>字数统计后阅读时间计算参数修改</h1>
-<h2 id="问题描述-v3"><a class="header-anchor" href="#问题描述-v3">¶</a>问题描述</h2>
-<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
-<h2 id="解决方案-v3"><a class="header-anchor" href="#解决方案-v3">¶</a>解决方案</h2>
-<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>next主题中超链接颜色的修改</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1>修改超链接样式</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
-而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
-  color: #428BCA;
-  font-weight: bold;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
-<a id="more"></a>
-<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
-  color: #f89fa0;
-  border-bottom: none;
-  &amp;:hover &#123;
-	color: #ff7a7a;
-	font-weight: bold;
-	text-decoration: underline;
-  		  &#125;
-  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
-<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
-<p>睡一觉起来它就好了。。。真是玄学🌝</p>
-<blockquote>
-<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>hexo</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>next主题美化——背景图片、动画</title>
     <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
     <content><![CDATA[<blockquote>
@@ -1192,6 +1150,48 @@ motion:
       <tags>
         <tag>个人博客</tag>
         <tag>网站建设</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题中超链接颜色的修改</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1>修改超链接样式</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
+而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
+  color: #428BCA;
+  font-weight: bold;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
+<a id="more"></a>
+<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
+  color: #f89fa0;
+  border-bottom: none;
+  &amp;:hover &#123;
+	color: #ff7a7a;
+	font-weight: bold;
+	text-decoration: underline;
+  		  &#125;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
+<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
+<p>睡一觉起来它就好了。。。真是玄学🌝</p>
+<blockquote>
+<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
