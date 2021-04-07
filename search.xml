@@ -871,45 +871,61 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
-    <title>next主题中超链接颜色的修改</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1>修改超链接样式</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
-而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
-  color: #428BCA;
-  font-weight: bold;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
-<a id="more"></a>
-<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
-  color: #f89fa0;
-  border-bottom: none;
-  &amp;:hover &#123;
-	color: #ff7a7a;
-	font-weight: bold;
-	text-decoration: underline;
-  		  &#125;
-  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
-<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
-<p>睡一觉起来它就好了。。。真是玄学🌝</p>
-<blockquote>
-<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
+    <title>HEXO博客部署到github并将个人域名解析至github</title>
+    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
 </blockquote>
+<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
+<h1>部署到github</h1>
+<p>首先在github中新建一个repository</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
+<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
+<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
+<pre class="line-numbers language-none"><code class="language-none">npm install hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
+<p>找到<code>deploy</code>并配置以下内容</p>
+<a id="more"></a>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">#部署
+# Deployment
+## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;one-command-deployment
+deploy:
+  - type: git
+    repo: git@github.com:ASnowMoon&#x2F;ASnowMoon.github.io.git   #用户名@服务器Ip:git仓库位置
+    branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中git仓库位置需要改为你自己新建的</p>
+<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
+<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
+<h1>域名注册和解析到github</h1>
+<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
+<h2 id="解析域名"><a class="header-anchor" href="#解析域名">¶</a>解析域名</h2>
+<p>进入控制台，点击解析-添加记录</p>
+<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<h2 id="添加CNAME文件"><a class="header-anchor" href="#添加CNAME文件">¶</a>添加CNAME文件</h2>
+<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
+<p>退出后<em><strong>删除.txt后缀文件名</strong></em></p>
+<p>最终CNAME的配置效果：</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886"></p>
+<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
+<p>这时候已经配置好了，再次部署到github上</p>
+<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
+<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
+<h1>参考文章</h1>
+<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
+<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
+<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
 ]]></content>
       <categories>
         <category>网站建设</category>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>个人博客</tag>
-        <tag>next</tag>
+        <tag>网站建设</tag>
       </tags>
   </entry>
   <entry>
@@ -1017,58 +1033,41 @@ Next主题版本: NexT version 8.2.1</p>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>个人博客</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
-    <title>HEXO博客部署到github并将个人域名解析至github</title>
-    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
-</blockquote>
-<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
-<h1>部署到github</h1>
-<p>首先在github中新建一个repository</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
-<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
-<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
-<p>找到<code>deploy</code>并配置以下内容</p>
+    <title>next主题中超链接颜色的修改</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1>修改超链接样式</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
+而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
+  color: #428BCA;
+  font-weight: bold;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
 <a id="more"></a>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">#部署
-# Deployment
-## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;one-command-deployment
-deploy:
-  - type: git
-    repo: git@github.com:ASnowMoon&#x2F;ASnowMoon.github.io.git   #用户名@服务器Ip:git仓库位置
-    branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>其中git仓库位置需要改为你自己新建的</p>
-<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
-<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
-<h1>域名注册和解析到github</h1>
-<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
-<h2 id="解析域名"><a class="header-anchor" href="#解析域名">¶</a>解析域名</h2>
-<p>进入控制台，点击解析-添加记录</p>
-<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<h2 id="添加CNAME文件"><a class="header-anchor" href="#添加CNAME文件">¶</a>添加CNAME文件</h2>
-<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
-<p>退出后<em><strong>删除.txt后缀文件名</strong></em></p>
-<p>最终CNAME的配置效果：</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886"></p>
-<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
-<p>这时候已经配置好了，再次部署到github上</p>
-<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
-<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
-<h1>参考文章</h1>
-<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
-<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
-<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
+<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
+<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
+  color: #f89fa0;
+  border-bottom: none;
+  &amp;:hover &#123;
+	color: #ff7a7a;
+	font-weight: bold;
+	text-decoration: underline;
+  		  &#125;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
+<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
+<p>睡一觉起来它就好了。。。真是玄学🌝</p>
+<blockquote>
+<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>网站建设</category>
@@ -1076,7 +1075,8 @@ deploy:
       </categories>
       <tags>
         <tag>个人博客</tag>
-        <tag>网站建设</tag>
+        <tag>hexo</tag>
+        <tag>next</tag>
       </tags>
   </entry>
   <entry>
@@ -1207,8 +1207,8 @@ motion:
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>个人博客</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1249,8 +1249,8 @@ motion:
       </categories>
       <tags>
         <tag>个人博客</tag>
-        <tag>next</tag>
         <tag>网站建设</tag>
+        <tag>next</tag>
       </tags>
   </entry>
   <entry>
@@ -1346,6 +1346,7 @@ imshow(&quot;output windows&quot;, output_image);<span aria-hidden="true" class=
 <p><a href="https://www.vultr.com/?ref=7048874"><img src="https://camo.githubusercontent.com/8caba2064c271f7e6528329d9c91c4c27560606fe6362d556aa7d0103d2eac29/68747470733a2f2f7777772e76756c74722e636f6d2f6d656469612f62616e6e6572732f62616e6e65725f3732387839302e706e67" alt="img"></a></p>
 <p>虽然是英文界面，但是现在的浏览器都有网页翻译功能，鼠标点击右键，选择网页翻译即可翻译成中文。</p>
 <p>注册并邮件激活账号，充值后即可购买服务器。充值方式是支付宝或paypal，使用paypal有银行卡（包括信用卡）即可。paypal注册地址：<a href="https://www.paypal.com/">https://www.paypal.com</a> （paypal是国际知名的第三方支付服务商，注册一下账号，绑定银行卡即可购买国外商品）</p>
+<a id="more"></a>
 <hr>
 <p>2.5美元/月的服务器配置信息：单核 512M内存 10G SSD硬盘 带宽1G 500G流量/月 (<strong>不推荐，仅提供ipv6 ip，不推荐</strong>)</p>
 <p>3.5美元/月的服务器配置信息：单核 512M内存 10G SSD硬盘 带宽1G 500G流量/月 (<strong>推荐</strong>)</p>
@@ -1363,7 +1364,6 @@ imshow(&quot;output windows&quot;, output_image);<span aria-hidden="true" class=
 <p><img src="https://camo.githubusercontent.com/8a4052f8fba72e9e00886cf152d0f296514634efbf3aaab188f8b9085a09ec1b/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472322e504e47" alt="img"></p>
 <p><img src="https://camo.githubusercontent.com/2ad7da69e453efaefe1f8ff34c37682fb7a89cb3d3275a28bb765706ff3f3b13/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472332e504e47" alt="img"></p>
 <h3 id="点击图中的CentOS几个字，会弹出选项，然后选中centos6或7！-（不要选默认的centos8，脚本不支持centos8！）"><a class="header-anchor" href="#点击图中的CentOS几个字，会弹出选项，然后选中centos6或7！-（不要选默认的centos8，脚本不支持centos8！）">¶</a>点击图中的CentOS几个字，会弹出选项，然后选中centos6或7！ （不要选默认的centos8，脚本不支持centos8！）</h3>
-<a id="more"></a>
 <p><img src="https://camo.githubusercontent.com/b58d21b997258d310dd8530ecad919247396e859c86b234373b1b492d4d0af3c/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472342e504e47" alt="img"></p>
 <p><img src="https://camo.githubusercontent.com/66ca92e4683e07fe68f1cb8edb2acea9bb414b08bbe8720e77c315d7aaee9dce/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472352e504e47" alt="img"></p>
 <p><img src="https://camo.githubusercontent.com/a844f35807f29b4a4d9e798052033e80a812c009db09712ded16d34dea258414/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472362e504e47" alt="img"></p>
