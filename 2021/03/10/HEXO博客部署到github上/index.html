@@ -215,20 +215,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -255,6 +255,10 @@
 
         </div>
       </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -344,7 +348,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.4k</span>
+      <span>1.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -371,20 +375,14 @@
 <p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
 <p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
 <p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
 <p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
 <p>找到<code>deploy</code>并配置以下内容</p>
 <a id="more"></a>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">#部署
-# Deployment
-## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;one-command-deployment
-deploy:
-  - type: git
-    repo: git@github.com:ASnowMoon&#x2F;ASnowMoon.github.io.git   #用户名@服务器Ip:git仓库位置
-    branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
 <p>其中git仓库位置需要改为你自己新建的</p>
 <p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
-<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
 <p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
 <h1>域名注册和解析到github</h1>
 <p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
@@ -400,7 +398,7 @@ deploy:
 <p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
 <p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
 <p>这时候已经配置好了，再次部署到github上</p>
-<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
 <p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
 <p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
 <h1>参考文章</h1>
@@ -522,14 +520,14 @@ deploy:
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">27k</span>
+    <span title="站点总字数">29k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:07</span>
+    <span title="站点阅读时长">1:13</span>
   </span>
 </div>
 <div class="busuanzi-count">

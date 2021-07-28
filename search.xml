@@ -662,59 +662,55 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo踩坑记录</title>
-    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
+    <title>HEXO博客部署到github并将个人域名解析至github</title>
+    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
     <content><![CDATA[<blockquote>
-<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑<br>
-hexo版本：hexo: 5.3.0<br>
-hexo-cli: 4.2.0<br>
-os: Windows_NT 10.0.19042 win32 x64<br>
-Next主题版本: NexT version 8.2.1</p>
+<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
 </blockquote>
-<h1>使用了live2d时不蒜子访客统计无法显示</h1>
-<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html">&#123;%- if theme.busuanzi_count.total_visitors %&#125;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>busuanzi_container_site_pv<span class="token punctuation">"</span></span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">display</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post-meta-item-icon<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span> Visitors
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>site-uv<span class="token punctuation">"</span></span> <span class="token attr-name">title</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>&#123;&#123; __(<span class="token punctuation">'</span>footer.total_visitors<span class="token punctuation">'</span>) &#125;&#125;<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>busuanzi_value_site_uv<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-&#123;%- endif %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>发现这个标签<code>&lt;span id=&quot;busuanzi_container_site_pv&quot; style=&quot;display: none;&quot;&gt;</code>中出现了个诡异的<code>style=&quot;display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
+<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
+<h1>部署到github</h1>
+<p>首先在github中新建一个repository</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
+<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
+<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
+<p>找到<code>deploy</code>并配置以下内容</p>
 <a id="more"></a>
-<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
-<h1>markdown-it美元符号$无法显示的问题</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>在使用markdown写文章时，美元符号\$在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<ol>
-<li>
-<p>使用双反斜杠\对美元符号\$进行转义</p>
-</li>
-<li>
-<p>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</p>
-</li>
-</ol>
-<h1>valine评论框中占位符无法换行的问题</h1>
-<h2 id="问题描述-v2"><a class="header-anchor" href="#问题描述-v2">¶</a>问题描述</h2>
-<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
-<h2 id="解决方案-v2"><a class="header-anchor" href="#解决方案-v2">¶</a>解决方案</h2>
-<p>输入了<code>&amp;#10</code>完成了换行</p>
-<h1>字数统计后阅读时间计算参数修改</h1>
-<h2 id="问题描述-v3"><a class="header-anchor" href="#问题描述-v3">¶</a>问题描述</h2>
-<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
-<h2 id="解决方案-v3"><a class="header-anchor" href="#解决方案-v3">¶</a>解决方案</h2>
-<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>其中git仓库位置需要改为你自己新建的</p>
+<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
+<h1>域名注册和解析到github</h1>
+<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
+<h2 id="解析域名"><a class="header-anchor" href="#解析域名">¶</a>解析域名</h2>
+<p>进入控制台，点击解析-添加记录</p>
+<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<h2 id="添加CNAME文件"><a class="header-anchor" href="#添加CNAME文件">¶</a>添加CNAME文件</h2>
+<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
+<p>退出后<em><strong>删除.txt后缀文件名</strong></em></p>
+<p>最终CNAME的配置效果：</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886"></p>
+<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
+<p>这时候已经配置好了，再次部署到github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
+<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
+<h1>参考文章</h1>
+<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
+<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
+<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
 ]]></content>
       <categories>
         <category>网站建设</category>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>个人博客</tag>
+        <tag>网站建设</tag>
       </tags>
   </entry>
   <entry>
@@ -927,64 +923,6 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
-    <title>HEXO博客部署到github并将个人域名解析至github</title>
-    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
-</blockquote>
-<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
-<h1>部署到github</h1>
-<p>首先在github中新建一个repository</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
-<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
-<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install hexo-deployer-git --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
-<p>找到<code>deploy</code>并配置以下内容</p>
-<a id="more"></a>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">#部署
-# Deployment
-## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;one-command-deployment
-deploy:
-  - type: git
-    repo: git@github.com:ASnowMoon&#x2F;ASnowMoon.github.io.git   #用户名@服务器Ip:git仓库位置
-    branch: master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>其中git仓库位置需要改为你自己新建的</p>
-<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
-<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
-<h1>域名注册和解析到github</h1>
-<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
-<h2 id="解析域名"><a class="header-anchor" href="#解析域名">¶</a>解析域名</h2>
-<p>进入控制台，点击解析-添加记录</p>
-<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<h2 id="添加CNAME文件"><a class="header-anchor" href="#添加CNAME文件">¶</a>添加CNAME文件</h2>
-<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
-<p>退出后<em><strong>删除.txt后缀文件名</strong></em></p>
-<p>最终CNAME的配置效果：</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886"></p>
-<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
-<p>这时候已经配置好了，再次部署到github上</p>
-<pre class="line-numbers language-none"><code class="language-none">hexo clean &amp;&amp; hexo g -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
-<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
-<h1>参考文章</h1>
-<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
-<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
-<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>网站建设</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo博客部署到云服务器</title>
     <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
     <content><![CDATA[<blockquote>
@@ -996,36 +934,33 @@ deploy:
 <ol>
 <li>
 <p>安装依赖库：</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel 
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> curl-devel expat-devel gettext-devel openssl-devel zlib-devel </span><br><span class="line"></span><br></pre></td></tr></table></figure>
 </li>
 <li>
 <p>安装编译工具：</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install gcc perl-ExtUtils-MakeMaker package <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">yum install gcc perl-ExtUtils-MakeMaker <span class="keyword">package</span> <span class="title"></span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <a id="more"></a>
 <h2 id="二、安装Git"><a class="header-anchor" href="#二、安装Git">¶</a>二、安装Git</h2>
 <p>先删除系统自带的旧版本git<br>
 切换到root用户</p>
-<pre class="line-numbers language-none"><code class="language-none">sudo su root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sudo su root</span></span><br></pre></td></tr></table></figure>
 <p>再删除旧版本git</p>
-<pre class="line-numbers language-none"><code class="language-none">yum remove git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">yum <span class="builtin-name">remove</span> git</span><br></pre></td></tr></table></figure>
 <p>安装git</p>
-<pre class="line-numbers language-none"><code class="language-none">yum install git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git</span><br></pre></td></tr></table></figure>
 <p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
 <p>2、创建个人账户</p>
 <p>在命令框输入（下面不做重复提示了）</p>
-<pre class="line-numbers language-none"><code class="language-none">adduser ZHY<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">adduser ZHY</span></span><br></pre></td></tr></table></figure>
 <p>3、添加个人账户权限</p>
-<pre class="line-numbers language-none"><code class="language-none">chmod 740 &#x2F;etc&#x2F;sudoers
-vim &#x2F;etc&#x2F;sudoers<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chmod <span class="number">740</span> <span class="regexp">/etc/</span>sudoers</span><br><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
 <p>输入上面的命令，回车之后，进入编辑界面。</p>
 <p>点击 I 键进入编辑模式，找到要修改的地方</p>
-<pre class="line-numbers language-none"><code class="language-none">## Allow root to run any commands anywhere
-root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">## Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
 <p>添加以下内容</p>
-<pre class="line-numbers language-none"><code class="language-none">ZHY     ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">ZHY     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
 <p>参考博客</p>
 <p>https://hjxlog.com/posts/20191130a1.html</p>
 ]]></content>
@@ -1038,6 +973,54 @@ root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"
       </tags>
   </entry>
   <entry>
+    <title>hexo踩坑记录</title>
+    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑<br>
+hexo版本：hexo: 5.3.0<br>
+hexo-cli: 4.2.0<br>
+os: Windows_NT 10.0.19042 win32 x64<br>
+Next主题版本: NexT version 8.2.1</p>
+</blockquote>
+<h1>使用了live2d时不蒜子访客统计无法显示</h1>
+<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;%- if theme.busuanzi_count.total_visitors %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_container_site_pv&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Visitors</span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;site-uv&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_visitors&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_value_site_uv&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">&#123;%- endif %&#125;</span><br></pre></td></tr></table></figure>
+<p>发现这个标签<code>&lt;span id=&quot;busuanzi_container_site_pv&quot; style=&quot;display: none;&quot;&gt;</code>中出现了个诡异的<code>style=&quot;display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
+<a id="more"></a>
+<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
+<h1>markdown-it美元符号$无法显示的问题</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>在使用markdown写文章时，美元符号\$在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<ol>
+<li>
+<p>使用双反斜杠\对美元符号\$进行转义</p>
+</li>
+<li>
+<p>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</p>
+</li>
+</ol>
+<h1>valine评论框中占位符无法换行的问题</h1>
+<h2 id="问题描述-v2"><a class="header-anchor" href="#问题描述-v2">¶</a>问题描述</h2>
+<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
+<h2 id="解决方案-v2"><a class="header-anchor" href="#解决方案-v2">¶</a>解决方案</h2>
+<p>输入了<code>&amp;#10</code>完成了换行</p>
+<h1>字数统计后阅读时间计算参数修改</h1>
+<h2 id="问题描述-v3"><a class="header-anchor" href="#问题描述-v3">¶</a>问题描述</h2>
+<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
+<h2 id="解决方案-v3"><a class="header-anchor" href="#解决方案-v3">¶</a>解决方案</h2>
+<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>next主题中超链接颜色的修改</title>
     <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
     <content><![CDATA[<h1>修改超链接样式</h1>
@@ -1046,22 +1029,11 @@ root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"
 <h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
 <p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
 而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a &#123;  
-  color: #428BCA;
-  font-weight: bold;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span> &#123;  </span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#428BCA</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
 <a id="more"></a>
 <p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">a:not(.btn)&#123;
-  color: #f89fa0;
-  border-bottom: none;
-  &amp;:hover &#123;
-	color: #ff7a7a;
-	font-weight: bold;
-	text-decoration: underline;
-  		  &#125;
-  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:not</span>(.btn)&#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#f89fa0</span>;</span><br><span class="line">  <span class="attribute">border-bottom</span>: none;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#ff7a7a</span>;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">    <span class="attribute">text-decoration</span>: underline;</span><br><span class="line">  		  &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 <p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
 <p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
 <p>睡一觉起来它就好了。。。真是玄学🌝</p>
@@ -1074,8 +1046,65 @@ root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>个人博客</tag>
+        <tag>hexo</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题美化——背景图片、动画</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
+<p>next版本：8.2.1</p>
+</blockquote>
+<h1>添加背景图片</h1>
+<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/background.jpg);</span><br><span class="line"> 	<span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>:fixed;</span><br><span class="line">    <span class="attribute">background-position</span>:<span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
+<code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
+<code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
+<code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
+<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.swig</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.swig</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.swig</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.swig</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.swig</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.swig</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.swig</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+<p>再将对应的#去除就可以了</p>
+<h1>博客内容透明化</h1>
+<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//博客内容透明化</span></span><br><span class="line"><span class="comment">//文章内容的透明度设置</span></span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-inner</span> &#123; </span><br><span class="line">   <span class="comment">// margin-top: 60px;</span></span><br><span class="line">   <span class="comment">// padding: 60px 60px 60px 60px;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//菜单栏的透明度设置</span></span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.8</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜索框（local-search）的透明度设置</span></span><br><span class="line"><span class="selector-class">.popup</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
+<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.post-block &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line">.sidebar &#123;</span><br><span class="line">  opacity: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.sidebar-inner &#123;</span><br><span class="line">  background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
+<h2 id="评论区透明度"><a class="header-anchor" href="#评论区透明度">¶</a>评论区透明度</h2>
+<p>在上述代码后添加以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.comments &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>添加圆角</h1>
+<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 20px 20px 20px 20px;</span><br><span class="line">$border-radius           = 20px;</span><br></pre></td></tr></table></figure>
+<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  variable: source/_data/variables.styl</span><br></pre></td></tr></table></figure>
+<h1>添加阴影效果</h1>
+<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 主页文章添加阴影效果</span></span><br><span class="line"><span class="selector-class">.post</span> &#123;</span><br><span class="line">   <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">   <span class="attribute">margin-bottom</span>: <span class="number">60px</span>;</span><br><span class="line">   -webkit-<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> rgba(<span class="number">120</span>, <span class="number">128</span>, <span class="number">114</span>, <span class="number">1.5</span>);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>动画</h1>
+<h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
+<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
+<h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
+<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1090,7 +1119,7 @@ root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"
 </blockquote>
 <p>IMREAD_GRAYSCALE 把原图加载为灰度图</p>
 <p>IMREAD_COLOR  把原图作为RGB图像加载进来</p>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">Mat src &#x3D; imread(&quot;E:&#x2F;OpenCV&#x2F;testimage&#x2F;test.png&quot;, IMREAD_GRAYSCALE); &#x2F;&#x2F;载入灰度图像<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">Mat src = imread(<span class="string">&quot;E:/OpenCV/testimage/test.png&quot;</span>, IMREAD_GRAYSCALE); <span class="comment">//载入灰度图像</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>判断图像是否为的方法：</p>
 <ol>
@@ -1099,19 +1128,14 @@ root    ALL&#x3D;(ALL)     ALL<span aria-hidden="true" class="line-numbers-rows"
 </ol>
 </blockquote>
 <h2 id="图像显示"><a class="header-anchor" href="#图像显示">¶</a>图像显示</h2>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">namedWindow(&quot;test opencv setup&quot;, WINDOW_AUTOSIZE); &#x2F;&#x2F;创建窗口，自动大小
-imshow(&quot;test opencv setup&quot;, src); &#x2F;&#x2F;窗口名，图像名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">namedWindow(<span class="string">&quot;test opencv setup&quot;</span>, WINDOW_AUTOSIZE); <span class="comment">//创建窗口，自动大小</span></span><br><span class="line">imshow(<span class="string">&quot;test opencv setup&quot;</span>, src); <span class="comment">//窗口名，图像名</span></span><br></pre></td></tr></table></figure>
 <p>CV_WINDOW_AUTOSIZE 会自动根据图像大小，显示窗口大小，不能人为改变窗口大小</p>
 <h2 id="色彩空间转换"><a class="header-anchor" href="#色彩空间转换">¶</a>色彩空间转换</h2>
-<pre class="line-numbers language-none"><code class="language-none">cvtColor( image, gray_image, COLOR_BGR2GRAY );
-namedWindow(&quot;output windows&quot;, CV_WINDOW_AUTOSIZE);
-Mat output_image;
-cvtColor(src, output_image, CV_BGR2HLS); &#x2F;&#x2F;修改图像为某色彩空间
-imshow(&quot;output windows&quot;, output_image);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">cvt<span class="constructor">Color( <span class="params">image</span>, <span class="params">gray_image</span>, COLOR_BGR2GRAY )</span>;</span><br><span class="line">named<span class="constructor">Window(<span class="string">&quot;output windows&quot;</span>, CV_WINDOW_AUTOSIZE)</span>;</span><br><span class="line">Mat output_image;</span><br><span class="line">cvt<span class="constructor">Color(<span class="params">src</span>, <span class="params">output_image</span>, CV_BGR2HLS)</span>; <span class="comment">//修改图像为某色彩空间</span></span><br><span class="line">imshow(<span class="string">&quot;output windows&quot;</span>, output_image);</span><br></pre></td></tr></table></figure>
 <p>COLOR_BGR2HLS // BGR 空间转为 亮度饱和度通道</p>
 <p>COLOR_BGR2GRAY // BGR 空间转为 灰度</p>
 <h2 id="保存"><a class="header-anchor" href="#保存">¶</a>保存</h2>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">imwrite(&quot;E:&#x2F;my.tif&quot;,output_image); &#x2F;&#x2F;保存位置，要保存的图片<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">imwrite(<span class="string">&quot;E:/my.tif&quot;</span>,output_image); <span class="comment">//保存位置，要保存的图片</span></span><br></pre></td></tr></table></figure>
 <h1>矩阵的掩膜操作</h1>
 <h2 id="核心公式："><a class="header-anchor" href="#核心公式：">¶</a>核心公式：</h2>
 <p>$I(i,j) = 5 * I(i,j)-[I(i-1,j)+I(i,j-1)+I(i+1,j)+I(i,j+1)]$</p>
@@ -1156,6 +1180,45 @@ imshow(&quot;output windows&quot;, output_image);<span aria-hidden="true" class=
       </tags>
   </entry>
   <entry>
+    <title>数据结构刷题笔记1——是否同一棵二叉搜索树</title>
+    <url>/2021/07/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%98%AF%E5%90%A6%E5%90%8C%E4%B8%80%E6%A3%B5%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
+    <content><![CDATA[<h1>04-树4 是否同一棵二叉搜索树 (25 分)</h1>
+<blockquote>
+<p>题目来源：浙江大学数据结构MOOC配套习题（PTA）</p>
+</blockquote>
+<p>给定一个插入序列就可以唯一确定一棵二叉搜索树。然而，一棵给定的二叉搜索树却可以由多种不同的插入序列得到。例如分别按照序列{2, 1, 3}和{2, 3, 1}插入初始为空的二叉搜索树，都得到一样的结果。于是对于输入的各种插入序列，你需要判断它们是否能生成一样的二叉搜索树。</p>
+<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
+<p>输入包含若干组测试数据。每组数据的第1行给出两个正整数<em>N</em> (≤10)和<em>L</em>，分别是每个序列插入元素的个数和需要检查的序列个数。第2行给出<em>N</em>个以空格分隔的正整数，作为初始插入序列。最后<em>L</em>行，每行给出<em>N</em>个插入的元素，属于<em>L</em>个需要检查的序列。</p>
+<p>简单起见，我们保证每个插入序列都是1到<em>N</em>的一个排列。当读到<em>N</em>为0时，标志输入结束，这组数据不要处理。</p>
+<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
+<p>对每一组需要检查的序列，如果其生成的二叉搜索树跟对应的初始序列生成的一样，输出“Yes”，否则输出“No”。</p>
+<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 2</span><br><span class="line">3 1 4 2</span><br><span class="line">3 4 1 2</span><br><span class="line">3 2 4 1</span><br><span class="line">2 1</span><br><span class="line">2 1</span><br><span class="line">1 2</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h3>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Yes</span><br><span class="line">No</span><br><span class="line">No</span><br></pre></td></tr></table></figure>
+<p><strong>题意</strong></p>
+<p>这个题目是给你一些建树用的数据，第一组树的数据作为判断的基准，后面的数据作为拿来判断是不是同一棵二叉搜索树的测试数据</p>
+<p><strong>思路</strong></p>
+<p>这道题有三种思路</p>
+<ol>
+<li>不建树，根据数据大小分类序列，递归判断序列是否相一致；</li>
+<li>建两棵树，根据序列建两棵树再判断两棵树是否一致；</li>
+<li>建一棵树，把判断基准建立为一棵基准树，其它的数据放进来和这棵树比较</li>
+</ol>
+<p>本文采用第三种方法——建立一棵树然后新的序列与这棵树作比较<br>
+代码如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">Tree</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Tree Left,Right;<span class="comment">//用两个指针来指向左右子树</span></span><br><span class="line">    <span class="keyword">int</span> data,flag;<span class="comment">//data来存放这个节点的数据，flag用来判断是否访问过该节点</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">BuildTree</span><span class="params">(<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function">Tree <span class="title">NewNode</span><span class="params">(<span class="keyword">int</span> V)</span></span>;</span><br><span class="line"><span class="function">Tree <span class="title">Insert</span><span class="params">(Tree T,<span class="keyword">int</span> V)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">Judge</span><span class="params">(Tree T,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">check</span><span class="params">(Tree T,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FreeTree</span><span class="params">(Tree T)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetT</span><span class="params">(Tree T)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> N,i,L;</span><br><span class="line">    Tree T;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;N);</span><br><span class="line">    <span class="keyword">while</span>(N)<span class="comment">//当N为0时返回</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;L);</span><br><span class="line">        T = BuildTree(N);<span class="comment">//建立二叉搜索树</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; L; i++)<span class="comment">//多组数据，使用读入的L来控制读入的数据组数</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Judge(T,N)) <span class="built_in">printf</span>(<span class="string">&quot;Yes\n&quot;</span>);<span class="comment">//判断是否是一棵树</span></span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">&quot;No\n&quot;</span>);</span><br><span class="line">            ResetT(T);<span class="comment">//将T初始化</span></span><br><span class="line">        &#125;</span><br><span class="line">        FreeTree(T);<span class="comment">//判断完成后释放当前树</span></span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;N);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">BuildTree</span><span class="params">(<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,V;</span><br><span class="line">    Tree T;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">    T = NewNode(V);<span class="comment">//开辟第一个节点</span></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">        T = Insert(T,V);<span class="comment">//后续节点的插入（保证插入完成后该树为二叉搜索树）</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> T;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">NewNode</span><span class="params">(<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Tree T = (Tree)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct TreeNode));<span class="comment">//开辟新节点</span></span><br><span class="line">    T -&gt; data = V;</span><br><span class="line">    T -&gt; Left = T-&gt;Right = <span class="literal">NULL</span>;</span><br><span class="line">    T -&gt; flag = <span class="number">0</span>;<span class="comment">//初始化操作</span></span><br><span class="line">    <span class="keyword">return</span> T;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">Insert</span><span class="params">(Tree T,<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!T) T = NewNode(V);<span class="comment">//查找到空节点时开辟新节点并插入</span></span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(T-&gt;data &gt; V)<span class="comment">//此节点数据大于要插入的数据时向左插入</span></span><br><span class="line">            T-&gt;Left = Insert(T-&gt;Left,V);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            T-&gt;Right = Insert(T-&gt;Right,V);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> T;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">Judge</span><span class="params">(Tree T,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,V,Jflag = <span class="number">0</span>;<span class="comment">//使用Jflag来保证在中途判断出不是同一棵树后仍能继续读数据和判断</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">    <span class="keyword">if</span>( V != T-&gt;data) Jflag = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> T-&gt;flag = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">        <span class="keyword">if</span>((!check(T,V)) &amp;&amp; (!Jflag)) Jflag = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(Jflag) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">check</span><span class="params">(Tree T,<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;flag)<span class="comment">//当这个节点被访问过</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//要判断的数据和这个节点不等时根据大小关系向左向右判断</span></span><br><span class="line">        <span class="keyword">if</span>(T-&gt;data&gt;V) <span class="keyword">return</span> check(T-&gt;Left,V);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(T-&gt;data&lt;V) <span class="keyword">return</span> check(T-&gt;Right,V);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//如果这个节点被访问过且数据和要判断的数据相同说明不是</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(V == T-&gt;data)&#123;<span class="comment">//未访问过该节点且该节点数据和需要判断的数据相等</span></span><br><span class="line">            T-&gt;flag = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FreeTree</span><span class="params">(Tree T)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//释放判断的基准树</span></span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Right) FreeTree(T-&gt;Right);</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Left) FreeTree(T-&gt;Left);</span><br><span class="line">    <span class="built_in">free</span>(T);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetT</span><span class="params">(Tree T)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//判断完成后的树的初始化</span></span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Right) ResetT(T-&gt;Right);</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Left) ResetT(T-&gt;Left);</span><br><span class="line">    T-&gt;flag = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>二叉搜索树</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
     <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
     <content><![CDATA[<blockquote>
@@ -1167,18 +1230,15 @@ imshow(&quot;output windows&quot;, output_image);<span aria-hidden="true" class=
 <p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
 <h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
 <p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">$title<span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// $title.children('a').remove();</span>
-<span class="token comment">// $title.html( '&lt;span id="' + id + '">' + $title.html() + '&lt;/span>' );</span>
-<span class="token comment">// $title.removeAttr('id');</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
 <p>但是我的hexo中并没有找到这个目录</p>
 <p>所以我找了另外的</p>
 <h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
 <a id="more"></a>
 <p>首先安装<code>markdown-it-named-headings</code>插件</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install markdown-it-named-headings --save<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
 <p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">parser<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'markdown-it-named-headings'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">parser.use(<span class="built_in">require</span>(<span class="string">&#x27;markdown-it-named-headings&#x27;</span>))</span><br></pre></td></tr></table></figure>
 <p>尝试以上两种方法，均未成功</p>
 <p>时间不早了，后面有时间再解决</p>
 <blockquote>
@@ -1197,303 +1257,38 @@ imshow(&quot;output windows&quot;, output_image);<span aria-hidden="true" class=
       </tags>
   </entry>
   <entry>
-    <title>next主题美化——背景图片、动画</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
-<p>next版本：8.2.1</p>
-</blockquote>
-<h1>添加背景图片</h1>
-<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">body &#123;
- 	background:url(&#x2F;images&#x2F;background.jpg);
- 	background-repeat: no-repeat;
-    background-attachment:fixed;
-    background-position:100% 100%;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
-<code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
-<code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
-<code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
-<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
-<a id="more"></a>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml">custom_file_path:
-  #head: source&#x2F;_data&#x2F;head.swig
-  #header: source&#x2F;_data&#x2F;header.swig
-  #sidebar: source&#x2F;_data&#x2F;sidebar.swig
-  #postMeta: source&#x2F;_data&#x2F;post-meta.swig
-  #postBodyEnd: source&#x2F;_data&#x2F;post-body-end.swig
-  #footer: source&#x2F;_data&#x2F;footer.swig
-  #bodyEnd: source&#x2F;_data&#x2F;body-end.swig
-  #variable: source&#x2F;_data&#x2F;variables.styl
-  #mixin: source&#x2F;_data&#x2F;mixins.styl
-  #style: source&#x2F;_data&#x2F;styles.styl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>再将对应的#去除就可以了</p>
-<h1>博客内容透明化</h1>
-<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">&#x2F;&#x2F;博客内容透明化
-&#x2F;&#x2F;文章内容的透明度设置
-.content-wrap &#123;
-  opacity: 0.8;
-&#125;
-.main-inner &#123; 
-   &#x2F;&#x2F; margin-top: 60px;
-   &#x2F;&#x2F; padding: 60px 60px 60px 60px;
-
-    opacity: 0.8;
-&#125;
-&#x2F;&#x2F;侧边框的透明度设置
-.sidebar &#123;
-  opacity: 0.8;
-&#125;
-
-&#x2F;&#x2F;菜单栏的透明度设置
-.header-inner &#123;
-  background: rgba(255,255,255,0.8);
-&#125;
-
-&#x2F;&#x2F;搜索框（local-search）的透明度设置
-.popup &#123;
-  opacity: 0.8;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
-<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">.</span>post<span class="token operator">-</span>block <span class="token punctuation">&#123;</span>
-	background<span class="token operator">:</span> <span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0.7</span><span class="token punctuation">)</span> none repeat scroll <span class="token operator">!</span>important<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">//侧边框的透明度设置</span>
-<span class="token punctuation">.</span>sidebar <span class="token punctuation">&#123;</span>
-  opacity<span class="token operator">:</span> <span class="token number">0.8</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>改为</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">.</span>sidebar<span class="token operator">-</span>inner <span class="token punctuation">&#123;</span>
-  background<span class="token operator">:</span> <span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0.7</span><span class="token punctuation">)</span> none repeat scroll <span class="token operator">!</span>important<span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
-<h2 id="评论区透明度"><a class="header-anchor" href="#评论区透明度">¶</a>评论区透明度</h2>
-<p>在上述代码后添加以下代码：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">.</span>comments <span class="token punctuation">&#123;</span>
-	background<span class="token operator">:</span> <span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0.7</span><span class="token punctuation">)</span> none repeat scroll <span class="token operator">!</span>important<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h1>添加圆角</h1>
-<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">&#x2F;&#x2F; 圆角设置
-$border-radius-inner     &#x3D; 20px 20px 20px 20px;
-$border-radius           &#x3D; 20px;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">custom_file_path:
-  variable: source&#x2F;_data&#x2F;variables.styl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h1>添加阴影效果</h1>
-<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
-<pre class="line-numbers language-stylus" data-language="stylus"><code class="language-stylus">	&#x2F;&#x2F; 主页文章添加阴影效果
-.post &#123;
-   margin-top: 60px;
-   padding: 20px;
-   margin-bottom: 60px;
-   -webkit-box-shadow: 0 0 5px rgba(120, 128, 114, 1.5);
-   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h1>动画</h1>
-<h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
-<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"># Use Animate.css to animate everything.
-# Use velocity to animate everything.
-motion:
-  enable: true
-  async: false
-  transition:
-    # Transition variants:
-    # fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut
-    # swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut
-    # bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut
-    # slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut
-    # slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut
-    # perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut
-    post_block: fadeIn
-    post_header: slideDownIn
-    post_body: slideDownIn
-    coll_header: slideLeftIn
-    # Only for Pisces | Gemini.
-    sidebar: slideDownBigOut<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
-<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>个人博客</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构刷题笔记1——是否同一棵二叉搜索树</title>
-    <url>/2021/07/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%98%AF%E5%90%A6%E5%90%8C%E4%B8%80%E6%A3%B5%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
-    <content><![CDATA[<h1>04-树4 是否同一棵二叉搜索树 (25 分)</h1>
-<blockquote>
-<p>题目来源：浙江大学数据结构MOOC配套习题（PTA）</p>
-</blockquote>
-<p>给定一个插入序列就可以唯一确定一棵二叉搜索树。然而，一棵给定的二叉搜索树却可以由多种不同的插入序列得到。例如分别按照序列{2, 1, 3}和{2, 3, 1}插入初始为空的二叉搜索树，都得到一样的结果。于是对于输入的各种插入序列，你需要判断它们是否能生成一样的二叉搜索树。</p>
+    <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
+    <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
+    <content><![CDATA[<h1>06-图1 列出连通集 (25 分)——PTA</h1>
+<p>给定一个有<em>N</em>个顶点和<em>E</em>条边的无向图，请用DFS和BFS分别列出其所有的连通集。假设顶点从0到<em>N</em>−1编号。进行搜索时，假设我们总是从编号最小的顶点出发，按编号递增的顺序访问邻接点。</p>
 <h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
-<p>输入包含若干组测试数据。每组数据的第1行给出两个正整数<em>N</em> (≤10)和<em>L</em>，分别是每个序列插入元素的个数和需要检查的序列个数。第2行给出<em>N</em>个以空格分隔的正整数，作为初始插入序列。最后<em>L</em>行，每行给出<em>N</em>个插入的元素，属于<em>L</em>个需要检查的序列。</p>
-<p>简单起见，我们保证每个插入序列都是1到<em>N</em>的一个排列。当读到<em>N</em>为0时，标志输入结束，这组数据不要处理。</p>
+<p>输入第1行给出2个整数<em>N</em>(0&lt;<em>N</em>≤10)和<em>E</em>，分别是图的顶点数和边数。随后<em>E</em>行，每行给出一条边的两个端点。每行中的数字之间用1空格分隔。</p>
 <h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
-<p>对每一组需要检查的序列，如果其生成的二叉搜索树跟对应的初始序列生成的一样，输出“Yes”，否则输出“No”。</p>
+<p>按照&quot;{ <em>v</em>1 <em>v</em>2 … <em>v**k</em> }&quot;的格式，每行输出一个连通集。先输出DFS的结果，再输出BFS的结果。</p>
 <h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
-<pre class="line-numbers language-in" data-language="in"><code class="language-in">4 2
-3 1 4 2
-3 4 1 2
-3 2 4 1
-2 1
-2 1
-1 2
-0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8 6</span><br><span class="line">0 7</span><br><span class="line">0 1</span><br><span class="line">2 0</span><br><span class="line">4 1</span><br><span class="line">2 4</span><br><span class="line">3 5</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; 0 1 4 2 7 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br><span class="line">&#123; 0 1 2 7 4 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="题目理解"><a class="header-anchor" href="#题目理解">¶</a>题目理解</h2>
+<p>本题给了我们几组数据用来建图，在建图完成后需要我们使用DFS与BFS遍历整个图然后按照遍历的顺序输出每个连通的图的节点的值</p>
+<h2 id="解题思路"><a class="header-anchor" href="#解题思路">¶</a>解题思路</h2>
+<p>根据要求走就行了，建图，然后DFS和BFS//第一个完全靠自己写出来的图的题，不容易啊😭😭😭</p>
+<p>本文使用的是邻接矩阵来表示图</p>
+<p>在使用BFS进行遍历时，因为数据量比较小，所以只需要使用一个数组和两个作为头尾的数字就能作为队列</p>
 <a id="more"></a>
-<h3 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h3>
-<pre class="line-numbers language-out" data-language="out"><code class="language-out">Yes
-No
-No<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><strong>题意</strong></p>
-<p>这个题目是给你一些建树用的数据，第一组树的数据作为判断的基准，后面的数据作为拿来判断是不是同一棵二叉搜索树的测试数据</p>
-<p><strong>思路</strong></p>
-<p>这道题有三种思路</p>
-<ol>
-<li>不建树，根据数据大小分类序列，递归判断序列是否相一致；</li>
-<li>建两棵树，根据序列建两棵树再判断两棵树是否一致；</li>
-<li>建一棵树，把判断基准建立为一棵基准树，其它的数据放进来和这棵树比较</li>
-</ol>
-<p>本文采用第三种方法——建立一棵树然后新的序列与这棵树作比较<br>
-代码如下</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-
-typedef struct TreeNode *Tree;
-struct TreeNode
-&#123;
-    Tree Left,Right;&#x2F;&#x2F;用两个指针来指向左右子树
-    int data,flag;&#x2F;&#x2F;data来存放这个节点的数据，flag用来判断是否访问过该节点
-&#125;;
-
-Tree BuildTree(int N);
-Tree NewNode(int V);
-Tree Insert(Tree T,int V);
-char Judge(Tree T,int N);
-char check(Tree T,int N);
-void FreeTree(Tree T);
-void ResetT(Tree T);
-
-int main()
-&#123;
-    int N,i,L;
-    Tree T;
-    scanf(&quot;%d&quot;,&amp;N);
-    while(N)&#x2F;&#x2F;当N为0时返回
-    &#123;
-        scanf(&quot;%d&quot;,&amp;L);
-        T &#x3D; BuildTree(N);&#x2F;&#x2F;建立二叉搜索树
-        for(i &#x3D; 0; i &lt; L; i++)&#x2F;&#x2F;多组数据，使用读入的L来控制读入的数据组数
-        &#123;
-            if(Judge(T,N)) printf(&quot;Yes\n&quot;);&#x2F;&#x2F;判断是否是一棵树
-            else printf(&quot;No\n&quot;);
-            ResetT(T);&#x2F;&#x2F;将T初始化
-        &#125;
-        FreeTree(T);&#x2F;&#x2F;判断完成后释放当前树
-        scanf(&quot;%d&quot;,&amp;N);
-    &#125;
-    return 0;
-&#125;
-
-Tree BuildTree(int N)
-&#123;
-    int i,V;
-    Tree T;
-    scanf(&quot;%d&quot;,&amp;V);
-    T &#x3D; NewNode(V);&#x2F;&#x2F;开辟第一个节点
-    for(i&#x3D;1;i&lt;N;i++)
-    &#123;
-        scanf(&quot;%d&quot;,&amp;V);
-        T &#x3D; Insert(T,V);&#x2F;&#x2F;后续节点的插入（保证插入完成后该树为二叉搜索树）
-    &#125;
-    return T;
-&#125;
-
-Tree NewNode(int V)
-&#123;
-    Tree T &#x3D; (Tree)malloc(sizeof(struct TreeNode));&#x2F;&#x2F;开辟新节点
-    T -&gt; data &#x3D; V;
-    T -&gt; Left &#x3D; T-&gt;Right &#x3D; NULL;
-    T -&gt; flag &#x3D; 0;&#x2F;&#x2F;初始化操作
-    return T;
-&#125;
-
-Tree Insert(Tree T,int V)
-&#123;
-    if(!T) T &#x3D; NewNode(V);&#x2F;&#x2F;查找到空节点时开辟新节点并插入
-    else&#123;
-        if(T-&gt;data &gt; V)&#x2F;&#x2F;此节点数据大于要插入的数据时向左插入
-            T-&gt;Left &#x3D; Insert(T-&gt;Left,V);
-        else
-            T-&gt;Right &#x3D; Insert(T-&gt;Right,V);
-    &#125;
-    return T;
-&#125;
-char Judge(Tree T,int N)
-&#123;
-    int i,V,Jflag &#x3D; 0;&#x2F;&#x2F;使用Jflag来保证在中途判断出不是同一棵树后仍能继续读数据和判断
-    scanf(&quot;%d&quot;,&amp;V);
-    if( V !&#x3D; T-&gt;data) Jflag &#x3D; 1;
-    else T-&gt;flag &#x3D; 1;
-    for(i&#x3D;1;i&lt;N;i++)
-    &#123;
-        scanf(&quot;%d&quot;,&amp;V);
-        if((!check(T,V)) &amp;&amp; (!Jflag)) Jflag &#x3D; 1;
-    &#125;
-    if(Jflag) return 0;
-    else return 1;
-&#125;
-
-char check(Tree T,int V)
-&#123;
-    if(T-&gt;flag)&#x2F;&#x2F;当这个节点被访问过
-    &#123;
-        &#x2F;&#x2F;要判断的数据和这个节点不等时根据大小关系向左向右判断
-        if(T-&gt;data&gt;V) return check(T-&gt;Left,V);
-        else if(T-&gt;data&lt;V) return check(T-&gt;Right,V);
-        else return 0;&#x2F;&#x2F;如果这个节点被访问过且数据和要判断的数据相同说明不是
-    &#125;
-    else&#123;
-        if(V &#x3D;&#x3D; T-&gt;data)&#123;&#x2F;&#x2F;未访问过该节点且该节点数据和需要判断的数据相等
-            T-&gt;flag &#x3D; 1;
-            return 1;
-        &#125;
-        else return 0;
-    &#125;
-&#125;
-
-void FreeTree(Tree T)
-&#123;&#x2F;&#x2F;释放判断的基准树
-    if(T-&gt;Right) FreeTree(T-&gt;Right);
-    if(T-&gt;Left) FreeTree(T-&gt;Left);
-    free(T);
-&#125;
-
-void ResetT(Tree T)
-&#123;&#x2F;&#x2F;判断完成后的树的初始化
-    if(T-&gt;Right) ResetT(T-&gt;Right);
-    if(T-&gt;Left) ResetT(T-&gt;Left);
-    T-&gt;flag &#x3D; 0;
-&#125;
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVertexNum 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> E,V;<span class="comment">//分别为边数E和顶点数V</span></span><br><span class="line">    <span class="keyword">int</span> G[MaxVertexNum][MaxVertexNum];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Visited[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//是否访问过该节点</span></span><br><span class="line"><span class="keyword">int</span> Q[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//用来做队列的数组</span></span><br><span class="line"><span class="function">MGraph <span class="title">CreatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//建图，初始化图的边和节点值</span></span><br><span class="line">    <span class="keyword">int</span> i,m,n;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph -&gt; V = V;</span><br><span class="line">    Graph -&gt; E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;m,&amp;n);</span><br><span class="line">        Graph-&gt;G[m][n] = <span class="number">1</span>;</span><br><span class="line">        Graph-&gt;G[n][m] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入一个节点就把访问过的标记为True</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,x);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((Graph-&gt;G[i][x] == <span class="number">1</span>) &amp;&amp; (!Visited[i]))<span class="comment">//使用DFS访问节点x相邻且没有被访问过的节点</span></span><br><span class="line">        &#123;</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetGraph</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;MaxVertexNum;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,head,rear;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;</span><br><span class="line">    Q[<span class="number">0</span>] = x;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入BFS时把BFS的入口节点视为访问过</span></span><br><span class="line">    <span class="keyword">while</span>(head != rear)<span class="comment">//当队列不为空</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Q[head]);<span class="comment">//输出头结点</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;<span class="comment">//遍历所有节点，如果是头结点的邻接点且没有被访问过则入队</span></span><br><span class="line">            <span class="keyword">if</span>(!Visited[i] &amp;&amp; (Graph-&gt;G[i][Q[head]] == <span class="number">1</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                rear++;</span><br><span class="line">                Q[rear] = i;</span><br><span class="line">                Visited[i] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E,i;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    Graph = CreatGraph(V,E);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ResetGraph(Graph);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            BFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
-        <category>二叉搜索树</category>
+        <category>图</category>
+        <category>DFS</category>
+        <category>BFS</category>
       </categories>
       <tags>
-        <tag>数据结构</tag>
+        <tag>数据结构与算法</tag>
+        <tag>DFS</tag>
+        <tag>BFS</tag>
       </tags>
   </entry>
   <entry>
@@ -1566,25 +1361,15 @@ void ResetT(Tree T)
 <p><strong>CentOS 6和7/Debian6+/Ubuntu14+ ShadowsocksR/Shadowsocks一键部署管理脚本：</strong></p>
 <p><strong>脚本一(SSR)，安装完成后，快捷管理命令：bash ssr.sh</strong></p>
 <hr>
-<h2 id="code￼0"><a class="header-anchor" href="#code￼0">¶</a><pre class="line-numbers language-none"><code class="language-none">
-yum -y install wget
-
-wget -N --no-check-certificate https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;ToyoDAdoubi&#x2F;doubi&#x2F;master&#x2F;ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></h2>
+<h2 id="code￼0"><a class="header-anchor" href="#code￼0">¶</a><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget -N --no-check-certificate https:<span class="regexp">//</span>raw.githubusercontent.com<span class="regexp">/ToyoDAdoubi/</span>doubi<span class="regexp">/master/</span>ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure></h2>
 <p><strong>脚本二（SS）</strong></p>
 <p><strong>脚本二没有单独做图文教程，参考脚本一的图文说明摸索下就会了。安装完成后，快捷管理命令：bash ss-go.sh</strong></p>
 <hr>
-<h2 id="code￼1"><a class="header-anchor" href="#code￼1">¶</a><pre class="line-numbers language-none"><code class="language-none">
-yum -y install wget
-
-wget -N --no-check-certificate https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;ToyoDAdoubiBackup&#x2F;doubi&#x2F;master&#x2F;ss-go.sh &amp;&amp; chmod +x ss-go.sh &amp;&amp; bash ss-go.sh
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></h2>
+<h2 id="code￼1"><a class="header-anchor" href="#code￼1">¶</a><figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">yum -<span class="keyword">y</span> install wget</span><br><span class="line"></span><br><span class="line">wget -<span class="keyword">N</span> --<span class="keyword">no</span>-check-certificate http<span class="variable">s:</span>//raw.githubusercontent.<span class="keyword">com</span>/ToyoDAdoubiBackup/doubi/master/ss-<span class="keyword">go</span>.<span class="keyword">sh</span> &amp;&amp; chmod +<span class="keyword">x</span> ss-<span class="keyword">go</span>.<span class="keyword">sh</span> &amp;&amp; bash ss-<span class="keyword">go</span>.<span class="keyword">sh</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></h2>
 <p><strong>脚本三（SSR多用户管理脚本）</strong></p>
 <p><strong>脚本三没有单独做图文教程，参考脚本一的图文说明摸索下就会了。安装完成后，快捷管理命令：bash ssrmu.sh 所有用户流量清零命令: bash ssrmu.sh clearall</strong></p>
 <hr>
-<h2 id="code￼2"><a class="header-anchor" href="#code￼2">¶</a><pre class="line-numbers language-none"><code class="language-none">
-yum -y install wget
-
-wget -N --no-check-certificate https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;ToyoDAdoubiBackup&#x2F;doubi&#x2F;master&#x2F;ssrmu.sh &amp;&amp; chmod +x ssrmu.sh &amp;&amp; bash ssrmu.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></h2>
+<h2 id="code￼2"><a class="header-anchor" href="#code￼2">¶</a><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">yum -y install wget</span><br><span class="line"></span><br><span class="line">wget -N --no-check-certificate https:<span class="regexp">//</span>raw.githubusercontent.com<span class="regexp">/ToyoDAdoubiBackup/</span>doubi<span class="regexp">/master/</span>ssrmu.sh &amp;&amp; chmod +x ssrmu.sh &amp;&amp; bash ssrmu.sh</span><br></pre></td></tr></table></figure></h2>
 <blockquote>
 <p>如果提示 wget: command not found 的错误，这是你的系统精简的太干净了，wget都没有安装，所以需要安装wget。CentOS系统安装wget命令: yum install -y wget Debian/Ubuntu系统安装wget命令:apt-get install -y wget</p>
 </blockquote>
@@ -1626,11 +1411,7 @@ wget -N --no-check-certificate https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;
 <p><strong>第三步：一键加速VPS服务器</strong></p>
 <p>五合一的TCP网络加速脚本，包括了BBR原版、BBR魔改版、暴力BBR魔改版、BBR plus（首选）、Lotsever(锐速)安装脚本。可用于KVMXen架构，不兼容OpenVZ（OVZ）。支持Centos 6+ / Debian 7+ / Ubuntu 14+，BBR魔改版不支持Debian 8。</p>
 <hr>
-<h2 id="code￼3"><a class="header-anchor" href="#code￼3">¶</a><pre class="line-numbers language-none"><code class="language-none">wget -N --no-check-certificate &quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;chiakge&#x2F;Linux-NetSpeed&#x2F;master&#x2F;tcp.sh&quot;
-
-chmod +x tcp.sh
-
-.&#x2F;tcp.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></h2>
+<h2 id="code￼3"><a class="header-anchor" href="#code￼3">¶</a><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">wget -<span class="keyword">N</span> --<span class="keyword">no</span>-check-certificate <span class="string">&quot;https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh&quot;</span></span><br><span class="line"></span><br><span class="line">chmod +x tcp.<span class="keyword">sh</span></span><br><span class="line"></span><br><span class="line">./tcp.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></h2>
 <blockquote>
 <p>如果提示 wget: command not found 的错误，这是你的系统精简的太干净了，wget都没有安装，所以需要安装wget。CentOS系统安装wget命令: yum install -y wget Debian/Ubuntu系统安装wget命令:apt-get install -y wget</p>
 </blockquote>

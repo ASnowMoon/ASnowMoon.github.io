@@ -210,20 +210,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -250,6 +250,10 @@
 
         </div>
       </div>
+        <div class="back-to-top animated" role="button">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -333,14 +337,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.1k</span>
+      <span>3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
+      <span>7 分钟</span>
     </span>
 </div>
 
@@ -362,19 +366,10 @@
 <h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
 <p>对每一组需要检查的序列，如果其生成的二叉搜索树跟对应的初始序列生成的一样，输出“Yes”，否则输出“No”。</p>
 <h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
-<pre class="line-numbers language-in" data-language="in"><code class="language-in">4 2
-3 1 4 2
-3 4 1 2
-3 2 4 1
-2 1
-2 1
-1 2
-0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">4 2</span><br><span class="line">3 1 4 2</span><br><span class="line">3 4 1 2</span><br><span class="line">3 2 4 1</span><br><span class="line">2 1</span><br><span class="line">2 1</span><br><span class="line">1 2</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <h3 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h3>
-<pre class="line-numbers language-out" data-language="out"><code class="language-out">Yes
-No
-No<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Yes</span><br><span class="line">No</span><br><span class="line">No</span><br></pre></td></tr></table></figure>
 <p><strong>题意</strong></p>
 <p>这个题目是给你一些建树用的数据，第一组树的数据作为判断的基准，后面的数据作为拿来判断是不是同一棵二叉搜索树的测试数据</p>
 <p><strong>思路</strong></p>
@@ -386,126 +381,7 @@ No<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><
 </ol>
 <p>本文采用第三种方法——建立一棵树然后新的序列与这棵树作比较<br>
 代码如下</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-
-typedef struct TreeNode *Tree;
-struct TreeNode
-&#123;
-    Tree Left,Right;&#x2F;&#x2F;用两个指针来指向左右子树
-    int data,flag;&#x2F;&#x2F;data来存放这个节点的数据，flag用来判断是否访问过该节点
-&#125;;
-
-Tree BuildTree(int N);
-Tree NewNode(int V);
-Tree Insert(Tree T,int V);
-char Judge(Tree T,int N);
-char check(Tree T,int N);
-void FreeTree(Tree T);
-void ResetT(Tree T);
-
-int main()
-&#123;
-    int N,i,L;
-    Tree T;
-    scanf(&quot;%d&quot;,&amp;N);
-    while(N)&#x2F;&#x2F;当N为0时返回
-    &#123;
-        scanf(&quot;%d&quot;,&amp;L);
-        T &#x3D; BuildTree(N);&#x2F;&#x2F;建立二叉搜索树
-        for(i &#x3D; 0; i &lt; L; i++)&#x2F;&#x2F;多组数据，使用读入的L来控制读入的数据组数
-        &#123;
-            if(Judge(T,N)) printf(&quot;Yes\n&quot;);&#x2F;&#x2F;判断是否是一棵树
-            else printf(&quot;No\n&quot;);
-            ResetT(T);&#x2F;&#x2F;将T初始化
-        &#125;
-        FreeTree(T);&#x2F;&#x2F;判断完成后释放当前树
-        scanf(&quot;%d&quot;,&amp;N);
-    &#125;
-    return 0;
-&#125;
-
-Tree BuildTree(int N)
-&#123;
-    int i,V;
-    Tree T;
-    scanf(&quot;%d&quot;,&amp;V);
-    T &#x3D; NewNode(V);&#x2F;&#x2F;开辟第一个节点
-    for(i&#x3D;1;i&lt;N;i++)
-    &#123;
-        scanf(&quot;%d&quot;,&amp;V);
-        T &#x3D; Insert(T,V);&#x2F;&#x2F;后续节点的插入（保证插入完成后该树为二叉搜索树）
-    &#125;
-    return T;
-&#125;
-
-Tree NewNode(int V)
-&#123;
-    Tree T &#x3D; (Tree)malloc(sizeof(struct TreeNode));&#x2F;&#x2F;开辟新节点
-    T -&gt; data &#x3D; V;
-    T -&gt; Left &#x3D; T-&gt;Right &#x3D; NULL;
-    T -&gt; flag &#x3D; 0;&#x2F;&#x2F;初始化操作
-    return T;
-&#125;
-
-Tree Insert(Tree T,int V)
-&#123;
-    if(!T) T &#x3D; NewNode(V);&#x2F;&#x2F;查找到空节点时开辟新节点并插入
-    else&#123;
-        if(T-&gt;data &gt; V)&#x2F;&#x2F;此节点数据大于要插入的数据时向左插入
-            T-&gt;Left &#x3D; Insert(T-&gt;Left,V);
-        else
-            T-&gt;Right &#x3D; Insert(T-&gt;Right,V);
-    &#125;
-    return T;
-&#125;
-char Judge(Tree T,int N)
-&#123;
-    int i,V,Jflag &#x3D; 0;&#x2F;&#x2F;使用Jflag来保证在中途判断出不是同一棵树后仍能继续读数据和判断
-    scanf(&quot;%d&quot;,&amp;V);
-    if( V !&#x3D; T-&gt;data) Jflag &#x3D; 1;
-    else T-&gt;flag &#x3D; 1;
-    for(i&#x3D;1;i&lt;N;i++)
-    &#123;
-        scanf(&quot;%d&quot;,&amp;V);
-        if((!check(T,V)) &amp;&amp; (!Jflag)) Jflag &#x3D; 1;
-    &#125;
-    if(Jflag) return 0;
-    else return 1;
-&#125;
-
-char check(Tree T,int V)
-&#123;
-    if(T-&gt;flag)&#x2F;&#x2F;当这个节点被访问过
-    &#123;
-        &#x2F;&#x2F;要判断的数据和这个节点不等时根据大小关系向左向右判断
-        if(T-&gt;data&gt;V) return check(T-&gt;Left,V);
-        else if(T-&gt;data&lt;V) return check(T-&gt;Right,V);
-        else return 0;&#x2F;&#x2F;如果这个节点被访问过且数据和要判断的数据相同说明不是
-    &#125;
-    else&#123;
-        if(V &#x3D;&#x3D; T-&gt;data)&#123;&#x2F;&#x2F;未访问过该节点且该节点数据和需要判断的数据相等
-            T-&gt;flag &#x3D; 1;
-            return 1;
-        &#125;
-        else return 0;
-    &#125;
-&#125;
-
-void FreeTree(Tree T)
-&#123;&#x2F;&#x2F;释放判断的基准树
-    if(T-&gt;Right) FreeTree(T-&gt;Right);
-    if(T-&gt;Left) FreeTree(T-&gt;Left);
-    free(T);
-&#125;
-
-void ResetT(Tree T)
-&#123;&#x2F;&#x2F;判断完成后的树的初始化
-    if(T-&gt;Right) ResetT(T-&gt;Right);
-    if(T-&gt;Left) ResetT(T-&gt;Left);
-    T-&gt;flag &#x3D; 0;
-&#125;
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">Tree</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Tree Left,Right;<span class="comment">//用两个指针来指向左右子树</span></span><br><span class="line">    <span class="keyword">int</span> data,flag;<span class="comment">//data来存放这个节点的数据，flag用来判断是否访问过该节点</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">BuildTree</span><span class="params">(<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function">Tree <span class="title">NewNode</span><span class="params">(<span class="keyword">int</span> V)</span></span>;</span><br><span class="line"><span class="function">Tree <span class="title">Insert</span><span class="params">(Tree T,<span class="keyword">int</span> V)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">Judge</span><span class="params">(Tree T,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">check</span><span class="params">(Tree T,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FreeTree</span><span class="params">(Tree T)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetT</span><span class="params">(Tree T)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> N,i,L;</span><br><span class="line">    Tree T;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;N);</span><br><span class="line">    <span class="keyword">while</span>(N)<span class="comment">//当N为0时返回</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;L);</span><br><span class="line">        T = BuildTree(N);<span class="comment">//建立二叉搜索树</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; L; i++)<span class="comment">//多组数据，使用读入的L来控制读入的数据组数</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Judge(T,N)) <span class="built_in">printf</span>(<span class="string">&quot;Yes\n&quot;</span>);<span class="comment">//判断是否是一棵树</span></span><br><span class="line">            <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">&quot;No\n&quot;</span>);</span><br><span class="line">            ResetT(T);<span class="comment">//将T初始化</span></span><br><span class="line">        &#125;</span><br><span class="line">        FreeTree(T);<span class="comment">//判断完成后释放当前树</span></span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;N);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">BuildTree</span><span class="params">(<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,V;</span><br><span class="line">    Tree T;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">    T = NewNode(V);<span class="comment">//开辟第一个节点</span></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">        T = Insert(T,V);<span class="comment">//后续节点的插入（保证插入完成后该树为二叉搜索树）</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> T;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">NewNode</span><span class="params">(<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Tree T = (Tree)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct TreeNode));<span class="comment">//开辟新节点</span></span><br><span class="line">    T -&gt; data = V;</span><br><span class="line">    T -&gt; Left = T-&gt;Right = <span class="literal">NULL</span>;</span><br><span class="line">    T -&gt; flag = <span class="number">0</span>;<span class="comment">//初始化操作</span></span><br><span class="line">    <span class="keyword">return</span> T;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Tree <span class="title">Insert</span><span class="params">(Tree T,<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!T) T = NewNode(V);<span class="comment">//查找到空节点时开辟新节点并插入</span></span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(T-&gt;data &gt; V)<span class="comment">//此节点数据大于要插入的数据时向左插入</span></span><br><span class="line">            T-&gt;Left = Insert(T-&gt;Left,V);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            T-&gt;Right = Insert(T-&gt;Right,V);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> T;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">Judge</span><span class="params">(Tree T,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,V,Jflag = <span class="number">0</span>;<span class="comment">//使用Jflag来保证在中途判断出不是同一棵树后仍能继续读数据和判断</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">    <span class="keyword">if</span>( V != T-&gt;data) Jflag = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> T-&gt;flag = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>,&amp;V);</span><br><span class="line">        <span class="keyword">if</span>((!check(T,V)) &amp;&amp; (!Jflag)) Jflag = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(Jflag) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">check</span><span class="params">(Tree T,<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;flag)<span class="comment">//当这个节点被访问过</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//要判断的数据和这个节点不等时根据大小关系向左向右判断</span></span><br><span class="line">        <span class="keyword">if</span>(T-&gt;data&gt;V) <span class="keyword">return</span> check(T-&gt;Left,V);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(T-&gt;data&lt;V) <span class="keyword">return</span> check(T-&gt;Right,V);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//如果这个节点被访问过且数据和要判断的数据相同说明不是</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(V == T-&gt;data)&#123;<span class="comment">//未访问过该节点且该节点数据和需要判断的数据相等</span></span><br><span class="line">            T-&gt;flag = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FreeTree</span><span class="params">(Tree T)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//释放判断的基准树</span></span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Right) FreeTree(T-&gt;Right);</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Left) FreeTree(T-&gt;Left);</span><br><span class="line">    <span class="built_in">free</span>(T);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetT</span><span class="params">(Tree T)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//判断完成后的树的初始化</span></span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Right) ResetT(T-&gt;Right);</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;Left) ResetT(T-&gt;Left);</span><br><span class="line">    T-&gt;flag = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -562,6 +438,9 @@ void ResetT(Tree T)
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/" rel="next" title="数据结构刷题笔记2——使用DFS和BFS列出连通集">
+                  数据结构刷题笔记2——使用DFS和BFS列出连通集 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -617,14 +496,14 @@ void ResetT(Tree T)
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">27k</span>
+    <span title="站点总字数">29k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:07</span>
+    <span title="站点阅读时长">1:13</span>
   </span>
 </div>
 <div class="busuanzi-count">
