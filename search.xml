@@ -871,56 +871,6 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
-    <title>hexo博客部署到云服务器</title>
-    <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：我的国外服务器最近IP被封锁了，于是就打算把本地的服务器部署到另外的服务器上</p>
-</blockquote>
-<h1>Git安装及配置</h1>
-<p>使用xshell远程连接服务器后先安装git依赖的库</p>
-<h2 id="安装依赖库及编译工具"><a class="header-anchor" href="#安装依赖库及编译工具">¶</a>安装依赖库及编译工具</h2>
-<ol>
-<li>
-<p>安装依赖库：</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> curl-devel expat-devel gettext-devel openssl-devel zlib-devel </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>安装编译工具：</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">yum install gcc perl-ExtUtils-MakeMaker <span class="keyword">package</span> <span class="title"></span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<a id="more"></a>
-<h2 id="二、安装Git"><a class="header-anchor" href="#二、安装Git">¶</a>二、安装Git</h2>
-<p>先删除系统自带的旧版本git<br>
-切换到root用户</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sudo su root</span></span><br></pre></td></tr></table></figure>
-<p>再删除旧版本git</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">yum <span class="builtin-name">remove</span> git</span><br></pre></td></tr></table></figure>
-<p>安装git</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git</span><br></pre></td></tr></table></figure>
-<p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
-<p>2、创建个人账户</p>
-<p>在命令框输入（下面不做重复提示了）</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">adduser ZHY</span></span><br></pre></td></tr></table></figure>
-<p>3、添加个人账户权限</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chmod <span class="number">740</span> <span class="regexp">/etc/</span>sudoers</span><br><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
-<p>输入上面的命令，回车之后，进入编辑界面。</p>
-<p>点击 I 键进入编辑模式，找到要修改的地方</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">## Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
-<p>添加以下内容</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">ZHY     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
-<p>参考博客</p>
-<p>https://hjxlog.com/posts/20191130a1.html</p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-      </categories>
-      <tags>
-        <tag>网站建设</tag>
-        <tag>博客部署</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HEXO博客部署到github并将个人域名解析至github</title>
     <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
     <content><![CDATA[<blockquote>
@@ -968,8 +918,58 @@ MAX常结合数组来使用<br>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>网站建设</tag>
         <tag>个人博客</tag>
+        <tag>网站建设</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo博客部署到云服务器</title>
+    <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：我的国外服务器最近IP被封锁了，于是就打算把本地的服务器部署到另外的服务器上</p>
+</blockquote>
+<h1>Git安装及配置</h1>
+<p>使用xshell远程连接服务器后先安装git依赖的库</p>
+<h2 id="安装依赖库及编译工具"><a class="header-anchor" href="#安装依赖库及编译工具">¶</a>安装依赖库及编译工具</h2>
+<ol>
+<li>
+<p>安装依赖库：</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> curl-devel expat-devel gettext-devel openssl-devel zlib-devel </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装编译工具：</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">yum install gcc perl-ExtUtils-MakeMaker <span class="keyword">package</span> <span class="title"></span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<a id="more"></a>
+<h2 id="二、安装Git"><a class="header-anchor" href="#二、安装Git">¶</a>二、安装Git</h2>
+<p>先删除系统自带的旧版本git<br>
+切换到root用户</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sudo su root</span></span><br></pre></td></tr></table></figure>
+<p>再删除旧版本git</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">yum <span class="builtin-name">remove</span> git</span><br></pre></td></tr></table></figure>
+<p>安装git</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git</span><br></pre></td></tr></table></figure>
+<p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
+<p>2、创建个人账户</p>
+<p>在命令框输入（下面不做重复提示了）</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">adduser ZHY</span></span><br></pre></td></tr></table></figure>
+<p>3、添加个人账户权限</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chmod <span class="number">740</span> <span class="regexp">/etc/</span>sudoers</span><br><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
+<p>输入上面的命令，回车之后，进入编辑界面。</p>
+<p>点击 I 键进入编辑模式，找到要修改的地方</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">## Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p>添加以下内容</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">ZHY     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p>参考博客</p>
+<p>https://hjxlog.com/posts/20191130a1.html</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+      </categories>
+      <tags>
+        <tag>网站建设</tag>
+        <tag>博客部署</tag>
       </tags>
   </entry>
   <entry>
@@ -1052,6 +1052,63 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
+    <title>next主题美化——背景图片、动画</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
+<p>next版本：8.2.1</p>
+</blockquote>
+<h1>添加背景图片</h1>
+<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/background.jpg);</span><br><span class="line"> 	<span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>:fixed;</span><br><span class="line">    <span class="attribute">background-position</span>:<span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
+<code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
+<code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
+<code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
+<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.swig</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.swig</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.swig</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.swig</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.swig</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.swig</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.swig</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+<p>再将对应的#去除就可以了</p>
+<h1>博客内容透明化</h1>
+<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//博客内容透明化</span></span><br><span class="line"><span class="comment">//文章内容的透明度设置</span></span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-inner</span> &#123; </span><br><span class="line">   <span class="comment">// margin-top: 60px;</span></span><br><span class="line">   <span class="comment">// padding: 60px 60px 60px 60px;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//菜单栏的透明度设置</span></span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.8</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜索框（local-search）的透明度设置</span></span><br><span class="line"><span class="selector-class">.popup</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
+<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.post-block &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line">.sidebar &#123;</span><br><span class="line">  opacity: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.sidebar-inner &#123;</span><br><span class="line">  background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
+<h2 id="评论区透明度"><a class="header-anchor" href="#评论区透明度">¶</a>评论区透明度</h2>
+<p>在上述代码后添加以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.comments &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>添加圆角</h1>
+<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 20px 20px 20px 20px;</span><br><span class="line">$border-radius           = 20px;</span><br></pre></td></tr></table></figure>
+<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  variable: source/_data/variables.styl</span><br></pre></td></tr></table></figure>
+<h1>添加阴影效果</h1>
+<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 主页文章添加阴影效果</span></span><br><span class="line"><span class="selector-class">.post</span> &#123;</span><br><span class="line">   <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">   <span class="attribute">margin-bottom</span>: <span class="number">60px</span>;</span><br><span class="line">   -webkit-<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> rgba(<span class="number">120</span>, <span class="number">128</span>, <span class="number">114</span>, <span class="number">1.5</span>);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>动画</h1>
+<h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
+<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
+<h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
+<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
     <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
     <content><![CDATA[<blockquote>
@@ -1084,8 +1141,8 @@ Next主题版本: NexT version 8.2.1</p>
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>网站建设</tag>
         <tag>个人博客</tag>
+        <tag>网站建设</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1161,60 +1218,49 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
-    <title>next主题美化——背景图片、动画</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
-<p>next版本：8.2.1</p>
-</blockquote>
-<h1>添加背景图片</h1>
-<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/background.jpg);</span><br><span class="line"> 	<span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>:fixed;</span><br><span class="line">    <span class="attribute">background-position</span>:<span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
-<code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
-<code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
-<code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
-<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
+    <title>数据结构与算法刷题笔记4——六度空间</title>
+    <url>/2021/07/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E5%85%AD%E5%BA%A6%E7%A9%BA%E9%97%B4/</url>
+    <content><![CDATA[<h1>06-图3 六度空间 (30 分)</h1>
+<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
+<p>“六度空间”理论又称作“六度分隔（Six Degrees of Separation）”理论。这个理论可以通俗地阐述为：“你和任何一个陌生人之间所间隔的人不会超过六个，也就是说，最多通过五个人你就能够认识任何一个陌生人。”如图1所示。</p>
+<p><img src="https://images.ptausercontent.com/35" alt="img"><br>
+图1 六度空间示意图</p>
+<p>“六度空间”理论虽然得到广泛的认同，并且正在得到越来越多的应用。但是数十年来，试图验证这个理论始终是许多社会学家努力追求的目标。然而由于历史的原因，这样的研究具有太大的局限性和困难。随着当代人的联络主要依赖于电话、短信、微信以及因特网上即时通信等工具，能够体现社交网络关系的一手数据已经逐渐使得“六度空间”理论的验证成为可能。</p>
+<p>假如给你一个社交网络图，请你对每个节点计算符合“六度空间”理论的结点占结点总数的百分比。</p>
+<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
+<p>输入第1行给出两个正整数，分别表示社交网络图的结点数<em>N</em>（1&lt;<em>N</em>≤103，表示人数）、边数<em>M</em>（≤33×<em>N</em>，表示社交关系数）。随后的<em>M</em>行对应<em>M</em>条边，每行给出一对正整数，分别是该条边直接连通的两个结点的编号（节点从1到<em>N</em>编号）。</p>
 <a id="more"></a>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.swig</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.swig</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.swig</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.swig</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.swig</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.swig</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.swig</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
-<p>再将对应的#去除就可以了</p>
-<h1>博客内容透明化</h1>
-<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//博客内容透明化</span></span><br><span class="line"><span class="comment">//文章内容的透明度设置</span></span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-inner</span> &#123; </span><br><span class="line">   <span class="comment">// margin-top: 60px;</span></span><br><span class="line">   <span class="comment">// padding: 60px 60px 60px 60px;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//菜单栏的透明度设置</span></span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.8</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜索框（local-search）的透明度设置</span></span><br><span class="line"><span class="selector-class">.popup</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
-<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.post-block &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line">.sidebar &#123;</span><br><span class="line">  opacity: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>改为</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.sidebar-inner &#123;</span><br><span class="line">  background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
-<h2 id="评论区透明度"><a class="header-anchor" href="#评论区透明度">¶</a>评论区透明度</h2>
-<p>在上述代码后添加以下代码：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.comments &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>添加圆角</h1>
-<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 20px 20px 20px 20px;</span><br><span class="line">$border-radius           = 20px;</span><br></pre></td></tr></table></figure>
-<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  variable: source/_data/variables.styl</span><br></pre></td></tr></table></figure>
-<h1>添加阴影效果</h1>
-<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 主页文章添加阴影效果</span></span><br><span class="line"><span class="selector-class">.post</span> &#123;</span><br><span class="line">   <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">   <span class="attribute">margin-bottom</span>: <span class="number">60px</span>;</span><br><span class="line">   -webkit-<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> rgba(<span class="number">120</span>, <span class="number">128</span>, <span class="number">114</span>, <span class="number">1.5</span>);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>动画</h1>
-<h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
-<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
-<h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
-<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
-]]></content>
+<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
+<p>对每个结点输出与该结点距离不超过6的结点数占结点总数的百分比，精确到小数点后2位。每个结节点输出一行，格式为“结点编号:（空格）百分比%”。</p>
+<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10 9</span><br><span class="line">1 2</span><br><span class="line">2 3</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br><span class="line">5 6</span><br><span class="line">6 7</span><br><span class="line">7 8</span><br><span class="line">8 9</span><br><span class="line">9 10</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h3 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h3>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1: 70.00%</span><br><span class="line">2: 80.00%</span><br><span class="line">3: 90.00%</span><br><span class="line">4: 100.00%</span><br><span class="line">5: 100.00%</span><br><span class="line">6: 100.00%</span><br><span class="line">7: 100.00%</span><br><span class="line">8: 90.00%</span><br><span class="line">9: 80.00%</span><br><span class="line">10: 70.00%</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1>思路与题解</h1>
+<h2 id="思路"><a class="header-anchor" href="#思路">¶</a>思路</h2>
+<p>根据题目描述，我们只需要建立一个图，而六层的统计要求就比较容易想到从输入的第一个节点进行广度优先搜索遍历所有节点，然后统计六层内的节点数量百分比即可<br>
+1000个节点的数据而节点间的连接又小于33个，所以可以认为是比较稀疏的图，使用邻接表来存储是比较合算的<br>
+难点在于遍历的层数的统计<br>
+有两种解决办法</p>
+<ol>
+<li>在结构体内加入一个数据记录节点层数</li>
+<li>每次遍历记录末尾数字和上一次的末尾数字，相同时层数++<br>
+本文采用第二种方法进行记录，代码如下</li>
+</ol>
+<h2 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h2>
+<blockquote>
+<p>第一次使用邻接表存储的图来写算法，虽然不是标准的邻接表，但也感觉有被烦到。。。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span> *<span class="title">AdjList</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex Value;</span><br><span class="line">    AdjList Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> Visited[MaxVer];</span><br><span class="line"><span class="keyword">int</span> Que[MaxVer];<span class="comment">//使用数组作为队列</span></span><br><span class="line">AdjList G[MaxVer];</span><br><span class="line"><span class="keyword">int</span> N,E;<span class="comment">//存储节点的数量和边的数量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GraphInit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="comment">/*建图*/</span></span><br><span class="line">    <span class="keyword">int</span> i,V1,V2;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;N,&amp;E);</span><br><span class="line">    AdjList NewNode;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化节点*/</span></span><br><span class="line">        G[i] = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        G[i]-&gt;Next = <span class="literal">NULL</span>;</span><br><span class="line">        G[i]-&gt;Value = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化边*/</span></span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V1,&amp;V2);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V1连向V2的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V1]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V2;</span><br><span class="line">        G[V1]-&gt;Next = NewNode;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V2连向V1的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V2]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V1;</span><br><span class="line">        G[V2]-&gt;Next = NewNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BFS</span><span class="params">(<span class="keyword">int</span> Num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> head,rear,Last,Tail,Level,count;</span><br><span class="line">    AdjList P;</span><br><span class="line">    Level = rear = <span class="number">0</span>;</span><br><span class="line">    count = <span class="number">1</span>;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    Que[<span class="number">0</span>] = Num;</span><br><span class="line">    Visited[Num] = <span class="number">1</span>;</span><br><span class="line">    Last = Tail = Num;</span><br><span class="line">    <span class="keyword">while</span>(head &lt; rear )<span class="comment">//当链表为空时</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        P = G[Que[head]]-&gt;Next;</span><br><span class="line">        <span class="keyword">while</span>( P )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!Visited[P-&gt;Value])</span><br><span class="line">            &#123;   </span><br><span class="line">                Visited[P-&gt;Value] =<span class="number">1</span>;</span><br><span class="line">                rear++;</span><br><span class="line">                Que[rear] = P-&gt;Value;</span><br><span class="line">                Tail = P-&gt;Value;</span><br><span class="line">                count++;<span class="comment">/*每个节点出来时都需要统计它的邻接点，</span></span><br><span class="line"><span class="comment">                		如果是在这个遍历外统计节点时最后的尾结</span></span><br><span class="line"><span class="comment">                		点统计会出现一些小问题*/</span></span><br><span class="line">            &#125;</span><br><span class="line">            P = P-&gt;Next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Que[head] == Last)<span class="comment">//如果当前出队列元素为这层的末尾元素</span></span><br><span class="line">        &#123;</span><br><span class="line">            Last = Tail;</span><br><span class="line">            Level++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Level == <span class="number">6</span>) <span class="keyword">break</span>;<span class="comment">//超过六层就退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    GraphInit();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d: %.2f%%\n&quot;</span>,i,<span class="number">100.0</span> * BFS(i) / N);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>BFS</category>
+        <category>邻接表</category>
       </categories>
       <tags>
-        <tag>个人博客</tag>
-        <tag>hexo</tag>
-        <tag>next</tag>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
       </tags>
   </entry>
   <entry>
@@ -1282,13 +1328,13 @@ Next主题版本: NexT version 8.2.1</p>
       <categories>
         <category>数据结构与算法</category>
         <category>图</category>
-        <category>DFS</category>
         <category>BFS</category>
+        <category>DFS</category>
       </categories>
       <tags>
         <tag>数据结构与算法</tag>
-        <tag>DFS</tag>
         <tag>BFS</tag>
+        <tag>DFS</tag>
       </tags>
   </entry>
   <entry>
@@ -1323,11 +1369,15 @@ Next主题版本: NexT version 8.2.1</p>
 <p>本题提供的数据为每个鳄鱼所在的点的坐标，使用DFS和BFS都能实现，感觉总体难点在于存储这些鳄鱼所在的点的数据结构，刚开始时我使用了一个点类来存储，开辟了一系列的含有坐标的点组成的数组，然后通过遍历这个数组来进行DFS，后来发现了更简单的方法，使用两个全局的数组来分别存储这些点的X坐标和Y坐标，然后数组的下标即表示一个点，所以就不用封装到结构里（PS：主要是我对struct不是很熟悉，写着总是报错。。。）</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxN 101</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> DIS,NUM;</span><br><span class="line"><span class="keyword">int</span> X[MaxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> Y[MaxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> Visited[MaxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Distance</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(<span class="built_in">pow</span>(X[i]-X[j],<span class="number">2</span>) + <span class="built_in">pow</span>(Y[i]-Y[j],<span class="number">2</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[N] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">if</span>(X[N] &gt;= <span class="number">50</span>-DIS||X[N] &lt;= DIS<span class="number">-50</span></span><br><span class="line">       ||Y[N] &gt;= <span class="number">50</span>-DIS||Y[N] &lt;= DIS<span class="number">-50</span>)<span class="comment">//满足边界条件，即能跳到岸边，就返回真，退出</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= NUM; i++)<span class="comment">//要从1开始遍历（因为用了0来存储原点，第一个点从1开始）</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(Visited[i] == <span class="number">0</span>&amp;&amp; ( Distance(N,i) &lt;= DIS))</span><br><span class="line">            <span class="keyword">if</span>(DFS(i))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;NUM,&amp;DIS);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= NUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>, &amp;X[i],&amp;Y[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(DIS+<span class="number">15</span>&gt;=<span class="number">50</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Yes\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= NUM;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(Distance(<span class="number">0</span>,i) &lt;= <span class="number">15</span> + DIS)<span class="comment">//第一跳，判断原点距离与第一个点的距离来判断是否能跳上去</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(DFS(i))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Yes\n&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;No\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>DFS</category>
+        <category>数据结构与算法</category>
+        <category>图</category>
         <category>BFS</category>
+        <category>DFS</category>
       </categories>
       <tags>
+        <tag>BFS</tag>
         <tag>数据结构</tag>
+        <tag>DFS</tag>
       </tags>
   </entry>
   <entry>
