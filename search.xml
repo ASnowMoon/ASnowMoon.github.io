@@ -662,58 +662,6 @@
       </tags>
   </entry>
   <entry>
-    <title>HEXO博客部署到github并将个人域名解析至github</title>
-    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
-</blockquote>
-<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
-<h1>部署到github</h1>
-<p>首先在github中新建一个repository</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
-<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
-<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
-<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
-<p>找到<code>deploy</code>并配置以下内容</p>
-<a id="more"></a>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<p>其中git仓库位置需要改为你自己新建的</p>
-<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
-<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
-<h1>域名注册和解析到github</h1>
-<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
-<h2 id="解析域名"><a class="header-anchor" href="#解析域名">¶</a>解析域名</h2>
-<p>进入控制台，点击解析-添加记录</p>
-<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<h2 id="添加CNAME文件"><a class="header-anchor" href="#添加CNAME文件">¶</a>添加CNAME文件</h2>
-<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
-<p>退出后<em><strong>删除.txt后缀文件名</strong></em></p>
-<p>最终CNAME的配置效果：</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886"></p>
-<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
-<p>这时候已经配置好了，再次部署到github上</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
-<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
-<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
-<h1>参考文章</h1>
-<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
-<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
-<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>网站建设</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Excel学习笔记3——函数求和及常见函数</title>
     <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<blockquote>
@@ -973,6 +921,58 @@ MAX常结合数组来使用<br>
       </tags>
   </entry>
   <entry>
+    <title>HEXO博客部署到github并将个人域名解析至github</title>
+    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
+</blockquote>
+<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
+<h1>部署到github</h1>
+<p>首先在github中新建一个repository</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319"></p>
+<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
+<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
+<p>找到<code>deploy</code>并配置以下内容</p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>其中git仓库位置需要改为你自己新建的</p>
+<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
+<h1>域名注册和解析到github</h1>
+<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
+<h2 id="解析域名"><a class="header-anchor" href="#解析域名">¶</a>解析域名</h2>
+<p>进入控制台，点击解析-添加记录</p>
+<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<h2 id="添加CNAME文件"><a class="header-anchor" href="#添加CNAME文件">¶</a>添加CNAME文件</h2>
+<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
+<p>退出后<em><strong>删除.txt后缀文件名</strong></em></p>
+<p>最终CNAME的配置效果：</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886"></p>
+<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681"></p>
+<p>这时候已经配置好了，再次部署到github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
+<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
+<h1>参考文章</h1>
+<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
+<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
+<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>网站建设</tag>
+        <tag>个人博客</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo踩坑记录</title>
     <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<blockquote>
@@ -1052,59 +1052,40 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
-    <title>next主题美化——背景图片、动画</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
+    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
+    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
     <content><![CDATA[<blockquote>
-<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
-<p>next版本：8.2.1</p>
+<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误</p>
 </blockquote>
-<h1>添加背景图片</h1>
-<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/background.jpg);</span><br><span class="line"> 	<span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>:fixed;</span><br><span class="line">    <span class="attribute">background-position</span>:<span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
-<code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
-<code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
-<code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
-<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
+<h1>TOC定向错误</h1>
+<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code>的代码</p>
+<p>现在会被编译为<code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
+<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
+<h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
+<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
+<p>但是我的hexo中并没有找到这个目录</p>
+<p>所以我找了另外的</p>
+<h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
 <a id="more"></a>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.swig</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.swig</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.swig</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.swig</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.swig</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.swig</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.swig</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
-<p>再将对应的#去除就可以了</p>
-<h1>博客内容透明化</h1>
-<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//博客内容透明化</span></span><br><span class="line"><span class="comment">//文章内容的透明度设置</span></span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-inner</span> &#123; </span><br><span class="line">   <span class="comment">// margin-top: 60px;</span></span><br><span class="line">   <span class="comment">// padding: 60px 60px 60px 60px;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//菜单栏的透明度设置</span></span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.8</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜索框（local-search）的透明度设置</span></span><br><span class="line"><span class="selector-class">.popup</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
-<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.post-block &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line">.sidebar &#123;</span><br><span class="line">  opacity: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>改为</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.sidebar-inner &#123;</span><br><span class="line">  background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
-<h2 id="评论区透明度"><a class="header-anchor" href="#评论区透明度">¶</a>评论区透明度</h2>
-<p>在上述代码后添加以下代码：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.comments &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>添加圆角</h1>
-<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 20px 20px 20px 20px;</span><br><span class="line">$border-radius           = 20px;</span><br></pre></td></tr></table></figure>
-<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  variable: source/_data/variables.styl</span><br></pre></td></tr></table></figure>
-<h1>添加阴影效果</h1>
-<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 主页文章添加阴影效果</span></span><br><span class="line"><span class="selector-class">.post</span> &#123;</span><br><span class="line">   <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">   <span class="attribute">margin-bottom</span>: <span class="number">60px</span>;</span><br><span class="line">   -webkit-<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> rgba(<span class="number">120</span>, <span class="number">128</span>, <span class="number">114</span>, <span class="number">1.5</span>);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>动画</h1>
-<h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
-<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
-<h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
-<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
+<p>首先安装<code>markdown-it-named-headings</code>插件</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">parser.use(<span class="built_in">require</span>(<span class="string">&#x27;markdown-it-named-headings&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>尝试以上两种方法，均未成功</p>
+<p>时间不早了，后面有时间再解决</p>
+<blockquote>
+<p>参考文章:</p>
+<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a>  <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>网站建设</category>
         <category>个人博客</category>
       </categories>
       <tags>
+        <tag>网站建设</tag>
         <tag>个人博客</tag>
-        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1180,6 +1161,63 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
+    <title>next主题美化——背景图片、动画</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
+<p>next版本：8.2.1</p>
+</blockquote>
+<h1>添加背景图片</h1>
+<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/background.jpg);</span><br><span class="line"> 	<span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>:fixed;</span><br><span class="line">    <span class="attribute">background-position</span>:<span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>background:url</code>为图片路径，也可以直接使用链接。<br>
+<code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕<br>
+<code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定<br>
+<code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
+<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.swig</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.swig</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.swig</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.swig</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.swig</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.swig</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.swig</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+<p>再将对应的#去除就可以了</p>
+<h1>博客内容透明化</h1>
+<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//博客内容透明化</span></span><br><span class="line"><span class="comment">//文章内容的透明度设置</span></span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-inner</span> &#123; </span><br><span class="line">   <span class="comment">// margin-top: 60px;</span></span><br><span class="line">   <span class="comment">// padding: 60px 60px 60px 60px;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//菜单栏的透明度设置</span></span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.8</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜索框（local-search）的透明度设置</span></span><br><span class="line"><span class="selector-class">.popup</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
+<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.post-block &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line">.sidebar &#123;</span><br><span class="line">  opacity: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.sidebar-inner &#123;</span><br><span class="line">  background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
+<h2 id="评论区透明度"><a class="header-anchor" href="#评论区透明度">¶</a>评论区透明度</h2>
+<p>在上述代码后添加以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.comments &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>添加圆角</h1>
+<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 20px 20px 20px 20px;</span><br><span class="line">$border-radius           = 20px;</span><br></pre></td></tr></table></figure>
+<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  variable: source/_data/variables.styl</span><br></pre></td></tr></table></figure>
+<h1>添加阴影效果</h1>
+<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 主页文章添加阴影效果</span></span><br><span class="line"><span class="selector-class">.post</span> &#123;</span><br><span class="line">   <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">   <span class="attribute">margin-bottom</span>: <span class="number">60px</span>;</span><br><span class="line">   -webkit-<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> rgba(<span class="number">120</span>, <span class="number">128</span>, <span class="number">114</span>, <span class="number">1.5</span>);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>动画</h1>
+<h2 id="动画效果"><a class="header-anchor" href="#动画效果">¶</a>动画效果</h2>
+<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
+<h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
+<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构刷题笔记1——是否同一棵二叉搜索树</title>
     <url>/2021/07/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%98%AF%E5%90%A6%E5%90%8C%E4%B8%80%E6%A3%B5%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
     <content><![CDATA[<h1>04-树4 是否同一棵二叉搜索树 (25 分)</h1>
@@ -1219,44 +1257,6 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
-    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
-    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
-    <content><![CDATA[<blockquote>
-<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误</p>
-</blockquote>
-<h1>TOC定向错误</h1>
-<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code>的代码</p>
-<p>现在会被编译为<code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
-<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
-<h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
-<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
-<p>但是我的hexo中并没有找到这个目录</p>
-<p>所以我找了另外的</p>
-<h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
-<a id="more"></a>
-<p>首先安装<code>markdown-it-named-headings</code>插件</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
-<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">parser.use(<span class="built_in">require</span>(<span class="string">&#x27;markdown-it-named-headings&#x27;</span>))</span><br></pre></td></tr></table></figure>
-<p>尝试以上两种方法，均未成功</p>
-<p>时间不早了，后面有时间再解决</p>
-<blockquote>
-<p>参考文章:</p>
-<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a>  <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>网站建设</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
     <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
     <content><![CDATA[<h1>06-图1 列出连通集 (25 分)——PTA</h1>
@@ -1289,6 +1289,43 @@ Next主题版本: NexT version 8.2.1</p>
         <tag>数据结构与算法</tag>
         <tag>DFS</tag>
         <tag>BFS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构刷题笔记3——拯救詹姆斯邦德</title>
+    <url>/2021/07/29/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%8B%AF%E6%95%91%E8%A9%B9%E5%A7%86%E6%96%AF%E9%82%A6%E5%BE%B7/</url>
+    <content><![CDATA[<h1>06-图2 Saving James Bond - Easy Version (25 分)</h1>
+<p>This time let us consider the situation in the movie “Live and Let Die” in which James Bond, the world’s most famous spy, was captured by a group of drug dealers. He was sent to a small piece of land at the center of a lake filled with crocodiles. There he performed the most daring action to escape – he jumped onto the head of the nearest crocodile! Before the animal realized what was happening, James jumped again onto the next big head… Finally he reached the bank before the last crocodile could bite him (actually the stunt man was caught by the big mouth and barely escaped with his extra thick boot).</p>
+<p>Assume that the lake is a 100 by 100 square one. Assume that the center of the lake is at (0,0) and the northeast corner at (50,50). The central island is a disk centered at (0,0) with the diameter of 15. A number of crocodiles are in the lake at various positions. Given the coordinates of each crocodile and the distance that James could jump, you must tell him whether or not he can escape.</p>
+<h2 id="Input-Specification"><a class="header-anchor" href="#Input-Specification">¶</a>Input Specification:</h2>
+<p>Each input file contains one test case. Each case starts with a line containing two positive integers <em>N</em> (≤100), the number of crocodiles, and <em>D</em>, the maximum distance that James could jump. Then <em>N</em> lines follow, each containing the (<em>x</em>,<em>y</em>) location of a crocodile. Note that no two crocodiles are staying at the same position.</p>
+<h2 id="Output-Specification"><a class="header-anchor" href="#Output-Specification">¶</a>Output Specification:</h2>
+<p>For each test case, print in a line “Yes” if James can escape, or “No” if not.</p>
+<h2 id="Sample-Input-1"><a class="header-anchor" href="#Sample-Input-1">¶</a>Sample Input 1:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">14 20</span><br><span class="line">25 -15</span><br><span class="line">-25 28</span><br><span class="line">8 49</span><br><span class="line">29 15</span><br><span class="line">-35 -2</span><br><span class="line">5 28</span><br><span class="line">27 -29</span><br><span class="line">-8 -28</span><br><span class="line">-20 -35</span><br><span class="line">-25 -20</span><br><span class="line">-13 29</span><br><span class="line">-30 15</span><br><span class="line">-35 40</span><br><span class="line">12 12</span><br></pre></td></tr></table></figure>
+<h2 id="Sample-Output-1"><a class="header-anchor" href="#Sample-Output-1">¶</a>Sample Output 1:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Yes</span><br></pre></td></tr></table></figure>
+<h2 id="Sample-Input-2"><a class="header-anchor" href="#Sample-Input-2">¶</a>Sample Input 2:</h2>
+<figure class="highlight subunit"><table><tr><td class="code"><pre><span class="line">4 13</span><br><span class="line"><span class="string">-12</span> 12</span><br><span class="line">12 12</span><br><span class="line"><span class="string">-12</span> <span class="string">-12</span></span><br><span class="line">12 <span class="string">-12</span></span><br></pre></td></tr></table></figure>
+<h2 id="Sample-Output-2"><a class="header-anchor" href="#Sample-Output-2">¶</a>Sample Output 2:</h2>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">No</span></span><br></pre></td></tr></table></figure>
+<h1>谷歌翻译版题目描述</h1>
+<h2 id="06-图2-拯救詹姆斯邦德-简易版（25分）"><a class="header-anchor" href="#06-图2-拯救詹姆斯邦德-简易版（25分）">¶</a>06-图2 拯救詹姆斯邦德 - 简易版（25分）</h2>
+<p>这一次让我们考虑一下电影《生与死》中世界上最著名的间谍詹姆斯邦德被一群毒贩抓获的情况。他被送到了一个充满鳄鱼的湖中心的一小块土地上。在那里，他做出了最大胆的逃跑动作——跳到了最近的鳄鱼的头上！还没等那只动物意识到发生了什么事，詹姆斯又跳到了下一个大脑袋上…… 终于在最后一条鳄鱼咬到他之前到达了岸边（实际上特技演员被大嘴卡住了，他的超厚靴子勉强逃过一劫）。</p>
+<p>假设湖是一个 100 x 100 的正方形。假设湖的中心在 (0,0)，东北角在 (50,50)。中央岛是一个以(0,0)为中心、直径为15的圆盘。湖中有许多鳄鱼在不同的位置。给定每条鳄鱼的坐标和詹姆斯可以跳跃的距离，你必须告诉他是否可以逃脱。</p>
+<h2 id="输入规格："><a class="header-anchor" href="#输入规格：">¶</a>输入规格：</h2>
+<p>每个输入文件包含一个测试用例。每个案例都以一行包含两个正整数 N（≤100）、鳄鱼的数量和 D（詹姆斯可以跳跃的最大距离）开始。然后是 N 行，每行都包含鳄鱼的 (x,y) 位置。请注意，没有两条鳄鱼停留在同一位置。</p>
+<h2 id="输出规格："><a class="header-anchor" href="#输出规格：">¶</a>输出规格：</h2>
+<p>对于每个测试用例，如果 James 可以逃脱，则打印“Yes”，否则打印“No”。</p>
+<h1>题目理解与思路</h1>
+<p>本题提供的数据为每个鳄鱼所在的点的坐标，使用DFS和BFS都能实现，感觉总体难点在于存储这些鳄鱼所在的点的数据结构，刚开始时我使用了一个点类来存储，开辟了一系列的含有坐标的点组成的数组，然后通过遍历这个数组来进行DFS，后来发现了更简单的方法，使用两个全局的数组来分别存储这些点的X坐标和Y坐标，然后数组的下标即表示一个点，所以就不用封装到结构里（PS：主要是我对struct不是很熟悉，写着总是报错。。。）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxN 101</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> DIS,NUM;</span><br><span class="line"><span class="keyword">int</span> X[MaxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> Y[MaxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> Visited[MaxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Distance</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(<span class="built_in">pow</span>(X[i]-X[j],<span class="number">2</span>) + <span class="built_in">pow</span>(Y[i]-Y[j],<span class="number">2</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">DFS</span><span class="params">(<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[N] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">if</span>(X[N] &gt;= <span class="number">50</span>-DIS||X[N] &lt;= DIS<span class="number">-50</span></span><br><span class="line">       ||Y[N] &gt;= <span class="number">50</span>-DIS||Y[N] &lt;= DIS<span class="number">-50</span>)<span class="comment">//满足边界条件，即能跳到岸边，就返回真，退出</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= NUM; i++)<span class="comment">//要从1开始遍历（因为用了0来存储原点，第一个点从1开始）</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(Visited[i] == <span class="number">0</span>&amp;&amp; ( Distance(N,i) &lt;= DIS))</span><br><span class="line">            <span class="keyword">if</span>(DFS(i))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;NUM,&amp;DIS);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= NUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>, &amp;X[i],&amp;Y[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(DIS+<span class="number">15</span>&gt;=<span class="number">50</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Yes\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= NUM;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(Distance(<span class="number">0</span>,i) &lt;= <span class="number">15</span> + DIS)<span class="comment">//第一跳，判断原点距离与第一个点的距离来判断是否能跳上去</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(DFS(i))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Yes\n&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;No\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>DFS</category>
+        <category>BFS</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
