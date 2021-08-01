@@ -1598,4 +1598,59 @@ Next主题版本: NexT version 8.2.1</p>
         <tag>Floyd算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title>1.计算机系统概论</title>
+    <url>/2021/08/01/1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%AE%BA/</url>
+    <content><![CDATA[<blockquote>
+<p>今天没有刷题，学的也比较水，主要原因有以下两点</p>
+<ol>
+<li>刚开一门新课，学的内容不是很多，不是很充实</li>
+<li>懒！！！今天没有用心学</li>
+</ol>
+</blockquote>
+<p>一、冯·诺依曼计算机的特点</p>
+<ol>
+<li>由五大部件组成</li>
+<li>指令和数据以同等地位存于存储器，可按地址寻访</li>
+<li>指令和数据用二进制表示</li>
+<li>指令由操作码和地址码组成</li>
+<li>存储程序</li>
+<li>以[[运算器]]为中心<br>
+<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230612.png" alt=""></li>
+</ol>
+<p>改进：以存储器为中心</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230631.png" alt="Pasted image 20210801195410"></p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230640.png" alt="Pasted image 20210801195500">系统复杂性的管理方法(3Y原则)</p>
+<ul>
+<li>层次化（Hierachy）：将被设计的系统划分为多个模块或子模块</li>
+<li>模块化（Modularity）：有明确定义（well-defined）的功能和接口</li>
+<li>规则性（regularity）：模块更容易被重用</li>
+</ul>
+<p>[[存储器]]</p>
+<p><strong>存储单元</strong>：存放一串二进制代码<br>
+<strong>存储字</strong>：存储单元中二进制代码的组合<br>
+<strong>存储字长</strong>：存储单元中二进制代码的位数</p>
+<a id="more"></a>
+<p>#MAR 存储器地址寄存器，反映存储单元的个数<br>
+#MDR 存储器数据寄存器，反映存储字长</p>
+<p>[[运算器]]</p>
+<p>由ACC、ALU、MQ、X组成</p>
+<p>[[控制器]]</p>
+<p>由CU、IR、PC、组成<br>
+PC 取指令<br>
+IR	分析指令<br>
+CU	执行指令<br>
+PC 存放当前欲执行指令的地址， 具有计数功能（PC）+ 1 PC<br>
+IR 存放当前欲执行的指令</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230702.png" alt="Pasted image 20210801224533"></p>
+<p><strong>机器字长</strong> CPU 一次能处理数据的位数 与 CPU 中的 寄存器位数 有关</p>
+]]></content>
+      <categories>
+        <category>计算机组成原理</category>
+        <category>概述</category>
+      </categories>
+      <tags>
+        <tag>计算机组成原理</tag>
+      </tags>
+  </entry>
 </search>
