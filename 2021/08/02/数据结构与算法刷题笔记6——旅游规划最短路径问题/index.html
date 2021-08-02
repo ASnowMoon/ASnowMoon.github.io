@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="UDLn1eAC3t5akkh08ZnfWHmh2xMkBmf01U9xV3rY2Tg">
+  <meta name="baidu-site-verification" content="KagJZl5pSaEUxtB5">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7Cconsolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="07-图6 旅游规划 (25 分)  前言：这篇文章是我的每日一文计划的第七篇文章，已经完成了一周的记录，在废物了几周之后感觉又一次找到了点好好学习的动力和不废物的目标感，希望自己能长期坚持！ PS:在文末我又立了点Flag👀👀，希望过一段时间以后这个Flag能够达成！🥳  ¶题目描述 有了一张自驾旅游路线图，你会知道城市间的高速公路长度、以及该公路要收取的过路费。现在需要你写一个程序，帮助">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构与算法刷题笔记6——旅游规划最短路径问题">
+<meta property="og:url" content="https://www.snowmoon.top/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:description" content="07-图6 旅游规划 (25 分)  前言：这篇文章是我的每日一文计划的第七篇文章，已经完成了一周的记录，在废物了几周之后感觉又一次找到了点好好学习的动力和不废物的目标感，希望自己能长期坚持！ PS:在文末我又立了点Flag👀👀，希望过一段时间以后这个Flag能够达成！🥳  ¶题目描述 有了一张自驾旅游路线图，你会知道城市间的高速公路长度、以及该公路要收取的过路费。现在需要你写一个程序，帮助">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg">
+<meta property="article:published_time" content="2021-08-02T02:59:08.000Z">
+<meta property="article:modified_time" content="2021-08-02T08:10:28.073Z">
+<meta property="article:author" content="Zheng Haoyu">
+<meta property="article:tag" content="Dijkstra">
+<meta property="article:tag" content="Floyd">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg">
+
+
+<link rel="canonical" href="https://www.snowmoon.top/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>数据结构与算法刷题笔记6——旅游规划最短路径问题 | SnowMoon-Haoyu's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="SnowMoon-Haoyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">SnowMoon-Haoyu's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录成长，变得更强！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-guestbook"><a href="/guestbook/" rel="section"><i class="fas fa-book fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-essay"><a href="/essay/" rel="section"><i class="fas fa-cannabis fa-fw"></i>随笔</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">07-图6 旅游规划 (25 分)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">题目描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">输入格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">输出格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">输入样例:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.5.</span> <span class="nav-text">输出样例:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">题目理解与思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">后记——对于Dijkstra算法与Floyd算法的一些理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dijkstra%E7%AE%97%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">Dijkstra算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Floyd%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">Floyd算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">附记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheng Haoyu"
+      src="/images/Avatar.jpg">
+  <p class="site-author-name" itemprop="name">Zheng Haoyu</p>
+  <div class="site-description" itemprop="description">本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">博客</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ASnowMoon" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ASnowMoon" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhenghaoyuzhy@163.com" title="E-Mail → mailto:zhenghaoyuzhy@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/Growing_potato?spm=1001.2014.3001.5343" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;Growing_potato?spm&#x3D;1001.2014.3001.5343" rel="noopener" target="_blank"><i class="fab fa-cuttlefish fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+<a target="_blank" rel="noopener" href="https://github.com/ASnowMoon" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Avatar.jpg">
+      <meta itemprop="name" content="Zheng Haoyu">
+      <meta itemprop="description" content="本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SnowMoon-Haoyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据结构与算法刷题笔记6——旅游规划最短路径问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-08-02 10:59:08 / 修改时间：16:10:28" itemprop="dateCreated datePublished" datetime="2021-08-02T10:59:08+08:00">2021-08-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%9B%BE/" itemprop="url" rel="index"><span itemprop="name">图</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%9B%BE/Dijkstra/" itemprop="url" rel="index"><span itemprop="name">Dijkstra</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span id="/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="数据结构与算法刷题笔记6——旅游规划最短路径问题" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1>07-图6 旅游规划 (25 分)</h1>
+<blockquote>
+<p>前言：这篇文章是我的每日一文计划的第七篇文章，已经完成了一周的记录，在废物了几周之后感觉又一次找到了点好好学习的动力和不废物的目标感，希望自己能长期坚持！</p>
+<p>PS:在文末我又立了点Flag👀👀，希望过一段时间以后这个Flag能够达成！🥳</p>
+</blockquote>
+<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
+<p>有了一张自驾旅游路线图，你会知道城市间的高速公路长度、以及该公路要收取的过路费。现在需要你写一个程序，帮助前来咨询的游客找一条出发地和目的地之间的最短路径。如果有若干条路径都是最短的，那么需要输出最便宜的一条路径。</p>
+<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
+<p>输入说明：输入数据的第1行给出4个正整数<em>N</em>、<em>M</em>、<em>S</em>、<em>D</em>，其中<em>N</em>（2≤<em>N</em>≤500）是城市的个数，顺便假设城市的编号为0~(<em>N</em>−1)；<em>M</em>是高速公路的条数；<em>S</em>是出发地的城市编号；<em>D</em>是目的地的城市编号。随后的<em>M</em>行中，每行给出一条高速公路的信息，分别是：城市1、城市2、高速公路长度、收费额，中间用空格分开，数字均为整数且不超过500。输入保证解的存在。</p>
+<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
+<p>在一行里输出路径的长度和收费总额，数字间以空格分隔，输出结尾不能有多余空格。</p>
+<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">4 5 0 3</span><br><span class="line">0 1 1 20</span><br><span class="line">1 3 2 30</span><br><span class="line">0 3 4 10</span><br><span class="line">0 2 2 20</span><br><span class="line">2 3 1 20</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 40</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1>题目理解与思路</h1>
+<p>本题题目理解起来不难，每个城市即为图的节点，每个城市之间的公路距离即为图的边</p>
+<p>难点在于如何优先使用距离来判断路径，然后距离相同时使用收费额来作为判断的第二依据</p>
+<p>本文使用邻接矩阵来存储图，使用Dijkstra算法来动态更新每个节点的最短路径，同时动态更新路径的花销（在计算最短路径的过程中就优先把价格更低的选择为当前路径），在Dijkstra算法计算完成后，保留的最短路径也就是花销最小的路径。代码如下</p>
+<h1>代码</h1>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 505</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Edge;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Distance;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Fare;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex V;</span><br><span class="line">    Edge E;</span><br><span class="line">    Distance G[MaxVer][MaxVer];</span><br><span class="line">    Fare F[MaxVer][MaxVer];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line">Fare cost[MaxVer];</span><br><span class="line">Distance Dist[MaxVer];</span><br><span class="line"><span class="keyword">char</span> collected[MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Vertex Start,Destina;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V,&amp;E,&amp;Start,&amp;Destina);</span><br><span class="line">    Graph = BuildGraph(V,E);</span><br><span class="line">    Dijkstra(Graph,Start,Destina);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,MinDist,Min;</span><br><span class="line">    <span class="comment">/*遍历所有顶点，将开始节点与其邻接点的Dist和cost初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">if</span>(Graph-&gt;G[Start][i] &lt; Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            Dist[i] = Graph-&gt;G[Start][i];</span><br><span class="line">            cost[i] = Graph-&gt;F[Start][i];</span><br><span class="line">        &#125;</span><br><span class="line">    collected[Start] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        Min = Inf;<span class="comment">//将最小距离记为Min，用于比较并找出Dis中最小的值</span></span><br><span class="line">        <span class="comment">//刚开始只用了MinDist来找最小值，找到后把i赋给MinDistinct，导致了小样本时不报错，大样本报错</span></span><br><span class="line">        <span class="comment">/*遍历所有节点，在未收集的节点中找出Dist最小的节点并收录*/</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">if</span>( Dist[i] &lt; Min &amp;&amp; collected[i] == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                MinDist = i;</span><br><span class="line">                Min = Dist[i];</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">if</span>(Min == Inf)<span class="keyword">break</span>;</span><br><span class="line">        collected[MinDist] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Graph-&gt;G[MinDist][i] &lt; Inf)<span class="comment">/*对于MinDist的每个未收集的邻接点*/</span></span><br><span class="line">                <span class="keyword">if</span>(collected[i] == <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">/*如果从新加入的MinDist走过去距离更小就更新Dist中的距离*/</span></span><br><span class="line">                    <span class="keyword">if</span>(Dist[MinDist] + Graph-&gt;G[MinDist][i] &lt; Dist[i])</span><br><span class="line">                    &#123;</span><br><span class="line">                        Dist[i] = Dist[MinDist] + Graph-&gt;G[MinDist][i];</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">/*如果距离相等且有价格更低的就更新价格*/</span></span><br><span class="line">                    <span class="keyword">if</span>((Dist[MinDist] + Graph-&gt;G[MinDist][i] == Dist[i]) </span><br><span class="line">                            &amp;&amp; ( cost[MinDist] + Graph-&gt;F[MinDist][i] &lt; cost[i]))</span><br><span class="line">                    &#123;</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Dist[Destina],cost[Destina]);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,D,F;</span><br><span class="line">    Vertex V1,V2;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="comment">/*对新建的图进行初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V; i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; Graph-&gt;V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = Graph-&gt;F[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                Graph-&gt;F[i][j] = Graph-&gt;G[i][j] = Inf;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;E; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;D,&amp;F);</span><br><span class="line">        Graph-&gt;G[V1][V2] = Graph-&gt;G[V2][V1] = D;</span><br><span class="line">        Graph-&gt;F[V1][V2] = Graph-&gt;F[V2][V1] = F;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        Dist[i] = Inf;</span><br><span class="line">        cost[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>后记——对于Dijkstra算法与Floyd算法的一些理解</h1>
+<p>学习了图这种数据结构之后一直想知道怎么运用这个数据结构不过一直没学到相关的算法，正好最近学了一些就写了点相关的题目，也有了些自己的新的理解。</p>
+<h2 id="Dijkstra算法"><a class="header-anchor" href="#Dijkstra算法">¶</a>Dijkstra算法</h2>
+<p>Dijkstra算法是用来求单个源点到其它所有点的距离的最小值的算法，使用最小堆来存储未收录点时查找最小点的复杂度为$O(logV)$（适合稀疏图），使用暴力的遍历所有节点查找最小值时复杂度为$O(V^2)$（适合稠密图），其思想是一种贪心算法，把节点分为了收录的和未收录的，收录的节点包含源点s和已经确定了最短路径的节点，每次收录一个节点，该节点也为已经缺定最短路径的节点，然后更新受新收录的节点影响的点到源点的距离和路径，而同时又可以证明收录的节点只会影响其邻接点的最小距离，故只需更新其邻接点的最小距离即可。由于每次收录的节点均为经过当前收录节点而确定的当前到源点距离最小的点（贪心），故保证了收录的所有节点均为确定了最短路径的节点。当所有的节点均收录完毕后，源点到所有对应点的距离也就确定了。<br>
+总结而言，Dijkstra算法就是每个循环都做以下三件事，直至所有节点都已被收录</p>
+<ol>
+<li>选择未收录节点中距离源点最小的节点收录</li>
+<li>收录后根据收录节点到源点的距离与图中其邻接边的权重来判断是否对邻接点有影响</li>
+<li>更新邻接点的最小距离</li>
+</ol>
+<h2 id="Floyd算法"><a class="header-anchor" href="#Floyd算法">¶</a>Floyd算法</h2>
+<p>Floyd算法是用来求多个源点到其它所有点的最短路径的算法，对于稠密图来说效果更好一点，复杂度为$O(V^{3})$​，其思想是动态规划的思想，每次迭代就比较源点 I 到一个节点K的距离加上K到目标节点 J 的距离是否小于源点 I 直接到目标节点 J 的距离，小于的时候就动态更新节点 J 的路径和最小距离，通过多次迭代来留下最小的各点到各点的距离值。</p>
+<h1>附记</h1>
+<p>从今日开始，增肌期结束💪，我将进入减脂期，会在每天的文章最后更新当日的体重噢🤸🏻🤸🏻🤸🏻</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg" alt="IMG_20210802_112256"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我喝咖啡</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Zheng Haoyu 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Zheng Haoyu 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Zheng Haoyu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://www.snowmoon.top/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/" title="数据结构与算法刷题笔记6——旅游规划最短路径问题">https://www.snowmoon.top/2021/08/02/数据结构与算法刷题笔记6——旅游规划最短路径问题/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Dijkstra/" rel="tag"><i class="fas fa-tag"></i> Dijkstra</a>
+              <a href="/tags/Floyd/" rel="tag"><i class="fas fa-tag"></i> Floyd</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/01/1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%AE%BA/" rel="prev" title="1.计算机系统概论">
+                  <i class="fa fa-chevron-left"></i> 1.计算机系统概论
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheng Haoyu</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">42k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:45</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i> Visitors
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+<span class="post-meta-divider">&nbsp|&nbsp</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i> Views
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+</div>
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2021, 02, 17, 13, 18, 22); // 北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }
+    siteTime();
+</script>
+<span id="sitetime"></span>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+ <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":null,"placeholder":"无需输入头像 昵称 网址 即可评论(*^▽^*)&#10valine评论不一定能及时看到，如果需要回复可以戳我主页的联系方式(～￣▽￣)～","avatar":"robohash","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
+      el: '#valine-comments',
+      path: "/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/",
+      serverURLs: "https://3kooisaa.api.lncldglobal.com"
+    }));
+  }, window.Valine);
+});
+</script>
+
+
+  <script async src="/js/cursor/fireworks.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":"ftrue"},"log":false});</script></body>
+</html>

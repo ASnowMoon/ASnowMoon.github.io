@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>1.计算机系统概论</title>
+    <url>/2021/08/01/1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%AE%BA/</url>
+    <content><![CDATA[<blockquote>
+<p>今天没有刷题，学的也比较水，主要原因有以下两点</p>
+<ol>
+<li>刚开一门新课，学的内容不是很多，不是很充实</li>
+<li>懒！！！今天没有用心学</li>
+</ol>
+</blockquote>
+<p>一、冯·诺依曼计算机的特点</p>
+<ol>
+<li>由五大部件组成</li>
+<li>指令和数据以同等地位存于存储器，可按地址寻访</li>
+<li>指令和数据用二进制表示</li>
+<li>指令由操作码和地址码组成</li>
+<li>存储程序</li>
+<li>以[[运算器]]为中心<br>
+<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230612.png" alt=""></li>
+</ol>
+<p>改进：以存储器为中心</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230631.png" alt="Pasted image 20210801195410"></p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230640.png" alt="Pasted image 20210801195500">系统复杂性的管理方法(3Y原则)</p>
+<ul>
+<li>层次化（Hierachy）：将被设计的系统划分为多个模块或子模块</li>
+<li>模块化（Modularity）：有明确定义（well-defined）的功能和接口</li>
+<li>规则性（regularity）：模块更容易被重用</li>
+</ul>
+<p>[[存储器]]</p>
+<p><strong>存储单元</strong>：存放一串二进制代码<br>
+<strong>存储字</strong>：存储单元中二进制代码的组合<br>
+<strong>存储字长</strong>：存储单元中二进制代码的位数</p>
+<a id="more"></a>
+<p>#MAR 存储器地址寄存器，反映存储单元的个数<br>
+#MDR 存储器数据寄存器，反映存储字长</p>
+<p>[[运算器]]</p>
+<p>由ACC、ALU、MQ、X组成</p>
+<p>[[控制器]]</p>
+<p>由CU、IR、PC、组成<br>
+PC 取指令<br>
+IR	分析指令<br>
+CU	执行指令<br>
+PC 存放当前欲执行指令的地址， 具有计数功能（PC）+ 1 PC<br>
+IR 存放当前欲执行的指令</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230702.png" alt="Pasted image 20210801224533"></p>
+<p><strong>机器字长</strong> CPU 一次能处理数据的位数 与 CPU 中的 寄存器位数 有关</p>
+]]></content>
+      <categories>
+        <category>计算机组成原理</category>
+        <category>概述</category>
+      </categories>
+      <tags>
+        <tag>计算机组成原理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Excel学习笔记1——填充、行列操作、数据格式</title>
     <url>/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/</url>
     <content><![CDATA[<h3 id="行列填充"><a class="header-anchor" href="#行列填充">¶</a>行列填充</h3>
@@ -1021,37 +1076,6 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
-    <title>next主题中超链接颜色的修改</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1>修改超链接样式</h1>
-<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
-<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
-<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
-<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
-而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span> &#123;  </span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#428BCA</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
-<a id="more"></a>
-<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:not</span>(.btn)&#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#f89fa0</span>;</span><br><span class="line">  <span class="attribute">border-bottom</span>: none;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#ff7a7a</span>;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">    <span class="attribute">text-decoration</span>: underline;</span><br><span class="line">  		  &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
-<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
-<p>睡一觉起来它就好了。。。真是玄学🌝</p>
-<blockquote>
-<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>hexo</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>next主题美化——背景图片、动画</title>
     <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
     <content><![CDATA[<blockquote>
@@ -1097,6 +1121,37 @@ Next主题版本: NexT version 8.2.1</p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
 <h2 id="动画的持续速度"><a class="header-anchor" href="#动画的持续速度">¶</a>动画的持续速度</h2>
 <p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题中超链接颜色的修改</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1>修改超链接样式</h1>
+<h2 id="问题描述"><a class="header-anchor" href="#问题描述">¶</a>问题描述</h2>
+<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
+<h2 id="解决方案"><a class="header-anchor" href="#解决方案">¶</a>解决方案</h2>
+<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里.<br>
+而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span> &#123;  </span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#428BCA</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><s>这样就可以把超链接的样式改为蓝色，粗体</s></p>
+<a id="more"></a>
+<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:not</span>(.btn)&#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#f89fa0</span>;</span><br><span class="line">  <span class="attribute">border-bottom</span>: none;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#ff7a7a</span>;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">    <span class="attribute">text-decoration</span>: underline;</span><br><span class="line">  		  &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
+<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
+<p>睡一觉起来它就好了。。。真是玄学🌝</p>
+<blockquote>
+<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>网站建设</category>
@@ -1265,6 +1320,121 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
+    <title>数据结构与算法刷题笔记6——旅游规划最短路径问题</title>
+    <url>/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1>07-图6 旅游规划 (25 分)</h1>
+<blockquote>
+<p>前言：这篇文章是我的每日一文计划的第七篇文章，已经完成了一周的记录，在废物了几周之后感觉又一次找到了点好好学习的动力和不废物的目标感，希望自己能长期坚持！</p>
+<p>PS:在文末我又立了点Flag👀👀，希望过一段时间以后这个Flag能够达成！🥳</p>
+</blockquote>
+<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
+<p>有了一张自驾旅游路线图，你会知道城市间的高速公路长度、以及该公路要收取的过路费。现在需要你写一个程序，帮助前来咨询的游客找一条出发地和目的地之间的最短路径。如果有若干条路径都是最短的，那么需要输出最便宜的一条路径。</p>
+<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
+<p>输入说明：输入数据的第1行给出4个正整数<em>N</em>、<em>M</em>、<em>S</em>、<em>D</em>，其中<em>N</em>（2≤<em>N</em>≤500）是城市的个数，顺便假设城市的编号为0~(<em>N</em>−1)；<em>M</em>是高速公路的条数；<em>S</em>是出发地的城市编号；<em>D</em>是目的地的城市编号。随后的<em>M</em>行中，每行给出一条高速公路的信息，分别是：城市1、城市2、高速公路长度、收费额，中间用空格分开，数字均为整数且不超过500。输入保证解的存在。</p>
+<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
+<p>在一行里输出路径的长度和收费总额，数字间以空格分隔，输出结尾不能有多余空格。</p>
+<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 5 0 3</span><br><span class="line">0 1 1 20</span><br><span class="line">1 3 2 30</span><br><span class="line">0 3 4 10</span><br><span class="line">0 2 2 20</span><br><span class="line">2 3 1 20</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3 40</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1>题目理解与思路</h1>
+<p>本题题目理解起来不难，每个城市即为图的节点，每个城市之间的公路距离即为图的边</p>
+<p>难点在于如何优先使用距离来判断路径，然后距离相同时使用收费额来作为判断的第二依据</p>
+<p>本文使用邻接矩阵来存储图，使用Dijkstra算法来动态更新每个节点的最短路径，同时动态更新路径的花销（在计算最短路径的过程中就优先把价格更低的选择为当前路径），在Dijkstra算法计算完成后，保留的最短路径也就是花销最小的路径。代码如下</p>
+<h1>代码</h1>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 505</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Edge;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Distance;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Fare;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex V;</span><br><span class="line">    Edge E;</span><br><span class="line">    Distance G[MaxVer][MaxVer];</span><br><span class="line">    Fare F[MaxVer][MaxVer];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line">Fare cost[MaxVer];</span><br><span class="line">Distance Dist[MaxVer];</span><br><span class="line"><span class="keyword">char</span> collected[MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Vertex Start,Destina;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V,&amp;E,&amp;Start,&amp;Destina);</span><br><span class="line">    Graph = BuildGraph(V,E);</span><br><span class="line">    Dijkstra(Graph,Start,Destina);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,MinDist,Min;</span><br><span class="line">    <span class="comment">/*遍历所有顶点，将开始节点与其邻接点的Dist和cost初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">if</span>(Graph-&gt;G[Start][i] &lt; Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            Dist[i] = Graph-&gt;G[Start][i];</span><br><span class="line">            cost[i] = Graph-&gt;F[Start][i];</span><br><span class="line">        &#125;</span><br><span class="line">    collected[Start] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        Min = Inf;<span class="comment">//将最小距离记为Min，用于比较并找出Dis中最小的值</span></span><br><span class="line">        <span class="comment">//刚开始只用了MinDist来找最小值，找到后把i赋给MinDistinct，导致了小样本时不报错，大样本报错</span></span><br><span class="line">        <span class="comment">/*遍历所有节点，在未收集的节点中找出Dist最小的节点并收录*/</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">if</span>( Dist[i] &lt; Min &amp;&amp; collected[i] == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                MinDist = i;</span><br><span class="line">                Min = Dist[i];</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">if</span>(Min == Inf)<span class="keyword">break</span>;</span><br><span class="line">        collected[MinDist] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Graph-&gt;G[MinDist][i] &lt; Inf)<span class="comment">/*对于MinDist的每个未收集的邻接点*/</span></span><br><span class="line">                <span class="keyword">if</span>(collected[i] == <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">/*如果从新加入的MinDist走过去距离更小就更新Dist中的距离*/</span></span><br><span class="line">                    <span class="keyword">if</span>(Dist[MinDist] + Graph-&gt;G[MinDist][i] &lt; Dist[i])</span><br><span class="line">                    &#123;</span><br><span class="line">                        Dist[i] = Dist[MinDist] + Graph-&gt;G[MinDist][i];</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">/*如果距离相等且有价格更低的就更新价格*/</span></span><br><span class="line">                    <span class="keyword">if</span>((Dist[MinDist] + Graph-&gt;G[MinDist][i] == Dist[i]) </span><br><span class="line">                            &amp;&amp; ( cost[MinDist] + Graph-&gt;F[MinDist][i] &lt; cost[i]))</span><br><span class="line">                    &#123;</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Dist[Destina],cost[Destina]);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,D,F;</span><br><span class="line">    Vertex V1,V2;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="comment">/*对新建的图进行初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V; i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; Graph-&gt;V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = Graph-&gt;F[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                Graph-&gt;F[i][j] = Graph-&gt;G[i][j] = Inf;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;E; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;D,&amp;F);</span><br><span class="line">        Graph-&gt;G[V1][V2] = Graph-&gt;G[V2][V1] = D;</span><br><span class="line">        Graph-&gt;F[V1][V2] = Graph-&gt;F[V2][V1] = F;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        Dist[i] = Inf;</span><br><span class="line">        cost[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>后记——对于Dijkstra算法与Floyd算法的一些理解</h1>
+<p>学习了图这种数据结构之后一直想知道怎么运用这个数据结构不过一直没学到相关的算法，正好最近学了一些就写了点相关的题目，也有了些自己的新的理解。</p>
+<h2 id="Dijkstra算法"><a class="header-anchor" href="#Dijkstra算法">¶</a>Dijkstra算法</h2>
+<p>Dijkstra算法是用来求单个源点到其它所有点的距离的最小值的算法，使用最小堆来存储未收录点时查找最小点的复杂度为$O(logV)$（适合稀疏图），使用暴力的遍历所有节点查找最小值时复杂度为$O(V^2)$（适合稠密图），其思想是一种贪心算法，把节点分为了收录的和未收录的，收录的节点包含源点s和已经确定了最短路径的节点，每次收录一个节点，该节点也为已经缺定最短路径的节点，然后更新受新收录的节点影响的点到源点的距离和路径，而同时又可以证明收录的节点只会影响其邻接点的最小距离，故只需更新其邻接点的最小距离即可。由于每次收录的节点均为经过当前收录节点而确定的当前到源点距离最小的点（贪心），故保证了收录的所有节点均为确定了最短路径的节点。当所有的节点均收录完毕后，源点到所有对应点的距离也就确定了。<br>
+总结而言，Dijkstra算法就是每个循环都做以下三件事，直至所有节点都已被收录</p>
+<ol>
+<li>选择未收录节点中距离源点最小的节点收录</li>
+<li>收录后根据收录节点到源点的距离与图中其邻接边的权重来判断是否对邻接点有影响</li>
+<li>更新邻接点的最小距离</li>
+</ol>
+<h2 id="Floyd算法"><a class="header-anchor" href="#Floyd算法">¶</a>Floyd算法</h2>
+<p>Floyd算法是用来求多个源点到其它所有点的最短路径的算法，对于稠密图来说效果更好一点，复杂度为$O(V^{3})$​，其思想是动态规划的思想，每次迭代就比较源点 I 到一个节点K的距离加上K到目标节点 J 的距离是否小于源点 I 直接到目标节点 J 的距离，小于的时候就动态更新节点 J 的路径和最小距离，通过多次迭代来留下最小的各点到各点的距离值。</p>
+<h1>附记</h1>
+<p>从今日开始，增肌期结束💪，我将进入减脂期，会在每天的文章最后更新当日的体重噢🤸🏻🤸🏻🤸🏻</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg" alt="IMG_20210802_112256"></p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>Dijkstra</category>
+      </categories>
+      <tags>
+        <tag>Dijkstra</tag>
+        <tag>Floyd</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
+    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
+    <content><![CDATA[<h1>07-图4 哈利·波特的考试 (25 分)</h1>
+<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
+<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
+<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
+<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
+<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
+<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
+<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
+<a id="more"></a>
+<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1>题目理解与思路</h1>
+<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
+        <tag>Floyd算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
+    <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
+    <content><![CDATA[<h1>06-图1 列出连通集 (25 分)——PTA</h1>
+<p>给定一个有<em>N</em>个顶点和<em>E</em>条边的无向图，请用DFS和BFS分别列出其所有的连通集。假设顶点从0到<em>N</em>−1编号。进行搜索时，假设我们总是从编号最小的顶点出发，按编号递增的顺序访问邻接点。</p>
+<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
+<p>输入第1行给出2个整数<em>N</em>(0&lt;<em>N</em>≤10)和<em>E</em>，分别是图的顶点数和边数。随后<em>E</em>行，每行给出一条边的两个端点。每行中的数字之间用1空格分隔。</p>
+<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
+<p>按照&quot;{ <em>v</em>1 <em>v</em>2 … <em>v**k</em> }&quot;的格式，每行输出一个连通集。先输出DFS的结果，再输出BFS的结果。</p>
+<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8 6</span><br><span class="line">0 7</span><br><span class="line">0 1</span><br><span class="line">2 0</span><br><span class="line">4 1</span><br><span class="line">2 4</span><br><span class="line">3 5</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; 0 1 4 2 7 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br><span class="line">&#123; 0 1 2 7 4 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="题目理解"><a class="header-anchor" href="#题目理解">¶</a>题目理解</h2>
+<p>本题给了我们几组数据用来建图，在建图完成后需要我们使用DFS与BFS遍历整个图然后按照遍历的顺序输出每个连通的图的节点的值</p>
+<h2 id="解题思路"><a class="header-anchor" href="#解题思路">¶</a>解题思路</h2>
+<p>根据要求走就行了，建图，然后DFS和BFS//第一个完全靠自己写出来的图的题，不容易啊😭😭😭</p>
+<p>本文使用的是邻接矩阵来表示图</p>
+<p>在使用BFS进行遍历时，因为数据量比较小，所以只需要使用一个数组和两个作为头尾的数字就能作为队列</p>
+<a id="more"></a>
+<h2 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVertexNum 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> E,V;<span class="comment">//分别为边数E和顶点数V</span></span><br><span class="line">    <span class="keyword">int</span> G[MaxVertexNum][MaxVertexNum];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Visited[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//是否访问过该节点</span></span><br><span class="line"><span class="keyword">int</span> Q[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//用来做队列的数组</span></span><br><span class="line"><span class="function">MGraph <span class="title">CreatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//建图，初始化图的边和节点值</span></span><br><span class="line">    <span class="keyword">int</span> i,m,n;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph -&gt; V = V;</span><br><span class="line">    Graph -&gt; E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;m,&amp;n);</span><br><span class="line">        Graph-&gt;G[m][n] = <span class="number">1</span>;</span><br><span class="line">        Graph-&gt;G[n][m] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入一个节点就把访问过的标记为True</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,x);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((Graph-&gt;G[i][x] == <span class="number">1</span>) &amp;&amp; (!Visited[i]))<span class="comment">//使用DFS访问节点x相邻且没有被访问过的节点</span></span><br><span class="line">        &#123;</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetGraph</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;MaxVertexNum;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,head,rear;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;</span><br><span class="line">    Q[<span class="number">0</span>] = x;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入BFS时把BFS的入口节点视为访问过</span></span><br><span class="line">    <span class="keyword">while</span>(head != rear)<span class="comment">//当队列不为空</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Q[head]);<span class="comment">//输出头结点</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;<span class="comment">//遍历所有节点，如果是头结点的邻接点且没有被访问过则入队</span></span><br><span class="line">            <span class="keyword">if</span>(!Visited[i] &amp;&amp; (Graph-&gt;G[i][Q[head]] == <span class="number">1</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                rear++;</span><br><span class="line">                Q[rear] = i;</span><br><span class="line">                Visited[i] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E,i;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    Graph = CreatGraph(V,E);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ResetGraph(Graph);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            BFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>DFS</category>
+        <category>BFS</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
+        <tag>DFS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构刷题笔记1——是否同一棵二叉搜索树</title>
     <url>/2021/07/27/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%98%AF%E5%90%A6%E5%90%8C%E4%B8%80%E6%A3%B5%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/</url>
     <content><![CDATA[<h1>04-树4 是否同一棵二叉搜索树 (25 分)</h1>
@@ -1304,41 +1474,6 @@ Next主题版本: NexT version 8.2.1</p>
       </tags>
   </entry>
   <entry>
-    <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
-    <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
-    <content><![CDATA[<h1>06-图1 列出连通集 (25 分)——PTA</h1>
-<p>给定一个有<em>N</em>个顶点和<em>E</em>条边的无向图，请用DFS和BFS分别列出其所有的连通集。假设顶点从0到<em>N</em>−1编号。进行搜索时，假设我们总是从编号最小的顶点出发，按编号递增的顺序访问邻接点。</p>
-<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
-<p>输入第1行给出2个整数<em>N</em>(0&lt;<em>N</em>≤10)和<em>E</em>，分别是图的顶点数和边数。随后<em>E</em>行，每行给出一条边的两个端点。每行中的数字之间用1空格分隔。</p>
-<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
-<p>按照&quot;{ <em>v</em>1 <em>v</em>2 … <em>v**k</em> }&quot;的格式，每行输出一个连通集。先输出DFS的结果，再输出BFS的结果。</p>
-<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8 6</span><br><span class="line">0 7</span><br><span class="line">0 1</span><br><span class="line">2 0</span><br><span class="line">4 1</span><br><span class="line">2 4</span><br><span class="line">3 5</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; 0 1 4 2 7 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br><span class="line">&#123; 0 1 2 7 4 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="题目理解"><a class="header-anchor" href="#题目理解">¶</a>题目理解</h2>
-<p>本题给了我们几组数据用来建图，在建图完成后需要我们使用DFS与BFS遍历整个图然后按照遍历的顺序输出每个连通的图的节点的值</p>
-<h2 id="解题思路"><a class="header-anchor" href="#解题思路">¶</a>解题思路</h2>
-<p>根据要求走就行了，建图，然后DFS和BFS//第一个完全靠自己写出来的图的题，不容易啊😭😭😭</p>
-<p>本文使用的是邻接矩阵来表示图</p>
-<p>在使用BFS进行遍历时，因为数据量比较小，所以只需要使用一个数组和两个作为头尾的数字就能作为队列</p>
-<a id="more"></a>
-<h2 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVertexNum 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> E,V;<span class="comment">//分别为边数E和顶点数V</span></span><br><span class="line">    <span class="keyword">int</span> G[MaxVertexNum][MaxVertexNum];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Visited[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//是否访问过该节点</span></span><br><span class="line"><span class="keyword">int</span> Q[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//用来做队列的数组</span></span><br><span class="line"><span class="function">MGraph <span class="title">CreatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//建图，初始化图的边和节点值</span></span><br><span class="line">    <span class="keyword">int</span> i,m,n;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph -&gt; V = V;</span><br><span class="line">    Graph -&gt; E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;m,&amp;n);</span><br><span class="line">        Graph-&gt;G[m][n] = <span class="number">1</span>;</span><br><span class="line">        Graph-&gt;G[n][m] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入一个节点就把访问过的标记为True</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,x);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((Graph-&gt;G[i][x] == <span class="number">1</span>) &amp;&amp; (!Visited[i]))<span class="comment">//使用DFS访问节点x相邻且没有被访问过的节点</span></span><br><span class="line">        &#123;</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetGraph</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;MaxVertexNum;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,head,rear;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;</span><br><span class="line">    Q[<span class="number">0</span>] = x;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入BFS时把BFS的入口节点视为访问过</span></span><br><span class="line">    <span class="keyword">while</span>(head != rear)<span class="comment">//当队列不为空</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Q[head]);<span class="comment">//输出头结点</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;<span class="comment">//遍历所有节点，如果是头结点的邻接点且没有被访问过则入队</span></span><br><span class="line">            <span class="keyword">if</span>(!Visited[i] &amp;&amp; (Graph-&gt;G[i][Q[head]] == <span class="number">1</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                rear++;</span><br><span class="line">                Q[rear] = i;</span><br><span class="line">                Visited[i] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E,i;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    Graph = CreatGraph(V,E);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ResetGraph(Graph);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            BFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-        <category>BFS</category>
-        <category>DFS</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-        <tag>DFS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构刷题笔记3——拯救詹姆斯邦德</title>
     <url>/2021/07/29/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%8B%AF%E6%95%91%E8%A9%B9%E5%A7%86%E6%96%AF%E9%82%A6%E5%BE%B7/</url>
     <content><![CDATA[<h1>06-图2 Saving James Bond - Easy Version (25 分)</h1>
@@ -1372,13 +1507,13 @@ Next主题版本: NexT version 8.2.1</p>
       <categories>
         <category>数据结构与算法</category>
         <category>图</category>
-        <category>BFS</category>
         <category>DFS</category>
+        <category>BFS</category>
       </categories>
       <tags>
         <tag>BFS</tag>
-        <tag>数据结构</tag>
         <tag>DFS</tag>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -1567,90 +1702,6 @@ Next主题版本: NexT version 8.2.1</p>
       <tags>
         <tag>SSR</tag>
         <tag>服务器搭建</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
-    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
-    <content><![CDATA[<h1>07-图4 哈利·波特的考试 (25 分)</h1>
-<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
-<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
-<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
-<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
-<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
-<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
-<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
-<a id="more"></a>
-<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1>题目理解与思路</h1>
-<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-        <tag>Floyd算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>1.计算机系统概论</title>
-    <url>/2021/08/01/1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%AE%BA/</url>
-    <content><![CDATA[<blockquote>
-<p>今天没有刷题，学的也比较水，主要原因有以下两点</p>
-<ol>
-<li>刚开一门新课，学的内容不是很多，不是很充实</li>
-<li>懒！！！今天没有用心学</li>
-</ol>
-</blockquote>
-<p>一、冯·诺依曼计算机的特点</p>
-<ol>
-<li>由五大部件组成</li>
-<li>指令和数据以同等地位存于存储器，可按地址寻访</li>
-<li>指令和数据用二进制表示</li>
-<li>指令由操作码和地址码组成</li>
-<li>存储程序</li>
-<li>以[[运算器]]为中心<br>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230612.png" alt=""></li>
-</ol>
-<p>改进：以存储器为中心</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230631.png" alt="Pasted image 20210801195410"></p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230640.png" alt="Pasted image 20210801195500">系统复杂性的管理方法(3Y原则)</p>
-<ul>
-<li>层次化（Hierachy）：将被设计的系统划分为多个模块或子模块</li>
-<li>模块化（Modularity）：有明确定义（well-defined）的功能和接口</li>
-<li>规则性（regularity）：模块更容易被重用</li>
-</ul>
-<p>[[存储器]]</p>
-<p><strong>存储单元</strong>：存放一串二进制代码<br>
-<strong>存储字</strong>：存储单元中二进制代码的组合<br>
-<strong>存储字长</strong>：存储单元中二进制代码的位数</p>
-<a id="more"></a>
-<p>#MAR 存储器地址寄存器，反映存储单元的个数<br>
-#MDR 存储器数据寄存器，反映存储字长</p>
-<p>[[运算器]]</p>
-<p>由ACC、ALU、MQ、X组成</p>
-<p>[[控制器]]</p>
-<p>由CU、IR、PC、组成<br>
-PC 取指令<br>
-IR	分析指令<br>
-CU	执行指令<br>
-PC 存放当前欲执行指令的地址， 具有计数功能（PC）+ 1 PC<br>
-IR 存放当前欲执行的指令</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230702.png" alt="Pasted image 20210801224533"></p>
-<p><strong>机器字长</strong> CPU 一次能处理数据的位数 与 CPU 中的 寄存器位数 有关</p>
-]]></content>
-      <categories>
-        <category>计算机组成原理</category>
-        <category>概述</category>
-      </categories>
-      <tags>
-        <tag>计算机组成原理</tag>
       </tags>
   </entry>
 </search>
