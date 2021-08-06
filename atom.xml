@@ -6,7 +6,7 @@
   <link href="https://www.snowmoon.top/atom.xml" rel="self"/>
   
   <link href="https://www.snowmoon.top/"/>
-  <updated>2021-08-05T15:48:42.066Z</updated>
+  <updated>2021-08-06T18:05:58.148Z</updated>
   <id>https://www.snowmoon.top/</id>
   
   <author>
@@ -18,12 +18,46 @@
   
   <entry>
     <title>CSAPP阅读笔记1——数据编码</title>
+    <link href="https://www.snowmoon.top/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94/"/>
+    <id>https://www.snowmoon.top/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94/</id>
+    <published>2021-08-06T08:30:00.000Z</published>
+    <updated>2021-08-06T18:05:58.148Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="整形变量integer">整形变量Integer</h1><h2 id="类型拓展与截取">类型拓展与截取</h2><p><strong>无符号数的零拓展</strong>：无符号数转换为更大的数据类型，只需要在开头添加0即可，这种运算也被称为零拓展。</p><p><strong>补码数的符号拓展：</strong>补码数转换为更大的数据类型需要在开头添加最高有效位的值，即：如果为负数，需要在拓展出来的开头位置添加数个1，正数需要添加数个0。</p><h2 id="截断数字">截断数字</h2><p>当我们将一个位数为 w 的数字截断为 k 位的数字时，我们会丢弃最高的w-k位。</p><p><strong>截断无符号数：</strong>相当于做mod运算，<span class="math inline">\(x&#39;=x\ mod\ 2^k\)</span></p><p><strong>截断补码数值：</strong>和无符号值相似，不过需要将最高位转换为符号位</p><a id="more"></a>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;整形变量integer&quot;&gt;整形变量Integer&lt;/h1&gt;
+&lt;h2 id=&quot;类型拓展与截取&quot;&gt;类型拓展与截取&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;无符号数的零拓展&lt;/strong&gt;：无符号数转换为更大的数据类型，只需要在开头添加0即可，这种运算也被称为零拓展。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;补码数的符号拓展：&lt;/strong&gt;补码数转换为更大的数据类型需要在开头添加最高有效位的值，即：如果为负数，需要在拓展出来的开头位置添加数个1，正数需要添加数个0。&lt;/p&gt;
+&lt;h2 id=&quot;截断数字&quot;&gt;截断数字&lt;/h2&gt;
+&lt;p&gt;当我们将一个位数为 w 的数字截断为 k 位的数字时，我们会丢弃最高的w-k位。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;截断无符号数：&lt;/strong&gt;相当于做mod运算，&lt;span class=&quot;math inline&quot;&gt;\(x&amp;#39;=x\ mod\ 2^k\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;截断补码数值：&lt;/strong&gt;和无符号值相似，不过需要将最高位转换为符号位&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="CSAPP" scheme="https://www.snowmoon.top/categories/CSAPP/"/>
+    
+    <category term="计算机组成原理" scheme="https://www.snowmoon.top/categories/CSAPP/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="CSAPP" scheme="https://www.snowmoon.top/tags/CSAPP/"/>
+    
+    <category term="原码" scheme="https://www.snowmoon.top/tags/%E5%8E%9F%E7%A0%81/"/>
+    
+    <category term="补码" scheme="https://www.snowmoon.top/tags/%E8%A1%A5%E7%A0%81/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CSAPP阅读笔记1——数据编码</title>
     <link href="https://www.snowmoon.top/2021/08/05/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/"/>
     <id>https://www.snowmoon.top/2021/08/05/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/</id>
     <published>2021-08-05T02:59:08.000Z</published>
-    <updated>2021-08-05T15:48:42.066Z</updated>
+    <updated>2021-08-06T16:01:03.542Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="数据编码">数据编码</h1><p>假设字长(word size)为 <span class="math inline">\(w\)</span>,也即数据的位数，则二进制向十进制的转换分别是：</p><ul><li>无符号数：<span class="math inline">\(B2U(X)=\sum_{i=0}^{w-1}x_i\cdot2^i\)</span>​​​</li><li>有符号数： <span class="math inline">\(B2T(X)=-x_{w-1}\cdot2^{w-1}+\sum_{i=0}^{w-2}x_i\cdot2^{i}\)</span>​</li></ul><p>左移：x向左移动k位，丢弃最高的k位，在右端补k个0；</p><p>逻辑右移 ：在左端补k个0</p><p>算术右移：在左端补k个最高有效位的值</p><p>PS：移位操作优先级低于+-，</p><p>无符号数编码定义： <span class="math display">\[B2U_w(x)=\sum_{i=0}^{w-1}x_i2^i\]</span> 原码：正数是其二进制本身；负数是符号位为1,数值部分取X绝对值的二进制。</p><p>最高位是符号位，用来确定剩下的位是应该取负权还是正权。 <span class="math display">\[B2S_w(x)=(-1)^{x_{w-1}}\cdot(\sum_{i=0}^{w-2}x_i2^i)\]</span> 补码：正数的补码和原码，反码相同；负数是符号位为1，其它位是原码按位取反，未位加1。（或者说负数的补码是其绝对值反码未位加1）</p><p>最高位<span class="math inline">\(x_{w-1}\)</span>也称为符号位，其权重为<span class="math inline">\(-2^{w-1}\)</span>​</p><a id="more"></a><p><span class="math display">\[B2T_w(x)=-x_{w-1}2^{w-1}+\sum_{i=0}^{w-2}x_i2^i\]</span></p><p>反码：正数的反码和原码相同；负数是符号位为1,其它位是原码取反。</p><p>除最高位权为<span class="math inline">\(-(2^{w-1}-1)\)</span>而不是<span class="math inline">\(-2^{w-1}\)</span>其余和补码一样。 <span class="math display">\[B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i\]</span></p><table><thead><tr class="header"><th style="text-align: center;">编码</th><th style="text-align: center;">10810（sbyte）</th><th style="text-align: center;">-10810（sbyte）</th></tr></thead><tbody><tr class="odd"><td style="text-align: center;">原码</td><td style="text-align: center;"><strong>0</strong>1101100</td><td style="text-align: center;"><strong>1</strong>1101100</td></tr><tr class="even"><td style="text-align: center;">反码</td><td style="text-align: center;"><strong>0</strong>1101100</td><td style="text-align: center;"><strong>1</strong>0010011</td></tr><tr class="odd"><td style="text-align: center;">补码</td><td style="text-align: center;"><strong>0</strong>1101100</td><td style="text-align: center;"><strong>1</strong>0010100</td></tr></tbody></table><ul><li>与 And：<code>A=1</code> 且 <code>B=1</code> 时，<code>A&amp;B = 1</code></li><li>或 Or：<code>A=1</code> 或 <code>B=1</code> 时，<code>A|B = 1</code></li><li>非 Not：<code>A=1</code> 时，<code>~A=0</code>；<code>A=0</code> 时，<code>~A=1</code></li><li>异或 Exclusive-Or(Xor)：<code>A=1</code> 或 <code>B=1</code> 时，<code>A^B = 1</code>；<code>A=1</code> 且 <code>B=1</code> 时，<code>A^B = 0</code></li></ul><p>对应与集合运算则是交集、并集、差集和补集，假设集合 A 是 <code>&#123;0, 3, 5, 6&#125;</code>，集合 B 是 <code>&#123;0, 2, 4, 6&#125;</code>，全集为 <code>&#123;0, 1, 2, 3, 4, 5, 6, 7&#125;</code>那么：</p><ul><li><p><code>&amp;</code> 交集 Intersection <code>&#123;0, 6&#125;</code></p></li><li><p><code>|</code> 并集 Union <code>&#123;0, 2, 3, 4, 5, 6&#125;</code></p></li><li><p><code>^</code> 差集 Symmetric difference <code>&#123;2, 3, 4, 5&#125;</code></p></li><li><p><code>~</code> 补集 Complement <code>&#123;1, 3, 5, 7&#125;</code></p></li></ul><p>类型转换 我们在数轴上把有符号数和无符号数画出来的话，就能很清晰的看出相对的关系：</p><figure><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052336446.png" alt="image-20210805233558134" /><figcaption aria-hidden="true">image-20210805233558134</figcaption></figure><p>在 C 语言中，如果不加关键字限制，默认的整型是有符号的。如果想要无符号数的话，需要在数字后面加 U，例如下面的代码段</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a_signed_number = <span class="number">-15213</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> a_unsigned_number = <span class="number">15213U</span>;</span><br></pre></td></tr></table></figure><p>在进行有符号和无符号数的互相转换时：</p><ul><li><p>具体每一个字节的值不会改变，<strong>改变的是计算机解释当前值的方式</strong></p></li><li><p>如果一个表达式既包含有符号数也包含无符号数，那么<strong>会被隐式转换成无符号数进行比较</strong></p></li></ul><table><thead><tr class="header"><th style="text-align: center;">表达式</th><th style="text-align: center;">比较对象</th><th style="text-align: center;">求值</th></tr></thead><tbody><tr class="odd"><td style="text-align: center;">0 == 0U</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">1</td></tr><tr class="even"><td style="text-align: center;">-1 &lt; 0</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">-1 &lt; 0U</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">0*</td></tr><tr class="even"><td style="text-align: center;">2147483647 &gt; (-2147483647-1)</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">2147483647U &lt; (-2147483647-1)</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">0*</td></tr><tr class="even"><td style="text-align: center;">-1 &gt; -2</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">(unsigned)-1 &gt; -2</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">1</td></tr><tr class="even"><td style="text-align: center;">2147483647 &lt; 2147483648U</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">2147483647 &gt; (int)2147483648U</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1*</td></tr></tbody></table><h1 id="参考文章">参考文章</h1><p><a href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p><p><a href="https://www.jianshu.com/p/abbdae4f3841">原码、反码、补码和移码详解</a></p><h1 id="今日体重更新">今日体重更新</h1><figure><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052347505.png" alt="image-20210805234727407" /><figcaption aria-hidden="true">image-20210805234727407</figcaption></figure><p>今天和朋友出去搓了顿周麻婆，体重略有上涨，意料之中。。。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="数据编码">数据编码</h1><p>假设字长(word size)为 <span class="math inline">\(w\)</span>,也即数据的位数，则二进制向十进制的转换分别是：</p><ul><li>无符号数：<span class="math inline">\(B2U(X)=\sum_{i=0}^{w-1}x_i\cdot2^i\)</span>​​​</li><li>有符号数： <span class="math inline">\(B2T(X)=-x_{w-1}\cdot2^{w-1}+\sum_{i=0}^{w-2}x_i\cdot2^{i}\)</span>​</li></ul><p>左移：x向左移动k位，丢弃最高的k位，在右端补k个0；</p><p>逻辑右移 ：在左端补k个0</p><p>算术右移：在左端补k个最高有效位的值</p><p>PS：移位操作优先级低于+-，</p><p>无符号数编码定义： <span class="math display">\[B2U_w(x)=\sum_{i=0}^{w-1}x_i2^i\]</span> 原码：正数是其二进制本身；负数是符号位为1,数值部分取X绝对值的二进制。</p><p>最高位是符号位，用来确定剩下的位是应该取负权还是正权。 <span class="math display">\[B2S_w(x)=(-1)^{x_{w-1}}\cdot(\sum_{i=0}^{w-2}x_i2^i)\]</span> 补码：正数的补码和原码，反码相同；负数是符号位为1，其它位是原码按位取反，未位加1。（或者说负数的补码是其绝对值反码未位加1）</p><p>最高位<span class="math inline">\(x_{w-1}\)</span>也称为符号位，其权重为<span class="math inline">\(-2^{w-1}\)</span>​</p><a id="more"></a><p><span class="math display">\[B2T_w(x)=-x_{w-1}2^{w-1}+\sum_{i=0}^{w-2}x_i2^i\]</span></p><p>反码：正数的反码和原码相同；负数是符号位为1,其它位是原码取反。</p><p>除最高位权为<span class="math inline">\(-(2^{w-1}-1)\)</span>而不是<span class="math inline">\(-2^{w-1}\)</span>其余和补码一样。 <span class="math display">\[B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i\]</span></p><table><thead><tr class="header"><th style="text-align: center;">编码</th><th style="text-align: center;">10810（sbyte）</th><th style="text-align: center;">-10810（sbyte）</th></tr></thead><tbody><tr class="odd"><td style="text-align: center;">原码</td><td style="text-align: center;"><strong>0</strong>1101100</td><td style="text-align: center;"><strong>1</strong>1101100</td></tr><tr class="even"><td style="text-align: center;">反码</td><td style="text-align: center;"><strong>0</strong>1101100</td><td style="text-align: center;"><strong>1</strong>0010011</td></tr><tr class="odd"><td style="text-align: center;">补码</td><td style="text-align: center;"><strong>0</strong>1101100</td><td style="text-align: center;"><strong>1</strong>0010100</td></tr></tbody></table><ul><li>与 And：<code>A=1</code> 且 <code>B=1</code> 时，<code>A&amp;B = 1</code></li><li>或 Or：<code>A=1</code> 或 <code>B=1</code> 时，<code>A|B = 1</code></li><li>非 Not：<code>A=1</code> 时，<code>~A=0</code>；<code>A=0</code> 时，<code>~A=1</code></li><li>异或 Exclusive-Or(Xor)：<code>A=1</code> 或 <code>B=1</code> 时，<code>A^B = 1</code>；<code>A=1</code> 且 <code>B=1</code> 时，<code>A^B = 0</code></li></ul><p>对应与集合运算则是交集、并集、差集和补集，假设集合 A 是 <code>&#123;0, 3, 5, 6&#125;</code>，集合 B 是 <code>&#123;0, 2, 4, 6&#125;</code>，全集为 <code>&#123;0, 1, 2, 3, 4, 5, 6, 7&#125;</code>那么：</p><ul><li><p><code>&amp;</code> 交集 Intersection <code>&#123;0, 6&#125;</code></p></li><li><p><code>|</code> 并集 Union <code>&#123;0, 2, 3, 4, 5, 6&#125;</code></p></li><li><p><code>^</code> 差集 Symmetric difference <code>&#123;2, 3, 4, 5&#125;</code></p></li><li><p><code>~</code> 补集 Complement <code>&#123;1, 3, 5, 7&#125;</code></p></li></ul><p>类型转换 我们在数轴上把有符号数和无符号数画出来的话，就能很清晰的看出相对的关系：</p><figure><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052336446.png" alt="image-20210805233558134" /><figcaption aria-hidden="true">image-20210805233558134</figcaption></figure><p>在 C 语言中，如果不加关键字限制，默认的整型是有符号的。如果想要无符号数的话，需要在数字后面加 U，例如下面的代码段 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a_signed_number = <span class="number">-15213</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> a_unsigned_number = <span class="number">15213U</span>;</span><br></pre></td></tr></table></figure> 在进行有符号和无符号数的互相转换时：</p><ul><li><p>具体每一个字节的值不会改变，<strong>改变的是计算机解释当前值的方式</strong></p></li><li><p>如果一个表达式既包含有符号数也包含无符号数，那么<strong>会被隐式转换成无符号数进行比较</strong></p></li></ul><table><thead><tr class="header"><th style="text-align: center;">表达式</th><th style="text-align: center;">比较对象</th><th style="text-align: center;">求值</th></tr></thead><tbody><tr class="odd"><td style="text-align: center;">0 == 0U</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">1</td></tr><tr class="even"><td style="text-align: center;">-1 &lt; 0</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">-1 &lt; 0U</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">0*</td></tr><tr class="even"><td style="text-align: center;">2147483647 &gt; (-2147483647-1)</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">2147483647U &lt; (-2147483647-1)</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">0*</td></tr><tr class="even"><td style="text-align: center;">-1 &gt; -2</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">(unsigned)-1 &gt; -2</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">1</td></tr><tr class="even"><td style="text-align: center;">2147483647 &lt; 2147483648U</td><td style="text-align: center;">无符号数</td><td style="text-align: center;">1</td></tr><tr class="odd"><td style="text-align: center;">2147483647 &gt; (int)2147483648U</td><td style="text-align: center;">有符号数</td><td style="text-align: center;">1*</td></tr></tbody></table><p><em>注：*号标注的为比较反直觉的一些结果</em></p><h1 id="参考文章">参考文章</h1><p><a href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p><p><a href="https://www.jianshu.com/p/abbdae4f3841">原码、反码、补码和移码详解</a></p><h1 id="今日体重更新">今日体重更新</h1><figure><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052347505.png" alt="image-20210805234727407" /><figcaption aria-hidden="true">image-20210805234727407</figcaption></figure><p>今天和朋友出去搓了顿周麻婆，体重略有上涨，意料之中。。。</p>]]></content>
     
     
     <summary type="html">&lt;h1 id=&quot;数据编码&quot;&gt;数据编码&lt;/h1&gt;
@@ -374,9 +408,9 @@ B2S_w(x)=(-1)^{x_{w-1}}\cdot(\sum_{i=0}^{w-2}x_i2^i)
     
     <category term="BFS" scheme="https://www.snowmoon.top/tags/BFS/"/>
     
-    <category term="DFS" scheme="https://www.snowmoon.top/tags/DFS/"/>
-    
     <category term="数据结构" scheme="https://www.snowmoon.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    
+    <category term="DFS" scheme="https://www.snowmoon.top/tags/DFS/"/>
     
   </entry>
   
@@ -730,49 +764,6 @@ B2S_w(x)=(-1)^{x_{w-1}}\cdot(\sum_{i=0}^{w-2}x_i2^i)
     <category term="计算机视觉" scheme="https://www.snowmoon.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"/>
     
     <category term="python" scheme="https://www.snowmoon.top/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Excel学习笔记3——函数求和及常见函数</title>
-    <link href="https://www.snowmoon.top/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/"/>
-    <id>https://www.snowmoon.top/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</id>
-    <published>2021-02-17T06:52:22.000Z</published>
-    <updated>2021-02-20T17:12:31.494Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略》时的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作</p></blockquote><h1 id="函数">函数</h1><ul><li>输入函数名的前几个字母后若要选择Excel联想的函数需使用小键盘的箭头，然后使用TAB键来选择联想的函数</li></ul><h3 id="相对引用与绝对引用">相对引用与绝对引用</h3><p>使用<code>$</code>可进行绝对引用，<code>$</code>位于列前则将列进行绝对引用，行前将行绝对引用</p><p><strong>例：</strong><code>$A$2</code>表示只使用A2这个单元格，<code>$A2</code>表示使用A列，但对应的行则使用相对的行，<code>A$2</code>表示使用第二行，对应的行根据相对关系使用</p><p><strong>PS：按下F4可以切换引用的模式</strong></p><h2 id="求和函数">求和函数</h2><p><strong>快速求和</strong>：Alt + = 会直接智能地将求和结果放到选中区域或智能将列区域求和放到列的下方</p><p><strong>定位求和</strong>：Ctrl + G定位空值后进行求和</p><p><strong>合并单元格的求和</strong>：将合计栏选中，在第一格中输入sum(要求和的目标栏第一格:最后一格）-sum(合计栏单元格第二格：最后一格)</p><p><strong>多表求和</strong>：</p><ol type="1"><li>输入SUM后选择要求和的目标表格的目标单元格，选择的每个单元格使用英文逗号隔开</li></ol><a id="more"></a><ol start="2" type="1"><li><p>或者输入SUM后先按住Shift选中要求和的表格，再选择要求和的目标单元格</p></li><li><p>合并计算：数据-合并计算-引用位置-选择好每个表格的数据的位置后点击添加，记得将标签的首行和最左列选中然后进行合并计算</p></li></ol><p><strong>条件求和：</strong></p><ol type="1"><li>SUMIF函数（条件区域，条件，求和区域）</li></ol><ul><li><p>条件注意要加上引号，区域绝对引用</p><ul><li>可用通配符查找："*"</li><li>条件的目标是中文则需要用英文引号引住</li><li>更好用的方法是将条件(即要求的目标)做成新单元格后当做条件来求和</li></ul></li></ul><ol start="2" type="1"><li><p>SUMIFS函数</p><p>（求和区域，条件区域1，条件1，条件区域2，条件2，……）</p></li></ol><ul><li>这个函数能使用更多的条件，上一个函数只能使用一个条件</li></ul><ol start="3" type="1"><li><p>SUMPRODUCT函数</p><p>①求乘积（区域1，区域2，区域3，……）</p></li></ol><ul><li><p>每个区域大小一致</p><p>②多条件求和</p><p>（条件1*条件2*……*条件n*求和区域）</p></li><li><p>区域不能采取整列引用，比如A：A</p></li><li><p>公式拖拽填充时，要考虑绝对引用</p></li></ul><table><thead><tr class="header"><th>SUBTOTAL函数</th><th></th><th style="text-align: center;"></th></tr></thead><tbody><tr class="odd"><td>包含隐藏值</td><td>不包含隐藏值</td><td style="text-align: center;">作用</td></tr><tr class="even"><td>1</td><td>101</td><td style="text-align: center;">平均值</td></tr><tr class="odd"><td>2</td><td>102</td><td style="text-align: center;">非空数值计算</td></tr><tr class="even"><td>3</td><td>103</td><td style="text-align: center;">非空单元格计数</td></tr><tr class="odd"><td>4</td><td>104</td><td style="text-align: center;">最大值</td></tr><tr class="even"><td>5</td><td>105</td><td style="text-align: center;">最小值</td></tr><tr class="odd"><td>6</td><td>106</td><td style="text-align: center;">乘积</td></tr><tr class="even"><td>7</td><td>107</td><td style="text-align: center;">标准偏差</td></tr><tr class="odd"><td>8</td><td>108</td><td style="text-align: center;">总体标准偏差</td></tr><tr class="even"><td>9</td><td>109</td><td style="text-align: center;">求和</td></tr><tr class="odd"><td>10</td><td>110</td><td style="text-align: center;">方差</td></tr><tr class="even"><td>11</td><td>111</td><td style="text-align: center;">总体方差</td></tr></tbody></table><h2 id="平均值">平均值</h2><ol type="1"><li>【平均值】：<strong>AVERAGE</strong>（数字1，数字2，……，数字n）或者</li></ol><p>AVERAGE（数字区域）</p><ol start="2" type="1"><li>【条件平均值】：<strong>AVERAGEIF</strong>（条件区域，条件，求平均值区域）</li></ol><ul><li>注意绝对引用</li></ul><h2 id="最值">最值</h2><ol type="1"><li>【最大值】：MAX（数字1，数字2，……，数字n）或者 MAX（数字区域）</li><li>【最小值】：MIN，参数同上 MAX常结合数组来使用 比如最新的个税公式： =ROUND(MAX((A4-5000)*{0.03;0.1;0.2;0.25;0.3;0.35;0.45}-{0;210;1410;2660;4410;7160;15160},0),2)</li></ol><h2 id="四舍五入绝对值函数">四舍五入、绝对值函数</h2><ol type="1"><li>【四舍五入】：ROUND（数字，保留小数位数） &gt; 1表示保留小数点后1位，0表示保留整数，-1表示保留到十位，以此类推</li><li>【直接舍去】：ROUNDDOWN（数字，保留小数位数）</li><li>【向上取整】：ROUNDUP（数字，保留小数位数）</li><li>【只保留整数】：INT（数字）</li><li>【取绝对值】：ABS（数字）</li></ol><h2 id="随机数">随机数</h2><ol type="1"><li>【随机整数】：=RANDBETWEEN（0,100）</li><li>【0-1随机小数】：=RAND()</li><li>【n1~n2随机小数】：公式 =n1+RAND()<em>(n2-n1) 例如”3~50随机小数“ =3+RAND()</em>(50-3) 按F9或者有编辑操作该函数会时时刷新，选择性粘贴为数值可固定数值 ## 计数函数</li><li>【统计数字个数】：COUNT（区域1，区域2，……）</li><li>【非空单元格数量】：COUNTA（区域1，区域2，……）</li><li>【空单元格数量】：COUNTBLANK（区域1，区域2，……）</li><li>【条件计数】COUNTIF（计数区域，计数条件） ## 求余数： MOD（被除数，除数） 返回结果为余数，例如： =MOD（28,5），结果为3 =MOD（3,5），结果仍为3 判断奇偶：=IF(MOD(A84,2)=0,"偶数","奇数")</li></ol>]]></content>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;前言：本文为本人学习B站向天歌出品系列视频——《Excel大神上分攻略》时的学习笔记，希望通过记录的方式强制自己将内容学会并为了方便将来遗忘而创作&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&quot;函数&quot;&gt;函数&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;输入函数名的前几个字母后若要选择Excel联想的函数需使用小键盘的箭头，然后使用TAB键来选择联想的函数&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;相对引用与绝对引用&quot;&gt;相对引用与绝对引用&lt;/h3&gt;
-&lt;p&gt;使用&lt;code&gt;$&lt;/code&gt;可进行绝对引用，&lt;code&gt;$&lt;/code&gt;位于列前则将列进行绝对引用，行前将行绝对引用&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;code&gt;$A$2&lt;/code&gt;表示只使用A2这个单元格，&lt;code&gt;$A2&lt;/code&gt;表示使用A列，但对应的行则使用相对的行，&lt;code&gt;A$2&lt;/code&gt;表示使用第二行，对应的行根据相对关系使用&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;PS：按下F4可以切换引用的模式&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&quot;求和函数&quot;&gt;求和函数&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;快速求和&lt;/strong&gt;：Alt + = 会直接智能地将求和结果放到选中区域或智能将列区域求和放到列的下方&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;定位求和&lt;/strong&gt;：Ctrl + G定位空值后进行求和&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;合并单元格的求和&lt;/strong&gt;：将合计栏选中，在第一格中输入sum(要求和的目标栏第一格:最后一格）-sum(合计栏单元格第二格：最后一格)&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;多表求和&lt;/strong&gt;：&lt;/p&gt;
-&lt;ol type=&quot;1&quot;&gt;
-&lt;li&gt;输入SUM后选择要求和的目标表格的目标单元格，选择的每个单元格使用英文逗号隔开&lt;/li&gt;
-&lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="办公类软件" scheme="https://www.snowmoon.top/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/"/>
-    
-    <category term="Excel" scheme="https://www.snowmoon.top/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/Excel/"/>
-    
-    
-    <category term="Excel" scheme="https://www.snowmoon.top/tags/Excel/"/>
-    
-    <category term="办公学习" scheme="https://www.snowmoon.top/tags/%E5%8A%9E%E5%85%AC%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
