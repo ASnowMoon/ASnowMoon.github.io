@@ -52,8 +52,12 @@
     <content><![CDATA[<h1 id="数据编码">数据编码</h1>
 <p>假设字长(word size)为 <span class="math inline">\(w\)</span>,也即数据的位数，则二进制向十进制的转换分别是：</p>
 <ul>
-<li>无符号数：<span class="math inline">\(B2U(X)=\sum_{i=0}^{w-1}x_i\cdot2^i\)</span>​​​</li>
-<li>有符号数： <span class="math inline">\(B2T(X)=-x_{w-1}\cdot2^{w-1}+\sum_{i=0}^{w-2}x_i\cdot2^{i}\)</span>​</li>
+<li>无符号数： <span class="math display">\[
+B2U(X)=\sum_{i=0}^{w-1}x_i\cdot2^i
+\]</span></li>
+<li>有符号数： <span class="math display">\[
+B2T(X)=-x_{w-1}\cdot2^{w-1}+\sum_{i=0}^{w-2}x_i\cdot2^{i}
+\]</span></li>
 </ul>
 <p>左移：x向左移动k位，丢弃最高的k位，在右端补k个0；</p>
 <p>逻辑右移 ：在左端补k个0</p>
@@ -257,7 +261,7 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
   </entry>
   <entry>
     <title>CSAPP阅读笔记3——数据编码3</title>
-    <url>/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/</url>
+    <url>/2021/08/07/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/</url>
     <content><![CDATA[<h1 id="浮点数">浮点数</h1>
 <p>浮点数的定义： <span class="math display">\[
 d=\sum_{i=-n}^m2^i \times d_i
@@ -944,6 +948,47 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
+    <title>hexo博客部署到云服务器</title>
+    <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：我的国外服务器最近IP被封锁了，于是就打算把本地的服务器部署到另外的服务器上</p>
+</blockquote>
+<h1 id="git安装及配置">Git安装及配置</h1>
+<p>使用xshell远程连接服务器后先安装git依赖的库</p>
+<h2 id="安装依赖库及编译工具">安装依赖库及编译工具</h2>
+<ol type="1">
+<li><p>安装依赖库：</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> curl-devel expat-devel gettext-devel openssl-devel zlib-devel </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>安装编译工具： <figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">yum install gcc perl-ExtUtils-MakeMaker <span class="keyword">package</span> <span class="title"></span></span><br></pre></td></tr></table></figure> <a id="more"></a></p></li>
+</ol>
+<h2 id="二安装git">二、安装Git</h2>
+<p>先删除系统自带的旧版本git 切换到root用户 <figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sudo su root</span></span><br></pre></td></tr></table></figure> 再删除旧版本git</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">yum <span class="builtin-name">remove</span> git</span><br></pre></td></tr></table></figure>
+<p>安装git</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git</span><br></pre></td></tr></table></figure>
+<p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
+<p>2、创建个人账户</p>
+<p>在命令框输入（下面不做重复提示了）</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">adduser ZHY</span></span><br></pre></td></tr></table></figure>
+<p>3、添加个人账户权限</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chmod <span class="number">740</span> <span class="regexp">/etc/</span>sudoers</span><br><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
+<p>输入上面的命令，回车之后，进入编辑界面。</p>
+<p>点击 I 键进入编辑模式，找到要修改的地方</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">## Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p>添加以下内容</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">ZHY     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p>参考博客</p>
+<p>https://hjxlog.com/posts/20191130a1.html</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+      </categories>
+      <tags>
+        <tag>网站建设</tag>
+        <tag>博客部署</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Excel学习笔记3——函数求和及常见函数</title>
     <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<blockquote>
@@ -1116,44 +1161,33 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
-    <title>hexo博客部署到云服务器</title>
-    <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：我的国外服务器最近IP被封锁了，于是就打算把本地的服务器部署到另外的服务器上</p>
+    <title>next主题中超链接颜色的修改</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<h1 id="修改超链接样式">修改超链接样式</h1>
+<h2 id="问题描述">问题描述</h2>
+<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
+<h2 id="解决方案">解决方案</h2>
+<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里. 而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span> &#123;  </span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#428BCA</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><del>这样就可以把超链接的样式改为蓝色，粗体</del></p>
+<a id="more"></a>
+<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:not</span>(.btn)&#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#f89fa0</span>;</span><br><span class="line">  <span class="attribute">border-bottom</span>: none;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#ff7a7a</span>;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">    <span class="attribute">text-decoration</span>: underline;</span><br><span class="line">  		  &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
+<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
+<p>睡一觉起来它就好了。。。真是玄学:full_moon_with_face:</p>
+<blockquote>
+<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
 </blockquote>
-<h1 id="git安装及配置">Git安装及配置</h1>
-<p>使用xshell远程连接服务器后先安装git依赖的库</p>
-<h2 id="安装依赖库及编译工具">安装依赖库及编译工具</h2>
-<ol type="1">
-<li><p>安装依赖库：</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> curl-devel expat-devel gettext-devel openssl-devel zlib-devel </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>安装编译工具： <figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">yum install gcc perl-ExtUtils-MakeMaker <span class="keyword">package</span> <span class="title"></span></span><br></pre></td></tr></table></figure> <a id="more"></a></p></li>
-</ol>
-<h2 id="二安装git">二、安装Git</h2>
-<p>先删除系统自带的旧版本git 切换到root用户 <figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sudo su root</span></span><br></pre></td></tr></table></figure> 再删除旧版本git</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">yum <span class="builtin-name">remove</span> git</span><br></pre></td></tr></table></figure>
-<p>安装git</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> git</span><br></pre></td></tr></table></figure>
-<p>中途出现<code>Is this ok [y/d/N]:</code>时输入y回车即可</p>
-<p>2、创建个人账户</p>
-<p>在命令框输入（下面不做重复提示了）</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">adduser ZHY</span></span><br></pre></td></tr></table></figure>
-<p>3、添加个人账户权限</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">chmod <span class="number">740</span> <span class="regexp">/etc/</span>sudoers</span><br><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
-<p>输入上面的命令，回车之后，进入编辑界面。</p>
-<p>点击 I 键进入编辑模式，找到要修改的地方</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">## Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
-<p>添加以下内容</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">ZHY     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
-<p>参考博客</p>
-<p>https://hjxlog.com/posts/20191130a1.html</p>
 ]]></content>
       <categories>
         <category>网站建设</category>
+        <category>个人博客</category>
       </categories>
       <tags>
-        <tag>网站建设</tag>
-        <tag>博客部署</tag>
+        <tag>hexo</tag>
+        <tag>个人博客</tag>
+        <tag>next</tag>
       </tags>
   </entry>
   <entry>
@@ -1209,36 +1243,6 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
-    <title>next主题中超链接颜色的修改</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<h1 id="修改超链接样式">修改超链接样式</h1>
-<h2 id="问题描述">问题描述</h2>
-<p>Next主题自带的超链接样式仅仅是将超链接的文字添加了下划线且文字颜色仍未改变，显示效果很差且不明显翻了很多博客发现都让在<code>./themes/next/source/css/_custom/custom.styl</code>文件中添加新的超链接CSS样式，但是我使用的Next主题的文件夹中并没有发现这个文件夹🤷，查阅Next的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现next已经在7.3.0版本中就已经移除了这个文件，而我的Next主题为8.2.1版本，所以根本不可能有这个文件。</p>
-<h2 id="解决方案">解决方案</h2>
-<p>主题样式是在<code>\hexoBlog\themes\next\source\css</code>,这里面保存了Muse,Mist和Pisces三个主题的css文件,例如,字体的边框的颜色还有字体图片的大小等就保存在<code>next\source\css\_variables</code>里. 而我要修改的body超链接的样式在<code>themes\next\source\css\_common\components\post\post-body.styl</code>里,在这里添加条目:</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span> &#123;  </span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#428BCA</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><del>这样就可以把超链接的样式改为蓝色，粗体</del></p>
-<a id="more"></a>
-<p>然鹅并没有完全成功😠，虽然我们已经成功将超链接颜色修改了，但是阅读全文按钮也被修改成了蓝色加粗，淦，这怎么行，参考别人的代码思考了一下之后魔改了一下：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:not</span>(.btn)&#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#f89fa0</span>;</span><br><span class="line">  <span class="attribute">border-bottom</span>: none;</span><br><span class="line">  <span class="selector-pseudo">&amp;:hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#ff7a7a</span>;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">    <span class="attribute">text-decoration</span>: underline;</span><br><span class="line">  		  &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>成功将<a href="https://snowmoon.top/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/">超链接样式</a>修改而不修改阅读全文的按钮🤪</p>
-<p>然鹅，在本地localhost:4000看着实现得好好的功能，部署上线服务器之后就完全没有效果。。。此问题。。。超出了我的知识能力范围，，，尚未解决😭</p>
-<p>睡一觉起来它就好了。。。真是玄学:full_moon_with_face:</p>
-<blockquote>
-<p>PS:可能原因猜测：服务器的同步速度较慢，在deploy之后还尚未更新完</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>hexo</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo踩坑记录</title>
     <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<blockquote>
@@ -1272,8 +1276,8 @@ d=\sum_{i=-n}^m2^i \times d_i
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>个人博客</tag>
         <tag>hexo</tag>
+        <tag>个人博客</tag>
       </tags>
   </entry>
   <entry>
@@ -1325,9 +1329,61 @@ d=\sum_{i=-n}^m2^i \times d_i
         <category>个人博客</category>
       </categories>
       <tags>
-        <tag>个人博客</tag>
         <tag>hexo</tag>
+        <tag>个人博客</tag>
         <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于C++的opcv学习笔记</title>
+    <url>/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="图像的基础操作">图像的基础操作</h1>
+<h2 id="图像加载">图像加载</h2>
+<p>IMREAD_UNCHANGED 加载原图，不做任何改变</p>
+<blockquote>
+<p>输入图像默认读进来的方式RGB，但是三个通道的排序是BGR</p>
+</blockquote>
+<p>IMREAD_GRAYSCALE 把原图加载为灰度图</p>
+<p>IMREAD_COLOR 把原图作为RGB图像加载进来</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">Mat src = imread(<span class="string">&quot;E:/OpenCV/testimage/test.png&quot;</span>, IMREAD_GRAYSCALE); <span class="comment">//载入灰度图像</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>判断图像是否为的方法：</p>
+<ol type="1">
+<li>!src.data == true //数据为空值 = true</li>
+<li>src.empty() == true // 判断空值函数</li>
+</ol>
+</blockquote>
+<h2 id="图像显示">图像显示</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">namedWindow(<span class="string">&quot;test opencv setup&quot;</span>, WINDOW_AUTOSIZE); <span class="comment">//创建窗口，自动大小</span></span><br><span class="line">imshow(<span class="string">&quot;test opencv setup&quot;</span>, src); <span class="comment">//窗口名，图像名</span></span><br></pre></td></tr></table></figure>
+<p>CV_WINDOW_AUTOSIZE 会自动根据图像大小，显示窗口大小，不能人为改变窗口大小 ## 色彩空间转换 <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">cvt<span class="constructor">Color( <span class="params">image</span>, <span class="params">gray_image</span>, COLOR_BGR2GRAY )</span>;</span><br><span class="line">named<span class="constructor">Window(<span class="string">&quot;output windows&quot;</span>, CV_WINDOW_AUTOSIZE)</span>;</span><br><span class="line">Mat output_image;</span><br><span class="line">cvt<span class="constructor">Color(<span class="params">src</span>, <span class="params">output_image</span>, CV_BGR2HLS)</span>; <span class="comment">//修改图像为某色彩空间</span></span><br><span class="line">imshow(<span class="string">&quot;output windows&quot;</span>, output_image);</span><br></pre></td></tr></table></figure> COLOR_BGR2HLS // BGR 空间转为 亮度饱和度通道</p>
+<p>COLOR_BGR2GRAY // BGR 空间转为 灰度</p>
+<h2 id="保存">保存</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">imwrite(<span class="string">&quot;E:/my.tif&quot;</span>,output_image); <span class="comment">//保存位置，要保存的图片</span></span><br></pre></td></tr></table></figure>
+<h1 id="矩阵的掩膜操作">矩阵的掩膜操作</h1>
+<h2 id="核心公式">核心公式：</h2>
+<p><span class="math inline">\(I(i,j) = 5 * I(i,j)-[I(i-1,j)+I(i,j-1)+I(i+1,j)+I(i,j+1)]\)</span></p>
+<h2 id="基本的操作api">基本的操作API</h2>
+<h3 id="获取图像像素指针">获取图像像素指针</h3>
+<ul>
+<li><p><a href="http://docs.opencv.org/3.1.0/db/de0/group__core__utils.html">CV_Assert</a>(myImage.depth() == <a href="http://docs.opencv.org/3.1.0/db/de0/group__core__utils.html">CV_8U</a>);</p></li>
+<li><p>Mat.ptr<uchar>(int i=0) 获取像素矩阵的指针，索引i表示第几行，从0开始计行数。</p></li>
+<li><p>获得当前行指针const uchar* current= myImage.ptr<uchar>(row );</p></li>
+<li><p>获取当前像素点P(row, col)的像素值 p(row, col) =current[col]</p></li>
+</ul>
+<h3 id="像素范围处理saturate_cast">像素范围处理saturate_cast<uchar></h3>
+<ul>
+<li><p>saturate_cast<uchar>（-100），返回 0。</p></li>
+<li><p>saturate_cast<uchar>（288），返回255</p></li>
+<li><p>saturate_cast<uchar>（100），返回100</p></li>
+<li><p>这个函数的功能是确保RGB值得范围在0~255之间</p></li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机视觉</category>
+      </categories>
+      <tags>
+        <tag>计算机视觉</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1403,108 +1459,6 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
-    <title>基于C++的opcv学习笔记</title>
-    <url>/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="图像的基础操作">图像的基础操作</h1>
-<h2 id="图像加载">图像加载</h2>
-<p>IMREAD_UNCHANGED 加载原图，不做任何改变</p>
-<blockquote>
-<p>输入图像默认读进来的方式RGB，但是三个通道的排序是BGR</p>
-</blockquote>
-<p>IMREAD_GRAYSCALE 把原图加载为灰度图</p>
-<p>IMREAD_COLOR 把原图作为RGB图像加载进来</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">Mat src = imread(<span class="string">&quot;E:/OpenCV/testimage/test.png&quot;</span>, IMREAD_GRAYSCALE); <span class="comment">//载入灰度图像</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>判断图像是否为的方法：</p>
-<ol type="1">
-<li>!src.data == true //数据为空值 = true</li>
-<li>src.empty() == true // 判断空值函数</li>
-</ol>
-</blockquote>
-<h2 id="图像显示">图像显示</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">namedWindow(<span class="string">&quot;test opencv setup&quot;</span>, WINDOW_AUTOSIZE); <span class="comment">//创建窗口，自动大小</span></span><br><span class="line">imshow(<span class="string">&quot;test opencv setup&quot;</span>, src); <span class="comment">//窗口名，图像名</span></span><br></pre></td></tr></table></figure>
-<p>CV_WINDOW_AUTOSIZE 会自动根据图像大小，显示窗口大小，不能人为改变窗口大小 ## 色彩空间转换 <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">cvt<span class="constructor">Color( <span class="params">image</span>, <span class="params">gray_image</span>, COLOR_BGR2GRAY )</span>;</span><br><span class="line">named<span class="constructor">Window(<span class="string">&quot;output windows&quot;</span>, CV_WINDOW_AUTOSIZE)</span>;</span><br><span class="line">Mat output_image;</span><br><span class="line">cvt<span class="constructor">Color(<span class="params">src</span>, <span class="params">output_image</span>, CV_BGR2HLS)</span>; <span class="comment">//修改图像为某色彩空间</span></span><br><span class="line">imshow(<span class="string">&quot;output windows&quot;</span>, output_image);</span><br></pre></td></tr></table></figure> COLOR_BGR2HLS // BGR 空间转为 亮度饱和度通道</p>
-<p>COLOR_BGR2GRAY // BGR 空间转为 灰度</p>
-<h2 id="保存">保存</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">imwrite(<span class="string">&quot;E:/my.tif&quot;</span>,output_image); <span class="comment">//保存位置，要保存的图片</span></span><br></pre></td></tr></table></figure>
-<h1 id="矩阵的掩膜操作">矩阵的掩膜操作</h1>
-<h2 id="核心公式">核心公式：</h2>
-<p><span class="math inline">\(I(i,j) = 5 * I(i,j)-[I(i-1,j)+I(i,j-1)+I(i+1,j)+I(i,j+1)]\)</span></p>
-<h2 id="基本的操作api">基本的操作API</h2>
-<h3 id="获取图像像素指针">获取图像像素指针</h3>
-<ul>
-<li><p><a href="http://docs.opencv.org/3.1.0/db/de0/group__core__utils.html">CV_Assert</a>(myImage.depth() == <a href="http://docs.opencv.org/3.1.0/db/de0/group__core__utils.html">CV_8U</a>);</p></li>
-<li><p>Mat.ptr<uchar>(int i=0) 获取像素矩阵的指针，索引i表示第几行，从0开始计行数。</p></li>
-<li><p>获得当前行指针const uchar* current= myImage.ptr<uchar>(row );</p></li>
-<li><p>获取当前像素点P(row, col)的像素值 p(row, col) =current[col]</p></li>
-</ul>
-<h3 id="像素范围处理saturate_cast">像素范围处理saturate_cast<uchar></h3>
-<ul>
-<li><p>saturate_cast<uchar>（-100），返回 0。</p></li>
-<li><p>saturate_cast<uchar>（288），返回255</p></li>
-<li><p>saturate_cast<uchar>（100），返回100</p></li>
-<li><p>这个函数的功能是确保RGB值得范围在0~255之间</p></li>
-</ul>
-]]></content>
-      <categories>
-        <category>计算机视觉</category>
-      </categories>
-      <tags>
-        <tag>计算机视觉</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记6——旅游规划最短路径问题</title>
-    <url>/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="图6-旅游规划-25-分">07-图6 旅游规划 (25 分)</h1>
-<blockquote>
-<p>前言：这篇文章是我的每日一文计划的第七篇文章，已经完成了一周的记录，在废物了几周之后感觉又一次找到了点好好学习的动力和不废物的目标感，希望自己能长期坚持！</p>
-<p>PS:在文末我又立了点Flag👀👀，希望过一段时间以后这个Flag能够达成！🥳</p>
-</blockquote>
-<h2 id="题目描述">题目描述</h2>
-<p>有了一张自驾旅游路线图，你会知道城市间的高速公路长度、以及该公路要收取的过路费。现在需要你写一个程序，帮助前来咨询的游客找一条出发地和目的地之间的最短路径。如果有若干条路径都是最短的，那么需要输出最便宜的一条路径。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入说明：输入数据的第1行给出4个正整数<em>N</em>、<em>M</em>、<em>S</em>、<em>D</em>，其中<em>N</em>（2≤<em>N</em>≤500）是城市的个数，顺便假设城市的编号为0~(<em>N</em>−1)；<em>M</em>是高速公路的条数；<em>S</em>是出发地的城市编号；<em>D</em>是目的地的城市编号。随后的<em>M</em>行中，每行给出一条高速公路的信息，分别是：城市1、城市2、高速公路长度、收费额，中间用空格分开，数字均为整数且不超过500。输入保证解的存在。</p>
-<h2 id="输出格式">输出格式:</h2>
-<p>在一行里输出路径的长度和收费总额，数字间以空格分隔，输出结尾不能有多余空格。</p>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 5 0 3</span><br><span class="line">0 1 1 20</span><br><span class="line">1 3 2 30</span><br><span class="line">0 3 4 10</span><br><span class="line">0 2 2 20</span><br><span class="line">2 3 1 20</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3 40</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<h1 id="题目理解与思路">题目理解与思路</h1>
-<p>本题题目理解起来不难，每个城市即为图的节点，每个城市之间的公路距离即为图的边</p>
-<p>难点在于如何优先使用距离来判断路径，然后距离相同时使用收费额来作为判断的第二依据</p>
-<p>本文使用邻接矩阵来存储图，使用Dijkstra算法来动态更新每个节点的最短路径，同时动态更新路径的花销（在计算最短路径的过程中就优先把价格更低的选择为当前路径），在Dijkstra算法计算完成后，保留的最短路径也就是花销最小的路径。代码如下</p>
-<h1 id="代码">代码</h1>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 505</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Edge;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Distance;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Fare;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex V;</span><br><span class="line">    Edge E;</span><br><span class="line">    Distance G[MaxVer][MaxVer];</span><br><span class="line">    Fare F[MaxVer][MaxVer];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line">Fare cost[MaxVer];</span><br><span class="line">Distance Dist[MaxVer];</span><br><span class="line"><span class="keyword">char</span> collected[MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Vertex Start,Destina;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V,&amp;E,&amp;Start,&amp;Destina);</span><br><span class="line">    Graph = BuildGraph(V,E);</span><br><span class="line">    Dijkstra(Graph,Start,Destina);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,MinDist,Min;</span><br><span class="line">    <span class="comment">/*遍历所有顶点，将开始节点与其邻接点的Dist和cost初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">if</span>(Graph-&gt;G[Start][i] &lt; Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            Dist[i] = Graph-&gt;G[Start][i];</span><br><span class="line">            cost[i] = Graph-&gt;F[Start][i];</span><br><span class="line">        &#125;</span><br><span class="line">    collected[Start] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        Min = Inf;<span class="comment">//将最小距离记为Min，用于比较并找出Dis中最小的值</span></span><br><span class="line">        <span class="comment">//刚开始只用了MinDist来找最小值，找到后把i赋给MinDistinct，导致了小样本时不报错，大样本报错</span></span><br><span class="line">        <span class="comment">/*遍历所有节点，在未收集的节点中找出Dist最小的节点并收录*/</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">if</span>( Dist[i] &lt; Min &amp;&amp; collected[i] == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                MinDist = i;</span><br><span class="line">                Min = Dist[i];</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">if</span>(Min == Inf)<span class="keyword">break</span>;</span><br><span class="line">        collected[MinDist] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Graph-&gt;G[MinDist][i] &lt; Inf)<span class="comment">/*对于MinDist的每个未收集的邻接点*/</span></span><br><span class="line">                <span class="keyword">if</span>(collected[i] == <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">/*如果从新加入的MinDist走过去距离更小就更新Dist中的距离*/</span></span><br><span class="line">                    <span class="keyword">if</span>(Dist[MinDist] + Graph-&gt;G[MinDist][i] &lt; Dist[i])</span><br><span class="line">                    &#123;</span><br><span class="line">                        Dist[i] = Dist[MinDist] + Graph-&gt;G[MinDist][i];</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">/*如果距离相等且有价格更低的就更新价格*/</span></span><br><span class="line">                    <span class="keyword">if</span>((Dist[MinDist] + Graph-&gt;G[MinDist][i] == Dist[i]) </span><br><span class="line">                            &amp;&amp; ( cost[MinDist] + Graph-&gt;F[MinDist][i] &lt; cost[i]))</span><br><span class="line">                    &#123;</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Dist[Destina],cost[Destina]);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,D,F;</span><br><span class="line">    Vertex V1,V2;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="comment">/*对新建的图进行初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V; i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; Graph-&gt;V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = Graph-&gt;F[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                Graph-&gt;F[i][j] = Graph-&gt;G[i][j] = Inf;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;E; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;D,&amp;F);</span><br><span class="line">        Graph-&gt;G[V1][V2] = Graph-&gt;G[V2][V1] = D;</span><br><span class="line">        Graph-&gt;F[V1][V2] = Graph-&gt;F[V2][V1] = F;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        Dist[i] = Inf;</span><br><span class="line">        cost[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="后记对于dijkstra算法与floyd算法的一些理解">后记——对于Dijkstra算法与Floyd算法的一些理解</h1>
-<p>学习了图这种数据结构之后一直想知道怎么运用这个数据结构不过一直没学到相关的算法，正好最近学了一些就写了点相关的题目，也有了些自己的新的理解。</p>
-<h2 id="dijkstra算法">Dijkstra算法</h2>
-<p>Dijkstra算法是用来求单个源点到其它所有点的距离的最小值的算法，使用最小堆来存储未收录点时查找最小点的复杂度为<span class="math inline">\(O(logV)\)</span>（适合稀疏图），使用暴力的遍历所有节点查找最小值时复杂度为<span class="math inline">\(O(V^2)\)</span>（适合稠密图），其思想是一种贪心算法，把节点分为了收录的和未收录的，收录的节点包含源点s和已经确定了最短路径的节点，每次收录一个节点，该节点也为已经缺定最短路径的节点，然后更新受新收录的节点影响的点到源点的距离和路径，而同时又可以证明收录的节点只会影响其邻接点的最小距离，故只需更新其邻接点的最小距离即可。由于每次收录的节点均为经过当前收录节点而确定的当前到源点距离最小的点（贪心），故保证了收录的所有节点均为确定了最短路径的节点。当所有的节点均收录完毕后，源点到所有对应点的距离也就确定了。 总结而言，Dijkstra算法就是每个循环都做以下三件事，直至所有节点都已被收录</p>
-<ol type="1">
-<li>选择未收录节点中距离源点最小的节点收录</li>
-<li>收录后根据收录节点到源点的距离与图中其邻接边的权重来判断是否对邻接点有影响</li>
-<li>更新邻接点的最小距离</li>
-</ol>
-<h2 id="floyd算法">Floyd算法</h2>
-<p>Floyd算法是用来求多个源点到其它所有点的最短路径的算法，对于稠密图来说效果更好一点，复杂度为<span class="math inline">\(O(V^{3})\)</span>​，其思想是动态规划的思想，每次迭代就比较源点 I 到一个节点K的距离加上K到目标节点 J 的距离是否小于源点 I 直接到目标节点 J 的距离，小于的时候就动态更新节点 J 的路径和最小距离，通过多次迭代来留下最小的各点到各点的距离值。</p>
-<h1 id="附记">附记</h1>
-<p>从今日开始，增肌期结束💪，我将进入减脂期，会在每天的文章最后更新当日的体重噢🤸🏻🤸🏻🤸🏻</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg" alt="IMG_20210802_112256" /></p>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-        <category>Dijkstra</category>
-      </categories>
-      <tags>
-        <tag>Dijkstra</tag>
-        <tag>Floyd</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
     <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
     <content><![CDATA[<h1 id="图4-哈利波特的考试-25-分">07-图4 哈利·波特的考试 (25 分)</h1>
@@ -1572,6 +1526,56 @@ d=\sum_{i=-n}^m2^i \times d_i
         <tag>最小生成树</tag>
         <tag>Prim</tag>
         <tag>Kruskal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记6——旅游规划最短路径问题</title>
+    <url>/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="图6-旅游规划-25-分">07-图6 旅游规划 (25 分)</h1>
+<blockquote>
+<p>前言：这篇文章是我的每日一文计划的第七篇文章，已经完成了一周的记录，在废物了几周之后感觉又一次找到了点好好学习的动力和不废物的目标感，希望自己能长期坚持！</p>
+<p>PS:在文末我又立了点Flag👀👀，希望过一段时间以后这个Flag能够达成！🥳</p>
+</blockquote>
+<h2 id="题目描述">题目描述</h2>
+<p>有了一张自驾旅游路线图，你会知道城市间的高速公路长度、以及该公路要收取的过路费。现在需要你写一个程序，帮助前来咨询的游客找一条出发地和目的地之间的最短路径。如果有若干条路径都是最短的，那么需要输出最便宜的一条路径。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入说明：输入数据的第1行给出4个正整数<em>N</em>、<em>M</em>、<em>S</em>、<em>D</em>，其中<em>N</em>（2≤<em>N</em>≤500）是城市的个数，顺便假设城市的编号为0~(<em>N</em>−1)；<em>M</em>是高速公路的条数；<em>S</em>是出发地的城市编号；<em>D</em>是目的地的城市编号。随后的<em>M</em>行中，每行给出一条高速公路的信息，分别是：城市1、城市2、高速公路长度、收费额，中间用空格分开，数字均为整数且不超过500。输入保证解的存在。</p>
+<h2 id="输出格式">输出格式:</h2>
+<p>在一行里输出路径的长度和收费总额，数字间以空格分隔，输出结尾不能有多余空格。</p>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 5 0 3</span><br><span class="line">0 1 1 20</span><br><span class="line">1 3 2 30</span><br><span class="line">0 3 4 10</span><br><span class="line">0 2 2 20</span><br><span class="line">2 3 1 20</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例">输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3 40</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1 id="题目理解与思路">题目理解与思路</h1>
+<p>本题题目理解起来不难，每个城市即为图的节点，每个城市之间的公路距离即为图的边</p>
+<p>难点在于如何优先使用距离来判断路径，然后距离相同时使用收费额来作为判断的第二依据</p>
+<p>本文使用邻接矩阵来存储图，使用Dijkstra算法来动态更新每个节点的最短路径，同时动态更新路径的花销（在计算最短路径的过程中就优先把价格更低的选择为当前路径），在Dijkstra算法计算完成后，保留的最短路径也就是花销最小的路径。代码如下</p>
+<h1 id="代码">代码</h1>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 505</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Edge;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Distance;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Fare;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex V;</span><br><span class="line">    Edge E;</span><br><span class="line">    Distance G[MaxVer][MaxVer];</span><br><span class="line">    Fare F[MaxVer][MaxVer];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line">Fare cost[MaxVer];</span><br><span class="line">Distance Dist[MaxVer];</span><br><span class="line"><span class="keyword">char</span> collected[MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Vertex Start,Destina;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V,&amp;E,&amp;Start,&amp;Destina);</span><br><span class="line">    Graph = BuildGraph(V,E);</span><br><span class="line">    Dijkstra(Graph,Start,Destina);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Dijkstra</span><span class="params">(MGraph Graph,Vertex Start,Vertex Destina)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,MinDist,Min;</span><br><span class="line">    <span class="comment">/*遍历所有顶点，将开始节点与其邻接点的Dist和cost初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">if</span>(Graph-&gt;G[Start][i] &lt; Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            Dist[i] = Graph-&gt;G[Start][i];</span><br><span class="line">            cost[i] = Graph-&gt;F[Start][i];</span><br><span class="line">        &#125;</span><br><span class="line">    collected[Start] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        Min = Inf;<span class="comment">//将最小距离记为Min，用于比较并找出Dis中最小的值</span></span><br><span class="line">        <span class="comment">//刚开始只用了MinDist来找最小值，找到后把i赋给MinDistinct，导致了小样本时不报错，大样本报错</span></span><br><span class="line">        <span class="comment">/*遍历所有节点，在未收集的节点中找出Dist最小的节点并收录*/</span></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">if</span>( Dist[i] &lt; Min &amp;&amp; collected[i] == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                MinDist = i;</span><br><span class="line">                Min = Dist[i];</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">if</span>(Min == Inf)<span class="keyword">break</span>;</span><br><span class="line">        collected[MinDist] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Graph-&gt;G[MinDist][i] &lt; Inf)<span class="comment">/*对于MinDist的每个未收集的邻接点*/</span></span><br><span class="line">                <span class="keyword">if</span>(collected[i] == <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">/*如果从新加入的MinDist走过去距离更小就更新Dist中的距离*/</span></span><br><span class="line">                    <span class="keyword">if</span>(Dist[MinDist] + Graph-&gt;G[MinDist][i] &lt; Dist[i])</span><br><span class="line">                    &#123;</span><br><span class="line">                        Dist[i] = Dist[MinDist] + Graph-&gt;G[MinDist][i];</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">/*如果距离相等且有价格更低的就更新价格*/</span></span><br><span class="line">                    <span class="keyword">if</span>((Dist[MinDist] + Graph-&gt;G[MinDist][i] == Dist[i]) </span><br><span class="line">                            &amp;&amp; ( cost[MinDist] + Graph-&gt;F[MinDist][i] &lt; cost[i]))</span><br><span class="line">                    &#123;</span><br><span class="line">                        cost[i] = cost[MinDist] + Graph-&gt;F[MinDist][i];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Dist[Destina],cost[Destina]);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">BuildGraph</span><span class="params">(<span class="keyword">int</span> V, <span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,D,F;</span><br><span class="line">    Vertex V1,V2;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="comment">/*对新建的图进行初始化*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V; i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; Graph-&gt;V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = Graph-&gt;F[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                Graph-&gt;F[i][j] = Graph-&gt;G[i][j] = Inf;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;E; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;D,&amp;F);</span><br><span class="line">        Graph-&gt;G[V1][V2] = Graph-&gt;G[V2][V1] = D;</span><br><span class="line">        Graph-&gt;F[V1][V2] = Graph-&gt;F[V2][V1] = F;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; Graph-&gt;V; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        Dist[i] = Inf;</span><br><span class="line">        cost[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="后记对于dijkstra算法与floyd算法的一些理解">后记——对于Dijkstra算法与Floyd算法的一些理解</h1>
+<p>学习了图这种数据结构之后一直想知道怎么运用这个数据结构不过一直没学到相关的算法，正好最近学了一些就写了点相关的题目，也有了些自己的新的理解。</p>
+<h2 id="dijkstra算法">Dijkstra算法</h2>
+<p>Dijkstra算法是用来求单个源点到其它所有点的距离的最小值的算法，使用最小堆来存储未收录点时查找最小点的复杂度为<span class="math inline">\(O(logV)\)</span>（适合稀疏图），使用暴力的遍历所有节点查找最小值时复杂度为<span class="math inline">\(O(V^2)\)</span>（适合稠密图），其思想是一种贪心算法，把节点分为了收录的和未收录的，收录的节点包含源点s和已经确定了最短路径的节点，每次收录一个节点，该节点也为已经缺定最短路径的节点，然后更新受新收录的节点影响的点到源点的距离和路径，而同时又可以证明收录的节点只会影响其邻接点的最小距离，故只需更新其邻接点的最小距离即可。由于每次收录的节点均为经过当前收录节点而确定的当前到源点距离最小的点（贪心），故保证了收录的所有节点均为确定了最短路径的节点。当所有的节点均收录完毕后，源点到所有对应点的距离也就确定了。 总结而言，Dijkstra算法就是每个循环都做以下三件事，直至所有节点都已被收录</p>
+<ol type="1">
+<li>选择未收录节点中距离源点最小的节点收录</li>
+<li>收录后根据收录节点到源点的距离与图中其邻接边的权重来判断是否对邻接点有影响</li>
+<li>更新邻接点的最小距离</li>
+</ol>
+<h2 id="floyd算法">Floyd算法</h2>
+<p>Floyd算法是用来求多个源点到其它所有点的最短路径的算法，对于稠密图来说效果更好一点，复杂度为<span class="math inline">\(O(V^{3})\)</span>​，其思想是动态规划的思想，每次迭代就比较源点 I 到一个节点K的距离加上K到目标节点 J 的距离是否小于源点 I 直接到目标节点 J 的距离，小于的时候就动态更新节点 J 的路径和最小距离，通过多次迭代来留下最小的各点到各点的距离值。</p>
+<h1 id="附记">附记</h1>
+<p>从今日开始，增肌期结束💪，我将进入减脂期，会在每天的文章最后更新当日的体重噢🤸🏻🤸🏻🤸🏻</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg" alt="IMG_20210802_112256" /></p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>Dijkstra</category>
+      </categories>
+      <tags>
+        <tag>Dijkstra</tag>
+        <tag>Floyd</tag>
       </tags>
   </entry>
   <entry>
