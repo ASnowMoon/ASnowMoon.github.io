@@ -40,8 +40,8 @@
 <meta property="article:published_time" content="2021-03-10T10:22:58.000Z">
 <meta property="article:modified_time" content="2021-03-18T13:51:21.156Z">
 <meta property="article:author" content="Zheng Haoyu">
-<meta property="article:tag" content="个人博客">
 <meta property="article:tag" content="网站建设">
+<meta property="article:tag" content="个人博客">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png">
 
@@ -215,7 +215,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -228,7 +228,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -344,7 +344,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.4k</span>
+      <span>1.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -368,9 +368,7 @@
 <p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a target="_blank" rel="noopener" href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
 <h1 id="部署到github">部署到github</h1>
 <p>首先在github中新建一个repository</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319" /><figcaption aria-hidden="true">image-20210318211154319</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319" /></p>
 <p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
 <p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
 <figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
@@ -392,13 +390,9 @@
 <p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
 <p>退出后<strong><em>删除.txt后缀文件名</em></strong></p>
 <p>最终CNAME的配置效果：</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886" /><figcaption aria-hidden="true">image-20210318214322886</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886" /></p>
 <p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681" /><figcaption aria-hidden="true">image-20210318214711681</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681" /></p>
 <p>这时候已经配置好了，再次部署到github上</p>
 <figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
 <p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
@@ -451,8 +445,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag"><i class="fas fa-tag"></i> 个人博客</a>
               <a href="/tags/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" rel="tag"><i class="fas fa-tag"></i> 网站建设</a>
+              <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag"><i class="fas fa-tag"></i> 个人博客</a>
           </div>
 
         
@@ -522,14 +516,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">52k</span>
+    <span title="站点总字数">53k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:25</span>
+    <span title="站点阅读时长">2:26</span>
   </span>
 </div>
 <div class="busuanzi-count">

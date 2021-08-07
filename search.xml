@@ -20,9 +20,7 @@
 <li>以[[运算器]]为中心 <img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230612.png" /></li>
 </ol>
 <p>改进：以存储器为中心</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230631.png" alt="Pasted image 20210801195410" /><figcaption aria-hidden="true">Pasted image 20210801195410</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230631.png" alt="Pasted image 20210801195410" /></p>
 <p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230640.png" alt="Pasted image 20210801195500" />系统复杂性的管理方法(3Y原则)</p>
 <ul>
 <li>层次化（Hierachy）：将被设计的系统划分为多个模块或子模块</li>
@@ -37,9 +35,7 @@
 <p>由ACC、ALU、MQ、X组成</p>
 <p>[[控制器]]</p>
 <p>由CU、IR、PC、组成 PC 取指令 IR 分析指令 CU 执行指令 PC 存放当前欲执行指令的地址， 具有计数功能（PC）+ 1 PC IR 存放当前欲执行的指令</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230702.png" alt="Pasted image 20210801224533" /><figcaption aria-hidden="true">Pasted image 20210801224533</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210801230702.png" alt="Pasted image 20210801224533" /></p>
 <p><strong>机器字长</strong> CPU 一次能处理数据的位数 与 CPU 中的 寄存器位数 有关</p>
 ]]></content>
       <categories>
@@ -118,9 +114,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <li><p><code>~</code> 补集 Complement <code>&#123;1, 3, 5, 7&#125;</code></p></li>
 </ul>
 <p>类型转换 我们在数轴上把有符号数和无符号数画出来的话，就能很清晰的看出相对的关系：</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052336446.png" alt="image-20210805233558134" /><figcaption aria-hidden="true">image-20210805233558134</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052336446.png" alt="image-20210805233558134" /></p>
 <p>在 C 语言中，如果不加关键字限制，默认的整型是有符号的。如果想要无符号数的话，需要在数字后面加 U，例如下面的代码段 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a_signed_number = <span class="number">-15213</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> a_unsigned_number = <span class="number">15213U</span>;</span><br></pre></td></tr></table></figure> 在进行有符号和无符号数的互相转换时：</p>
 <ul>
 <li><p>具体每一个字节的值不会改变，<strong>改变的是计算机解释当前值的方式</strong></p></li>
@@ -187,9 +181,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <p><a href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p>
 <p><a href="https://www.jianshu.com/p/abbdae4f3841">原码、反码、补码和移码详解</a></p>
 <h1 id="今日体重更新">今日体重更新</h1>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052347505.png" alt="image-20210805234727407" /><figcaption aria-hidden="true">image-20210805234727407</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052347505.png" alt="image-20210805234727407" /></p>
 <p>今天和朋友出去搓了顿周麻婆，体重略有上涨，意料之中。。。</p>
 ]]></content>
       <categories>
@@ -203,8 +195,8 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
-    <title>CSAPP阅读笔记1——数据编码</title>
-    <url>/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94/</url>
+    <title>CSAPP阅读笔记2——数据编码2</title>
+    <url>/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%812/</url>
     <content><![CDATA[<h1 id="整形变量integer">整形变量Integer</h1>
 <h2 id="类型拓展与截取">类型拓展与截取</h2>
 <p><strong>无符号数的零拓展</strong>：无符号数转换为更大的数据类型，只需要在开头添加0即可，这种运算也被称为零拓展。</p>
@@ -214,6 +206,44 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <p><strong>截断无符号数：</strong>相当于做mod运算，<span class="math inline">\(x&#39;=x\ mod\ 2^k\)</span></p>
 <p><strong>截断补码数值：</strong>和无符号值相似，不过需要将最高位转换为符号位</p>
 <a id="more"></a>
+<h2 id="运算与溢出">运算与溢出</h2>
+<p>无符号数字加法：溢出时会丢弃最高位，实际上相当于做了个mod操作 <span class="math display">\[
+x+^u_wy=
+\left\{
+\begin{array}{l}
+    x+y,\quad x+y&lt;2^w\\
+    x+y-2^w, \quad 2^w\leq x+y&lt;2^{w+1}\\
+\end{array}
+\right.
+\]</span> 检测无符号数是否溢出：当<span class="math inline">\(s&lt;x\)</span>或<span class="math inline">\(s&lt;y\)</span>时发生了溢出</p>
+<p>补码加法：溢出时会产生正溢出和负溢出，正溢出是数字太大，把符号位改成了1而变成了负数，负溢出为数字太小把符号位改成了0而变成了正数</p>
+<p>对于满足<span class="math inline">\(-2^{w-1} \leq x,y&lt;2^{w-1}\)</span>​的整数，有： <span class="math display">\[
+x+^t_wy = \left\{
+\begin
+{array}{l}
+x+y-2^w,\qquad 2^{w-1} \leq x+y\qquad \quad 正溢出\\
+x+y,\qquad -2^{w-1}\leq x+y &lt; 2^{w-1}\qquad 正常\\
+x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
+\end{array}
+\right.
+\]</span> 对于乘法来说，值的范围会大很多，这里分情况讨论一下，假设两个乘数是 x,y 并且都是 w 位的：</p>
+<ul>
+<li>无符号数：至多 2w 位
+<ul>
+<li>范围$ 0≤x×y≤(2w−1)<sup>2=2</sup>{2w}−2^{w+1}+1$</li>
+</ul></li>
+<li>有符号数，最小的负数：至多 2w - 1 位
+<ul>
+<li>范围<span class="math inline">\(x×y≥(−2^{w−1})×(2^{w−1}−1)=−2^{2w−2}+2^{w−1}\)</span></li>
+</ul></li>
+<li>有符号数，最大的正数：至多 2w 位，只有<span class="math inline">\((TMin_w)^2\)</span>一种情况
+<ul>
+<li>范围 <span class="math inline">\(x×y≤(−2^{w−1})^2=2^{2w−2}\)</span></li>
+</ul></li>
+</ul>
+<p>如果需要保证精度，就需要用软件来实现了。另外，计算的无符号乘法的时候，会忽略最高的 w 位，相当于 <span class="math inline">\(UMult_w(u,v)=u⋅v\ mod\ 2^w\)</span></p>
+<h1 id="今日体重">今日体重</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080018693.png" alt="image-20210808001824599" /></p>
 ]]></content>
       <categories>
         <category>CSAPP</category>
@@ -223,6 +253,26 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
         <tag>CSAPP</tag>
         <tag>原码</tag>
         <tag>补码</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSAPP阅读笔记3——数据编码3</title>
+    <url>/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/</url>
+    <content><![CDATA[<h1 id="浮点数">浮点数</h1>
+<p>浮点数的定义： <span class="math display">\[
+d=\sum_{i=-n}^m2^i \times d_i
+\]</span> 这个定义导致我们只有在表示<span class="math inline">\(\frac{x}{2^k}\)</span>时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。</p>
+<a id="more"></a>
+<h1 id="今日体重">今日体重</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080019434.png" alt="image-20210808001912353" /></p>
+]]></content>
+      <categories>
+        <category>CSAPP</category>
+        <category>计算机组成原理</category>
+      </categories>
+      <tags>
+        <tag>CSAPP</tag>
+        <tag>浮点数</tag>
       </tags>
   </entry>
   <entry>
@@ -1066,102 +1116,6 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
-    <title>HEXO博客部署到github并将个人域名解析至github</title>
-    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
-</blockquote>
-<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
-<h1 id="部署到github">部署到github</h1>
-<p>首先在github中新建一个repository</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319" /><figcaption aria-hidden="true">image-20210318211154319</figcaption>
-</figure>
-<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
-<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
-<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
-<p>找到<code>deploy</code>并配置以下内容</p>
-<a id="more"></a>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<p>其中git仓库位置需要改为你自己新建的</p>
-<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
-<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
-<h1 id="域名注册和解析到github">域名注册和解析到github</h1>
-<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
-<h2 id="解析域名">解析域名</h2>
-<p>进入控制台，点击解析-添加记录</p>
-<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<h2 id="添加cname文件">添加CNAME文件</h2>
-<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
-<p>退出后<strong><em>删除.txt后缀文件名</em></strong></p>
-<p>最终CNAME的配置效果：</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886" /><figcaption aria-hidden="true">image-20210318214322886</figcaption>
-</figure>
-<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681" /><figcaption aria-hidden="true">image-20210318214711681</figcaption>
-</figure>
-<p>这时候已经配置好了，再次部署到github上</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
-<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
-<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
-<h1 id="参考文章">参考文章</h1>
-<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
-<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
-<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>网站建设</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo踩坑记录</title>
-    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑 hexo版本：hexo: 5.3.0 hexo-cli: 4.2.0 os: Windows_NT 10.0.19042 win32 x64 Next主题版本: NexT version 8.2.1</p>
-</blockquote>
-<h1 id="使用了live2d时不蒜子访客统计无法显示">使用了live2d时不蒜子访客统计无法显示</h1>
-<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;%- if theme.busuanzi_count.total_visitors %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_container_site_pv&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Visitors</span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;site-uv&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_visitors&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_value_site_uv&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">&#123;%- endif %&#125;</span><br></pre></td></tr></table></figure>
-<p>发现这个标签<code>&lt;span id="busuanzi_container_site_pv" style="display: none;"&gt;</code>中出现了个诡异的<code>style="display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
-<a id="more"></a>
-<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
-<h1 id="markdown-it美元符号无法显示的问题">markdown-it美元符号$无法显示的问题</h1>
-<h2 id="问题描述">问题描述</h2>
-<p>在使用markdown写文章时，美元符号\<span class="math inline">\(在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示 ## 解决方案 1. 使用双反斜杠\\对美元符号\\\)</span>进行转义</p>
-<ol start="2" type="1">
-<li>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</li>
-</ol>
-<h1 id="valine评论框中占位符无法换行的问题">valine评论框中占位符无法换行的问题</h1>
-<h2 id="问题描述-1">问题描述</h2>
-<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
-<h2 id="解决方案">解决方案</h2>
-<p>输入了<code>&amp;#10</code>完成了换行</p>
-<h1 id="字数统计后阅读时间计算参数修改">字数统计后阅读时间计算参数修改</h1>
-<h2 id="问题描述-2">问题描述</h2>
-<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
-<h2 id="解决方案-1">解决方案</h2>
-<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo博客部署到云服务器</title>
     <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
     <content><![CDATA[<blockquote>
@@ -1203,6 +1157,58 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
+    <title>HEXO博客部署到github并将个人域名解析至github</title>
+    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
+</blockquote>
+<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
+<h1 id="部署到github">部署到github</h1>
+<p>首先在github中新建一个repository</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319" /></p>
+<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
+<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
+<p>找到<code>deploy</code>并配置以下内容</p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>其中git仓库位置需要改为你自己新建的</p>
+<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
+<h1 id="域名注册和解析到github">域名注册和解析到github</h1>
+<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
+<h2 id="解析域名">解析域名</h2>
+<p>进入控制台，点击解析-添加记录</p>
+<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<h2 id="添加cname文件">添加CNAME文件</h2>
+<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
+<p>退出后<strong><em>删除.txt后缀文件名</em></strong></p>
+<p>最终CNAME的配置效果：</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886" /></p>
+<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681" /></p>
+<p>这时候已经配置好了，再次部署到github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
+<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
+<h1 id="参考文章">参考文章</h1>
+<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
+<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
+<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>网站建设</tag>
+        <tag>个人博客</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>next主题中超链接颜色的修改</title>
     <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E4%B8%AD%E8%B6%85%E9%93%BE%E6%8E%A5%E9%A2%9C%E8%89%B2%E7%9A%84%E4%BF%AE%E6%94%B9/</url>
     <content><![CDATA[<h1 id="修改超链接样式">修改超链接样式</h1>
@@ -1230,6 +1236,44 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
         <tag>个人博客</tag>
         <tag>hexo</tag>
         <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo踩坑记录</title>
+    <url>/2021/02/21/hexo%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为我在使用hexo开发个人博客时的踩坑记录，帮助大家解决一些我遇到的坑 hexo版本：hexo: 5.3.0 hexo-cli: 4.2.0 os: Windows_NT 10.0.19042 win32 x64 Next主题版本: NexT version 8.2.1</p>
+</blockquote>
+<h1 id="使用了live2d时不蒜子访客统计无法显示">使用了live2d时不蒜子访客统计无法显示</h1>
+<p>我使用的不蒜子进行字数统计，但是在启用了live2d时发现在文章底部的字数统计居然特喵的消失了，搜索了hexo的<a href="https://github.com/next-theme/hexo-theme-next/issues/4">更新说明</a>后发现他给的解决方案居然是很扯淡的不用live2d。。。这怎么能忍，我找了一波显示不蒜子统计的的脚本<code>\themes\next\layout\_partials\footer.njk</code> 代码如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">&#123;%- if theme.busuanzi_count.total_visitors %&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_container_site_pv&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;post-meta-item-icon&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;&#123;&#123; theme.busuanzi_count.total_visitors_icon &#125;&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span> Visitors</span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;site-uv&quot;</span> <span class="attr">title</span>=<span class="string">&quot;&#123;&#123; __(&#x27;footer.total_visitors&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_value_site_uv&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">&#123;%- endif %&#125;</span><br></pre></td></tr></table></figure>
+<p>发现这个标签<code>&lt;span id="busuanzi_container_site_pv" style="display: none;"&gt;</code>中出现了个诡异的<code>style="display: none;</code>把它删除后，在底部的字数统计结果就又出现了。</p>
+<a id="more"></a>
+<p>但是在文章中的字数统计又不见了，找了半天，没有办法解决，于是我就直接关闭了不蒜子的文章访客启用了valine的visitor统计来代替不蒜子的统计功能</p>
+<h1 id="markdown-it美元符号无法显示的问题">markdown-it美元符号$无法显示的问题</h1>
+<h2 id="问题描述">问题描述</h2>
+<p>在使用markdown写文章时，美元符号\<span class="math inline">\(在本地能够正常显示，但上传到网站中就被渲染成了数学公式，无法正常显示，在使用了反斜杠\\进行转义时也无法正常显示，查了很多资料，甚至改了markdown的渲染引擎，更改了数学公式的渲染引擎也无法显示 ## 解决方案 1. 使用双反斜杠\\对美元符号\\\)</span>进行转义</p>
+<ol start="2" type="1">
+<li>将美元符号<code>$</code>放入代码块中实现<code>$</code>的正常显示</li>
+</ol>
+<h1 id="valine评论框中占位符无法换行的问题">valine评论框中占位符无法换行的问题</h1>
+<h2 id="问题描述-1">问题描述</h2>
+<p>在valine评论系统中设置默认占位符placeholder来提示评论者时无法直接在文本中进行换行，使用\n也无法换行，使用HTML的<code>&lt;br&gt;</code>标签也无法进行换行</p>
+<h2 id="解决方案">解决方案</h2>
+<p>输入了<code>&amp;#10</code>完成了换行</p>
+<h1 id="字数统计后阅读时间计算参数修改">字数统计后阅读时间计算参数修改</h1>
+<h2 id="问题描述-2">问题描述</h2>
+<p>在使用了<code>symbols_count_time</code>进行字数统计后发现统计的结果很离谱，中文的文章1800字阅读时间统计为1分钟，参照现有博客想修改<code>symbols_count_time</code>中的<code>awl</code>和<code>wpm</code>使计数更为准确时发现在主题的<code>_config.yml</code>中修改无效，尝试在<code>header</code>文件中修改计算词数和阅读的脚本中的<code>awl</code>和<code>wpm</code>数值无效</p>
+<h2 id="解决方案-1">解决方案</h2>
+<p>在hexo的站点配置文件<code>_config.yml</code>中对<code>symbols_count_time</code>进行初始化的同时对直接<code>awl</code>和<code>wpm</code>进行赋值</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1287,6 +1331,78 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
+    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
+    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
+    <content><![CDATA[<blockquote>
+<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误</p>
+</blockquote>
+<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id="title"&gt;title&lt;/h2&gt;</code>的代码</p>
+<p>现在会被编译为<code>&lt;h2&gt;&lt;span id="title"&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
+<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
+<h2 id="方法1">方法1</h2>
+<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
+<p>但是我的hexo中并没有找到这个目录</p>
+<p>所以我找了另外的</p>
+<h2 id="方法2">方法2</h2>
+<a id="more"></a>
+<p>首先安装<code>markdown-it-named-headings</code>插件</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">parser.use(<span class="built_in">require</span>(<span class="string">&#x27;markdown-it-named-headings&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>尝试以上两种方法，均未成功</p>
+<p>时间不早了，后面有时间再解决</p>
+<blockquote>
+<p>参考文章:</p>
+<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a> <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>网站建设</tag>
+        <tag>个人博客</tag>
+        <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记4——六度空间</title>
+    <url>/2021/07/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E5%85%AD%E5%BA%A6%E7%A9%BA%E9%97%B4/</url>
+    <content><![CDATA[<h1 id="图3-六度空间-30-分">06-图3 六度空间 (30 分)</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>“六度空间”理论又称作“六度分隔（Six Degrees of Separation）”理论。这个理论可以通俗地阐述为：“你和任何一个陌生人之间所间隔的人不会超过六个，也就是说，最多通过五个人你就能够认识任何一个陌生人。”如图1所示。</p>
+<p><img src="https://images.ptausercontent.com/35" alt="img" /> 图1 六度空间示意图</p>
+<p>“六度空间”理论虽然得到广泛的认同，并且正在得到越来越多的应用。但是数十年来，试图验证这个理论始终是许多社会学家努力追求的目标。然而由于历史的原因，这样的研究具有太大的局限性和困难。随着当代人的联络主要依赖于电话、短信、微信以及因特网上即时通信等工具，能够体现社交网络关系的一手数据已经逐渐使得“六度空间”理论的验证成为可能。</p>
+<p>假如给你一个社交网络图，请你对每个节点计算符合“六度空间”理论的结点占结点总数的百分比。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入第1行给出两个正整数，分别表示社交网络图的结点数<em>N</em>（1&lt;<em>N</em>≤103，表示人数）、边数<em>M</em>（≤33×<em>N</em>，表示社交关系数）。随后的<em>M</em>行对应<em>M</em>条边，每行给出一对正整数，分别是该条边直接连通的两个结点的编号（节点从1到<em>N</em>编号）。 <a id="more"></a> ## 输出格式:</p>
+<p>对每个结点输出与该结点距离不超过6的结点数占结点总数的百分比，精确到小数点后2位。每个结节点输出一行，格式为“结点编号:（空格）百分比%”。</p>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10 9</span><br><span class="line">1 2</span><br><span class="line">2 3</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br><span class="line">5 6</span><br><span class="line">6 7</span><br><span class="line">7 8</span><br><span class="line">8 9</span><br><span class="line">9 10</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h3 id="输出样例">输出样例:</h3>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1: 70.00%</span><br><span class="line">2: 80.00%</span><br><span class="line">3: 90.00%</span><br><span class="line">4: 100.00%</span><br><span class="line">5: 100.00%</span><br><span class="line">6: 100.00%</span><br><span class="line">7: 100.00%</span><br><span class="line">8: 90.00%</span><br><span class="line">9: 80.00%</span><br><span class="line">10: 70.00%</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1 id="思路与题解">思路与题解</h1>
+<h2 id="思路">思路</h2>
+<p>根据题目描述，我们只需要建立一个图，而六层的统计要求就比较容易想到从输入的第一个节点进行广度优先搜索遍历所有节点，然后统计六层内的节点数量百分比即可 1000个节点的数据而节点间的连接又小于33个，所以可以认为是比较稀疏的图，使用邻接表来存储是比较合算的 难点在于遍历的层数的统计 有两种解决办法</p>
+<ol type="1">
+<li>在结构体内加入一个数据记录节点层数</li>
+<li>每次遍历记录末尾数字和上一次的末尾数字，相同时层数++ 本文采用第二种方法进行记录，代码如下 ## 代码 &gt; 第一次使用邻接表存储的图来写算法，虽然不是标准的邻接表，但也感觉有被烦到。。。 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span> *<span class="title">AdjList</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex Value;</span><br><span class="line">    AdjList Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> Visited[MaxVer];</span><br><span class="line"><span class="keyword">int</span> Que[MaxVer];<span class="comment">//使用数组作为队列</span></span><br><span class="line">AdjList G[MaxVer];</span><br><span class="line"><span class="keyword">int</span> N,E;<span class="comment">//存储节点的数量和边的数量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GraphInit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="comment">/*建图*/</span></span><br><span class="line">    <span class="keyword">int</span> i,V1,V2;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;N,&amp;E);</span><br><span class="line">    AdjList NewNode;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化节点*/</span></span><br><span class="line">        G[i] = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        G[i]-&gt;Next = <span class="literal">NULL</span>;</span><br><span class="line">        G[i]-&gt;Value = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化边*/</span></span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V1,&amp;V2);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V1连向V2的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V1]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V2;</span><br><span class="line">        G[V1]-&gt;Next = NewNode;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V2连向V1的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V2]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V1;</span><br><span class="line">        G[V2]-&gt;Next = NewNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BFS</span><span class="params">(<span class="keyword">int</span> Num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> head,rear,Last,Tail,Level,count;</span><br><span class="line">    AdjList P;</span><br><span class="line">    Level = rear = <span class="number">0</span>;</span><br><span class="line">    count = <span class="number">1</span>;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    Que[<span class="number">0</span>] = Num;</span><br><span class="line">    Visited[Num] = <span class="number">1</span>;</span><br><span class="line">    Last = Tail = Num;</span><br><span class="line">    <span class="keyword">while</span>(head &lt; rear )<span class="comment">//当链表为空时</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        P = G[Que[head]]-&gt;Next;</span><br><span class="line">        <span class="keyword">while</span>( P )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!Visited[P-&gt;Value])</span><br><span class="line">            &#123;   </span><br><span class="line">                Visited[P-&gt;Value] =<span class="number">1</span>;</span><br><span class="line">                rear++;</span><br><span class="line">                Que[rear] = P-&gt;Value;</span><br><span class="line">                Tail = P-&gt;Value;</span><br><span class="line">                count++;<span class="comment">/*每个节点出来时都需要统计它的邻接点，</span></span><br><span class="line"><span class="comment">                		如果是在这个遍历外统计节点时最后的尾结</span></span><br><span class="line"><span class="comment">                		点统计会出现一些小问题*/</span></span><br><span class="line">            &#125;</span><br><span class="line">            P = P-&gt;Next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Que[head] == Last)<span class="comment">//如果当前出队列元素为这层的末尾元素</span></span><br><span class="line">        &#123;</span><br><span class="line">            Last = Tail;</span><br><span class="line">            Level++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Level == <span class="number">6</span>) <span class="keyword">break</span>;<span class="comment">//超过六层就退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    GraphInit();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d: %.2f%%\n&quot;</span>,i,<span class="number">100.0</span> * BFS(i) / N);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>BFS</category>
+        <category>邻接表</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于C++的opcv学习笔记</title>
     <url>/2021/02/19/opcv%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="图像的基础操作">图像的基础操作</h1>
@@ -1339,108 +1455,6 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
-    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
-    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
-    <content><![CDATA[<blockquote>
-<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误</p>
-</blockquote>
-<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id="title"&gt;title&lt;/h2&gt;</code>的代码</p>
-<p>现在会被编译为<code>&lt;h2&gt;&lt;span id="title"&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
-<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
-<h2 id="方法1">方法1</h2>
-<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
-<p>但是我的hexo中并没有找到这个目录</p>
-<p>所以我找了另外的</p>
-<h2 id="方法2">方法2</h2>
-<a id="more"></a>
-<p>首先安装<code>markdown-it-named-headings</code>插件</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
-<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">parser.use(<span class="built_in">require</span>(<span class="string">&#x27;markdown-it-named-headings&#x27;</span>))</span><br></pre></td></tr></table></figure>
-<p>尝试以上两种方法，均未成功</p>
-<p>时间不早了，后面有时间再解决</p>
-<blockquote>
-<p>参考文章:</p>
-<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a> <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>网站建设</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记4——六度空间</title>
-    <url>/2021/07/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E5%85%AD%E5%BA%A6%E7%A9%BA%E9%97%B4/</url>
-    <content><![CDATA[<h1 id="图3-六度空间-30-分">06-图3 六度空间 (30 分)</h1>
-<h2 id="题目描述">题目描述</h2>
-<p>“六度空间”理论又称作“六度分隔（Six Degrees of Separation）”理论。这个理论可以通俗地阐述为：“你和任何一个陌生人之间所间隔的人不会超过六个，也就是说，最多通过五个人你就能够认识任何一个陌生人。”如图1所示。</p>
-<p><img src="https://images.ptausercontent.com/35" alt="img" /> 图1 六度空间示意图</p>
-<p>“六度空间”理论虽然得到广泛的认同，并且正在得到越来越多的应用。但是数十年来，试图验证这个理论始终是许多社会学家努力追求的目标。然而由于历史的原因，这样的研究具有太大的局限性和困难。随着当代人的联络主要依赖于电话、短信、微信以及因特网上即时通信等工具，能够体现社交网络关系的一手数据已经逐渐使得“六度空间”理论的验证成为可能。</p>
-<p>假如给你一个社交网络图，请你对每个节点计算符合“六度空间”理论的结点占结点总数的百分比。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入第1行给出两个正整数，分别表示社交网络图的结点数<em>N</em>（1&lt;<em>N</em>≤103，表示人数）、边数<em>M</em>（≤33×<em>N</em>，表示社交关系数）。随后的<em>M</em>行对应<em>M</em>条边，每行给出一对正整数，分别是该条边直接连通的两个结点的编号（节点从1到<em>N</em>编号）。 <a id="more"></a> ## 输出格式:</p>
-<p>对每个结点输出与该结点距离不超过6的结点数占结点总数的百分比，精确到小数点后2位。每个结节点输出一行，格式为“结点编号:（空格）百分比%”。</p>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10 9</span><br><span class="line">1 2</span><br><span class="line">2 3</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br><span class="line">5 6</span><br><span class="line">6 7</span><br><span class="line">7 8</span><br><span class="line">8 9</span><br><span class="line">9 10</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h3 id="输出样例">输出样例:</h3>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1: 70.00%</span><br><span class="line">2: 80.00%</span><br><span class="line">3: 90.00%</span><br><span class="line">4: 100.00%</span><br><span class="line">5: 100.00%</span><br><span class="line">6: 100.00%</span><br><span class="line">7: 100.00%</span><br><span class="line">8: 90.00%</span><br><span class="line">9: 80.00%</span><br><span class="line">10: 70.00%</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1 id="思路与题解">思路与题解</h1>
-<h2 id="思路">思路</h2>
-<p>根据题目描述，我们只需要建立一个图，而六层的统计要求就比较容易想到从输入的第一个节点进行广度优先搜索遍历所有节点，然后统计六层内的节点数量百分比即可 1000个节点的数据而节点间的连接又小于33个，所以可以认为是比较稀疏的图，使用邻接表来存储是比较合算的 难点在于遍历的层数的统计 有两种解决办法</p>
-<ol type="1">
-<li>在结构体内加入一个数据记录节点层数</li>
-<li>每次遍历记录末尾数字和上一次的末尾数字，相同时层数++ 本文采用第二种方法进行记录，代码如下 ## 代码 &gt; 第一次使用邻接表存储的图来写算法，虽然不是标准的邻接表，但也感觉有被烦到。。。 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span> *<span class="title">AdjList</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex Value;</span><br><span class="line">    AdjList Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> Visited[MaxVer];</span><br><span class="line"><span class="keyword">int</span> Que[MaxVer];<span class="comment">//使用数组作为队列</span></span><br><span class="line">AdjList G[MaxVer];</span><br><span class="line"><span class="keyword">int</span> N,E;<span class="comment">//存储节点的数量和边的数量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GraphInit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="comment">/*建图*/</span></span><br><span class="line">    <span class="keyword">int</span> i,V1,V2;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;N,&amp;E);</span><br><span class="line">    AdjList NewNode;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化节点*/</span></span><br><span class="line">        G[i] = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        G[i]-&gt;Next = <span class="literal">NULL</span>;</span><br><span class="line">        G[i]-&gt;Value = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化边*/</span></span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V1,&amp;V2);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V1连向V2的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V1]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V2;</span><br><span class="line">        G[V1]-&gt;Next = NewNode;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V2连向V1的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V2]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V1;</span><br><span class="line">        G[V2]-&gt;Next = NewNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BFS</span><span class="params">(<span class="keyword">int</span> Num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> head,rear,Last,Tail,Level,count;</span><br><span class="line">    AdjList P;</span><br><span class="line">    Level = rear = <span class="number">0</span>;</span><br><span class="line">    count = <span class="number">1</span>;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    Que[<span class="number">0</span>] = Num;</span><br><span class="line">    Visited[Num] = <span class="number">1</span>;</span><br><span class="line">    Last = Tail = Num;</span><br><span class="line">    <span class="keyword">while</span>(head &lt; rear )<span class="comment">//当链表为空时</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        P = G[Que[head]]-&gt;Next;</span><br><span class="line">        <span class="keyword">while</span>( P )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!Visited[P-&gt;Value])</span><br><span class="line">            &#123;   </span><br><span class="line">                Visited[P-&gt;Value] =<span class="number">1</span>;</span><br><span class="line">                rear++;</span><br><span class="line">                Que[rear] = P-&gt;Value;</span><br><span class="line">                Tail = P-&gt;Value;</span><br><span class="line">                count++;<span class="comment">/*每个节点出来时都需要统计它的邻接点，</span></span><br><span class="line"><span class="comment">                		如果是在这个遍历外统计节点时最后的尾结</span></span><br><span class="line"><span class="comment">                		点统计会出现一些小问题*/</span></span><br><span class="line">            &#125;</span><br><span class="line">            P = P-&gt;Next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Que[head] == Last)<span class="comment">//如果当前出队列元素为这层的末尾元素</span></span><br><span class="line">        &#123;</span><br><span class="line">            Last = Tail;</span><br><span class="line">            Level++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Level == <span class="number">6</span>) <span class="keyword">break</span>;<span class="comment">//超过六层就退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    GraphInit();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d: %.2f%%\n&quot;</span>,i,<span class="number">100.0</span> * BFS(i) / N);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-        <category>BFS</category>
-        <category>邻接表</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
-    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
-    <content><![CDATA[<h1 id="图4-哈利波特的考试-25-分">07-图4 哈利·波特的考试 (25 分)</h1>
-<h2 id="题目描述">题目描述</h2>
-<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
-<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
-<h2 id="输出格式">输出格式:</h2>
-<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
-<a id="more"></a>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1 id="题目理解与思路">题目理解与思路</h1>
-<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-        <tag>Floyd算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构与算法刷题笔记6——旅游规划最短路径问题</title>
     <url>/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="图6-旅游规划-25-分">07-图6 旅游规划 (25 分)</h1>
@@ -1478,9 +1492,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <p>Floyd算法是用来求多个源点到其它所有点的最短路径的算法，对于稠密图来说效果更好一点，复杂度为<span class="math inline">\(O(V^{3})\)</span>​，其思想是动态规划的思想，每次迭代就比较源点 I 到一个节点K的距离加上K到目标节点 J 的距离是否小于源点 I 直接到目标节点 J 的距离，小于的时候就动态更新节点 J 的路径和最小距离，通过多次迭代来留下最小的各点到各点的距离值。</p>
 <h1 id="附记">附记</h1>
 <p>从今日开始，增肌期结束💪，我将进入减脂期，会在每天的文章最后更新当日的体重噢🤸🏻🤸🏻🤸🏻</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg" alt="IMG_20210802_112256" /><figcaption aria-hidden="true">IMG_20210802_112256</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210802112328.jpg" alt="IMG_20210802_112256" /></p>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
@@ -1490,6 +1502,36 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       <tags>
         <tag>Dijkstra</tag>
         <tag>Floyd</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
+    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
+    <content><![CDATA[<h1 id="图4-哈利波特的考试-25-分">07-图4 哈利·波特的考试 (25 分)</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
+<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
+<h2 id="输出格式">输出格式:</h2>
+<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
+<a id="more"></a>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例">输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1 id="题目理解与思路">题目理解与思路</h1>
+<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
+        <tag>Floyd算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1518,9 +1560,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGNode</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V;</span><br><span class="line">    <span class="keyword">int</span> E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxVer][MaxVer];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGNode MGraph;</span><br><span class="line"><span class="keyword">int</span> collected[MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> S[MaxVer];</span><br><span class="line"><span class="keyword">int</span> VisitedE[MaxVer][MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">creatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,V1,V2,D,j;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">            &#123;</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">                S[i] = <span class="number">-1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;D);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = D;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">findRoot</span><span class="params">(<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(S[V] &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> S[V] = findRoot(S[V]);<span class="comment">//路径压缩</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Union</span><span class="params">(<span class="keyword">int</span> Root1,<span class="keyword">int</span> Root2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(S[Root1] &lt; S[Root2])</span><br><span class="line">    &#123;</span><br><span class="line">        S[Root1] += S[Root2];</span><br><span class="line">        S[Root2] = Root1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        S[Root2] += S[Root1];</span><br><span class="line">        S[Root1] = Root2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Kruskal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MinEdge,sum;</span><br><span class="line">    <span class="keyword">int</span> V1,V2,p1,p2;</span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> num = Graph-&gt;V;</span><br><span class="line">    <span class="keyword">while</span>(num &gt; <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        MinEdge = Inf;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;E;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(j=i;j&lt;Graph-&gt;E;j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>((Graph-&gt;G[i][j] &lt; MinEdge)&amp;&amp;(VisitedE[i][j] == <span class="number">0</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    MinEdge = Graph-&gt;G[i][j];</span><br><span class="line">                    V1 = i,V2 = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MinEdge == Inf)<span class="keyword">break</span>;</span><br><span class="line">        VisitedE[V1][V2] = <span class="number">1</span>;</span><br><span class="line">        VisitedE[V2][V1] = <span class="number">1</span>;</span><br><span class="line">        p1 = findRoot(V1);</span><br><span class="line">        p2 = findRoot(V2);</span><br><span class="line">        <span class="keyword">if</span>(p1 != p2)&#123;</span><br><span class="line">        sum += MinEdge;</span><br><span class="line">        num--;</span><br><span class="line">        Union(V1,V2);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(num &gt; <span class="number">1</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;-1\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,sum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = creatGraph(V,E);</span><br><span class="line">    Kruskal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="后记">后记</h1>
 <p>今日体重</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108031650116.png" alt="image-20210803165011918" /><figcaption aria-hidden="true">image-20210803165011918</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108031650116.png" alt="image-20210803165011918" /></p>
 <p>今天的体重是脱了鞋称的，所以比昨天轻很多2333</p>
 ]]></content>
       <categories>
@@ -1565,9 +1605,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Bubble_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,flag;</span><br><span class="line">    <span class="keyword">for</span>(i = N<span class="number">-1</span>;i &gt;= <span class="number">0</span>;i--)</span><br><span class="line">    &#123;</span><br><span class="line">        flag = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; i;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Data[j] &gt; Data[j+<span class="number">1</span>])</span><br><span class="line">            &#123;</span><br><span class="line">                swap(&amp;Data[j],&amp;Data[j+<span class="number">1</span>]);</span><br><span class="line">                flag = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(flag)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = *A;</span><br><span class="line">    *A = *B;</span><br><span class="line">    *B = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="测试结果">测试结果</h2>
 <p>可以看到数据量才涨到<span class="math inline">\(10^3\)</span>的时候冒泡排序的效率就已经比较差了，等数据量更大了之后如果不是输入已经有序都是超时的</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042102637.png" alt="image-20210804210235543" /><figcaption aria-hidden="true">image-20210804210235543</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042102637.png" alt="image-20210804210235543" /></p>
 <h2 id="小结">小结</h2>
 <ul>
 <li>小结 <strong>最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>​​​，如果数组基本有序，那么经过若干趟排序之后数组就可能是有序的，所以可能复杂度是<span class="math inline">\(O(N)\)</span>​，所以通过了测试点7</strong> 评价：交换排序，简单排序，最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>，在数组基本有序的情况下时间复杂度可能是<span class="math inline">\(O(N)\)</span>​​​​。空间复杂度<span class="math inline">\(O(1)\)</span>。</li>
@@ -1580,9 +1618,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> Data[],<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Insersion_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        tmp = Data[i];</span><br><span class="line">        <span class="keyword">for</span>(j = i;j &gt; <span class="number">0</span> &amp;&amp; tmp &lt; Data[j<span class="number">-1</span>];j--)</span><br><span class="line">            Data[j] = Data[j<span class="number">-1</span>];</span><br><span class="line">        Data[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="测试结果-1">测试结果</h2>
 <p>可以看到插入排序的效果貌似略好于冒泡排序，因为它的稳定性比较好，比较的次数大概率是小于冒泡排序的</p>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042310285.png" alt="image-20210804231041200" /><figcaption aria-hidden="true">image-20210804231041200</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042310285.png" alt="image-20210804231041200" /></p>
 <p>可以看出来插入排序虽然全部测试点都通过了，但是有几个测试点的数据依然比较慢，但是插入排序的测试结果整体是好于冒泡的；</p>
 <p>插入排序的空间复杂度为<span class="math inline">\(O(1)\)</span>，插入排序的时间复杂度最坏是<span class="math inline">\(O(N^2)\)</span>​，是所有数据都处于逆序状态时才会遇到的情况，绝大多数情况下不会遇到，而在数组基本有序的情况下，插入排序甚至都不用移动几次就能够完成排序，所以时间复杂度可能直接降为<span class="math inline">\(O(N)\)</span>​；</p>
 <p>插入和冒泡需要完成的交换次数都是相当的，这是由于插入和冒泡每次都只交换相邻的两个元素，这使得他们每次交换都只能消去一个<strong>逆序对</strong>，由此，为了使每次交换都消除更多的逆序对便产生了对插入排序优化后的希尔排序</p>
@@ -1591,9 +1627,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <h2 id="代码-2">代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*原始希尔排序*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp,D;</span><br><span class="line">    <span class="keyword">for</span>(D = N/<span class="number">2</span>;D &gt; <span class="number">0</span>;D = D/<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 希尔排序 - 用Sedgewick增量序列 */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">     <span class="keyword">int</span> Si, D, P, i,j,tmp;</span><br><span class="line">     <span class="comment">/* 这里只列出一小部分增量 */</span></span><br><span class="line">     <span class="keyword">int</span> Sedgewick[] = &#123;<span class="number">929</span>, <span class="number">505</span>, <span class="number">209</span>, <span class="number">109</span>, <span class="number">41</span>, <span class="number">19</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">for</span> ( Si=<span class="number">0</span>; Sedgewick[Si]&gt;=N; Si++ );</span><br><span class="line">    <span class="comment">/* 初始的增量Sedgewick[Si]不能超过待排序列长度 */</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span> ( D=Sedgewick[Si]; D&gt;<span class="number">0</span>; D=Sedgewick[++Si] )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="测试结果-2">测试结果</h2>
-<figure>
-<img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042340791.png" alt="image-20210804234044710" /><figcaption aria-hidden="true">image-20210804234044710</figcaption>
-</figure>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042340791.png" alt="image-20210804234044710" /></p>
 <p>从测试结果来看，希尔排序相对于插入排序已经快了很多，说明相对于插入排序已经优化了很多，但是希尔排序需要它的序列选取比较好才会有比较好的效果，目前人们一般认为对于Sedgewick增量序列：<span class="math inline">\(9\times 4^i-9\times2^i\)</span>​或<span class="math inline">\(4^i-3\times2^i+1\)</span>​的时间复杂度为<span class="math inline">\(T_{arg} = O(N^{7/6})\)</span>,<span class="math inline">\(T_{worst} = O(4/3)\)</span></p>
 <h1 id="后记">后记</h1>
 <p>今日体重，82.95kg，测量于晚饭后，早上刚起床时候还是81.9kg，感觉很不真实，就没有把欺骗自己的体重放出来</p>
@@ -1649,41 +1683,6 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
-    <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
-    <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
-    <content><![CDATA[<h1 id="图1-列出连通集-25-分pta">06-图1 列出连通集 (25 分)——PTA</h1>
-<p>给定一个有<em>N</em>个顶点和<em>E</em>条边的无向图，请用DFS和BFS分别列出其所有的连通集。假设顶点从0到<em>N</em>−1编号。进行搜索时，假设我们总是从编号最小的顶点出发，按编号递增的顺序访问邻接点。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入第1行给出2个整数<em>N</em>(0&lt;<em>N</em>≤10)和<em>E</em>，分别是图的顶点数和边数。随后<em>E</em>行，每行给出一条边的两个端点。每行中的数字之间用1空格分隔。</p>
-<h2 id="输出格式">输出格式:</h2>
-<p>按照"{ <em>v</em>1 <em>v</em>2 ... *v**k* }"的格式，每行输出一个连通集。先输出DFS的结果，再输出BFS的结果。</p>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8 6</span><br><span class="line">0 7</span><br><span class="line">0 1</span><br><span class="line">2 0</span><br><span class="line">4 1</span><br><span class="line">2 4</span><br><span class="line">3 5</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; 0 1 4 2 7 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br><span class="line">&#123; 0 1 2 7 4 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="题目理解">题目理解</h2>
-<p>本题给了我们几组数据用来建图，在建图完成后需要我们使用DFS与BFS遍历整个图然后按照遍历的顺序输出每个连通的图的节点的值</p>
-<h2 id="解题思路">解题思路</h2>
-<p>根据要求走就行了，建图，然后DFS和BFS//第一个完全靠自己写出来的图的题，不容易啊😭😭😭</p>
-<p>本文使用的是邻接矩阵来表示图</p>
-<p>在使用BFS进行遍历时，因为数据量比较小，所以只需要使用一个数组和两个作为头尾的数字就能作为队列</p>
-<a id="more"></a>
-<h2 id="代码">代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVertexNum 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> E,V;<span class="comment">//分别为边数E和顶点数V</span></span><br><span class="line">    <span class="keyword">int</span> G[MaxVertexNum][MaxVertexNum];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Visited[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//是否访问过该节点</span></span><br><span class="line"><span class="keyword">int</span> Q[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//用来做队列的数组</span></span><br><span class="line"><span class="function">MGraph <span class="title">CreatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//建图，初始化图的边和节点值</span></span><br><span class="line">    <span class="keyword">int</span> i,m,n;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph -&gt; V = V;</span><br><span class="line">    Graph -&gt; E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;m,&amp;n);</span><br><span class="line">        Graph-&gt;G[m][n] = <span class="number">1</span>;</span><br><span class="line">        Graph-&gt;G[n][m] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入一个节点就把访问过的标记为True</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,x);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((Graph-&gt;G[i][x] == <span class="number">1</span>) &amp;&amp; (!Visited[i]))<span class="comment">//使用DFS访问节点x相邻且没有被访问过的节点</span></span><br><span class="line">        &#123;</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetGraph</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;MaxVertexNum;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,head,rear;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;</span><br><span class="line">    Q[<span class="number">0</span>] = x;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入BFS时把BFS的入口节点视为访问过</span></span><br><span class="line">    <span class="keyword">while</span>(head != rear)<span class="comment">//当队列不为空</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Q[head]);<span class="comment">//输出头结点</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;<span class="comment">//遍历所有节点，如果是头结点的邻接点且没有被访问过则入队</span></span><br><span class="line">            <span class="keyword">if</span>(!Visited[i] &amp;&amp; (Graph-&gt;G[i][Q[head]] == <span class="number">1</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                rear++;</span><br><span class="line">                Q[rear] = i;</span><br><span class="line">                Visited[i] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E,i;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    Graph = CreatGraph(V,E);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ResetGraph(Graph);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            BFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-        <category>BFS</category>
-        <category>DFS</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-        <tag>DFS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构刷题笔记3——拯救詹姆斯邦德</title>
     <url>/2021/07/29/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%8B%AF%E6%95%91%E8%A9%B9%E5%A7%86%E6%96%AF%E9%82%A6%E5%BE%B7/</url>
     <content><![CDATA[<h1 id="图2-saving-james-bond---easy-version-25-分">06-图2 Saving James Bond - Easy Version (25 分)</h1>
@@ -1728,6 +1727,41 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
+    <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
+    <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="图1-列出连通集-25-分pta">06-图1 列出连通集 (25 分)——PTA</h1>
+<p>给定一个有<em>N</em>个顶点和<em>E</em>条边的无向图，请用DFS和BFS分别列出其所有的连通集。假设顶点从0到<em>N</em>−1编号。进行搜索时，假设我们总是从编号最小的顶点出发，按编号递增的顺序访问邻接点。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入第1行给出2个整数<em>N</em>(0&lt;<em>N</em>≤10)和<em>E</em>，分别是图的顶点数和边数。随后<em>E</em>行，每行给出一条边的两个端点。每行中的数字之间用1空格分隔。</p>
+<h2 id="输出格式">输出格式:</h2>
+<p>按照"{ <em>v</em>1 <em>v</em>2 ... *v**k* }"的格式，每行输出一个连通集。先输出DFS的结果，再输出BFS的结果。</p>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8 6</span><br><span class="line">0 7</span><br><span class="line">0 1</span><br><span class="line">2 0</span><br><span class="line">4 1</span><br><span class="line">2 4</span><br><span class="line">3 5</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例">输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; 0 1 4 2 7 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br><span class="line">&#123; 0 1 2 7 4 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="题目理解">题目理解</h2>
+<p>本题给了我们几组数据用来建图，在建图完成后需要我们使用DFS与BFS遍历整个图然后按照遍历的顺序输出每个连通的图的节点的值</p>
+<h2 id="解题思路">解题思路</h2>
+<p>根据要求走就行了，建图，然后DFS和BFS//第一个完全靠自己写出来的图的题，不容易啊😭😭😭</p>
+<p>本文使用的是邻接矩阵来表示图</p>
+<p>在使用BFS进行遍历时，因为数据量比较小，所以只需要使用一个数组和两个作为头尾的数字就能作为队列</p>
+<a id="more"></a>
+<h2 id="代码">代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVertexNum 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> E,V;<span class="comment">//分别为边数E和顶点数V</span></span><br><span class="line">    <span class="keyword">int</span> G[MaxVertexNum][MaxVertexNum];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Visited[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//是否访问过该节点</span></span><br><span class="line"><span class="keyword">int</span> Q[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//用来做队列的数组</span></span><br><span class="line"><span class="function">MGraph <span class="title">CreatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//建图，初始化图的边和节点值</span></span><br><span class="line">    <span class="keyword">int</span> i,m,n;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph -&gt; V = V;</span><br><span class="line">    Graph -&gt; E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;m,&amp;n);</span><br><span class="line">        Graph-&gt;G[m][n] = <span class="number">1</span>;</span><br><span class="line">        Graph-&gt;G[n][m] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入一个节点就把访问过的标记为True</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,x);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((Graph-&gt;G[i][x] == <span class="number">1</span>) &amp;&amp; (!Visited[i]))<span class="comment">//使用DFS访问节点x相邻且没有被访问过的节点</span></span><br><span class="line">        &#123;</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetGraph</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;MaxVertexNum;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,head,rear;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;</span><br><span class="line">    Q[<span class="number">0</span>] = x;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入BFS时把BFS的入口节点视为访问过</span></span><br><span class="line">    <span class="keyword">while</span>(head != rear)<span class="comment">//当队列不为空</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Q[head]);<span class="comment">//输出头结点</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;<span class="comment">//遍历所有节点，如果是头结点的邻接点且没有被访问过则入队</span></span><br><span class="line">            <span class="keyword">if</span>(!Visited[i] &amp;&amp; (Graph-&gt;G[i][Q[head]] == <span class="number">1</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                rear++;</span><br><span class="line">                Q[rear] = i;</span><br><span class="line">                Visited[i] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E,i;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    Graph = CreatGraph(V,E);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ResetGraph(Graph);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            BFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>BFS</category>
+        <category>DFS</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
+        <tag>DFS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>自建SSR教程</title>
     <url>/2021/03/04/%E8%87%AA%E5%BB%BASSR%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="自建ssssr教程">自建ss/ssr教程</h1>
@@ -1741,7 +1775,7 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <p><strong>第一步：购买VPS服务器</strong></p>
 <p>VPS服务器需要选择国外的，首选国际知名的vultr，速度不错、稳定且性价比高，按小时计费，能够随时开通和删除服务器，新服务器即是新ip。</p>
 <p>vultr注册地址：https://www.vultr.com/?ref=7048874 （vps最低2.5美元/月，vultr全球17个服务器位置可选，包括日本、韩国、新加坡、洛杉矶、德国、荷兰等。支持支付宝和paypal付款。）</p>
-<p><a href="https://www.vultr.com/?ref=7048874"><img src="https://camo.githubusercontent.com/8caba2064c271f7e6528329d9c91c4c27560606fe6362d556aa7d0103d2eac29/68747470733a2f2f7777772e76756c74722e636f6d2f6d656469612f62616e6e6572732f62616e6e65725f3732387839302e706e67" alt="img" /></a></p>
+<p><a href="https://www.vultr.com/?ref=7048874"><img src="https://camo.githubusercontent.com/8caba2064c271f7e6528329d9c91c4c27560606fe6362d556aa7d0103d2eac29/68747470733a2f2f7777772e76756c74722e636f6d2f6d656469612f62616e6e6572732f62616e6e65725f3732387839302e706e67" /></a></p>
 <p>虽然是英文界面，但是现在的浏览器都有网页翻译功能，鼠标点击右键，选择网页翻译即可翻译成中文。</p>
 <p>注册并邮件激活账号，充值后即可购买服务器。充值方式是支付宝或paypal，使用paypal有银行卡（包括信用卡）即可。paypal注册地址：<a href="https://www.paypal.com/">https://www.paypal.com</a> （paypal是国际知名的第三方支付服务商，注册一下账号，绑定银行卡即可购买国外商品）</p>
 <a id="more"></a>
@@ -1756,81 +1790,43 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <p>vultr实际上是折算成小时来计费的，比如服务器是5美元1个月，那么每小时收费为5/30/24=0.0069美元 会自动从账号中扣费，只要保证账号有钱即可。如果你部署的服务器实测后速度不理想，你可以把它删掉（destroy），重新换个地区的服务器来部署，方便且实用。因为新的服务器就是新的ip，所以当ip被墙时这个方法很有用。当ip被墙时，为了保证新开的服务器ip和原先的ip不一样，先开新服务器，开好后再删除旧服务器即可。在账号的Billing选项里可以看到账户余额。</p>
 <!--more-->
 <p><strong>账号充值如图</strong>：</p>
-<figure>
-<img src="https://camo.githubusercontent.com/512797b7fc840297c5e901d80a080788460c6b35b982b747b4ca02ef105ad92f/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f70703130302e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/1b5250d846c97d4a15c452c7fa4f67660817c1374409f68d8e3dcdaf15dbdfa0/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f70703130312e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/512797b7fc840297c5e901d80a080788460c6b35b982b747b4ca02ef105ad92f/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f70703130302e706e67" /></p>
+<p><img src="https://camo.githubusercontent.com/1b5250d846c97d4a15c452c7fa4f67660817c1374409f68d8e3dcdaf15dbdfa0/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f70703130312e706e67" /></p>
 <p><strong>开通服务器步骤如图</strong>：</p>
-<figure>
-<img src="https://camo.githubusercontent.com/9515afc76315dee9a2c37c809e0e38cb60fc157ceafb446d2071c4b693d0cba4/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472312e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/8a4052f8fba72e9e00886cf152d0f296514634efbf3aaab188f8b9085a09ec1b/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472322e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/2ad7da69e453efaefe1f8ff34c37682fb7a89cb3d3275a28bb765706ff3f3b13/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472332e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/9515afc76315dee9a2c37c809e0e38cb60fc157ceafb446d2071c4b693d0cba4/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472312e504e47" /></p>
+<p><img src="https://camo.githubusercontent.com/8a4052f8fba72e9e00886cf152d0f296514634efbf3aaab188f8b9085a09ec1b/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472322e504e47" /></p>
+<p><img src="https://camo.githubusercontent.com/2ad7da69e453efaefe1f8ff34c37682fb7a89cb3d3275a28bb765706ff3f3b13/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472332e504e47" /></p>
 <h3 id="点击图中的centos几个字会弹出选项然后选中centos6或7-不要选默认的centos8脚本不支持centos8">点击图中的CentOS几个字，会弹出选项，然后选中centos6或7！ （不要选默认的centos8，脚本不支持centos8！）</h3>
-<figure>
-<img src="https://camo.githubusercontent.com/b58d21b997258d310dd8530ecad919247396e859c86b234373b1b492d4d0af3c/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472342e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/66ca92e4683e07fe68f1cb8edb2acea9bb414b08bbe8720e77c315d7aaee9dce/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472352e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/a844f35807f29b4a4d9e798052033e80a812c009db09712ded16d34dea258414/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472362e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/b58d21b997258d310dd8530ecad919247396e859c86b234373b1b492d4d0af3c/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472342e504e47" /></p>
+<p><img src="https://camo.githubusercontent.com/66ca92e4683e07fe68f1cb8edb2acea9bb414b08bbe8720e77c315d7aaee9dce/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472352e504e47" /></p>
+<p><img src="https://camo.githubusercontent.com/a844f35807f29b4a4d9e798052033e80a812c009db09712ded16d34dea258414/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f76756c7472362e504e47" /></p>
 <p><strong>开通服务器时，当出现了ip，不要立马去ping或者用xshell去连接，再等5分钟之后，有个缓冲时间。完成购买后，找到系统的密码记下来，部署服务器时需要用到。vps系统密码获取方法如下图：</strong></p>
-<figure>
-<img src="https://camo.githubusercontent.com/21f87c9b5604582f633fd30b7d00a59687c65ff0b764c5a7db3366cbb95b2ec8/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f6372705f75702f70616325453625393525393925453725413825384230352e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/18682cec86277948b122a9e1b71c5392f2281f671d31735495173087d2cf3452/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f6372705f75702f70616325453625393525393925453725413825384230362e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/21f87c9b5604582f633fd30b7d00a59687c65ff0b764c5a7db3366cbb95b2ec8/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f6372705f75702f70616325453625393525393925453725413825384230352e706e67" /></p>
+<p><img src="https://camo.githubusercontent.com/18682cec86277948b122a9e1b71c5392f2281f671d31735495173087d2cf3452/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f6372705f75702f70616325453625393525393925453725413825384230362e706e67" /></p>
 <p><strong>删掉服务器步骤如下图</strong>：</p>
 <p>删除服务器时，先开新的服务器后再删除旧服务器，这样可以保证新服务器的ip与旧ip不同。</p>
-<figure>
-<img src="https://camo.githubusercontent.com/cc15ca0d3c4f2de59a63e6aefe834baa24d838617435da631b78fd5a17615519/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f6465342e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/60ea7e6d8663b1074f22366392168943d5235d71a78c50025c4e27cf2ff15923/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f6465322e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/555aa1c20df6c105b280c5e56a9b70914a1a37a290bec8ab1e3ad8e0c7d78323/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f6465352e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/cc15ca0d3c4f2de59a63e6aefe834baa24d838617435da631b78fd5a17615519/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f6465342e504e47" /></p>
+<p><img src="https://camo.githubusercontent.com/60ea7e6d8663b1074f22366392168943d5235d71a78c50025c4e27cf2ff15923/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f6465322e504e47" /></p>
+<p><img src="https://camo.githubusercontent.com/555aa1c20df6c105b280c5e56a9b70914a1a37a290bec8ab1e3ad8e0c7d78323/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f6465352e706e67" /></p>
 <hr />
 <p><strong>第二步：部署VPS服务器</strong></p>
 <p>购买服务器后，需要部署一下。因为你买的是虚拟东西，而且又远在国外，我们需要一个叫Xshell的软件来远程部署。Xshell windows版下载地址：</p>
 <p><a href="https://tr101.free4444.xyz/Xshell_setup_wm.exe">国外云盘1下载</a> <a href="https://tr61.free4444.xyz/Xshell_setup_wm.exe">国外云盘2下载</a> <a href="https://tr71.free4444.xyz/Xshell_setup_wm.exe">国外云盘3下载</a></p>
 <p>如果你是Mac苹果电脑操作系统，更简单，无需下载xshell，系统可以直接连接VPS。直接打开Terminal终端，输入：ssh root@43.45.43.21（将45.45.43.21换成你的IP），之后输入你的密码就可以登录了（输入密码的时候屏幕上不会有显示）</p>
-<figure>
-<img src="https://camo.githubusercontent.com/8b4690232baa54101cc70f3d0151ab58cf9d54fae97874c55e3a1a18f6699c45/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f4d61632e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/8b4690232baa54101cc70f3d0151ab58cf9d54fae97874c55e3a1a18f6699c45/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f4d61632e706e67" /></p>
 <p>如果不能用Mac自带的终端连接的话，直接网上搜“Mac连接SSH的软件”，有很多，然后通过软件来连接vps服务器就行，具体操作方式参考windows xshell。Mac成功连接vps后剩下的操作和windows一样。</p>
 <hr />
 <p>部署教程：</p>
 <p>下载windows xshell软件并安装后，打开软件</p>
-<figure>
-<img src="https://camo.githubusercontent.com/94a8616faaa2ad7f514433fdc58690c07ff396d68dd825387bc7603ba99f3655/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31312e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/94a8616faaa2ad7f514433fdc58690c07ff396d68dd825387bc7603ba99f3655/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31312e706e67" alt="img" /></p>
 <p>选择文件，新建</p>
-<figure>
-<img src="https://camo.githubusercontent.com/09e7281a5e514313d1ced5fe9d46a255353ddedefebd1bc10a8ee9434a719c57/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31322e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/09e7281a5e514313d1ced5fe9d46a255353ddedefebd1bc10a8ee9434a719c57/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31322e706e67" alt="img" /></p>
 <p>随便取个名字，然后把你的服务器ip填上</p>
-<figure>
-<img src="https://camo.githubusercontent.com/381e03d70eb46a2c5dc636ee71ed0db85ecdaee7d51a02528b29a8af66b35509/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31332e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/381e03d70eb46a2c5dc636ee71ed0db85ecdaee7d51a02528b29a8af66b35509/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31332e706e67" alt="img" /></p>
 <p>连接国外ip即服务器时，软件会先后提醒你输入用户名和密码，用户名默认都是root，密码是你购买的服务器系统的密码。</p>
 <p><strong>如果xshell连不上服务器，没有弹出让你输入用户名和密码的输入框，表明你开到的ip是一个被墙的ip，遇到这种情况，重新开新的服务器，直到能用xshell连上为止，耐心点哦！如果同一个地区开了多台服务器还是不行的话，可以换其它地区。</strong></p>
-<figure>
-<img src="https://camo.githubusercontent.com/fd2deccd9cb508d537446c43b91f746bcaf4c27cb72d6cd6abc8b1bfe3302146/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31342e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/b4a1ccb8ef6c89490d294861a9b025df1ed2a3b90836117fa47dc784ef4169e3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f787368656c6c322e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/fd2deccd9cb508d537446c43b91f746bcaf4c27cb72d6cd6abc8b1bfe3302146/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f787368656c6c31342e706e67" alt="img" /></p>
+<p><img src="https://camo.githubusercontent.com/b4a1ccb8ef6c89490d294861a9b025df1ed2a3b90836117fa47dc784ef4169e3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f787368656c6c322e706e67" alt="img" /></p>
 <p>连接成功后，会出现如上图所示，之后就可以复制粘贴代码部署了。</p>
 <p><strong>CentOS 6和7/Debian6+/Ubuntu14+ ShadowsocksR/Shadowsocks一键部署管理脚本：</strong></p>
 <p><strong>脚本一(SSR)，安装完成后，快捷管理命令：bash ssr.sh</strong></p>
@@ -1849,56 +1845,32 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 </blockquote>
 <hr />
 <p>复制上面的<strong>脚本一代码</strong>到VPS服务器里，复制代码用鼠标右键的复制（整个代码一起复制，而不是分段哦！），然后在vps里面右键粘贴进去，因为ctrl+c和ctrl+v无效。接着按回车键，脚本会自动安装，以后只需要运行这个快捷命令就可以出现下图的界面进行设置，快捷管理命令为：bash ssr.sh</p>
-<figure>
-<img src="https://camo.githubusercontent.com/74a61877f22fa65efa57b54d182d9b4231493d6e229e2bbb26e6417029fe6c28/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f382e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/74a61877f22fa65efa57b54d182d9b4231493d6e229e2bbb26e6417029fe6c28/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f382e706e67" alt="img" /></p>
 <p>如上图出现管理界面后，<strong>输入数字1来安装SSR服务端</strong>。如果输入1后不能进入下一步，那么请退出xshell，重新连接vps服务器，然后输入快捷管理命令bash ssr.sh 再尝试。</p>
-<figure>
-<img src="https://camo.githubusercontent.com/9b03e6f675fbc2bac38e97f8b76aae0b96c2cf93bd2e394f2c9d58d560eb0311/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33312e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/9b03e6f675fbc2bac38e97f8b76aae0b96c2cf93bd2e394f2c9d58d560eb0311/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33312e706e67" alt="img" /></p>
 <p>根据上图提示，依次输入自己想设置的<strong>端口和密码</strong> (<strong>密码建议用复杂点的字母组合，端口号为40-65535之间的数字</strong>)，回车键用于确认</p>
 <p>注：关于端口的设置，总的网络总端口有6万多个，理论上可以任意设置，但不要以0开头！但是有的地区需要设置特殊的端口才有效，一些特殊的端口比如80、143、443、1433、3306、3389、8080。</p>
-<figure>
-<img src="https://camo.githubusercontent.com/27880ffcd56cf87b7cf1309110e5777dd7e41642beb58b774062fc9d894e7f52/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33322e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/27880ffcd56cf87b7cf1309110e5777dd7e41642beb58b774062fc9d894e7f52/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33322e706e67" alt="img" /></p>
 <p>如上图，选择想设置的<strong>加密方式</strong>，比如10，按回车键确认</p>
 <p>接下来是选择<strong>协议插件</strong>，如下图：</p>
-<figure>
-<img src="https://camo.githubusercontent.com/b165dfc754bd8627550b36c17a048ac94284a28b08a42020eb0e5d50b86a69ba/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31312e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/ad320b6dc25699280c386d0cb42c1fb727f9cbb1e0bb8b61fc19a4d7629f05c7/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f34312e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/b165dfc754bd8627550b36c17a048ac94284a28b08a42020eb0e5d50b86a69ba/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31312e706e67" alt="img" /></p>
+<p><img src="https://camo.githubusercontent.com/ad320b6dc25699280c386d0cb42c1fb727f9cbb1e0bb8b61fc19a4d7629f05c7/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f34312e504e47" alt="img" /></p>
 <p>选择并确认后，会出现上图的界面，提示你是否选择兼容原版，这里的原版指的是SS客户端（SS客户端没有协议和混淆的选项），可以根据需求进行选择，演示选择y</p>
 <p>之后进行混淆插件的设置。</p>
 <p><strong>注意：如果协议是origin，那么混淆也必须是plain；如果协议不是origin，那么混淆可以是任意的。有的地区需要把混淆设置成plain才好用。因为混淆不总是有效果，要看各地区的策略，有时候不混淆（plain）或者（origin和plain一起使用），让其看起来像随机数据更好。（特别注意：tls 1.2_ticket_auth容易受到干扰！请选择除tls开头以外的其它混淆！！！）</strong></p>
-<figure>
-<img src="https://camo.githubusercontent.com/1375917c57f5bd2242431cb6bc2366e52ea7770548214ab887bc153b8a74aa83/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33332e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/1375917c57f5bd2242431cb6bc2366e52ea7770548214ab887bc153b8a74aa83/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33332e706e67" alt="img" /></p>
 <p>进行混淆插件的设置后，会依次提示你对设备数、单线程限速和端口总限速进行设置，默认值是不进行限制，个人使用的话，选择默认即可，即直接敲回车键。</p>
 <p>注意：关于限制设备数，这个协议必须是非原版且不兼容原版才有效，也就是必须使用SSR协议的情况下，才有效！</p>
-<figure>
-<img src="https://camo.githubusercontent.com/51a16d7b1e91a8525d2212c81e50607cdd2c8f7e056dde0e0f3a1ee5ee0aacc3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31342e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/51a16d7b1e91a8525d2212c81e50607cdd2c8f7e056dde0e0f3a1ee5ee0aacc3/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31342e706e67" alt="img" /></p>
 <p>之后代码就正式自动部署了，到下图所示的位置，提示你下载文件，输入：y</p>
-<figure>
-<img src="https://camo.githubusercontent.com/60aed25a115a5932c1e3a85e1c5d70b9337356c61c2ace26653a9f660354227b/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31352e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/60aed25a115a5932c1e3a85e1c5d70b9337356c61c2ace26653a9f660354227b/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31352e706e67" alt="img" /></p>
 <p>耐心等待一会，出现下面的界面即部署完成：</p>
-<figure>
-<img src="https://camo.githubusercontent.com/5acc4e0da95115d7aac45a56b00b42f3ecfa8c39a8bb486123ff3fb920cb4c69/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31362e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/75fe024be2624866eb23a8520be8d9c703d22948a92441717034c1ab93e51f98/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33342e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/5acc4e0da95115d7aac45a56b00b42f3ecfa8c39a8bb486123ff3fb920cb4c69/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f31362e706e67" alt="img" /></p>
+<p><img src="https://camo.githubusercontent.com/75fe024be2624866eb23a8520be8d9c703d22948a92441717034c1ab93e51f98/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f33342e706e67" alt="img" /></p>
 <p>根据上图就可以看到自己设置的SSR账号信息，包括IP、端口、密码、加密方式、协议插件、混淆插件，这些信息需要填入你的SSR客户端。提醒一下：二维码链接地址由于域名失效不可用，所以部署好的账号需要自己在客户端里面手动填写信息。</p>
 <p>如果之后想修改账号信息，直接输入快捷管理命令：bash ssr.sh 进入管理界面，选择相应的数字来进行一键修改。例如：</p>
-<figure>
-<img src="https://camo.githubusercontent.com/08274855140e8d2feabfdfa5ef4e9dbce1f731e2154eb4e8e59eeb59d7b58cb1/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f32322e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/137c8539ef43bd97a3c35faf339930b4bac10231f432ea9e4c719751ca8aebfe/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f32332e706e67" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/08274855140e8d2feabfdfa5ef4e9dbce1f731e2154eb4e8e59eeb59d7b58cb1/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f32322e706e67" alt="img" /></p>
+<p><img src="https://camo.githubusercontent.com/137c8539ef43bd97a3c35faf339930b4bac10231f432ea9e4c719751ca8aebfe/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f73732f32332e706e67" alt="img" /></p>
 <p><strong>脚本演示结束。</strong></p>
 <p>此脚本是开机自动启动，部署一次即可。最后可以重启服务器确保部署生效（一般情况不重启也可以）。重启需要在命令栏里输入reboot ，输入命令后稍微等待一会服务器就会自动重启，一般重启过程需要2～5分钟，重启过程中Xshell会自动断开连接，等VPS重启好后才可以用Xshell软件进行连接。如果部署过程中卡在某个位置超过10分钟，可以用xshell软件断开，然后重新连接你的ip，再复制代码进行部署。</p>
 <p><strong>注意：如果创建的是centos7的服务器，需要使用命令关闭防火墙，否则无法使用代理。CentOS 7.0默认使用的是firewall作为防火墙。</strong></p>
@@ -1914,31 +1886,19 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <p>如果提示 wget: command not found 的错误，这是你的系统精简的太干净了，wget都没有安装，所以需要安装wget。CentOS系统安装wget命令: yum install -y wget Debian/Ubuntu系统安装wget命令:apt-get install -y wget</p>
 </blockquote>
 <p>安装完成后，脚本管理命令为：./tcp.sh</p>
-<figure>
-<img src="https://camo.githubusercontent.com/e6d49f52edd130193d5f52e1da0ca2052ab56fa0091b04531645b38246f31459/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272312e6a7067" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/e6d49f52edd130193d5f52e1da0ca2052ab56fa0091b04531645b38246f31459/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272312e6a7067" alt="img" /></p>
 <p>操作方法：先安装内核，重启vps让内核生效，再启动对应的加速即可。数字1的BBR/BBR魔改内核对应数字4、5、6的BBR加速、BBR魔改加速和暴力BBR魔改版加速。数字2的BBRplus内核对应数字7的BBRplus加速。数字3的锐速加速内核对应数字8的锐速加速。</p>
 <p>以安装暴力BBR魔改版加速为例，我们先安装对应的内核，输入数字1</p>
-<figure>
-<img src="https://camo.githubusercontent.com/11855b550bfe50040f9febedcc7f6aa4ec20c5e88eab90a9b7b7f6b78a276a8a/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272322e6a7067" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/11855b550bfe50040f9febedcc7f6aa4ec20c5e88eab90a9b7b7f6b78a276a8a/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272322e6a7067" alt="img" /></p>
 <p>内核安装完成后，输入y进行重启，重启才能让内核生效</p>
-<figure>
-<img src="https://camo.githubusercontent.com/ff9e008ca6061d92eecf3eb55f00d8aebfa85301a759318ac8dc4a447fef97d1/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272332e6a7067" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/ff9e008ca6061d92eecf3eb55f00d8aebfa85301a759318ac8dc4a447fef97d1/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272332e6a7067" alt="img" /></p>
 <p>重启完成后，输入数字6来启动暴力BBR魔改版加速</p>
-<figure>
-<img src="https://camo.githubusercontent.com/fdb4ed21c5db3b5344d0f631a98e317b5cf60ab2aa3b3d73f6192a3473fb0091/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272342e6a7067" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="https://camo.githubusercontent.com/55f3bfacee04be5c21cc15e5b6c1772ea34d56e1668354b801026765b5c29f16/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272352e6a7067" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/fdb4ed21c5db3b5344d0f631a98e317b5cf60ab2aa3b3d73f6192a3473fb0091/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272342e6a7067" alt="img" /></p>
+<p><img src="https://camo.githubusercontent.com/55f3bfacee04be5c21cc15e5b6c1772ea34d56e1668354b801026765b5c29f16/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272352e6a7067" alt="img" /></p>
 <p>输入./tcp.sh查看最终是否启动成功。</p>
 <p>如果想换一个加速，输入数字9进行卸载加速，然后进行同样的操作，安装内核再安装对应内核的加速即可。</p>
 <p><strong>注意：如果在安装内核环节出现这样一张图，注意选择NO</strong></p>
-<figure>
-<img src="https://camo.githubusercontent.com/11e23104c37a2bf3ef44bab2af125c6de46c118200f6d6b3fe45ee91e52b1baf/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272362e6a7067" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/11e23104c37a2bf3ef44bab2af125c6de46c118200f6d6b3fe45ee91e52b1baf/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f706163322f76756c74722f6e6577626272362e6a7067" alt="img" /></p>
 <hr />
 <p>【SSR客户端下载】</p>
 <p>第一次电脑系统使用SSR/SS客户端时，如果提示你需要安装NET Framework 4.0，网上搜一下这个东西，安装一下即可。NET Framework 4.0是SSR/SS的运行库，没有这个SSR/SS客户端无法正常运行。有的电脑系统可能会自带NET Framework 4.0。</p>
@@ -1951,20 +1911,14 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 <p><a href="http://www.mediafire.com/folder/sfqz8bmodqdx5/shadowsocks相关客户端">全平台SS/SSR客户端下载汇总</a></p>
 <hr />
 <p><strong>有了账号后，打开SSR客户端，填上信息，这里以windows版的SSR客户端为例子</strong>：</p>
-<figure>
-<img src="https://camo.githubusercontent.com/7d2a9a9257b3ae7d21dd3f03537dd6da3be6ad74464114abf0b341465b21bf35/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f34322e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/7d2a9a9257b3ae7d21dd3f03537dd6da3be6ad74464114abf0b341465b21bf35/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f34322e504e47" alt="img" /></p>
 <p>在对应的位置，填上服务器ip、服务器端口、密码、加密方式、协议和混淆，最后将浏览器的代理设置为（http）127.0.0.1和1080即可。账号的端口号就是你自己设置的，而要上网的浏览器的端口号是1080，固定的，谷歌浏览器可以通过 SwitchyOmega 插件来设置。</p>
 <p>下载插件：<a href="https://github.com/atrandys/trojan/releases/download/1.0.0/SwitchyOmega_Chromium.crx">switchyomega</a></p>
 <p>安装插件，打开chrome，打开扩展程序，将下载的插件拖动到扩展程序页面，添加到扩展。 <img src="https://user-images.githubusercontent.com/12132898/70548725-0461d000-1bae-11ea-9d1e-4577e36ac46e.png" alt="20181116000534" /></p>
 <p>完成添加，会跳转到switchyomega页面，点跳过教程，然后点击proxy，如图填写，最后点击应用选项。</p>
-<figure>
-<img src="https://camo.githubusercontent.com/589c30b98af69729b6eef30b83f835d84040662cb65002d03b243400186681da/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f7373726b7a2e504e47" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://camo.githubusercontent.com/589c30b98af69729b6eef30b83f835d84040662cb65002d03b243400186681da/68747470733a2f2f63646e2e6a7364656c6976722e6e65742f67682f416c76696e393939392f5041432f64656d6f2f7373726b7a2e504e47" alt="img" /></p>
 <p>启动SSR客户端后，右键SSR客户端图标，选择第一个“系统代理模式”，里面有3个子选项，选择"全局模式“，之后就可以用浏览器设置好了的代理模式（http）127.0.0.1和1080翻墙，此模式下所有的网站都会走SSR代理。</p>
-<figure>
-<img src="https://user-images.githubusercontent.com/12132898/32225069-cfe6195a-be7e-11e7-99e0-e2fa98f93b1f.png" alt="ssr9000" /><figcaption aria-hidden="true">ssr9000</figcaption>
-</figure>
+<p><img src="https://user-images.githubusercontent.com/12132898/32225069-cfe6195a-be7e-11e7-99e0-e2fa98f93b1f.png" alt="ssr9000" /></p>
 <hr />
 <p><strong>常见问题及解决方法</strong>：</p>
 <p><strong>1、搭建的账号之前能用，突然不能用了，怎么解决？</strong></p>
