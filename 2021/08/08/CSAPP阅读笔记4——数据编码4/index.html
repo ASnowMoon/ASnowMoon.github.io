@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="¶浮点数2 ¶舍入 对于浮点数的加法和乘法来说，我们可以先计算出准确值，然后转换到合适的精度。在这个过程中，既可能会溢出，也可能需要舍入来满足 frac 的精度。 在二进制中，我们舍入到最近的偶数，即如果出现在中间的情况，舍入之后最右边的值要是偶数，对于十进制数，例子如下： 12345  原数值       舍入结果    原因2.8949999      2.89    #不到一半，正常四舍五入">
+<meta name="description" content="浮点数2 舍入 对于浮点数的加法和乘法来说，我们可以先计算出准确值，然后转换到合适的精度。在这个过程中，既可能会溢出，也可能需要舍入来满足 frac 的精度。 在二进制中，我们舍入到最近的偶数，即如果出现在中间的情况，舍入之后最右边的值要是偶数，对于十进制数，例子如下： 12345  原数值       舍入结果    原因2.8949999      2.89    #不到一半，正常四舍">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSAPP阅读笔记4——数据编码4">
 <meta property="og:url" content="https://www.snowmoon.top/2021/08/08/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%814/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="¶浮点数2 ¶舍入 对于浮点数的加法和乘法来说，我们可以先计算出准确值，然后转换到合适的精度。在这个过程中，既可能会溢出，也可能需要舍入来满足 frac 的精度。 在二进制中，我们舍入到最近的偶数，即如果出现在中间的情况，舍入之后最右边的值要是偶数，对于十进制数，例子如下： 12345  原数值       舍入结果    原因2.8949999      2.89    #不到一半，正常四舍五入">
+<meta property="og:description" content="浮点数2 舍入 对于浮点数的加法和乘法来说，我们可以先计算出准确值，然后转换到合适的精度。在这个过程中，既可能会溢出，也可能需要舍入来满足 frac 的精度。 在二进制中，我们舍入到最近的偶数，即如果出现在中间的情况，舍入之后最右边的值要是偶数，对于十进制数，例子如下： 12345  原数值       舍入结果    原因2.8949999      2.89    #不到一半，正常四舍">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108090008183.png">
 <meta property="article:published_time" content="2021-08-08T08:30:00.000Z">
@@ -213,7 +213,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -360,19 +360,19 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="浮点数2"><a class="header-anchor" href="#浮点数2">¶</a>浮点数2</h1>
-<h2 id="舍入"><a class="header-anchor" href="#舍入">¶</a>舍入</h2>
+        <h1 id="浮点数2">浮点数2</h1>
+<h2 id="舍入">舍入</h2>
 <p>对于浮点数的加法和乘法来说，我们可以先计算出准确值，然后转换到合适的精度。在这个过程中，既可能会溢出，也可能需要舍入来满足 frac 的精度。</p>
 <p>在二进制中，我们舍入到最近的偶数，即如果出现在中间的情况，舍入之后最右边的值要是偶数，对于十进制数，例子如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  原数值       舍入结果    原因</span><br><span class="line"><span class="number">2.8949999</span>      <span class="number">2.89</span>    <span class="comment">#不到一半，正常四舍五入</span></span><br><span class="line"><span class="number">2.8950001</span>      <span class="number">2.90</span>    <span class="comment">#超过一般，正常四舍五入</span></span><br><span class="line"><span class="number">2.8950000</span>      <span class="number">2.90</span>    <span class="comment">#刚好在一半时，保证最后一位是偶数，所以向上舍入</span></span><br><span class="line"><span class="number">2.8850000</span>      <span class="number">2.88</span>    <span class="comment">#刚好在一半时，保证最后一位是偶数，所以向下舍入</span></span><br></pre></td></tr></table></figure>
 <p>对于二进制数也是类似的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  十进制    二进制     舍入结果  十进制    原因</span><br><span class="line">2 又 3&#x2F;32  10.00011   10.00     2    \\不到一半，正常四舍五入</span><br><span class="line">2 又 3&#x2F;16  10.00110   10.01  2 又 1&#x2F;4 \\超过一般，正常四舍五入</span><br><span class="line">2 又 7&#x2F;8   10.11100   11.00     3    \\刚好在一半时，保证最后一位是偶数，所以向上舍入</span><br><span class="line">2 又 5&#x2F;8   10.10100   10.10  2 又 1&#x2F;2 \\刚好在一半时，保证最后一位是偶数，所以向下舍入</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<h3 id="浮点数加法"><a class="header-anchor" href="#浮点数加法">¶</a>浮点数加法</h3>
-<p>$$<br>
-(−1)<sup>{s1}M_12</sup>{E1}+(−1)<sup>{s2}M_22</sup>{E2}<br>
-$$</p>
-<p>这里假设 E1&gt;E2，结果是 $(−1)<sup>sM2</sup>E$ ，其中 $s=s1∧s2,M=M1+M2,E=E1$</p>
+<h3 id="浮点数加法">浮点数加法</h3>
+<p><span class="math display">\[
+(−1)^{s1}M_12^{E1}+(−1)^{s2}M_22^{E2}
+\]</span></p>
+<p>这里假设 E1&gt;E2，结果是 <span class="math inline">\((−1)^sM2^E\)</span> ，其中 <span class="math inline">\(s=s1∧s2,M=M1+M2,E=E1\)</span></p>
 <ul>
 <li>如果 M 大于等于 2，那么把 M 右移，并增加 E 的值</li>
 <li>如果 M 小于 1，把 M 左移 k 位，E 减少 k</li>
@@ -386,13 +386,13 @@ $$</p>
 <li>不满足结合律（因为舍入会造成精度损失，如 <code>(3.14+1e10)-1e10=0</code>，但 <code>3.14+(1e10-1e10)=3.14</code>）</li>
 <li>加上 0 等于原来的数</li>
 <li>除了 infinity 和 NaN，每个元素都有对应的倒数</li>
-<li>除了 infinity 和 NaN，满足单调性，即 $a≥b→a+c≥b+c$</li>
+<li>除了 infinity 和 NaN，满足单调性，即 <span class="math inline">\(a≥b→a+c≥b+c\)</span></li>
 </ul>
-<h3 id="浮点数乘法"><a class="header-anchor" href="#浮点数乘法">¶</a>浮点数乘法</h3>
-<p>$$<br>
-(−1)<sup>{s1}M_12</sup>{E1}×(−1)<sup>{s2}M_22</sup>{E2}<br>
-$$</p>
-<p>结果是 $(−1)<sup>sM2</sup>E$，其中 $s=s1∧s2,M=M1×M2,E=E1+E2$</p>
+<h3 id="浮点数乘法">浮点数乘法</h3>
+<p><span class="math display">\[
+(−1)^{s1}M_12^{E1}×(−1)^{s2}M_22^{E2}
+\]</span></p>
+<p>结果是 <span class="math inline">\((−1)^sM2^E\)</span>，其中 <span class="math inline">\(s=s1∧s2,M=M1×M2,E=E1+E2\)</span></p>
 <ul>
 <li>如果 M 大于等于 2，那么把 M 右移，并增加 E 的值。</li>
 <li>如果 E 超出了可以表示的范围，溢出</li>
@@ -407,9 +407,9 @@ $$</p>
 <li>不满足分配率 <code>1e20*(1e20-1e20)=0.0</code> 但 <code>1e20*1e20-1e20*1e20=NaN</code></li>
 <li>除了 infinity 和 NaN，满足单调性，即 a≥b→a×c≥a×b</li>
 </ul>
-<h1 id="今日体重"><a class="header-anchor" href="#今日体重">¶</a>今日体重</h1>
+<h1 id="今日体重">今日体重</h1>
 <p>又回去了，虽然跑了个一两天步，但感觉总体运动量还是不太够</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108090008183.png" alt="image-20210809000841088"></p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108090008183.png" alt="image-20210809000841088" /></p>
 
     </div>
 
@@ -467,7 +467,7 @@ $$</p>
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/08/09/CSAPPLAB1%E2%80%94%E2%80%94Datalab/" rel="next" title="CSAPPLAB1——Datalab">
+                <a href="/2021/08/09/CSAPPLAB1%E2%80%94%E2%80%94Datalab(%E4%B8%8A)/" rel="next" title="CSAPPLAB1——Datalab">
                   CSAPPLAB1——Datalab <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -525,14 +525,14 @@ $$</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">57k</span>
+    <span title="站点总字数">58k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:38</span>
+    <span title="站点阅读时长">2:42</span>
   </span>
 </div>
 <div class="busuanzi-count">

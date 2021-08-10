@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="¶浮点数 浮点数的定义： $$ d&#x3D;\sum_{i&#x3D;-n}m2i \times d_i $$ 这个定义导致我们只有在表示$\frac{x}{2^k}$时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。 ¶IEEE 浮点数标准 以下内容引用自文章【读薄 CSAPP】壹 数据表示 IEEE 的浮点数标准更多是从数值角度来建立的">
+<meta name="description" content="浮点数 浮点数的定义： \[ d&#x3D;\sum_{i&#x3D;-n}^m2^i \times d_i \] 这个定义导致我们只有在表示\(\frac{x}{2^k}\)时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。 IEEE 浮点数标准 以下内容引用自文章【读薄 CSAPP】壹 数据表示 IEEE 的浮点数标准更多是从">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSAPP阅读笔记3——数据编码3">
 <meta property="og:url" content="https://www.snowmoon.top/2021/08/07/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="¶浮点数 浮点数的定义： $$ d&#x3D;\sum_{i&#x3D;-n}m2i \times d_i $$ 这个定义导致我们只有在表示$\frac{x}{2^k}$时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。 ¶IEEE 浮点数标准 以下内容引用自文章【读薄 CSAPP】壹 数据表示 IEEE 的浮点数标准更多是从数值角度来建立的">
+<meta property="og:description" content="浮点数 浮点数的定义： \[ d&#x3D;\sum_{i&#x3D;-n}^m2^i \times d_i \] 这个定义导致我们只有在表示\(\frac{x}{2^k}\)时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。 IEEE 浮点数标准 以下内容引用自文章【读薄 CSAPP】壹 数据表示 IEEE 的浮点数标准更多是从">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108081400558.png">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080019434.png">
@@ -198,7 +198,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">浮点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IEEE-%E6%B5%AE%E7%82%B9%E6%95%B0%E6%A0%87%E5%87%86"><span class="nav-number">1.1.</span> <span class="nav-text">IEEE 浮点数标准</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8A%E6%97%A5%E4%BD%93%E9%87%8D"><span class="nav-number">2.</span> <span class="nav-text">今日体重</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">浮点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ieee-%E6%B5%AE%E7%82%B9%E6%95%B0%E6%A0%87%E5%87%86"><span class="nav-number">1.1.</span> <span class="nav-text">IEEE 浮点数标准</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8A%E6%97%A5%E4%BD%93%E9%87%8D"><span class="nav-number">2.</span> <span class="nav-text">今日体重</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -214,7 +214,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -361,63 +361,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="浮点数"><a class="header-anchor" href="#浮点数">¶</a>浮点数</h1>
-<p>浮点数的定义：<br>
-$$<br>
-d=\sum_{i=-n}<sup>m2</sup>i \times d_i<br>
-$$<br>
-这个定义导致我们只有在表示$\frac{x}{2^k}$时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。</p>
-<h2 id="IEEE-浮点数标准"><a class="header-anchor" href="#IEEE-浮点数标准">¶</a>IEEE 浮点数标准</h2>
+        <h1 id="浮点数">浮点数</h1>
+<p>浮点数的定义： <span class="math display">\[
+d=\sum_{i=-n}^m2^i \times d_i
+\]</span> 这个定义导致我们只有在表示<span class="math inline">\(\frac{x}{2^k}\)</span>时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。</p>
+<h2 id="ieee-浮点数标准">IEEE 浮点数标准</h2>
 <p>以下内容引用自文章<a target="_blank" rel="noopener" href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p>
 <p>IEEE 的浮点数标准更多是从数值角度来建立的，对于舍入，上溢出和下溢出都有比较统一的处理方法。但与此同时也给硬件优化带来了比较大的困难。因为和平时使用的数制也有一定差异，从理解的角度来看不够直观，但是好在主流的 CPU 都支持浮点数，所以我们不必过多涉及这方面的细节。</p>
-<p>在 IEEE 标准中，我们用下面的公式来表达浮点数：<br>
-$$<br>
-(−1)<sup>sM2</sup>E<br>
-$$</p>
-<a id="more"></a>
+<p>在 IEEE 标准中，我们用下面的公式来表达浮点数： <span class="math display">\[
+(−1)^sM2^E
+\]</span> <a id="more"></a></p>
 <p>其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：</p>
 <p>下图中 <code>s</code> 对应着符号位，<code>exp</code> 对应着 E（注意，不一定等于 E，因为位数限制表达能力有限），<code>frac</code> 对应着 <code>M</code>（注意，不一定等于 <code>M</code>，因为位数限制表达能力有限）。不同的位数就代表了不同的表示能力，也就是单精度，双精度，扩展精度的来源。</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108081400558.png" alt="image-20210808140048419"></p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108081400558.png" alt="image-20210808140048419" /></p>
 <table>
 <thead>
-<tr>
-<th style="text-align:center">形式</th>
-<th style="text-align:center">指数</th>
-<th style="text-align:center">小数部分</th>
+<tr class="header">
+<th style="text-align: center;">形式</th>
+<th style="text-align: center;">指数</th>
+<th style="text-align: center;">小数部分</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:center">零</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">0</td>
+<tr class="odd">
+<td style="text-align: center;">零</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
 </tr>
-<tr>
-<td style="text-align:center">非规约形式</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">大于0小于1</td>
+<tr class="even">
+<td style="text-align: center;">非规约形式</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">大于0小于1</td>
 </tr>
-<tr>
-<td style="text-align:center">规约形式</td>
-<td style="text-align:center">1到$2^e-2$</td>
-<td style="text-align:center">大于等于1小于2</td>
+<tr class="odd">
+<td style="text-align: center;">规约形式</td>
+<td style="text-align: center;">1到<span class="math inline">\(2^e-2\)</span></td>
+<td style="text-align: center;">大于等于1小于2</td>
 </tr>
-<tr>
-<td style="text-align:center">无穷</td>
-<td style="text-align:center">$2^e-1$</td>
-<td style="text-align:center">$0$</td>
+<tr class="even">
+<td style="text-align: center;">无穷</td>
+<td style="text-align: center;"><span class="math inline">\(2^e-1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
 </tr>
-<tr>
-<td style="text-align:center">NaN</td>
-<td style="text-align:center">$2^e-1$</td>
-<td style="text-align:center">非0</td>
+<tr class="odd">
+<td style="text-align: center;">NaN</td>
+<td style="text-align: center;"><span class="math inline">\(2^e-1\)</span></td>
+<td style="text-align: center;">非0</td>
 </tr>
 </tbody>
 </table>
 <p>例子如下</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">    s exp  frac   E   值</span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">000</span>   -<span class="number">6</span>   <span class="number">0</span>   <span class="comment"># 这部分是非规范化数值，下一部分是规范化值</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> 001   -<span class="number">6</span>   <span class="number">1</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">1</span>/<span class="number">512</span> <span class="comment"># 能表示的最接近零的值</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> 010   -<span class="number">6</span>   <span class="number">2</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">2</span>/<span class="number">512</span> </span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">110</span>   -<span class="number">6</span>   <span class="number">6</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">6</span>/<span class="number">512</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">111</span>   -<span class="number">6</span>   <span class="number">7</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">7</span>/<span class="number">512</span> <span class="comment"># 能表示的最大非规范化值</span></span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> 0001 <span class="number">000</span>   -<span class="number">6</span>   <span class="number">8</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">8</span>/<span class="number">512</span> <span class="comment"># 能表示的最小规范化值</span></span><br><span class="line">    <span class="number">0</span> 0001 001   -<span class="number">6</span>   <span class="number">9</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">9</span>/<span class="number">512</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> 0110 <span class="number">110</span>   -<span class="number">1</span>   <span class="number">14</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">2</span> = <span class="number">14</span>/<span class="number">16</span></span><br><span class="line">    <span class="number">0</span> 0110 <span class="number">111</span>   -<span class="number">1</span>   <span class="number">15</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">2</span> = <span class="number">15</span>/<span class="number">16</span> <span class="comment"># 最接近且小于 1 的值</span></span><br><span class="line">    <span class="number">0</span> 0111 <span class="number">000</span>    <span class="number">0</span>   <span class="number">8</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">1</span></span><br><span class="line">    <span class="number">0</span> 0111 001    <span class="number">0</span>   <span class="number">9</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">9</span>/<span class="number">8</span>      <span class="comment"># 最接近且大于 1 的值</span></span><br><span class="line">    <span class="number">0</span> 0111 010    <span class="number">0</span>   <span class="number">10</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">10</span>/<span class="number">8</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> <span class="number">1110</span> <span class="number">110</span>    <span class="number">7</span>   <span class="number">14</span>/<span class="number">8</span> * <span class="number">128</span> = <span class="number">224</span></span><br><span class="line">    <span class="number">0</span> <span class="number">1110</span> <span class="number">111</span>    <span class="number">7</span>   <span class="number">15</span>/<span class="number">8</span> * <span class="number">128</span> = <span class="number">240</span>   <span class="comment"># 能表示的最大规范化值</span></span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> <span class="number">1111</span> <span class="number">000</span>   n/a  无穷               <span class="comment"># 特殊值</span></span><br></pre></td></tr></table></figure>
-<h1 id="今日体重"><a class="header-anchor" href="#今日体重">¶</a>今日体重</h1>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080019434.png" alt="image-20210808001912353"></p>
+<h1 id="今日体重">今日体重</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080019434.png" alt="image-20210808001912353" /></p>
 
     </div>
 
@@ -533,14 +529,14 @@ $$</p>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">57k</span>
+    <span title="站点总字数">58k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:38</span>
+    <span title="站点阅读时长">2:42</span>
   </span>
 </div>
 <div class="busuanzi-count">

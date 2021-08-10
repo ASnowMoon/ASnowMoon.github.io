@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="¶09-排序1 排序（冒泡、插入、希尔） 给定N个（长整型范围内的）整数，要求输出从小到大排序后的结果。 本题旨在测试各种不同的排序算法在各种数据情况下的表现。各组测试数据特点如下： 数据1：只有$1$个元素； 数据2：$11$个不相同的整数，测试基本正确性； 数据3：$10^3$个随机整数； 数据4：$10^4$个随机整数； 数据5：$10^5$个随机整数； 数据6：$10^5$个顺序整数； 数">
+<meta name="description" content="09-排序1 排序（冒泡、插入、希尔） 给定N个（长整型范围内的）整数，要求输出从小到大排序后的结果。 本题旨在测试各种不同的排序算法在各种数据情况下的表现。各组测试数据特点如下： 数据1：只有\(1\)个元素； 数据2：\(11\)个不相同的整数，测试基本正确性； 数据3：\(10^3\)个随机整数； 数据4：\(10^4\)个随机整数； 数据5：\(10^5\)个随机整数； 数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构与算法刷题笔记8——排序（冒泡、插入、希尔）">
 <meta property="og:url" content="https://www.snowmoon.top/2021/08/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="¶09-排序1 排序（冒泡、插入、希尔） 给定N个（长整型范围内的）整数，要求输出从小到大排序后的结果。 本题旨在测试各种不同的排序算法在各种数据情况下的表现。各组测试数据特点如下： 数据1：只有$1$个元素； 数据2：$11$个不相同的整数，测试基本正确性； 数据3：$10^3$个随机整数； 数据4：$10^4$个随机整数； 数据5：$10^5$个随机整数； 数据6：$10^5$个顺序整数； 数">
+<meta property="og:description" content="09-排序1 排序（冒泡、插入、希尔） 给定N个（长整型范围内的）整数，要求输出从小到大排序后的结果。 本题旨在测试各种不同的排序算法在各种数据情况下的表现。各组测试数据特点如下： 数据1：只有\(1\)个元素； 数据2：\(11\)个不相同的整数，测试基本正确性； 数据3：\(10^3\)个随机整数； 数据4：\(10^4\)个随机整数； 数据5：\(10^5\)个随机整数； 数">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042102637.png">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042310285.png">
@@ -200,7 +200,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#09-%E6%8E%92%E5%BA%8F1-%E6%8E%92%E5%BA%8F%EF%BC%88%E5%86%92%E6%B3%A1%E3%80%81%E6%8F%92%E5%85%A5%E3%80%81%E5%B8%8C%E5%B0%94%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">09-排序1 排序（冒泡、插入、希尔）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">输入格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">输出格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.3.</span> <span class="nav-text">输入样例:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">输出样例:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">冒泡排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.</span> <span class="nav-text">中心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">测试结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">2.4.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="nav-number">3.</span> <span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%BF%83%E6%80%9D%E6%83%B3%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">中心思想：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-v2"><span class="nav-number">3.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C-v2"><span class="nav-number">3.3.</span> <span class="nav-text">测试结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F"><span class="nav-number">4.</span> <span class="nav-text">希尔排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-v3"><span class="nav-number">4.1.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C-v3"><span class="nav-number">4.2.</span> <span class="nav-text">测试结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F1-%E6%8E%92%E5%BA%8F%E5%86%92%E6%B3%A1%E6%8F%92%E5%85%A5%E5%B8%8C%E5%B0%94"><span class="nav-number">1.</span> <span class="nav-text">09-排序1 排序（冒泡、插入、希尔）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">输入格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">输出格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.3.</span> <span class="nav-text">输入样例:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">输出样例:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">冒泡排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.</span> <span class="nav-text">中心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">测试结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">2.4.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="nav-number">3.</span> <span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%BF%83%E6%80%9D%E6%83%B3-1"><span class="nav-number">3.1.</span> <span class="nav-text">中心思想：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-1"><span class="nav-number">3.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C-1"><span class="nav-number">3.3.</span> <span class="nav-text">测试结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F"><span class="nav-number">4.</span> <span class="nav-text">希尔排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-2"><span class="nav-number">4.1.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C-2"><span class="nav-number">4.2.</span> <span class="nav-text">测试结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -216,7 +216,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -345,7 +345,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.5k</span>
+      <span>3.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -363,67 +363,62 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="09-排序1-排序（冒泡、插入、希尔）"><a class="header-anchor" href="#09-排序1-排序（冒泡、插入、希尔）">¶</a>09-排序1 排序（冒泡、插入、希尔）</h1>
+        <h1 id="排序1-排序冒泡插入希尔">09-排序1 排序（冒泡、插入、希尔）</h1>
 <p>给定<em>N</em>个（长整型范围内的）整数，要求输出从小到大排序后的结果。</p>
 <p>本题旨在测试各种不同的排序算法在各种数据情况下的表现。各组测试数据特点如下：</p>
-<p>数据1：只有$1$个元素；</p>
-<p>数据2：$11$个不相同的整数，测试基本正确性；</p>
-<p>数据3：$10^3$个随机整数；</p>
-<p>数据4：$10^4$个随机整数；</p>
-<p>数据5：$10^5$个随机整数；</p>
-<p>数据6：$10^5$个顺序整数；</p>
-<p>数据7：$10^5$个逆序整数；</p>
-<p>数据8：$10^5$个基本有序的整数；</p>
-<p>数据9：$10^5$个随机正整数，每个数字不超过$1000$。</p>
-<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
-<p>输入第一行给出正整数<em>N</em>$(≤10^5)$，随后一行给出<em>N</em>个（长整型范围内的）整数，其间以空格分隔。</p>
+<p>数据1：只有<span class="math inline">\(1\)</span>个元素；</p>
+<p>数据2：<span class="math inline">\(11\)</span>个不相同的整数，测试基本正确性；</p>
+<p>数据3：<span class="math inline">\(10^3\)</span>个随机整数；</p>
+<p>数据4：<span class="math inline">\(10^4\)</span>个随机整数；</p>
+<p>数据5：<span class="math inline">\(10^5\)</span>个随机整数；</p>
+<p>数据6：<span class="math inline">\(10^5\)</span>个顺序整数；</p>
+<p>数据7：<span class="math inline">\(10^5\)</span>个逆序整数；</p>
+<p>数据8：<span class="math inline">\(10^5\)</span>个基本有序的整数；</p>
+<p>数据9：<span class="math inline">\(10^5\)</span>个随机正整数，每个数字不超过<span class="math inline">\(1000\)</span>。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入第一行给出正整数<em>N</em><span class="math inline">\((≤10^5)\)</span>，随后一行给出<em>N</em>个（长整型范围内的）整数，其间以空格分隔。</p>
 <a id="more"></a>
-<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
+<h2 id="输出格式">输出格式:</h2>
 <p>在一行中输出从小到大排序后的结果，数字间以1个空格分隔，行末不得有多余空格。</p>
-<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
+<h2 id="输入样例">输入样例:</h2>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">11</span><br><span class="line">4 981 10 -17 0 -20 29 50 8 43 -5</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
+<h2 id="输出样例">输出样例:</h2>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-20 -17 -5 0 4 8 10 29 43 50 981</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1 id="冒泡排序"><a class="header-anchor" href="#冒泡排序">¶</a>冒泡排序</h1>
-<h2 id="中心思想"><a class="header-anchor" href="#中心思想">¶</a>中心思想</h2>
+<h1 id="冒泡排序">冒泡排序</h1>
+<h2 id="中心思想">中心思想</h2>
 <p>多次遍历数组，如果相邻的数字左边比右边大就交换，一趟遍历完后最后一位是最大的数，第二趟遍历后，次大的在倒二；</p>
-<h2 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h2>
+<h2 id="代码">代码</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Bubble_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,flag;</span><br><span class="line">    <span class="keyword">for</span>(i = N<span class="number">-1</span>;i &gt;= <span class="number">0</span>;i--)</span><br><span class="line">    &#123;</span><br><span class="line">        flag = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; i;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Data[j] &gt; Data[j+<span class="number">1</span>])</span><br><span class="line">            &#123;</span><br><span class="line">                swap(&amp;Data[j],&amp;Data[j+<span class="number">1</span>]);</span><br><span class="line">                flag = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(flag)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = *A;</span><br><span class="line">    *A = *B;</span><br><span class="line">    *B = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试结果"><a class="header-anchor" href="#测试结果">¶</a>测试结果</h2>
-<p>可以看到数据量才涨到$10^3$的时候冒泡排序的效率就已经比较差了，等数据量更大了之后如果不是输入已经有序都是超时的</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042102637.png" alt="image-20210804210235543"></p>
-<h2 id="小结"><a class="header-anchor" href="#小结">¶</a>小结</h2>
+<h2 id="测试结果">测试结果</h2>
+<p>可以看到数据量才涨到<span class="math inline">\(10^3\)</span>的时候冒泡排序的效率就已经比较差了，等数据量更大了之后如果不是输入已经有序都是超时的</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042102637.png" alt="image-20210804210235543" /></p>
+<h2 id="小结">小结</h2>
 <ul>
-<li>小结<br>
-<strong>最坏时间复杂度是$O(N^2)$​​​，如果数组基本有序，那么经过若干趟排序之后数组就可能是有序的，所以可能复杂度是$O(N)$​，所以通过了测试点7</strong><br>
-评价：交换排序，简单排序，最坏时间复杂度是$O(N^2)$，在数组基本有序的情况下时间复杂度可能是$O(N)$​​​​。空间复杂度$O(1)$。</li>
+<li>小结 <strong>最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>​​​，如果数组基本有序，那么经过若干趟排序之后数组就可能是有序的，所以可能复杂度是<span class="math inline">\(O(N)\)</span>​，所以通过了测试点7</strong> 评价：交换排序，简单排序，最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>，在数组基本有序的情况下时间复杂度可能是<span class="math inline">\(O(N)\)</span>​​​​。空间复杂度<span class="math inline">\(O(1)\)</span>。</li>
 </ul>
-<h1 id="插入排序"><a class="header-anchor" href="#插入排序">¶</a>插入排序</h1>
-<h2 id="中心思想："><a class="header-anchor" href="#中心思想：">¶</a>中心思想：</h2>
+<h1 id="插入排序">插入排序</h1>
+<h2 id="中心思想-1">中心思想：</h2>
 <p>就像打牌时候整理手牌，一张张的摸牌，每拿入一张牌都插入到手牌中合适的位置，保证每次插入后都是有序的</p>
 <p>可以做的一点优化是用移位来代替交换；</p>
-<h2 id="代码-v2"><a class="header-anchor" href="#代码-v2">¶</a>代码</h2>
+<h2 id="代码-1">代码</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> Data[],<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Insersion_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        tmp = Data[i];</span><br><span class="line">        <span class="keyword">for</span>(j = i;j &gt; <span class="number">0</span> &amp;&amp; tmp &lt; Data[j<span class="number">-1</span>];j--)</span><br><span class="line">            Data[j] = Data[j<span class="number">-1</span>];</span><br><span class="line">        Data[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试结果-v2"><a class="header-anchor" href="#测试结果-v2">¶</a>测试结果</h2>
+<h2 id="测试结果-1">测试结果</h2>
 <p>可以看到插入排序的效果貌似略好于冒泡排序，因为它的稳定性比较好，比较的次数大概率是小于冒泡排序的</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042310285.png" alt="image-20210804231041200"></p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042310285.png" alt="image-20210804231041200" /></p>
 <p>可以看出来插入排序虽然全部测试点都通过了，但是有几个测试点的数据依然比较慢，但是插入排序的测试结果整体是好于冒泡的；</p>
-<p>插入排序的空间复杂度为$O(1)$，插入排序的时间复杂度最坏是$O(N^2)$​，是所有数据都处于逆序状态时才会遇到的情况，绝大多数情况下不会遇到，而在数组基本有序的情况下，插入排序甚至都不用移动几次就能够完成排序，所以时间复杂度可能直接降为$O(N)$​；</p>
+<p>插入排序的空间复杂度为<span class="math inline">\(O(1)\)</span>，插入排序的时间复杂度最坏是<span class="math inline">\(O(N^2)\)</span>​，是所有数据都处于逆序状态时才会遇到的情况，绝大多数情况下不会遇到，而在数组基本有序的情况下，插入排序甚至都不用移动几次就能够完成排序，所以时间复杂度可能直接降为<span class="math inline">\(O(N)\)</span>​；</p>
 <p>插入和冒泡需要完成的交换次数都是相当的，这是由于插入和冒泡每次都只交换相邻的两个元素，这使得他们每次交换都只能消去一个<strong>逆序对</strong>，由此，为了使每次交换都消除更多的逆序对便产生了对插入排序优化后的希尔排序</p>
-<h1 id="希尔排序"><a class="header-anchor" href="#希尔排序">¶</a>希尔排序</h1>
-<p>与插入排序类似，但是每次比较的不是相邻的数，而是距离为某个值的两个元素。要定义一个间隔序列： 从大到小，最后是1<br>
-如Sedgewick序列：<br>
-int Sedgewick[] = {929, 505, 209, 109, 41, 19, 5, 1, 0};<br>
-这个序列中的元素一般要是互质的，这样希尔排序性能才会并较好。</p>
-<h2 id="代码-v3"><a class="header-anchor" href="#代码-v3">¶</a>代码</h2>
+<h1 id="希尔排序">希尔排序</h1>
+<p>与插入排序类似，但是每次比较的不是相邻的数，而是距离为某个值的两个元素。要定义一个间隔序列： 从大到小，最后是1 如Sedgewick序列： int Sedgewick[] = {929, 505, 209, 109, 41, 19, 5, 1, 0}; 这个序列中的元素一般要是互质的，这样希尔排序性能才会并较好。</p>
+<h2 id="代码-2">代码</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*原始希尔排序*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp,D;</span><br><span class="line">    <span class="keyword">for</span>(D = N/<span class="number">2</span>;D &gt; <span class="number">0</span>;D = D/<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 希尔排序 - 用Sedgewick增量序列 */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">     <span class="keyword">int</span> Si, D, P, i,j,tmp;</span><br><span class="line">     <span class="comment">/* 这里只列出一小部分增量 */</span></span><br><span class="line">     <span class="keyword">int</span> Sedgewick[] = &#123;<span class="number">929</span>, <span class="number">505</span>, <span class="number">209</span>, <span class="number">109</span>, <span class="number">41</span>, <span class="number">19</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">for</span> ( Si=<span class="number">0</span>; Sedgewick[Si]&gt;=N; Si++ );</span><br><span class="line">    <span class="comment">/* 初始的增量Sedgewick[Si]不能超过待排序列长度 */</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span> ( D=Sedgewick[Si]; D&gt;<span class="number">0</span>; D=Sedgewick[++Si] )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试结果-v3"><a class="header-anchor" href="#测试结果-v3">¶</a>测试结果</h2>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042340791.png" alt="image-20210804234044710"></p>
-<p>从测试结果来看，希尔排序相对于插入排序已经快了很多，说明相对于插入排序已经优化了很多，但是希尔排序需要它的序列选取比较好才会有比较好的效果，目前人们一般认为对于Sedgewick增量序列：$9\times 4<sup>i-9\times2</sup>i$​或$4<sup>i-3\times2</sup>i+1$​的时间复杂度为$T_{arg} = O(N^{7/6})$,$T_{worst} = O(4/3)$</p>
-<h1 id="后记"><a class="header-anchor" href="#后记">¶</a>后记</h1>
+<h2 id="测试结果-2">测试结果</h2>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042340791.png" alt="image-20210804234044710" /></p>
+<p>从测试结果来看，希尔排序相对于插入排序已经快了很多，说明相对于插入排序已经优化了很多，但是希尔排序需要它的序列选取比较好才会有比较好的效果，目前人们一般认为对于Sedgewick增量序列：<span class="math inline">\(9\times 4^i-9\times2^i\)</span>​或<span class="math inline">\(4^i-3\times2^i+1\)</span>​的时间复杂度为<span class="math inline">\(T_{arg} = O(N^{7/6})\)</span>,<span class="math inline">\(T_{worst} = O(4/3)\)</span></p>
+<h1 id="后记">后记</h1>
 <p>今日体重，82.95kg，测量于晚饭后，早上刚起床时候还是81.9kg，感觉很不真实，就没有把欺骗自己的体重放出来</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042002600.png" alt=""></p>
-<h1 id="参考文章"><a class="header-anchor" href="#参考文章">¶</a>参考文章</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042002600.png" /></p>
+<h1 id="参考文章">参考文章</h1>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bobo1356/article/details/71749720">排序算法-09-排序1 排序 (25分)-第一部分</a></p>
 
     </div>
@@ -540,14 +535,14 @@ int Sedgewick[] = {929, 505, 209, 109, 41, 19, 5, 1, 0};<br>
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">57k</span>
+    <span title="站点总字数">58k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:38</span>
+    <span title="站点阅读时长">2:42</span>
   </span>
 </div>
 <div class="busuanzi-count">

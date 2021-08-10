@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误  ¶TOC定向错误 分析原因： 经过排查，发现原本会被编译为h2 id&#x3D;&quot;title&quot;&gt;title&lt;&#x2F;h2&gt;的代码 现在会被编译为&lt;h2&gt;&lt;span id&#x3D;&quot;title&amp;">
+<meta name="description" content="前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误  分析原因： 经过排查，发现原本会被编译为h2 id&#x3D;&quot;title&quot;&gt;title&lt;&#x2F;h2&gt;的代码 现在会被编译为&lt;h2&gt;&lt;span id&#x3D;&quot;title&quot;&gt;title&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="next踩坑记录——markdown-it引擎渲染导致标题TOC错误">
 <meta property="og:url" content="https://www.snowmoon.top/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误  ¶TOC定向错误 分析原因： 经过排查，发现原本会被编译为h2 id&#x3D;&quot;title&quot;&gt;title&lt;&#x2F;h2&gt;的代码 现在会被编译为&lt;h2&gt;&lt;span id&#x3D;&quot;title&amp;">
+<meta property="og:description" content="前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误  分析原因： 经过排查，发现原本会被编译为h2 id&#x3D;&quot;title&quot;&gt;title&lt;&#x2F;h2&gt;的代码 现在会被编译为&lt;h2&gt;&lt;span id&#x3D;&quot;title&quot;&gt;title&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-03T12:42:53.000Z">
 <meta property="article:modified_time" content="2021-03-03T15:50:23.166Z">
@@ -196,7 +196,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TOC%E5%AE%9A%E5%90%91%E9%94%99%E8%AF%AF"><span class="nav-number">1.</span> <span class="nav-text">TOC定向错误</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%951"><span class="nav-number">1.1.</span> <span class="nav-text">方法1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%952"><span class="nav-number">1.2.</span> <span class="nav-text">方法2</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%951"><span class="nav-number">1.</span> <span class="nav-text">方法1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%952"><span class="nav-number">2.</span> <span class="nav-text">方法2</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -212,7 +212,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -335,7 +335,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>891</span>
+      <span>869</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -354,18 +354,17 @@
     
     <div class="post-body" itemprop="articleBody">
         <blockquote>
-<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误</p>
+<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误</p>
 </blockquote>
-<h1 id="TOC定向错误"><a class="header-anchor" href="#TOC定向错误">¶</a>TOC定向错误</h1>
-<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id=&quot;title&quot;&gt;title&lt;/h2&gt;</code>的代码</p>
-<p>现在会被编译为<code>&lt;h2&gt;&lt;span id=&quot;title&quot;&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
+<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id="title"&gt;title&lt;/h2&gt;</code>的代码</p>
+<p>现在会被编译为<code>&lt;h2&gt;&lt;span id="title"&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
 <p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
-<h2 id="方法1"><a class="header-anchor" href="#方法1">¶</a>方法1</h2>
+<h2 id="方法1">方法1</h2>
 <p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
 <p>但是我的hexo中并没有找到这个目录</p>
 <p>所以我找了另外的</p>
-<h2 id="方法2"><a class="header-anchor" href="#方法2">¶</a>方法2</h2>
+<h2 id="方法2">方法2</h2>
 <a id="more"></a>
 <p>首先安装<code>markdown-it-named-headings</code>插件</p>
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
@@ -375,7 +374,7 @@
 <p>时间不早了，后面有时间再解决</p>
 <blockquote>
 <p>参考文章:</p>
-<p><a target="_blank" rel="noopener" href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a>  <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
+<p><a target="_blank" rel="noopener" href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a> <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
 </blockquote>
 
     </div>
@@ -493,14 +492,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">57k</span>
+    <span title="站点总字数">58k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:38</span>
+    <span title="站点阅读时长">2:42</span>
   </span>
 </div>
 <div class="busuanzi-count">
