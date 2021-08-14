@@ -47,7 +47,7 @@
       </tags>
   </entry>
   <entry>
-    <title>CSAPPLAB1——Datalab</title>
+    <title>CSAPPLAB1——Datalab(上)</title>
     <url>/2021/08/09/CSAPPLAB1%E2%80%94%E2%80%94Datalab(%E4%B8%8A)/</url>
     <content><![CDATA[<blockquote>
 <p>前言：本文为CSAPP3.0配套Lab的刷题笔记，这是第一个lab——Datalab的笔记</p>
@@ -58,62 +58,62 @@
 <li>题解和思路</li>
 <li>解题代码</li>
 </ul>
-<h1 id="bitxor">bitXor</h1>
-<h2 id="题目描述">题目描述</h2>
+<h1 id="bitXor"><a class="header-anchor" href="#bitXor">¶</a>bitXor</h1>
+<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
 <p>只使用按位与非逻辑实现按位异或逻辑</p>
-<h2 id="题解与思路">题解与思路</h2>
+<h2 id="题解与思路"><a class="header-anchor" href="#题解与思路">¶</a>题解与思路</h2>
 <p>排除掉两个不能通过的逻辑，写成的代码就能通过。</p>
 <p>即：把x与y相同的答案都否定掉</p>
-<h2 id="代码">代码</h2>
+<h2 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * bitXor - x^y using only ~ and &amp; </span></span><br><span class="line"><span class="comment"> *   Example: bitXor(4, 5) = 1</span></span><br><span class="line"><span class="comment"> *   Legal ops: ~ &amp;</span></span><br><span class="line"><span class="comment"> *   Max ops: 14</span></span><br><span class="line"><span class="comment"> *   Rating: 1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bitXor</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> ~(~x&amp;~y)&amp;~(x&amp;y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="tmin">tmin</h1>
-<h2 id="题目描述-1">题目描述</h2>
+<h1 id="tmin"><a class="header-anchor" href="#tmin">¶</a>tmin</h1>
+<h2 id="题目描述-v2"><a class="header-anchor" href="#题目描述-v2">¶</a>题目描述</h2>
 <p>返回补码表示数字的最小值。</p>
-<h2 id="题解与思路-1">题解与思路</h2>
+<h2 id="题解与思路-v2"><a class="header-anchor" href="#题解与思路-v2">¶</a>题解与思路</h2>
 <p>补码的最小值是符号位为1，其余均为0，所以返回这个数字就行了。</p>
 <p>我的思路也很简单粗暴，直接通过移位得到</p>
 <a id="more"></a>
-<h2 id="代码-1">代码</h2>
+<h2 id="代码-v2"><a class="header-anchor" href="#代码-v2">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * tmin - return minimum two&#x27;s complement integer </span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 4</span></span><br><span class="line"><span class="comment"> *   Rating: 1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tmin</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0xff</span>&lt;&lt;<span class="number">31</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="istmax">isTmax</h1>
-<h2 id="题目描述-2">题目描述</h2>
+<h1 id="isTmax"><a class="header-anchor" href="#isTmax">¶</a>isTmax</h1>
+<h2 id="题目描述-v3"><a class="header-anchor" href="#题目描述-v3">¶</a>题目描述</h2>
 <p>判断一个数是不是补码表示的最大数字，是则返回1，否返回0</p>
-<h2 id="题解与思路-2">题解与思路</h2>
+<h2 id="题解与思路-v3"><a class="header-anchor" href="#题解与思路-v3">¶</a>题解与思路</h2>
 <p>补码最大数字应该是符号位为0，其余位均为1，所以将它向左移1位再加1之后得到的应该是全为1的数，此时再按位取反后就得到0，再用逻辑非判断即可。</p>
 <p>需要注意的是，补码表示的-1进行上述操作后得到的也是一样的结果，所以要把-1排除了，方法是按位取反得到0，然后用逻辑非把这个结果否定了。</p>
-<h2 id="代码-2">代码</h2>
+<h2 id="代码-v3"><a class="header-anchor" href="#代码-v3">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * isTmax - returns 1 if x is the maximum, two&#x27;s complement number,</span></span><br><span class="line"><span class="comment"> *     and 0 otherwise </span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | +</span></span><br><span class="line"><span class="comment"> *   Max ops: 10</span></span><br><span class="line"><span class="comment"> *   Rating: 1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isTmax</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> !(~(x+x+<span class="number">1</span>))&amp;!!(~x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="alloddbits">allOddBits</h1>
-<h2 id="题目描述-3">题目描述</h2>
+<h1 id="allOddBits"><a class="header-anchor" href="#allOddBits">¶</a>allOddBits</h1>
+<h2 id="题目描述-v4"><a class="header-anchor" href="#题目描述-v4">¶</a>题目描述</h2>
 <p>判断所有奇数位是否都为1，如果都为1返回1，否则返回0</p>
 <p>PS：这里的位置编号是从0到31</p>
-<h2 id="题解与思路-3">题解与思路</h2>
+<h2 id="题解与思路-v4"><a class="header-anchor" href="#题解与思路-v4">¶</a>题解与思路</h2>
 <p>由于只能使用0x00到0xFF间的16进制数，故需要每8位判断1次，所以要考虑移位8、16、24位之后的数字，然后按位取反后与0xAA进行&amp;操作，如果x的奇数位上均为1，取反后应该均为0，与0xAA进行&amp;操作后应均为0，所以再对这个式子求一个逻辑非即可</p>
-<h2 id="代码-3">代码</h2>
+<h2 id="代码-v4"><a class="header-anchor" href="#代码-v4">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * allOddBits - return 1 if all odd-numbered bits in word set to 1</span></span><br><span class="line"><span class="comment"> *   where bits are numbered from 0 (least significant) to 31 (most significant)</span></span><br><span class="line"><span class="comment"> *   Examples allOddBits(0xFFFFFFFD) = 0, allOddBits(0xAAAAAAAA) = 1</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 12</span></span><br><span class="line"><span class="comment"> *   Rating: 2</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">allOddBits</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> !(~(x &amp; (x &gt;&gt; <span class="number">8</span>) &amp; (x &gt;&gt; <span class="number">16</span>) &amp; (x &gt;&gt; <span class="number">24</span>)) &amp; <span class="number">0xAA</span>);</span><br><span class="line"> &#125;</span><br><span class="line"><span class="comment">/* </span></span><br></pre></td></tr></table></figure>
-<h1 id="negate">negate</h1>
-<h2 id="题目描述-4">题目描述</h2>
+<h1 id="negate"><a class="header-anchor" href="#negate">¶</a>negate</h1>
+<h2 id="题目描述-v5"><a class="header-anchor" href="#题目描述-v5">¶</a>题目描述</h2>
 <p>不用<code>-</code>操作符返回数字的负值</p>
-<h2 id="题解与思路-4">题解与思路</h2>
+<h2 id="题解与思路-v5"><a class="header-anchor" href="#题解与思路-v5">¶</a>题解与思路</h2>
 <p>补码的正常表示，按位取反加一</p>
-<h2 id="代码-4">代码</h2>
+<h2 id="代码-v5"><a class="header-anchor" href="#代码-v5">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * negate - return -x </span></span><br><span class="line"><span class="comment"> *   Example: negate(1) = -1.</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 5</span></span><br><span class="line"><span class="comment"> *   Rating: 2</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">negate</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> ~x+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="isasciidigit">isAsciiDigit</h1>
-<h2 id="题目描述-5">题目描述</h2>
-<p>判断一个数是否是数字'0'到'9'的ASCII码，也即判断一个数字是否位于0x30与0x39之间</p>
-<h2 id="题解与思路-5">题解与思路</h2>
+<h1 id="isAsciiDigit"><a class="header-anchor" href="#isAsciiDigit">¶</a>isAsciiDigit</h1>
+<h2 id="题目描述-v6"><a class="header-anchor" href="#题目描述-v6">¶</a>题目描述</h2>
+<p>判断一个数是否是数字’0’到’9’的ASCII码，也即判断一个数字是否位于0x30与0x39之间</p>
+<h2 id="题解与思路-v6"><a class="header-anchor" href="#题解与思路-v6">¶</a>题解与思路</h2>
 <p>若要位于0x30与0x39之间，则这个数减去0x30&gt;=0;减去0x3a&lt;0</p>
-<h2 id="代码-5">代码</h2>
+<h2 id="代码-v6"><a class="header-anchor" href="#代码-v6">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * isAsciiDigit - return 1 if 0x30 &lt;= x &lt;= 0x39 (ASCII codes for characters &#x27;0&#x27; to &#x27;9&#x27;)</span></span><br><span class="line"><span class="comment"> *   Example: isAsciiDigit(0x35) = 1.</span></span><br><span class="line"><span class="comment"> *            isAsciiDigit(0x3a) = 0.</span></span><br><span class="line"><span class="comment"> *            isAsciiDigit(0x05) = 0.</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 15</span></span><br><span class="line"><span class="comment"> *   Rating: 3</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isAsciiDigit</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> !((x+~<span class="number">0x30</span>+<span class="number">1</span>)&gt;&gt;<span class="number">31</span>)&amp;!~((x+~<span class="number">0X3a</span>+<span class="number">1</span>)&gt;&gt;<span class="number">31</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="conditional">conditional</h1>
-<h2 id="题目描述-6">题目描述</h2>
+<h1 id="conditional"><a class="header-anchor" href="#conditional">¶</a>conditional</h1>
+<h2 id="题目描述-v7"><a class="header-anchor" href="#题目描述-v7">¶</a>题目描述</h2>
 <p>返回操作结果与语句<code>x ? y : z</code>相同，也即x为1返回y，x为0返回z</p>
-<h2 id="题解与思路-6">题解与思路</h2>
-<p>先把x利用逻辑非<code>!</code>转换为0或1，保证我们需要转换的只有0或1，然后接下来就是把0或1转换之后造出一个`<code>0x00000000</code>或者<code>0xffffffff</code>再与y和z进行相应的与操作保留y/z即可。</p>
-<h2 id="代码-6">代码</h2>
+<h2 id="题解与思路-v7"><a class="header-anchor" href="#题解与思路-v7">¶</a>题解与思路</h2>
+<p>先把x利用逻辑非<code>!</code>转换为0或1，保证我们需要转换的只有0或1，然后接下来就是把0或1转换之后造出一个``0x00000000<code>或者</code>0xffffffff`再与y和z进行相应的与操作保留y/z即可。</p>
+<h2 id="代码-v7"><a class="header-anchor" href="#代码-v7">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * conditional - same as x ? y : z </span></span><br><span class="line"><span class="comment"> *   Example: conditional(2,4,5) = 4</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 16</span></span><br><span class="line"><span class="comment"> *   Rating: 3</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">conditional</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (~!!x+<span class="number">1</span>&amp;y)|(~!x+<span class="number">1</span>&amp;z);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="今日体重">今日体重</h1>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108100047882.png" alt="image-20210810004740111" /></p>
+<h1 id="今日体重"><a class="header-anchor" href="#今日体重">¶</a>今日体重</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108100047882.png" alt="image-20210810004740111"></p>
 ]]></content>
       <categories>
         <category>CSAPPLAB</category>
@@ -125,7 +125,7 @@
       </tags>
   </entry>
   <entry>
-    <title>CSAPPLAB1——Datalab</title>
+    <title>CSAPPLAB1——Datalab(下)</title>
     <url>/2021/08/10/CSAPPLAB2%E2%80%94%E2%80%94Datalab(%E4%B8%8B)/</url>
     <content><![CDATA[<blockquote>
 <p>前言：本文为CSAPP3.0配套Lab的刷题笔记，这是第一个lab——Datalab的笔记</p>
@@ -136,27 +136,33 @@
 <li>题解和思路</li>
 <li>解题代码</li>
 </ul>
-<h1 id="islessorequal">isLessOrEqual</h1>
-<h2 id="题目描述">题目描述</h2>
+<h1 id="isLessOrEqual"><a class="header-anchor" href="#isLessOrEqual">¶</a>isLessOrEqual</h1>
+<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
 <p>如果x&lt;=y，返回1，否则返回</p>
-<h2 id="题解与思路">题解与思路</h2>
+<h2 id="题解与思路"><a class="header-anchor" href="#题解与思路">¶</a>题解与思路</h2>
 <p>本来刚开始一看：诶，这简单嘛，让y-x&gt;=0就行了嘛，就想着写个y+x的相反数然后判断它的符号位，然后没想到又是该死的TMin，这该死的按位取反加一仍然为它本身的数字！还有一个原因是如果相减的结果大于Tmax会溢出为负数，也会有错误，所以修改了实现的逻辑</p>
-<p>分成两种情况：x和y符号相同和不同时：y为正为真 x和y符号相同时：y-x&gt;0为真 由于溢出只有在x和y异号的时候才会出现，所以这种方法巧妙的规避了溢出的情况</p>
-<h1 id="代码">代码</h1>
+<p>分成两种情况：x和y符号相同和不同时：y为正为真<br>
+x和y符号相同时：y-x&gt;0为真<br>
+由于溢出只有在x和y异号的时候才会出现，所以这种方法巧妙的规避了溢出的情况</p>
+<h1 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h1>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * isLessOrEqual - if x &lt;= y  then return 1, else return 0 </span></span><br><span class="line"><span class="comment"> *   Example: isLessOrEqual(4,5) = 1.</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 24</span></span><br><span class="line"><span class="comment"> *   Rating: 3</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isLessOrEqual</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> xsign = x&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> ysign = y&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> check = xsign^ysign;</span><br><span class="line">  <span class="keyword">int</span> yminusx = (y+~x+<span class="number">1</span>)&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">return</span> (check&amp;(!ysign))|(!check&amp;(!yminusx));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="logicalneg">logicalNeg</h1>
-<h2 id="题目描述-1">题目描述</h2>
-<p>不使用逻辑非 '!' 实现逻辑非 '!'</p>
-<h2 id="题解与思路-1">题解与思路</h2>
-<ol type="1">
-<li><p>在所有数字中，只有0和Tmin取它的补码相反数后还为它本身，也即<code>~0+1=0,~Tmin+1=Tmin</code>而Tmin为0x80000000，符号位为1，所以可以将x取补码的相反数后判断符号位是否为0</p></li>
-<li><p>转换为考虑筛选出<code>x&lt;0&amp;&amp;x&gt;=1</code>的数字然后返回0</p></li>
+<h1 id="logicalNeg"><a class="header-anchor" href="#logicalNeg">¶</a>logicalNeg</h1>
+<h2 id="题目描述-v2"><a class="header-anchor" href="#题目描述-v2">¶</a>题目描述</h2>
+<p>不使用逻辑非 ‘!’ 实现逻辑非 ‘!’</p>
+<h2 id="题解与思路-v2"><a class="header-anchor" href="#题解与思路-v2">¶</a>题解与思路</h2>
+<ol>
+<li>
+<p>在所有数字中，只有0和Tmin取它的补码相反数后还为它本身，也即<code>~0+1=0,~Tmin+1=Tmin</code>而Tmin为0x80000000，符号位为1，所以可以将x取补码的相反数后判断符号位是否为0</p>
+</li>
+<li>
+<p>转换为考虑筛选出<code>x&lt;0&amp;&amp;x&gt;=1</code>的数字然后返回0</p>
+</li>
 </ol>
 <a id="more"></a>
-<h2 id="代码-1">代码</h2>
+<h2 id="代码-v2"><a class="header-anchor" href="#代码-v2">¶</a>代码</h2>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * logicalNeg - implement the ! operator, using all of </span></span><br><span class="line"><span class="comment"> *              the legal operators except !</span></span><br><span class="line"><span class="comment"> *   Examples: logicalNeg(3) = 0, logicalNeg(0) = 1</span></span><br><span class="line"><span class="comment"> *   Legal ops: ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 12</span></span><br><span class="line"><span class="comment"> *   Rating: 4 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">logicalNeg</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> ((x&gt;&gt;<span class="number">31</span>)+<span class="number">1</span>)&amp;((x+~<span class="number">1</span>+<span class="number">1</span>&gt;&gt;<span class="number">31</span>)&amp;<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="今日体重">今日体重</h1>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108110029080.png" alt="image-20210811002904543" /></p>
+<h1 id="今日体重"><a class="header-anchor" href="#今日体重">¶</a>今日体重</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108110029080.png" alt="image-20210811002904543"></p>
 ]]></content>
       <categories>
         <category>CSAPPLAB</category>
@@ -2181,6 +2187,56 @@ d=\sum_{i=-n}^m2^i \times d_i
       <tags>
         <tag>SSR</tag>
         <tag>服务器搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一些杂谈</title>
+    <url>/2021/08/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B010%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>今天不写技术，天天写也累了，今天换换口味，记录一下最近看的电影</p>
+<h1 id="教父系列"><a class="header-anchor" href="#教父系列">¶</a>教父系列</h1>
+<p>首先谈谈这几天看的《教父》系列电影，目前只看了前两部，不过给我的触动也还是挺深的，两代教父有着完全不同的境遇，所谓打江山难，守江山更难呐！</p>
+<p>一代教父白手起家，从西西里镇被追杀来到当时充满希望和梦想的美国，一步步开始为</p>
+]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记9——排序算法（堆、归并）</title>
+    <url>/2021/08/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B09%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="09-排序1-排序-堆、归并"><a class="header-anchor" href="#09-排序1-排序-堆、归并">¶</a><strong>09-排序1 排序 (堆、归并)</strong></h1>
+<p>题目全文见此文<a href="https://www.snowmoon.top/2021/08/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/#more">数据结构与算法刷题笔记8——排序（冒泡、插入、希尔）</a></p>
+<h1 id="堆排序"><a class="header-anchor" href="#堆排序">¶</a>堆排序</h1>
+<h2 id="中心思想"><a class="header-anchor" href="#中心思想">¶</a>中心思想</h2>
+<p>选择排序的优化版，选择排序是顺序扫描整个数组，找到最大值然后放到末尾，堆排序是使用了一个最大堆来存储最大值，然后每次找最大值就使用删除首节点的方法，最终继续使用选择排序完成剩下的排序过程。</p>
+<a id="more"></a>
+<h2 id="实现代码"><a class="header-anchor" href="#实现代码">¶</a>实现代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Heap_sort</span><span class="params">(<span class="keyword">int</span> Data[],<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PercDown</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> M,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Heap_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Heap_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = N/<span class="number">2</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">        PercDown(Data,i,N);</span><br><span class="line">    <span class="keyword">for</span>(i = N<span class="number">-1</span>;i &gt; <span class="number">0</span>; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        swap(&amp;Data[<span class="number">0</span>],&amp;Data[i]);</span><br><span class="line">        PercDown(Data,<span class="number">0</span>,i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PercDown</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> M,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> parent,child,X;</span><br><span class="line">    X = Data[M];</span><br><span class="line">    <span class="keyword">for</span>(parent = M; parent*<span class="number">2</span> + <span class="number">2</span> &lt;= N; parent = child)&#123;</span><br><span class="line">        child = parent*<span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>((child != N<span class="number">-1</span>)&amp;&amp;(Data[child] &lt; Data[child+<span class="number">1</span>]))</span><br><span class="line">            child++;</span><br><span class="line">        <span class="keyword">if</span>(Data[child] &lt;= X) <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            Data[parent] = Data[child];</span><br><span class="line">    &#125;</span><br><span class="line">    Data[parent] = X;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *A;</span><br><span class="line">    *A = *B;</span><br><span class="line">    *B = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试结果"><a class="header-anchor" href="#测试结果">¶</a>测试结果</h2>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108111017612.png" alt="image-20210811101701248"></p>
+<p>堆排序是一个复杂度为$O(NlogN)$的排序算法，可以看出来它的排序效率和希尔排序是差不多的，不过堆排序额外开辟了一个数量级为$N$的数组，导致了可排序的数字减少了一半，不过使用空间换时间也是比较常见的策略</p>
+<h1 id="归并排序"><a class="header-anchor" href="#归并排序">¶</a>归并排序</h1>
+<h2 id="中心思想-v2"><a class="header-anchor" href="#中心思想-v2">¶</a>中心思想</h2>
+<p>归并排序的想法是开辟一个数组，把我们要排序的数组分成左右两部分，先解决左边的排序问题在解决右边的排序问题。要怎么解决左边的问题呢？再递归调用归并排序的函数，继续分而治之。</p>
+<h2 id="递归实现代码"><a class="header-anchor" href="#递归实现代码">¶</a>递归实现代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge</span><span class="params">( <span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> L, <span class="keyword">int</span> R, <span class="keyword">int</span> RightEnd )</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Msort</span><span class="params">(<span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> L, <span class="keyword">int</span> RightEnd)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Merge_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *TmpData;</span><br><span class="line">    TmpData = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    Msort( Data, TmpData, <span class="number">0</span>, N<span class="number">-1</span> );</span><br><span class="line">    <span class="built_in">free</span>( TmpData );</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Msort</span><span class="params">(<span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> L, <span class="keyword">int</span> RightEnd)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> Center;</span><br><span class="line">    <span class="keyword">if</span>( L &lt; RightEnd )</span><br><span class="line">    &#123;</span><br><span class="line">        Center = ( L + RightEnd ) / <span class="number">2</span>;</span><br><span class="line">        Msort( Data, TmpData, L, Center );</span><br><span class="line">        Msort( Data, TmpData, Center+<span class="number">1</span>, RightEnd );</span><br><span class="line">        Merge( Data, TmpData, L, Center+<span class="number">1</span>, RightEnd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* L = 左边起始位置, R = 右边起始位置, RightEnd = 右边终点位置*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge</span><span class="params">( <span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> L, <span class="keyword">int</span> R, <span class="keyword">int</span> RightEnd )</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="comment">/* 将有序的Data[L]~Data[R-1]和Data[R]~Data[RightEnd]归并成一个有序序列 */</span></span><br><span class="line">    <span class="keyword">int</span> LeftEnd, NumElements, Tmp, i;</span><br><span class="line">    NumElements = RightEnd - L + <span class="number">1</span>;</span><br><span class="line">    LeftEnd = R<span class="number">-1</span>;</span><br><span class="line">    Tmp = L;</span><br><span class="line">    <span class="keyword">while</span>(L &lt;= LeftEnd &amp;&amp; R &lt;= RightEnd)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(Data[L] &gt; Data[R])</span><br><span class="line">            TmpData[Tmp++] = Data[R++];</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            TmpData[Tmp++] = Data[L++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>( L &lt;= LeftEnd )</span><br><span class="line">        TmpData[Tmp++] = Data[L++];</span><br><span class="line">    <span class="keyword">while</span>( R &lt;= RightEnd )</span><br><span class="line">        TmpData[Tmp++] = Data[R++];</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NumElements; i++, RightEnd--)</span><br><span class="line">        Data[RightEnd] = TmpData[RightEnd];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试结果-v2"><a class="header-anchor" href="#测试结果-v2">¶</a>测试结果</h2>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108111127687.png" alt="image-20210811112743604"></p>
+<h2 id="非递归实现代码"><a class="header-anchor" href="#非递归实现代码">¶</a>非递归实现代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge</span><span class="params">( <span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> L, <span class="keyword">int</span> R, <span class="keyword">int</span> RightEnd )</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Msort</span><span class="params">(<span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> N, <span class="keyword">int</span> length)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Merge_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *TmpData,length;</span><br><span class="line">    length = <span class="number">1</span>;</span><br><span class="line">    TmpData = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">while</span>(length &lt; N)&#123;</span><br><span class="line">        Msort( Data, TmpData, N, length );</span><br><span class="line">        length *= <span class="number">2</span>;</span><br><span class="line">        Msort( TmpData, Data, N, length );</span><br><span class="line">        length *= <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="built_in">free</span>( TmpData );</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Msort</span><span class="params">(<span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> N, <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    <span class="keyword">for</span>( i = <span class="number">0</span>;i &lt; N - <span class="number">2</span>*length; i+=<span class="number">2</span>*length)</span><br><span class="line">        Merge(Data, TmpData, i, i+length, i+<span class="number">2</span>*length<span class="number">-1</span> );</span><br><span class="line">    <span class="keyword">if</span>(i + length &lt; N)</span><br><span class="line">        Merge(Data, TmpData, i, i+length, N<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">for</span>(j = i;j &lt; N;j++)TmpData[j] = Data[j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* L = 左边起始位置, R = 右边起始位置, RightEnd = 右边终点位置*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge</span><span class="params">( <span class="keyword">int</span> Data[], <span class="keyword">int</span> TmpData[], <span class="keyword">int</span> L, <span class="keyword">int</span> R, <span class="keyword">int</span> RightEnd )</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="comment">/* 将有序的Data[L]~Data[R-1]和Data[R]~Data[RightEnd]归并成一个有序序列 */</span></span><br><span class="line">    <span class="keyword">int</span> LeftEnd, NumElements, Tmp;</span><br><span class="line">    NumElements = RightEnd - L + <span class="number">1</span>;</span><br><span class="line">    LeftEnd = R<span class="number">-1</span>;</span><br><span class="line">    Tmp = L;</span><br><span class="line">    <span class="keyword">while</span>(L &lt;= LeftEnd &amp;&amp; R &lt;= RightEnd)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(Data[L] &gt; Data[R])</span><br><span class="line">            TmpData[Tmp++] = Data[R++];</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            TmpData[Tmp++] = Data[L++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>( L &lt;= LeftEnd )</span><br><span class="line">        TmpData[Tmp++] = Data[L++];</span><br><span class="line">    <span class="keyword">while</span>( R &lt;= RightEnd )</span><br><span class="line">        TmpData[Tmp++] = Data[R++];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试结果-v3"><a class="header-anchor" href="#测试结果-v3">¶</a>测试结果</h2>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108111305102.png" alt="image-20210811130527026"></p>
+<p>感觉看整体测试效果里面的非递归实现的效率相对于递归实现的效率并没有特别特别大的提升，算是中规中矩，不过总体看来非递归还是要比递归更快一些，也更节省资源</p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>堆排序</tag>
+        <tag>归并排序</tag>
       </tags>
   </entry>
 </search>
