@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="UDLn1eAC3t5akkh08ZnfWHmh2xMkBmf01U9xV3rY2Tg">
+  <meta name="baidu-site-verification" content="KagJZl5pSaEUxtB5">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic%7Cconsolas:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP5——程序机器级表示">
+<meta property="og:url" content="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/index.html">
+<meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:description" content="从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png">
+<meta property="article:published_time" content="2021-08-14T00:30:00.000Z">
+<meta property="article:modified_time" content="2021-08-19T06:09:22.245Z">
+<meta property="article:author" content="Zheng Haoyu">
+<meta property="article:tag" content="CSAPP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png">
+
+
+<link rel="canonical" href="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>CSAPP5——程序机器级表示 | SnowMoon-Haoyu's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="SnowMoon-Haoyu's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">SnowMoon-Haoyu's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录成长，变得更强！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-guestbook"><a href="/guestbook/" rel="section"><i class="fas fa-book fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-essay"><a href="/essay/" rel="section"><i class="fas fa-cannabis fa-fw"></i>随笔</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8Ec%E5%88%B0%E6%9C%BA%E5%99%A8%E4%BB%A3%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">从C到机器代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">CPU 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">一个实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.2.</span> <span class="nav-text">push 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.3.</span> <span class="nav-text">call 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mov-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.4.</span> <span class="nav-text">mov 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.5.</span> <span class="nav-text">add 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.6.</span> <span class="nav-text">pop 指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">2.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zheng Haoyu"
+      src="/images/Avatar.jpg">
+  <p class="site-author-name" itemprop="name">Zheng Haoyu</p>
+  <div class="site-description" itemprop="description">本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">博客</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ASnowMoon" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ASnowMoon" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhenghaoyuzhy@163.com" title="E-Mail → mailto:zhenghaoyuzhy@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/Growing_potato?spm=1001.2014.3001.5343" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;Growing_potato?spm&#x3D;1001.2014.3001.5343" rel="noopener" target="_blank"><i class="fab fa-cuttlefish fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+<a target="_blank" rel="noopener" href="https://github.com/ASnowMoon" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/Avatar.jpg">
+      <meta itemprop="name" content="Zheng Haoyu">
+      <meta itemprop="description" content="本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SnowMoon-Haoyu's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSAPP5——程序机器级表示
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-14 08:30:00" itemprop="dateCreated datePublished" datetime="2021-08-14T08:30:00+08:00">2021-08-14</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-08-19 14:09:22" itemprop="dateModified" datetime="2021-08-19T14:09:22+08:00">2021-08-19</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span id="/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/" class="post-meta-item leancloud_visitors" data-flag-title="CSAPP5——程序机器级表示" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="从c到机器代码">从C到机器代码</h1>
+<p>机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。</p>
+<p>C-&gt;可执行程序：</p>
+<ul>
+<li>C 语言代码(a.c)经过编译器的处理(<code>gcc -0g -S</code>)成为汇编代码(a.s)</li>
+<li>汇编代码(a.s)经过汇编器的处理(<code>gcc</code> 或 <code>as</code>)成为对象程序(a.o)</li>
+<li>对象程序(a.o)以及所需静态库(lib.a)经过链接器的处理(<code>gcc</code> 或 <code>ld</code>)最终成为计算机可执行的程序</li>
+</ul>
+<p>先来看一段C代码及其经过汇编产生的代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C 代码</span></span><br><span class="line">*dest = t;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的汇编代码</span></span><br><span class="line">movq    %rax, (%rbx)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的对象代码</span></span><br><span class="line"><span class="number">0x40059e</span>:   <span class="number">46</span> <span class="number">89</span> <span class="number">03</span></span><br></pre></td></tr></table></figure>
+<p>C 代码的意思很简单，就是把值 <code>t</code> 存储到指针 <code>dest</code> 指向的内存中。对应到汇编代码，就是把 8字节（也就是四个字, Quad words）移动到内存中（这也就是为什叫做 <code>movq</code>）。<code>t</code> 的值保存在寄存器 %rax 中，<code>dest</code> 指向的地址保存在 %rbx 中，而 <code>*dest</code> 是取地址操作，对应于在内存中找到对应的值，也就是 <code>M[%rbx]</code>，在汇编代码中用小括号表示取地址，即 <code>(%rbx)</code>。最后转换成 3 个字节的指令，并保存在 <code>0x40059e</code> 这个地址中。</p>
+<a id="more"></a>
+<h2 id="cpu-指令">CPU 指令</h2>
+<h3 id="一个实例">一个实例</h3>
+<p>了解寄存器和内存模型以后，就可以来看汇编语言到底是什么了。下面是一个简单的程序<code>example.c</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int add_a_and_b(int a, int b) &#123;</span><br><span class="line">return a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">return add_a_and_b(2, 3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>gcc 将这个程序转成汇编语言。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -S example.c</span><br></pre></td></tr></table></figure>
+<p>上面的命令执行以后，会生成一个文本文件<code>example.s</code>，里面就是汇编语言，包含了几十行指令。这么说吧，一个高级语言的简单操作，底层可能由几个，甚至几十个 CPU 指令构成。CPU 依次执行这些指令，完成这一步操作。</p>
+<p><code>example.s</code>经过简化以后，大概是下面的样子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">_add_a_and_b:</span><br><span class="line">push   %ebx</span><br><span class="line">mov    %eax, [%esp+8] </span><br><span class="line">mov    %ebx, [%esp+12]</span><br><span class="line">add    %eax, %ebx </span><br><span class="line">pop    %ebx </span><br><span class="line">ret  </span><br><span class="line"></span><br><span class="line">_main:</span><br><span class="line">push   3</span><br><span class="line">push   2</span><br><span class="line">call   _add_a_and_b </span><br><span class="line">add    %esp, 8</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+<p>可以看到，原程序的两个函数<code>add_a_and_b</code>和<code>main</code>，对应两个标签<code>_add_a_and_b</code>和<code>_main</code>。每个标签里面是该函数所转成的 CPU 运行流程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
+<p>这一行里面，<code>push</code>是 CPU 指令，<code>%ebx</code>是该指令要用到的运算子。一个 CPU 指令可以有零个到多个运算子。</p>
+<p>下面我就一行一行讲解这个汇编程序，建议读者最好把这个程序，在另一个窗口拷贝一份，省得阅读的时候再把页面滚动上来。</p>
+<h3 id="push-指令">push 指令</h3>
+<p>根据约定，程序从<code>_main</code>标签开始执行，这时会在 Stack 上为<code>main</code>建立一个帧，并将 Stack 所指向的地址，写入 ESP 寄存器。后面如果有数据要写入<code>main</code>这个帧，就会写在 ESP 寄存器所保存的地址。</p>
+<p>然后，开始执行第一行代码。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   3</span><br></pre></td></tr></table></figure>
+<p><code>push</code>指令用于将运算子放入 Stack，这里就是将<code>3</code>写入<code>main</code>这个帧。</p>
+</blockquote>
+<p>虽然看上去很简单，<code>push</code>指令其实有一个前置操作。它会先取出 ESP 寄存器里面的地址，将其减去4个字节，然后将新地址写入 ESP 寄存器。使用减法是因为 Stack 从高位向低位发展，4个字节则是因为<code>3</code>的类型是<code>int</code>，占用4个字节。得到新地址以后， 3 就会写入这个地址开始的四个字节。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   2</span><br></pre></td></tr></table></figure>
+<p>第二行也是一样，<code>push</code>指令将<code>2</code>写入<code>main</code>这个帧，位置紧贴着前面写入的<code>3</code>。这时，ESP 寄存器会再减去 4个字节（累计减去8）。</p>
+</blockquote>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png" alt="img" /></p>
+<h3 id="call-指令">call 指令</h3>
+<p>第三行的<code>call</code>指令用来调用函数。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call   _add_a_and_b</span><br></pre></td></tr></table></figure>
+<p>上面的代码表示调用<code>add_a_and_b</code>函数。这时，程序就会去找<code>_add_a_and_b</code>标签，并为该函数建立一个新的帧。</p>
+</blockquote>
+<p>下面就开始执行<code>_add_a_and_b</code>的代码。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
+<p>这一行表示将 EBX 寄存器里面的值，写入<code>_add_a_and_b</code>这个帧。这是因为后面要用到这个寄存器，就先把里面的值取出来，用完后再写回去。</p>
+</blockquote>
+<p>这时，<code>push</code>指令会再将 ESP 寄存器里面的地址减去4个字节（累计减去12）。</p>
+<h3 id="mov-指令">mov 指令</h3>
+<p><code>mov</code>指令用于将一个值写入某个寄存器。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov    %eax, [%esp+8] </span><br></pre></td></tr></table></figure>
+<p>这一行代码表示，先将 ESP 寄存器里面的地址加上8个字节，得到一个新的地址，然后按照这个地址在 Stack 取出数据。根据前面的步骤，可以推算出这里取出的是<code>2</code>，再将<code>2</code>写入 EAX 寄存器。</p>
+</blockquote>
+<p>下一行代码也是干同样的事情。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov    %ebx, [%esp+12] </span><br></pre></td></tr></table></figure>
+<p>上面的代码将 ESP 寄存器的值加12个字节，再按照这个地址在 Stack 取出数据，这次取出的是<code>3</code>，将其写入 EBX 寄存器。</p>
+</blockquote>
+<h3 id="add-指令">add 指令</h3>
+<p><code>add</code>指令用于将两个运算子相加，并将结果写入第一个运算子。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add    %eax, %ebx</span><br></pre></td></tr></table></figure>
+<p>上面的代码将 EAX 寄存器的值（即2）加上 EBX 寄存器的值（即3），得到结果5，再将这个结果写入第一个运算子 EAX 寄存器。</p>
+</blockquote>
+<h3 id="pop-指令">pop 指令</h3>
+<p><code>pop</code>指令用于取出 Stack 最近一个写入的值（即最低位地址的值），并将这个值写入运算子指定的位置。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pop    %ebx</span><br></pre></td></tr></table></figure>
+<p>上面的代码表示，取出 Stack 最近写入的值（即 EBX 寄存器的原始值），再将这个值写回 EBX 寄存器（因为加法已经做完了，EBX 寄存器用不到了）。</p>
+</blockquote>
+<p>注意，<code>pop</code>指令还会将 ESP 寄存器里面的地址加4，即回收4个字节。ret 指令</p>
+<p><code>ret</code>指令用于终止当前函数的执行，将运行权交还给上层函数。也就是，当前函数的帧将被回收。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
+<p>可以看到，该指令没有运算子。</p>
+</blockquote>
+<p>随着<code>add_a_and_b</code>函数终止执行，系统就回到刚才<code>main</code>函数中断的地方，继续往下执行。</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add    %esp, 8 </span><br></pre></td></tr></table></figure>
+<p>上面的代码表示，将 ESP 寄存器里面的地址，手动加上8个字节，再写回 ESP 寄存器。这是因为 ESP 寄存器的是 Stack 的写入开始地址，前面的<code>pop</code>操作已经回收了4个字节，这里再回收8个字节，等于全部回收。</p>
+</blockquote>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
+<p>最后，<code>main</code>函数运行结束，<code>ret</code>指令退出程序执行。</p>
+</blockquote>
+<h1 id="参考文章">参考文章</h1>
+<p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://wdxtub.com/csapp/thin-csapp-2/2016/04/16/">【读薄 CSAPP】贰 机器指令与程序优化</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我喝咖啡</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Zheng Haoyu 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Zheng Haoyu 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Zheng Haoyu
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/" title="CSAPP5——程序机器级表示">https://www.snowmoon.top/2021/08/14/CSAPP5 - 副本/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CSAPP/" rel="tag"><i class="fas fa-tag"></i> CSAPP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B010/" rel="prev" title="数据结构与算法刷题笔记10——排序算法(快排)">
+                  <i class="fa fa-chevron-left"></i> 数据结构与算法刷题笔记10——排序算法(快排)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/14/CSAPP5/" rel="next" title="CSAPP5——程序机器级表示">
+                  CSAPP5——程序机器级表示 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zheng Haoyu</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">71k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:16</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i> Visitors
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+<span class="post-meta-divider">&nbsp|&nbsp</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i> Views
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+</div>
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2021, 02, 17, 13, 18, 22); // 北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }
+    siteTime();
+</script>
+<span id="sitetime"></span>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+<script>
+if (document.querySelectorAll('.mermaid').length) {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/mermaid@8.9.0/dist/mermaid.min.js', () => {
+    mermaid.init({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    }, '.mermaid');
+  }, window.mermaid);
+}
+</script>
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+  
+ <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'all'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+<script>
+NexT.utils.loadComments('#valine-comments', () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":null,"placeholder":"无需输入头像 昵称 网址 即可评论(*^▽^*)&#10valine评论不一定能及时看到，如果需要回复可以戳我主页的联系方式(～￣▽￣)～","avatar":"robohash","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
+      el: '#valine-comments',
+      path: "/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/",
+      serverURLs: "https://3kooisaa.api.lncldglobal.com"
+    }));
+  }, window.Valine);
+});
+</script>
+
+
+  <script async src="/js/cursor/fireworks.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>
