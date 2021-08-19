@@ -1947,7 +1947,7 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
-    <title>数据结构刷题笔记13</title>
+    <title>数据结构刷题笔记14</title>
     <url>/2021/08/19/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%9514/</url>
     <content><![CDATA[<h1 id="散列2-hashing-25-分">11-散列2 Hashing (25 分)</h1>
 <p>The task of this problem is simple: insert a sequence of distinct positive integers into a hash table, and output the positions of the input numbers. The hash function is defined to be <em>H</em>(<em>k<strong>ey<em>)=</em>k</strong>ey</em>%<em>TS<strong>i</strong>ze</em> where <em>TS<strong>i</strong>ze</em> is the maximum size of the hash table. Quadratic probing (with positive increments only) is used to solve the collisions.</p>
