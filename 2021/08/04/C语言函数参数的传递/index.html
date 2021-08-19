@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="今日第二更嘿嘿 前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习  函数参数的调用    调用类型 描述     传值调用 该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1在这种情况下，修改函数内的形式参数不会影响实际参数。   引用调用 通过指针传递方式，形参">
+<meta name="description" content="今日第二更嘿嘿 前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习  ¶函数参数的调用    调用类型 描述     传值调用 该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1在这种情况下，修改函数内的形式参数不会影响实际参数。   引用调用 通过指针传递方式，形参为指向实参地址的指针，对应正确写法当">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C语言函数参数传递的错误与避免">
 <meta property="og:url" content="https://www.snowmoon.top/2021/08/04/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E4%BC%A0%E9%80%92/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="今日第二更嘿嘿 前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习  函数参数的调用    调用类型 描述     传值调用 该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1在这种情况下，修改函数内的形式参数不会影响实际参数。   引用调用 通过指针传递方式，形参">
+<meta property="og:description" content="今日第二更嘿嘿 前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习  ¶函数参数的调用    调用类型 描述     传值调用 该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1在这种情况下，修改函数内的形式参数不会影响实际参数。   引用调用 通过指针传递方式，形参为指向实参地址的指针，对应正确写法当">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-08-04T15:15:08.000Z">
 <meta property="article:modified_time" content="2021-08-04T16:59:45.331Z">
@@ -195,7 +195,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">函数参数的调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%8B%E5%88%A9%E7%94%A8swap%E5%87%BD%E6%95%B0%E4%BA%A4%E6%8D%A2%E5%8F%98%E9%87%8Fab%E7%9A%84%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF"><span class="nav-number">2.</span> <span class="nav-text">例：利用Swap函数交换变量a，b的常见错误</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#error1%E4%BD%BF%E7%94%A8%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E4%BB%A3%E6%9B%BF%E5%8E%9F%E5%A7%8B%E5%8F%98%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text">ERROR1——使用局部变量代替原始变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error2%E5%8F%AA%E4%BA%A4%E6%8D%A2%E4%BA%86%E5%9C%B0%E5%9D%80"><span class="nav-number">2.2.</span> <span class="nav-text">ERROR2——只交换了地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#error3%E9%87%8E%E6%8C%87%E9%92%88"><span class="nav-number">2.3.</span> <span class="nav-text">ERROR3——野指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E5%86%99%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">正确写法</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">函数参数的调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%8B%EF%BC%9A%E5%88%A9%E7%94%A8Swap%E5%87%BD%E6%95%B0%E4%BA%A4%E6%8D%A2%E5%8F%98%E9%87%8Fa%EF%BC%8Cb%E7%9A%84%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF"><span class="nav-number">2.</span> <span class="nav-text">例：利用Swap函数交换变量a，b的常见错误</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERROR1%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E4%BB%A3%E6%9B%BF%E5%8E%9F%E5%A7%8B%E5%8F%98%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text">ERROR1——使用局部变量代替原始变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERROR2%E2%80%94%E2%80%94%E5%8F%AA%E4%BA%A4%E6%8D%A2%E4%BA%86%E5%9C%B0%E5%9D%80"><span class="nav-number">2.2.</span> <span class="nav-text">ERROR2——只交换了地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ERROR3%E2%80%94%E2%80%94%E9%87%8E%E6%8C%87%E9%92%88"><span class="nav-number">2.3.</span> <span class="nav-text">ERROR3——野指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E5%86%99%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">正确写法</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,7 +211,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -358,47 +358,53 @@
 <p>今日第二更嘿嘿</p>
 <p>前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习</p>
 </blockquote>
-<h1 id="函数参数的调用">函数参数的调用</h1>
+<h1 id="函数参数的调用"><a class="header-anchor" href="#函数参数的调用">¶</a>函数参数的调用</h1>
 <table>
 <thead>
-<tr class="header">
-<th style="text-align: center;">调用类型</th>
-<th style="text-align: center;">描述</th>
+<tr>
+<th style="text-align:center">调用类型</th>
+<th style="text-align:center">描述</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: center;"><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-call-by-value.html">传值调用</a></td>
-<td style="text-align: center;">该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1<br/>在这种情况下，修改函数内的形式参数不会影响实际参数。</td>
+<tr>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-call-by-value.html">传值调用</a></td>
+<td style="text-align:center">该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1<br/>在这种情况下，修改函数内的形式参数不会影响实际参数。</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;"><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-call-by-pointer.html">引用调用</a></td>
-<td style="text-align: center;">通过指针传递方式，形参为指向实参地址的指针，对应正确写法<br/>当对形参的指向操作时，就相当于对实参本身进行的操作。</td>
+<tr>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-function-call-by-pointer.html">引用调用</a></td>
+<td style="text-align:center">通过指针传递方式，形参为指向实参地址的指针，对应正确写法<br/>当对形参的指向操作时，就相当于对实参本身进行的操作。</td>
 </tr>
 </tbody>
 </table>
-<h1 id="例利用swap函数交换变量ab的常见错误">例：利用Swap函数交换变量a，b的常见错误</h1>
+<h1 id="例：利用Swap函数交换变量a，b的常见错误"><a class="header-anchor" href="#例：利用Swap函数交换变量a，b的常见错误">¶</a>例：利用Swap函数交换变量a，b的常见错误</h1>
 <a id="more"></a>
-<h2 id="error1使用局部变量代替原始变量">ERROR1——使用局部变量代替原始变量</h2>
+<h2 id="ERROR1——使用局部变量代替原始变量"><a class="header-anchor" href="#ERROR1——使用局部变量代替原始变量">¶</a>ERROR1——使用局部变量代替原始变量</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error1</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error1(a,b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>运行结果：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
-<p>局部变量：定义在函数内部的变量，只能在函数内部使用。 上面代码里在main函数中定义的a，b与Swap函数中a，b只是同名，只在Swap函数中交换a与b的值而不影响main函数中的原始变量a与b的值</p>
-<h2 id="error2只交换了地址">ERROR2——只交换了地址</h2>
+<p>局部变量：定义在函数内部的变量，只能在函数内部使用。<br>
+上面代码里在main函数中定义的a，b与Swap函数中a，b只是同名，只在Swap函数中交换a与b的值而不影响main函数中的原始变量a与b的值</p>
+<h2 id="ERROR2——只交换了地址"><a class="header-anchor" href="#ERROR2——只交换了地址">¶</a>ERROR2——只交换了地址</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = p1;<span class="comment">//将a的地址赋值给tmp</span></span><br><span class="line">    p1 = p2;</span><br><span class="line">    p2 = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error2(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>运行结果：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
 <p>可以看到上述代码并没有完成对ab的交换。</p>
 <p>在上面代码中Swap函数虽然使用了指针，但是未做取值运算，所以只是将两个变量a,b的存储位置交换了一下</p>
-<h2 id="error3野指针">ERROR3——野指针</h2>
+<h2 id="ERROR3——野指针"><a class="header-anchor" href="#ERROR3——野指针">¶</a>ERROR3——野指针</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp=*p1;<span class="comment">//野指针</span></span><br><span class="line">    *p1=*p2;</span><br><span class="line">    *p2=*tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error3(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输出结果：</p>
 <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">———————————</span><br><span class="line"></span><br><span class="line">Process returned <span class="number">-1073741819</span> (<span class="number">0xC0000005</span>)   execution <span class="type">time</span> : <span class="number">1.663</span> s</span><br><span class="line">Press <span class="keyword">any</span> key <span class="keyword">to</span> <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
 <p>上述程序在运行了一段时间之后就崩了，没有输出任何东西，这是因为我们在给tmp初始化的时候直接把P1的值，也即a的值当做地址赋给了tmp，导致tmp指向了不能访问的地区导致了程序崩溃。</p>
-<p>野指针（悬挂指针）：没有访问权限的指针，这个指针有可能存在也有可能不存在，但是你不能访问。（野指针不好判断） 1、地址不存在（例如电话号码少一位）。 2、地址存在，但是不能访问（例如电话号码写成别人）。 3、地址之前可以访问，但现在不可以（更换电话号码）</p>
-<h2 id="正确写法">正确写法</h2>
+<p>野指针（悬挂指针）：没有访问权限的指针，这个指针有可能存在也有可能不存在，但是你不能访问。（野指针不好判断）<br>
+1、地址不存在（例如电话号码少一位）。<br>
+2、地址存在，但是不能访问（例如电话号码写成别人）。<br>
+3、地址之前可以访问，但现在不可以（更换电话号码）</p>
+<h2 id="正确写法"><a class="header-anchor" href="#正确写法">¶</a>正确写法</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *p1;<span class="comment">//tmp＝a</span></span><br><span class="line">    *p1 = *p2;<span class="comment">//a＝b</span></span><br><span class="line">    *p2 = tmp;<span class="comment">//b＝tmp</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结论 一个函数（父函数）调用另一个函数（子函数），想通过子函数修改父函数的数据，必须传指针，子函数内部解引用。也就是子函数的改变要想影响父函数的数据必须传指针和解引用。 error1中既没有指针也没有解引用，error2中只是传指针但在Swap函数中没有使用解引用 error3中传了野指针导致程序崩溃。</p>
+<p>结论<br>
+一个函数（父函数）调用另一个函数（子函数），想通过子函数修改父函数的数据，必须传指针，子函数内部解引用。也就是子函数的改变要想影响父函数的数据必须传指针和解引用。<br>
+error1中既没有指针也没有解引用，error2中只是传指针但在Swap函数中没有使用解引用 error3中传了野指针导致程序崩溃。</p>
 <p>参考文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_51663917/article/details/109206266">C语言中利用Swap函数交换变量a，b</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.runoob.com/cprogramming/c-functions.html">菜鸟教程——C函数</a></p>
 
@@ -516,14 +522,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">79k</span>
+    <span title="站点总字数">81k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:45</span>
   </span>
 </div>
 <div class="busuanzi-count">

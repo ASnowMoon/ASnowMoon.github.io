@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="10-排序4 统计工龄 (20 分) 给定公司N名员工的工龄，要求按工龄增序输出每个工龄段有多少员工。 输入格式: 输入首先给出正整数N（≤105），即员工总人数；随后给出N个整数，即每个员工的工龄，范围在[0, 50]。 输出格式: 按工龄的递增顺序输出每个工龄的员工个数，格式为：“工龄:人数”。每项占一行。如果人数为0则不输出该项。 输入样例: 123810 2 0 5 7 2">
+<meta name="description" content="¶10-排序4 统计工龄 (20 分) 给定公司N名员工的工龄，要求按工龄增序输出每个工龄段有多少员工。 ¶输入格式: 输入首先给出正整数N（≤105），即员工总人数；随后给出N个整数，即每个员工的工龄，范围在[0, 50]。 ¶输出格式: 按工龄的递增顺序输出每个工龄的员工个数，格式为：“工龄:人数”。每项占一行。如果人数为0则不输出该项。 ¶输入样例: 123810 2 0 5 7 2 5 2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构刷题笔记12">
 <meta property="og:url" content="https://www.snowmoon.top/2021/08/17/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%9512/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="10-排序4 统计工龄 (20 分) 给定公司N名员工的工龄，要求按工龄增序输出每个工龄段有多少员工。 输入格式: 输入首先给出正整数N（≤105），即员工总人数；随后给出N个整数，即每个员工的工龄，范围在[0, 50]。 输出格式: 按工龄的递增顺序输出每个工龄的员工个数，格式为：“工龄:人数”。每项占一行。如果人数为0则不输出该项。 输入样例: 123810 2 0 5 7 2">
+<meta property="og:description" content="¶10-排序4 统计工龄 (20 分) 给定公司N名员工的工龄，要求按工龄增序输出每个工龄段有多少员工。 ¶输入格式: 输入首先给出正整数N（≤105），即员工总人数；随后给出N个整数，即每个员工的工龄，范围在[0, 50]。 ¶输出格式: 按工龄的递增顺序输出每个工龄的员工个数，格式为：“工龄:人数”。每项占一行。如果人数为0则不输出该项。 ¶输入样例: 123810 2 0 5 7 2 5 2">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-08-17T00:30:00.000Z">
 <meta property="article:modified_time" content="2021-08-19T06:47:54.967Z">
@@ -196,7 +196,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F4-%E7%BB%9F%E8%AE%A1%E5%B7%A5%E9%BE%84-20-%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">10-排序4 统计工龄 (20 分)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">输入格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">输出格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.3.</span> <span class="nav-text">输入样例:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">输出样例:</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#10-%E6%8E%92%E5%BA%8F4-%E7%BB%9F%E8%AE%A1%E5%B7%A5%E9%BE%84-20-%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">10-排序4 统计工龄 (20 分)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">输入格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">输出格式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.3.</span> <span class="nav-text">输入样例:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%A0%B7%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">输出样例:</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -212,7 +212,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -337,14 +337,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>484</span>
+      <span>567</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -355,21 +355,39 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="排序4-统计工龄-20-分">10-排序4 统计工龄 (20 分)</h1>
+        <h1 id="10-排序4-统计工龄-20-分"><a class="header-anchor" href="#10-排序4-统计工龄-20-分">¶</a>10-排序4 统计工龄 (20 分)</h1>
 <p>给定公司<em>N</em>名员工的工龄，要求按工龄增序输出每个工龄段有多少员工。</p>
-<h2 id="输入格式">输入格式:</h2>
+<h2 id="输入格式"><a class="header-anchor" href="#输入格式">¶</a>输入格式:</h2>
 <p>输入首先给出正整数<em>N</em>（≤105），即员工总人数；随后给出<em>N</em>个整数，即每个员工的工龄，范围在[0, 50]。</p>
-<h2 id="输出格式">输出格式:</h2>
+<h2 id="输出格式"><a class="header-anchor" href="#输出格式">¶</a>输出格式:</h2>
 <p>按工龄的递增顺序输出每个工龄的员工个数，格式为：“工龄:人数”。每项占一行。如果人数为0则不输出该项。</p>
-<h2 id="输入样例">输入样例:</h2>
+<h2 id="输入样例"><a class="header-anchor" href="#输入样例">¶</a>输入样例:</h2>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">8</span><br><span class="line">10 2 0 5 7 2 5 2</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<h2 id="输出样例">输出样例:</h2>
+<h2 id="输出样例"><a class="header-anchor" href="#输出样例">¶</a>输出样例:</h2>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0:1</span><br><span class="line">2:3</span><br><span class="line">5:2</span><br><span class="line">7:1</span><br><span class="line">10:1</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<p>这题取了个巧，都没排序，直接按照工龄从低到高且不为空顺序输出了 ```C #include&lt;stdio.h&gt; #include&lt;stdlib.h&gt;</p>
-<p>int main() { int i, x, n; scanf("%d", &amp;n); int s[51] = {0}; for(i = 0; i &lt; n; i ++) { scanf("%d", &amp;x); s[x] ++; } for(i = 0; i &lt;= 50; i ++) { if(s[i]) { printf("%d:%d", i, s[i]); } }</p>
-<pre><code>return 0;</code></pre>
-<p>}</p>
+<p>这题取了个巧，都没排序，直接按照工龄从低到高且不为空顺序输出了</p>
+<pre><code class="language-C">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+int main()
+&#123;
+    int i, x, n;
+    scanf(&quot;%d&quot;, &amp;n);
+    int s[51] = &#123;0&#125;;
+    for(i = 0; i &lt; n; i ++) &#123;
+        scanf(&quot;%d&quot;, &amp;x);
+        s[x] ++;
+    &#125;
+    for(i = 0; i &lt;= 50; i ++) &#123;
+        if(s[i]) &#123;
+            printf(&quot;%d:%d\n&quot;, i, s[i]);
+        &#125;
+    &#125;
+
+    return 0;
+&#125;
+</code></pre>
 
     </div>
 
@@ -428,7 +446,7 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/08/18/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%9513/" rel="next" title="数据结构刷题笔记13">
+                <a href="/2021/08/18/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%9514/" rel="next" title="数据结构刷题笔记13">
                   数据结构刷题笔记13 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -486,14 +504,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">79k</span>
+    <span title="站点总字数">81k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:45</span>
   </span>
 </div>
 <div class="busuanzi-count">

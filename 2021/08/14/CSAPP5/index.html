@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处">
+<meta name="description" content="¶从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处理(gc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSAPP5——程序机器级表示">
 <meta property="og:url" content="https://www.snowmoon.top/2021/08/14/CSAPP5/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处">
+<meta property="og:description" content="¶从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处理(gc">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png">
 <meta property="article:published_time" content="2021-08-14T00:30:00.000Z">
@@ -196,7 +196,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8Ec%E5%88%B0%E6%9C%BA%E5%99%A8%E4%BB%A3%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">从C到机器代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">CPU 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">一个实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.2.</span> <span class="nav-text">push 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.3.</span> <span class="nav-text">call 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mov-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.4.</span> <span class="nav-text">mov 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.5.</span> <span class="nav-text">add 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.6.</span> <span class="nav-text">pop 指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">2.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8EC%E5%88%B0%E6%9C%BA%E5%99%A8%E4%BB%A3%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">从C到机器代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">CPU 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">一个实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.2.</span> <span class="nav-text">push 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.3.</span> <span class="nav-text">call 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mov-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.4.</span> <span class="nav-text">mov 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.5.</span> <span class="nav-text">add 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.6.</span> <span class="nav-text">pop 指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">2.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -212,7 +212,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -355,7 +355,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="从c到机器代码">从C到机器代码</h1>
+        <h1 id="从C到机器代码"><a class="header-anchor" href="#从C到机器代码">¶</a>从C到机器代码</h1>
 <p>机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。</p>
 <p>C-&gt;可执行程序：</p>
 <ul>
@@ -367,8 +367,8 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C 代码</span></span><br><span class="line">*dest = t;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的汇编代码</span></span><br><span class="line">movq    %rax, (%rbx)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的对象代码</span></span><br><span class="line"><span class="number">0x40059e</span>:   <span class="number">46</span> <span class="number">89</span> <span class="number">03</span></span><br></pre></td></tr></table></figure>
 <p>C 代码的意思很简单，就是把值 <code>t</code> 存储到指针 <code>dest</code> 指向的内存中。对应到汇编代码，就是把 8字节（也就是四个字, Quad words）移动到内存中（这也就是为什叫做 <code>movq</code>）。<code>t</code> 的值保存在寄存器 %rax 中，<code>dest</code> 指向的地址保存在 %rbx 中，而 <code>*dest</code> 是取地址操作，对应于在内存中找到对应的值，也就是 <code>M[%rbx]</code>，在汇编代码中用小括号表示取地址，即 <code>(%rbx)</code>。最后转换成 3 个字节的指令，并保存在 <code>0x40059e</code> 这个地址中。</p>
 <a id="more"></a>
-<h2 id="cpu-指令">CPU 指令</h2>
-<h3 id="一个实例">一个实例</h3>
+<h2 id="CPU-指令"><a class="header-anchor" href="#CPU-指令">¶</a>CPU 指令</h2>
+<h3 id="一个实例"><a class="header-anchor" href="#一个实例">¶</a>一个实例</h3>
 <p>了解寄存器和内存模型以后，就可以来看汇编语言到底是什么了。下面是一个简单的程序<code>example.c</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int add_a_and_b(int a, int b) &#123;</span><br><span class="line">return a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">return add_a_and_b(2, 3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>gcc 将这个程序转成汇编语言。</p>
@@ -380,70 +380,70 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
 <p>这一行里面，<code>push</code>是 CPU 指令，<code>%ebx</code>是该指令要用到的运算子。一个 CPU 指令可以有零个到多个运算子。</p>
 <p>下面我就一行一行讲解这个汇编程序，建议读者最好把这个程序，在另一个窗口拷贝一份，省得阅读的时候再把页面滚动上来。</p>
-<h3 id="push-指令">push 指令</h3>
+<h3 id="push-指令"><a class="header-anchor" href="#push-指令">¶</a>push 指令</h3>
 <p>根据约定，程序从<code>_main</code>标签开始执行，这时会在 Stack 上为<code>main</code>建立一个帧，并将 Stack 所指向的地址，写入 ESP 寄存器。后面如果有数据要写入<code>main</code>这个帧，就会写在 ESP 寄存器所保存的地址。</p>
 <p>然后，开始执行第一行代码。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   3</span><br></pre></td></tr></table></figure>
-<p><code>push</code>指令用于将运算子放入 Stack，这里就是将<code>3</code>写入<code>main</code>这个帧。</p>
 </blockquote>
+<p><code>push</code>指令用于将运算子放入 Stack，这里就是将<code>3</code>写入<code>main</code>这个帧。</p>
 <p>虽然看上去很简单，<code>push</code>指令其实有一个前置操作。它会先取出 ESP 寄存器里面的地址，将其减去4个字节，然后将新地址写入 ESP 寄存器。使用减法是因为 Stack 从高位向低位发展，4个字节则是因为<code>3</code>的类型是<code>int</code>，占用4个字节。得到新地址以后， 3 就会写入这个地址开始的四个字节。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   2</span><br></pre></td></tr></table></figure>
-<p>第二行也是一样，<code>push</code>指令将<code>2</code>写入<code>main</code>这个帧，位置紧贴着前面写入的<code>3</code>。这时，ESP 寄存器会再减去 4个字节（累计减去8）。</p>
 </blockquote>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png" alt="img" /></p>
-<h3 id="call-指令">call 指令</h3>
+<p>第二行也是一样，<code>push</code>指令将<code>2</code>写入<code>main</code>这个帧，位置紧贴着前面写入的<code>3</code>。这时，ESP 寄存器会再减去 4个字节（累计减去8）。</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png" alt="img"></p>
+<h3 id="call-指令"><a class="header-anchor" href="#call-指令">¶</a>call 指令</h3>
 <p>第三行的<code>call</code>指令用来调用函数。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call   _add_a_and_b</span><br></pre></td></tr></table></figure>
-<p>上面的代码表示调用<code>add_a_and_b</code>函数。这时，程序就会去找<code>_add_a_and_b</code>标签，并为该函数建立一个新的帧。</p>
 </blockquote>
+<p>上面的代码表示调用<code>add_a_and_b</code>函数。这时，程序就会去找<code>_add_a_and_b</code>标签，并为该函数建立一个新的帧。</p>
 <p>下面就开始执行<code>_add_a_and_b</code>的代码。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
-<p>这一行表示将 EBX 寄存器里面的值，写入<code>_add_a_and_b</code>这个帧。这是因为后面要用到这个寄存器，就先把里面的值取出来，用完后再写回去。</p>
 </blockquote>
+<p>这一行表示将 EBX 寄存器里面的值，写入<code>_add_a_and_b</code>这个帧。这是因为后面要用到这个寄存器，就先把里面的值取出来，用完后再写回去。</p>
 <p>这时，<code>push</code>指令会再将 ESP 寄存器里面的地址减去4个字节（累计减去12）。</p>
-<h3 id="mov-指令">mov 指令</h3>
+<h3 id="mov-指令"><a class="header-anchor" href="#mov-指令">¶</a>mov 指令</h3>
 <p><code>mov</code>指令用于将一个值写入某个寄存器。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov    %eax, [%esp+8] </span><br></pre></td></tr></table></figure>
-<p>这一行代码表示，先将 ESP 寄存器里面的地址加上8个字节，得到一个新的地址，然后按照这个地址在 Stack 取出数据。根据前面的步骤，可以推算出这里取出的是<code>2</code>，再将<code>2</code>写入 EAX 寄存器。</p>
 </blockquote>
+<p>这一行代码表示，先将 ESP 寄存器里面的地址加上8个字节，得到一个新的地址，然后按照这个地址在 Stack 取出数据。根据前面的步骤，可以推算出这里取出的是<code>2</code>，再将<code>2</code>写入 EAX 寄存器。</p>
 <p>下一行代码也是干同样的事情。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov    %ebx, [%esp+12] </span><br></pre></td></tr></table></figure>
-<p>上面的代码将 ESP 寄存器的值加12个字节，再按照这个地址在 Stack 取出数据，这次取出的是<code>3</code>，将其写入 EBX 寄存器。</p>
 </blockquote>
-<h3 id="add-指令">add 指令</h3>
+<p>上面的代码将 ESP 寄存器的值加12个字节，再按照这个地址在 Stack 取出数据，这次取出的是<code>3</code>，将其写入 EBX 寄存器。</p>
+<h3 id="add-指令"><a class="header-anchor" href="#add-指令">¶</a>add 指令</h3>
 <p><code>add</code>指令用于将两个运算子相加，并将结果写入第一个运算子。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add    %eax, %ebx</span><br></pre></td></tr></table></figure>
-<p>上面的代码将 EAX 寄存器的值（即2）加上 EBX 寄存器的值（即3），得到结果5，再将这个结果写入第一个运算子 EAX 寄存器。</p>
 </blockquote>
-<h3 id="pop-指令">pop 指令</h3>
+<p>上面的代码将 EAX 寄存器的值（即2）加上 EBX 寄存器的值（即3），得到结果5，再将这个结果写入第一个运算子 EAX 寄存器。</p>
+<h3 id="pop-指令"><a class="header-anchor" href="#pop-指令">¶</a>pop 指令</h3>
 <p><code>pop</code>指令用于取出 Stack 最近一个写入的值（即最低位地址的值），并将这个值写入运算子指定的位置。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pop    %ebx</span><br></pre></td></tr></table></figure>
-<p>上面的代码表示，取出 Stack 最近写入的值（即 EBX 寄存器的原始值），再将这个值写回 EBX 寄存器（因为加法已经做完了，EBX 寄存器用不到了）。</p>
 </blockquote>
+<p>上面的代码表示，取出 Stack 最近写入的值（即 EBX 寄存器的原始值），再将这个值写回 EBX 寄存器（因为加法已经做完了，EBX 寄存器用不到了）。</p>
 <p>注意，<code>pop</code>指令还会将 ESP 寄存器里面的地址加4，即回收4个字节。ret 指令</p>
 <p><code>ret</code>指令用于终止当前函数的执行，将运行权交还给上层函数。也就是，当前函数的帧将被回收。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>可以看到，该指令没有运算子。</p>
 </blockquote>
+<p>可以看到，该指令没有运算子。</p>
 <p>随着<code>add_a_and_b</code>函数终止执行，系统就回到刚才<code>main</code>函数中断的地方，继续往下执行。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add    %esp, 8 </span><br></pre></td></tr></table></figure>
-<p>上面的代码表示，将 ESP 寄存器里面的地址，手动加上8个字节，再写回 ESP 寄存器。这是因为 ESP 寄存器的是 Stack 的写入开始地址，前面的<code>pop</code>操作已经回收了4个字节，这里再回收8个字节，等于全部回收。</p>
 </blockquote>
+<p>上面的代码表示，将 ESP 寄存器里面的地址，手动加上8个字节，再写回 ESP 寄存器。这是因为 ESP 寄存器的是 Stack 的写入开始地址，前面的<code>pop</code>操作已经回收了4个字节，这里再回收8个字节，等于全部回收。</p>
 <blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>最后，<code>main</code>函数运行结束，<code>ret</code>指令退出程序执行。</p>
 </blockquote>
-<h1 id="参考文章">参考文章</h1>
+<p>最后，<code>main</code>函数运行结束，<code>ret</code>指令退出程序执行。</p>
+<h1 id="参考文章"><a class="header-anchor" href="#参考文章">¶</a>参考文章</h1>
 <p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></p>
 <p><a target="_blank" rel="noopener" href="https://wdxtub.com/csapp/thin-csapp-2/2016/04/16/">【读薄 CSAPP】贰 机器指令与程序优化</a></p>
 
@@ -560,14 +560,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">79k</span>
+    <span title="站点总字数">81k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:45</span>
   </span>
 </div>
 <div class="busuanzi-count">

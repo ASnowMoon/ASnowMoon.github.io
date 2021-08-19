@@ -27,35 +27,30 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="¶汇编入门（二） x86-64 架构中的整型寄存器如下图所示（暂时不考虑浮点数的部分）  仔细看看寄存器的分布，我们可以发现有不同的颜色以及不同的寄存器名称，黄色部分是 16 位寄存器，也就是 16 位处理器 8086 的设计，然后绿色部分是 32 位寄存器（这里我是按照比例画的），给 32 位处理器使用，而蓝色部分是为 64 位处理器设计的。这样的设计保证了令人震惊的向下兼容性，几十年前的 x8">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CSAPP6——程序机器级表示2">
-<meta property="og:url" content="https://www.snowmoon.top/2021/08/15/CSAPP6/index.html">
+<meta name="description" content="本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:url" content="https://www.snowmoon.top/page/8/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="¶汇编入门（二） x86-64 架构中的整型寄存器如下图所示（暂时不考虑浮点数的部分）  仔细看看寄存器的分布，我们可以发现有不同的颜色以及不同的寄存器名称，黄色部分是 16 位寄存器，也就是 16 位处理器 8086 的设计，然后绿色部分是 32 位寄存器（这里我是按照比例画的），给 32 位处理器使用，而蓝色部分是为 64 位处理器设计的。这样的设计保证了令人震惊的向下兼容性，几十年前的 x8">
+<meta property="og:description" content="本网站是我的个人博客，主要用于记录我个人学习的内容以及一些杂谈、心情记录、文摘等">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191422580.jpeg">
-<meta property="article:published_time" content="2021-08-15T00:30:00.000Z">
-<meta property="article:modified_time" content="2021-08-19T06:23:22.823Z">
 <meta property="article:author" content="Zheng Haoyu">
-<meta property="article:tag" content="CSAPP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191422580.jpeg">
 
 
-<link rel="canonical" href="https://www.snowmoon.top/2021/08/15/CSAPP6/">
+<link rel="canonical" href="https://www.snowmoon.top/page/8/">
 
 
 <script class="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : false,
-    isPost : true,
+    isHome : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
-<title>CSAPP6——程序机器级表示2 | SnowMoon-Haoyu's Blog</title>
+<title>SnowMoon-Haoyu's Blog</title>
   
 
 
@@ -183,7 +178,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -196,7 +191,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E5%85%A5%E9%97%A8%EF%BC%88%E4%BA%8C%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">汇编入门（二）</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -260,18 +254,17 @@
     </header>
 <a target="_blank" rel="noopener" href="https://github.com/ASnowMoon" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner index posts-expand">
 
-
-  
+    	
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/08/15/CSAPP6/">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/Avatar.jpg">
@@ -283,9 +276,9 @@
       <meta itemprop="name" content="SnowMoon-Haoyu's Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          CSAPP6——程序机器级表示2
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="post-title-link" itemprop="url">Excel学习笔记1——填充、行列操作、数据格式</a>
+        </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -295,14 +288,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-08-15 08:30:00" itemprop="dateCreated datePublished" datetime="2021-08-15T08:30:00+08:00">2021-08-15</time>
+      <time title="创建时间：2021-02-16 17:22:33" itemprop="dateCreated datePublished" datetime="2021-02-16T17:22:33+08:00">2021-02-16</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-08-19 14:23:22" itemprop="dateModified" datetime="2021-08-19T14:23:22+08:00">2021-08-19</time>
+        <time title="修改时间：2021-02-21 00:08:41" itemprop="dateModified" datetime="2021-02-21T00:08:41+08:00">2021-02-21</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -310,19 +303,16 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CSAPP/" itemprop="url" rel="index"><span itemprop="name">CSAPP</span></a>
+          <a href="/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">办公类软件</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8A%9E%E5%85%AC%E7%B1%BB%E8%BD%AF%E4%BB%B6/Excel/" itemprop="url" rel="index"><span itemprop="name">Excel</span></a>
         </span>
     </span>
 
   
-    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span id="busuanzi_value_page_pv"></span>
-    </span>
-    <span id="/2021/08/15/CSAPP6/" class="post-meta-item leancloud_visitors" data-flag-title="CSAPP6——程序机器级表示2" title="阅读次数">
+    <span id="/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title="Excel学习笔记1——填充、行列操作、数据格式" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -337,14 +327,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.3k</span>
+      <span>3.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
+      <span>9 分钟</span>
     </span>
 </div>
 
@@ -355,82 +345,38 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="汇编入门（二）"><a class="header-anchor" href="#汇编入门（二）">¶</a>汇编入门（二）</h1>
-<p>x86-64 架构中的整型寄存器如下图所示（暂时不考虑浮点数的部分）</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191422580.jpeg" alt="img"></p>
-<p>仔细看看寄存器的分布，我们可以发现有不同的颜色以及不同的寄存器名称，黄色部分是 16 位寄存器，也就是 16 位处理器 8086 的设计，然后绿色部分是 32 位寄存器（这里我是按照比例画的），给 32 位处理器使用，而蓝色部分是为 64 位处理器设计的。这样的设计保证了令人震惊的向下兼容性，几十年前的 x86 代码现在仍然可以运行！</p>
-<p>前六个寄存器(%rax, %rbx, %rcx, %rdx, %rsi, %rdi)称为通用寄存器，有其『特定』的用途：</p>
+          <h3 id="行列填充"><a class="header-anchor" href="#行列填充">¶</a>行列填充</h3>
 <ul>
-<li>%rax(%eax) 用于做累加</li>
-<li>%rcx(%ecx) 用于计数</li>
-<li>%rdx(%edx) 用于保存数据</li>
-<li>%rbx(%ebx) 用于做内存查找的基础地址</li>
-<li>%rsi(%esi) 用于保存源索引值</li>
-<li>%rdi(%edi) 用于保存目标索引值</li>
+<li><strong>序列填充</strong>：填充-等差数列 设置步长与终止值后填充</li>
+<li><strong>填充</strong>：</li>
 </ul>
-<p>而 %rsp(%esp) 和 %rbp(%ebp) 则是作为栈指针和基指针来使用的。下面我们通过 <code>movq</code> 这个指令来了解操作数的三种基本类型：立即数(Imm)、寄存器值(Reg)和内存值(Mem)。</p>
-<a id="more"></a>
-<p>对于 <code>movq</code> 指令来说，需要源操作数和目标操作数，源操作数可以是立即数、寄存器值或内存值的任意一种，但目标操作数只能是寄存器值或内存值。指令的具体格式可以这样写 <code>movq [Imm|Reg|Mem], [Reg|Mem]</code>，第一个是源操作数，第二个是目标操作数，例如：</p>
+<ol>
+<li>向右：Ctrl + R</li>
+<li>向下：Ctrl + D</li>
+<li>在选中单元格附近悬停，出现黑色十字后双击</li>
+<li>若要下方单元格填充与上方一样的内容则选择时候选中含有数据的单元格</li>
+</ol>
 <ul>
-<li><code>movq Imm, Reg</code> -&gt; <code>mov $0x5, %rax</code> -&gt; <code>temp = 0x5;</code></li>
-<li><code>movq Imm, Mem</code> -&gt; <code>mov $0x5, (%rax)</code> -&gt; <code>*p = 0x5;</code></li>
-<li><code>movq Reg, Reg</code> -&gt; <code>mov %rax, %rdx</code> -&gt; <code>temp2 = temp1;</code></li>
-<li><code>movq Reg, Mem</code> -&gt; <code>mov %rax, (%rdx)</code> -&gt; <code>*p = temp;</code></li>
-<li><code>movq Mem, Reg</code> -&gt; <code>mov (%rax), %rdx</code> -&gt; <code>temp = *p;</code></li>
+<li>
+<p><strong>快速填充</strong>：Ctrl + E</p>
+<blockquote>
+<p>快速填充非常好用，能用来将旁边的内容中你需要的部分提取出来，或者在每行/列对应的数据组合成你想要的目标内容后放到几个目标格子中然后Ctrl + E就能快速的把附近的单元格填充好</p>
+</blockquote>
+</li>
 </ul>
-<p>这里有一种情况是不存在的，没有 <code>movq Mem, Mem</code> 这个方式，也就是说，我们没有办法用一条指令完成内存间的数据交换。</p>
-<p>上面的例子中有些操作数是带括号的，括号的意思就是寻址，这也分两种情况：</p>
+<h3 id="行列操作"><a class="header-anchor" href="#行列操作">¶</a>行列操作</h3>
 <ul>
-<li>普通模式，®，相当于 <code>Mem[Reg[R]]</code>，也就是说寄存器 R 指定内存地址，类似于 C 语言中的指针，语法为：<code>movq (%rcx), %rax</code> 也就是说以 %rcx 寄存器中存储的地址去内存里找对应的数据，存到寄存器 %rax 中</li>
-<li>移位模式，D®，相当于 <code>Mem[Reg[R]+D]</code>，寄存器 R 给出起始的内存地址，然后 D 是偏移量，语法为：<code>movq 8(%rbp),%rdx</code> 也就是说以 %rbp 寄存器中存储的地址再加上 8 个偏移量去内存里找对应的数据，存到寄存器 %rdx 中</li>
+<li><strong>自动调整列宽/行高</strong>：选中整个行/列（一定要是行/列）后移动到两行/两列之间直至出现双箭头然后双击即可自动调整行列宽</li>
 </ul>
-<p>因为寻址这个内容比较重要，所以多说两句，不然之后接触指针会比较吃力。对于寻址来说，比较通用的格式是 <code>D(Rb, Ri, S)</code> -&gt; <code>Mem[Reg[Rb]+S*Reg[Ri]+D]</code>，其中：</p>
-<ul>
-<li><code>D</code> - 常数偏移量</li>
-<li><code>Rb</code> - 基寄存器</li>
-<li><code>Ri</code> - 索引寄存器，不能是 %rsp</li>
-<li><code>S</code> - 系数</li>
-</ul>
-<p>除此之外，还有如下三种特殊情况</p>
-<ul>
-<li><code>(Rb, Ri)</code> -&gt; <code>Mem[Reg[Rb]+Reg[Ri]]</code></li>
-<li><code>D(Rb, Ri)</code> -&gt; <code>Mem[Reg[Rb]+Reg[Ri]+D]</code></li>
-<li><code>(Rb, Ri, S)</code> -&gt; <code>Mem[Reg[Rb]+S*Reg[Ri]]</code></li>
-</ul>
-<p>我们通过具体的例子来巩固一下，这里假设 %rdx 中的存着 <code>0xf000</code>，%rcx 中存着 <code>0x0100</code>，那么</p>
-<ul>
-<li><code>0x8(%rdx)</code> = <code>0xf000</code> + <code>0x8</code> = <code>0xf008</code></li>
-<li><code>(%rdx, %rcx)</code> = <code>0xf000</code> + <code>0x100</code> = <code>0xf100</code></li>
-<li><code>(%rdx, %rcx, 4)</code> = <code>0xf000</code> + <code>4*0x100</code> = <code>0xf400</code></li>
-<li><code>0x80(, %rdx, 2)</code> = <code>2*0xf000</code> + <code>0x80</code> = <code>0x1e080</code></li>
-</ul>
-<p>了解了寻址之后，我们来看看运算指令，这里以 <code>leaq</code> 指令为例子。具体格式为 <code>leaq Src, Dst</code>，其中 <code>Src</code> 是地址的表达式，然后把计算的值存入 <code>Dst</code> 指定的寄存器，也就是说，无须内存引用就可以计算，类似于 <code>p = &amp;x[i];</code>。我们来看一个具体的例子，假设一个 C 函数是：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">m12</span><span class="params">(<span class="keyword">long</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">12</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>复制</p>
-<p>对应的汇编代码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaq (%rdi, %rdi, 2), %rax # t &lt;- x+x*2</span><br><span class="line">salq $2, %rax              # return t &lt;&lt; 2</span><br></pre></td></tr></table></figure>
-<p>复制</p>
-<p>可以看到是直接对 %rdi 寄存器中存的数据（地址）进行运算，然后赋值给 %rax。最后给出一些常见的算术运算指令，注意参数的顺序，而且对于有符号和无符号数都是一样的，更多的信息可以参考 Intel 官方文档[3]。</p>
-<p>需要两个操作数的指令</p>
-<ul>
-<li><code>addq Src, Dest</code> -&gt; <code>Dest = Dest + Src</code></li>
-<li><code>subq Src, Dest</code> -&gt; <code>Dest = Dest - Src</code></li>
-<li><code>imulq Src, Dest</code> -&gt; <code>Dest = Dest * Src</code></li>
-<li><code>salq Src, Dest</code> -&gt; <code>Dest = Dest &lt;&lt; Src</code></li>
-<li><code>sarq Src, Dest</code> -&gt; <code>Dest = Dest &gt;&gt; Src</code></li>
-<li><code>shrq Src, Dest</code> -&gt; <code>Dest = Dest &gt;&gt; Src</code></li>
-<li><code>xorq Src, Dest</code> -&gt; <code>Dest = Dest ^ Src</code></li>
-<li><code>andq Src, Dest</code> -&gt; <code>Dest = Dest &amp; Src</code></li>
-<li><code>orq Src, Dest</code> -&gt; <code>Dest = Dest | Src</code></li>
-</ul>
-<p>需要一个操作数的指令</p>
-<ul>
-<li><code>incq Dest</code> -&gt; <code>Dest = Dest + 1</code></li>
-<li><code>decq Dest</code> -&gt; <code>Dest = Dest - 1</code></li>
-<li><code>negq Dest</code> -&gt; <code>Dest = -Dest</code></li>
-<li><code>notq Dest</code> -&gt; <code>Dest = ~Dest</code></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/16/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E5%A1%AB%E5%85%85%E3%80%81%E8%A1%8C%E5%88%97%E6%93%8D%E4%BD%9C%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
     </div>
 
     
@@ -438,59 +384,8 @@
     
 
     <footer class="post-footer">
-          <div class="reward-container">
-  <div>请我喝咖啡</div>
-  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
-    赞赏
-  </button>
-  <div class="post-reward">
-      <div>
-        <img src="/images/wechatpay.png" alt="Zheng Haoyu 微信">
-        <span>微信</span>
-      </div>
-      <div>
-        <img src="/images/alipay.png" alt="Zheng Haoyu 支付宝">
-        <span>支付宝</span>
-      </div>
-
-  </div>
-</div>
-
-          
-
-<div class="post-copyright">
-<ul>
-  <li class="post-copyright-author">
-      <strong>本文作者： </strong>Zheng Haoyu
-  </li>
-  <li class="post-copyright-link">
-      <strong>本文链接：</strong>
-      <a href="https://www.snowmoon.top/2021/08/15/CSAPP6/" title="CSAPP6——程序机器级表示2">https://www.snowmoon.top/2021/08/15/CSAPP6/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-          <div class="post-tags">
-              <a href="/tags/CSAPP/" rel="tag"><i class="fas fa-tag"></i> CSAPP</a>
-          </div>
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-                <a href="/2021/08/14/CSAPP5/" rel="prev" title="CSAPP5——程序机器级表示">
-                  <i class="fa fa-chevron-left"></i> CSAPP5——程序机器级表示
-                </a>
-            </div>
-            <div class="post-nav-item">
-                <a href="/2021/08/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%9511/" rel="next" title="数据结构刷题笔记11">
-                  数据结构刷题笔记11 <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
+        <div class="post-eof"></div>
+      
     </footer>
   </article>
 </div>
@@ -498,9 +393,10 @@
 
 
 
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+  </nav>
 
-
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -699,7 +595,7 @@ NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
     new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":null,"placeholder":"无需输入头像 昵称 网址 即可评论(*^▽^*)&#10valine评论不一定能及时看到，如果需要回复可以戳我主页的联系方式(～￣▽￣)～","avatar":"robohash","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
       el: '#valine-comments',
-      path: "/2021/08/15/CSAPP6/",
+      path: "/page/8/",
       serverURLs: "https://3kooisaa.api.lncldglobal.com"
     }));
   }, window.Valine);

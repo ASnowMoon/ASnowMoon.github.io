@@ -27,12 +27,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="数据编码 假设字长(word size)为 \(w\),也即数据的位数，则二进制向十进制的转换分别是：  无符号数： \[ B2U(X)&#x3D;\sum_{i&#x3D;0}^{w-1}x_i\cdot2^i \] 有符号数： \[ B2T(X)&#x3D;-x_{w-1}\cdot2^{w-1}+\sum_{i&#x3D;0}^{w-2}x_i\cdot2^{i} \]  左移：x向左移动k位，丢弃最高的k位，">
+<meta name="description" content="¶数据编码 假设字长(word size)为 $w$,也即数据的位数，则二进制向十进制的转换分别是：  无符号数： $$ B2U(X)&#x3D;\sum_{i&#x3D;0}{w-1}x_i\cdot2i $$ 有符号数： $$ B2T(X)&#x3D;-x_{w-1}\cdot2{w-1}+\sum_{i&#x3D;0}{w-2}x_i\cdot2^{i} $$  左移：x向左移动k位，丢弃最高的k位，在右端补k个0； 逻辑右移 ：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSAPP阅读笔记1——数据编码">
 <meta property="og:url" content="https://www.snowmoon.top/2021/08/05/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="数据编码 假设字长(word size)为 \(w\),也即数据的位数，则二进制向十进制的转换分别是：  无符号数： \[ B2U(X)&#x3D;\sum_{i&#x3D;0}^{w-1}x_i\cdot2^i \] 有符号数： \[ B2T(X)&#x3D;-x_{w-1}\cdot2^{w-1}+\sum_{i&#x3D;0}^{w-2}x_i\cdot2^{i} \]  左移：x向左移动k位，丢弃最高的k位，">
+<meta property="og:description" content="¶数据编码 假设字长(word size)为 $w$,也即数据的位数，则二进制向十进制的转换分别是：  无符号数： $$ B2U(X)&#x3D;\sum_{i&#x3D;0}{w-1}x_i\cdot2i $$ 有符号数： $$ B2T(X)&#x3D;-x_{w-1}\cdot2{w-1}+\sum_{i&#x3D;0}{w-2}x_i\cdot2^{i} $$  左移：x向左移动k位，丢弃最高的k位，在右端补k个0； 逻辑右移 ：">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052336446.png">
 <meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052347505.png">
@@ -215,7 +215,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">博客</span>
         </a>
       </div>
@@ -344,7 +344,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.7k</span>
+      <span>1.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -362,58 +362,65 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="数据编码">数据编码</h1>
-<p>假设字长(word size)为 <span class="math inline">\(w\)</span>,也即数据的位数，则二进制向十进制的转换分别是：</p>
+        <h1 id="数据编码"><a class="header-anchor" href="#数据编码">¶</a>数据编码</h1>
+<p>假设字长(word size)为 $w$,也即数据的位数，则二进制向十进制的转换分别是：</p>
 <ul>
-<li>无符号数： <span class="math display">\[
-B2U(X)=\sum_{i=0}^{w-1}x_i\cdot2^i
-\]</span></li>
-<li>有符号数： <span class="math display">\[
-B2T(X)=-x_{w-1}\cdot2^{w-1}+\sum_{i=0}^{w-2}x_i\cdot2^{i}
-\]</span></li>
+<li>无符号数：<br>
+$$<br>
+B2U(X)=\sum_{i=0}<sup>{w-1}x_i\cdot2</sup>i<br>
+$$</li>
+<li>有符号数：<br>
+$$<br>
+B2T(X)=-x_{w-1}\cdot2<sup>{w-1}+\sum_{i=0}</sup>{w-2}x_i\cdot2^{i}<br>
+$$</li>
 </ul>
 <p>左移：x向左移动k位，丢弃最高的k位，在右端补k个0；</p>
 <p>逻辑右移 ：在左端补k个0</p>
 <p>算术右移：在左端补k个最高有效位的值</p>
-<p>PS：移位操作优先级低于+-，</p>
-<p>无符号数编码定义： <span class="math display">\[
-B2U_w(x)=\sum_{i=0}^{w-1}x_i2^i
-\]</span> 原码：正数是其二进制本身；负数是符号位为1,数值部分取X绝对值的二进制。</p>
-<p>最高位是符号位，用来确定剩下的位是应该取负权还是正权。 <span class="math display">\[
-B2S_w(x)=(-1)^{x_{w-1}}\cdot(\sum_{i=0}^{w-2}x_i2^i)
-\]</span> 补码：正数的补码和原码，反码相同；负数是符号位为1，其它位是原码按位取反，未位加1。（或者说负数的补码是其绝对值反码未位加1）</p>
-<p>最高位<span class="math inline">\(x_{w-1}\)</span>也称为符号位，其权重为<span class="math inline">\(-2^{w-1}\)</span>​</p>
+<p>PS：移位操作优先级低于±，</p>
+<p>无符号数编码定义：<br>
+$$<br>
+B2U_w(x)=\sum_{i=0}<sup>{w-1}x_i2</sup>i<br>
+$$<br>
+原码：正数是其二进制本身；负数是符号位为1,数值部分取X绝对值的二进制。</p>
+<p>最高位是符号位，用来确定剩下的位是应该取负权还是正权。<br>
+$$<br>
+B2S_w(x)=(-1)<sup>{x_{w-1}}\cdot(\sum_{i=0}</sup>{w-2}x_i2^i)<br>
+$$<br>
+补码：正数的补码和原码，反码相同；负数是符号位为1，其它位是原码按位取反，未位加1。（或者说负数的补码是其绝对值反码未位加1）</p>
+<p>最高位$x_{w-1}$也称为符号位，其权重为$-2^{w-1}$​</p>
 <a id="more"></a>
-<p><span class="math display">\[
-B2T_w(x)=-x_{w-1}2^{w-1}+\sum_{i=0}^{w-2}x_i2^i
-\]</span></p>
+<p>$$<br>
+B2T_w(x)=-x_{w-1}2<sup>{w-1}+\sum_{i=0}</sup>{w-2}x_i2^i<br>
+$$</p>
 <p>反码：正数的反码和原码相同；负数是符号位为1,其它位是原码取反。</p>
-<p>除最高位权为<span class="math inline">\(-(2^{w-1}-1)\)</span>而不是<span class="math inline">\(-2^{w-1}\)</span>其余和补码一样。 <span class="math display">\[
-B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
-\]</span></p>
+<p>除最高位权为$-(2<sup>{w-1}-1)$而不是$-2</sup>{w-1}$其余和补码一样。<br>
+$$<br>
+B2O_w(x)=-x_{w-1}(2<sup>{w-1}-1)+\sum_{i=0}</sup>{w-2}x_i2^i<br>
+$$</p>
 <table>
 <thead>
-<tr class="header">
-<th style="text-align: center;">编码</th>
-<th style="text-align: center;">10810（sbyte）</th>
-<th style="text-align: center;">-10810（sbyte）</th>
+<tr>
+<th style="text-align:center">编码</th>
+<th style="text-align:center">10810（sbyte）</th>
+<th style="text-align:center">-10810（sbyte）</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: center;">原码</td>
-<td style="text-align: center;"><strong>0</strong>1101100</td>
-<td style="text-align: center;"><strong>1</strong>1101100</td>
+<tr>
+<td style="text-align:center">原码</td>
+<td style="text-align:center"><strong>0</strong>1101100</td>
+<td style="text-align:center"><strong>1</strong>1101100</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">反码</td>
-<td style="text-align: center;"><strong>0</strong>1101100</td>
-<td style="text-align: center;"><strong>1</strong>0010011</td>
+<tr>
+<td style="text-align:center">反码</td>
+<td style="text-align:center"><strong>0</strong>1101100</td>
+<td style="text-align:center"><strong>1</strong>0010011</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">补码</td>
-<td style="text-align: center;"><strong>0</strong>1101100</td>
-<td style="text-align: center;"><strong>1</strong>0010100</td>
+<tr>
+<td style="text-align:center">补码</td>
+<td style="text-align:center"><strong>0</strong>1101100</td>
+<td style="text-align:center"><strong>1</strong>0010100</td>
 </tr>
 </tbody>
 </table>
@@ -425,80 +432,95 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
 </ul>
 <p>对应与集合运算则是交集、并集、差集和补集，假设集合 A 是 <code>&#123;0, 3, 5, 6&#125;</code>，集合 B 是 <code>&#123;0, 2, 4, 6&#125;</code>，全集为 <code>&#123;0, 1, 2, 3, 4, 5, 6, 7&#125;</code>那么：</p>
 <ul>
-<li><p><code>&amp;</code> 交集 Intersection <code>&#123;0, 6&#125;</code></p></li>
-<li><p><code>|</code> 并集 Union <code>&#123;0, 2, 3, 4, 5, 6&#125;</code></p></li>
-<li><p><code>^</code> 差集 Symmetric difference <code>&#123;2, 3, 4, 5&#125;</code></p></li>
-<li><p><code>~</code> 补集 Complement <code>&#123;1, 3, 5, 7&#125;</code></p></li>
+<li>
+<p><code>&amp;</code> 交集 Intersection <code>&#123;0, 6&#125;</code></p>
+</li>
+<li>
+<p><code>|</code> 并集 Union <code>&#123;0, 2, 3, 4, 5, 6&#125;</code></p>
+</li>
+<li>
+<p><code>^</code> 差集 Symmetric difference <code>&#123;2, 3, 4, 5&#125;</code></p>
+</li>
+<li>
+<p><code>~</code> 补集 Complement <code>&#123;1, 3, 5, 7&#125;</code></p>
+</li>
 </ul>
-<p>类型转换 我们在数轴上把有符号数和无符号数画出来的话，就能很清晰的看出相对的关系：</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052336446.png" alt="image-20210805233558134" /></p>
-<p>在 C 语言中，如果不加关键字限制，默认的整型是有符号的。如果想要无符号数的话，需要在数字后面加 U，例如下面的代码段 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a_signed_number = <span class="number">-15213</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> a_unsigned_number = <span class="number">15213U</span>;</span><br></pre></td></tr></table></figure> 在进行有符号和无符号数的互相转换时：</p>
+<p>类型转换<br>
+我们在数轴上把有符号数和无符号数画出来的话，就能很清晰的看出相对的关系：</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052336446.png" alt="image-20210805233558134"></p>
+<p>在 C 语言中，如果不加关键字限制，默认的整型是有符号的。如果想要无符号数的话，需要在数字后面加 U，例如下面的代码段</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a_signed_number = <span class="number">-15213</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> a_unsigned_number = <span class="number">15213U</span>;</span><br></pre></td></tr></table></figure>
+<p>在进行有符号和无符号数的互相转换时：</p>
 <ul>
-<li><p>具体每一个字节的值不会改变，<strong>改变的是计算机解释当前值的方式</strong></p></li>
-<li><p>如果一个表达式既包含有符号数也包含无符号数，那么<strong>会被隐式转换成无符号数进行比较</strong></p></li>
+<li>
+<p>具体每一个字节的值不会改变，<strong>改变的是计算机解释当前值的方式</strong></p>
+</li>
+<li>
+<p>如果一个表达式既包含有符号数也包含无符号数，那么<strong>会被隐式转换成无符号数进行比较</strong></p>
+</li>
 </ul>
 <table>
 <thead>
-<tr class="header">
-<th style="text-align: center;">表达式</th>
-<th style="text-align: center;">比较对象</th>
-<th style="text-align: center;">求值</th>
+<tr>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">比较对象</th>
+<th style="text-align:center">求值</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: center;">0 == 0U</td>
-<td style="text-align: center;">无符号数</td>
-<td style="text-align: center;">1</td>
+<tr>
+<td style="text-align:center">0 == 0U</td>
+<td style="text-align:center">无符号数</td>
+<td style="text-align:center">1</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">-1 &lt; 0</td>
-<td style="text-align: center;">有符号数</td>
-<td style="text-align: center;">1</td>
+<tr>
+<td style="text-align:center">-1 &lt; 0</td>
+<td style="text-align:center">有符号数</td>
+<td style="text-align:center">1</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">-1 &lt; 0U</td>
-<td style="text-align: center;">无符号数</td>
-<td style="text-align: center;">0*</td>
+<tr>
+<td style="text-align:center">-1 &lt; 0U</td>
+<td style="text-align:center">无符号数</td>
+<td style="text-align:center">0*</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">2147483647 &gt; (-2147483647-1)</td>
-<td style="text-align: center;">有符号数</td>
-<td style="text-align: center;">1</td>
+<tr>
+<td style="text-align:center">2147483647 &gt; (-2147483647-1)</td>
+<td style="text-align:center">有符号数</td>
+<td style="text-align:center">1</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">2147483647U &lt; (-2147483647-1)</td>
-<td style="text-align: center;">无符号数</td>
-<td style="text-align: center;">0*</td>
+<tr>
+<td style="text-align:center">2147483647U &lt; (-2147483647-1)</td>
+<td style="text-align:center">无符号数</td>
+<td style="text-align:center">0*</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">-1 &gt; -2</td>
-<td style="text-align: center;">有符号数</td>
-<td style="text-align: center;">1</td>
+<tr>
+<td style="text-align:center">-1 &gt; -2</td>
+<td style="text-align:center">有符号数</td>
+<td style="text-align:center">1</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">(unsigned)-1 &gt; -2</td>
-<td style="text-align: center;">无符号数</td>
-<td style="text-align: center;">1</td>
+<tr>
+<td style="text-align:center">(unsigned)-1 &gt; -2</td>
+<td style="text-align:center">无符号数</td>
+<td style="text-align:center">1</td>
 </tr>
-<tr class="even">
-<td style="text-align: center;">2147483647 &lt; 2147483648U</td>
-<td style="text-align: center;">无符号数</td>
-<td style="text-align: center;">1</td>
+<tr>
+<td style="text-align:center">2147483647 &lt; 2147483648U</td>
+<td style="text-align:center">无符号数</td>
+<td style="text-align:center">1</td>
 </tr>
-<tr class="odd">
-<td style="text-align: center;">2147483647 &gt; (int)2147483648U</td>
-<td style="text-align: center;">有符号数</td>
-<td style="text-align: center;">1*</td>
+<tr>
+<td style="text-align:center">2147483647 &gt; (int)2147483648U</td>
+<td style="text-align:center">有符号数</td>
+<td style="text-align:center">1*</td>
 </tr>
 </tbody>
 </table>
 <p><em>注：*号标注的为比较反直觉的一些结果</em></p>
-<h1 id="参考文章">参考文章</h1>
+<h1 id="参考文章"><a class="header-anchor" href="#参考文章">¶</a>参考文章</h1>
 <p><a target="_blank" rel="noopener" href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/abbdae4f3841">原码、反码、补码和移码详解</a></p>
-<h1 id="今日体重更新">今日体重更新</h1>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052347505.png" alt="image-20210805234727407" /></p>
+<h1 id="今日体重更新"><a class="header-anchor" href="#今日体重更新">¶</a>今日体重更新</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108052347505.png" alt="image-20210805234727407"></p>
 <p>今天和朋友出去搓了顿周麻婆，体重略有上涨，意料之中。。。</p>
 
     </div>
@@ -616,14 +638,14 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">79k</span>
+    <span title="站点总字数">81k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:45</span>
   </span>
 </div>
 <div class="busuanzi-count">
