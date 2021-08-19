@@ -569,72 +569,6 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       </tags>
   </entry>
   <entry>
-    <title>CSAPP阅读笔记3——数据编码3</title>
-    <url>/2021/08/07/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/</url>
-    <content><![CDATA[<h1 id="浮点数">浮点数</h1>
-<p>浮点数的定义： <span class="math display">\[
-d=\sum_{i=-n}^m2^i \times d_i
-\]</span> 这个定义导致我们只有在表示<span class="math inline">\(\frac{x}{2^k}\)</span>时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。</p>
-<h2 id="ieee-浮点数标准">IEEE 浮点数标准</h2>
-<p>以下内容引用自文章<a href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p>
-<p>IEEE 的浮点数标准更多是从数值角度来建立的，对于舍入，上溢出和下溢出都有比较统一的处理方法。但与此同时也给硬件优化带来了比较大的困难。因为和平时使用的数制也有一定差异，从理解的角度来看不够直观，但是好在主流的 CPU 都支持浮点数，所以我们不必过多涉及这方面的细节。</p>
-<p>在 IEEE 标准中，我们用下面的公式来表达浮点数： <span class="math display">\[
-(−1)^sM2^E
-\]</span> <a id="more"></a></p>
-<p>其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：</p>
-<p>下图中 <code>s</code> 对应着符号位，<code>exp</code> 对应着 E（注意，不一定等于 E，因为位数限制表达能力有限），<code>frac</code> 对应着 <code>M</code>（注意，不一定等于 <code>M</code>，因为位数限制表达能力有限）。不同的位数就代表了不同的表示能力，也就是单精度，双精度，扩展精度的来源。</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108081400558.png" alt="image-20210808140048419" /></p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">形式</th>
-<th style="text-align: center;">指数</th>
-<th style="text-align: center;">小数部分</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">零</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">非规约形式</td>
-<td style="text-align: center;">0</td>
-<td style="text-align: center;">大于0小于1</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">规约形式</td>
-<td style="text-align: center;">1到<span class="math inline">\(2^e-2\)</span></td>
-<td style="text-align: center;">大于等于1小于2</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">无穷</td>
-<td style="text-align: center;"><span class="math inline">\(2^e-1\)</span></td>
-<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">NaN</td>
-<td style="text-align: center;"><span class="math inline">\(2^e-1\)</span></td>
-<td style="text-align: center;">非0</td>
-</tr>
-</tbody>
-</table>
-<p>例子如下</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">    s exp  frac   E   值</span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">000</span>   -<span class="number">6</span>   <span class="number">0</span>   <span class="comment"># 这部分是非规范化数值，下一部分是规范化值</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> 001   -<span class="number">6</span>   <span class="number">1</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">1</span>/<span class="number">512</span> <span class="comment"># 能表示的最接近零的值</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> 010   -<span class="number">6</span>   <span class="number">2</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">2</span>/<span class="number">512</span> </span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">110</span>   -<span class="number">6</span>   <span class="number">6</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">6</span>/<span class="number">512</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">111</span>   -<span class="number">6</span>   <span class="number">7</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">7</span>/<span class="number">512</span> <span class="comment"># 能表示的最大非规范化值</span></span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> 0001 <span class="number">000</span>   -<span class="number">6</span>   <span class="number">8</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">8</span>/<span class="number">512</span> <span class="comment"># 能表示的最小规范化值</span></span><br><span class="line">    <span class="number">0</span> 0001 001   -<span class="number">6</span>   <span class="number">9</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">9</span>/<span class="number">512</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> 0110 <span class="number">110</span>   -<span class="number">1</span>   <span class="number">14</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">2</span> = <span class="number">14</span>/<span class="number">16</span></span><br><span class="line">    <span class="number">0</span> 0110 <span class="number">111</span>   -<span class="number">1</span>   <span class="number">15</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">2</span> = <span class="number">15</span>/<span class="number">16</span> <span class="comment"># 最接近且小于 1 的值</span></span><br><span class="line">    <span class="number">0</span> 0111 <span class="number">000</span>    <span class="number">0</span>   <span class="number">8</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">1</span></span><br><span class="line">    <span class="number">0</span> 0111 001    <span class="number">0</span>   <span class="number">9</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">9</span>/<span class="number">8</span>      <span class="comment"># 最接近且大于 1 的值</span></span><br><span class="line">    <span class="number">0</span> 0111 010    <span class="number">0</span>   <span class="number">10</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">10</span>/<span class="number">8</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> <span class="number">1110</span> <span class="number">110</span>    <span class="number">7</span>   <span class="number">14</span>/<span class="number">8</span> * <span class="number">128</span> = <span class="number">224</span></span><br><span class="line">    <span class="number">0</span> <span class="number">1110</span> <span class="number">111</span>    <span class="number">7</span>   <span class="number">15</span>/<span class="number">8</span> * <span class="number">128</span> = <span class="number">240</span>   <span class="comment"># 能表示的最大规范化值</span></span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> <span class="number">1111</span> <span class="number">000</span>   n/a  无穷               <span class="comment"># 特殊值</span></span><br></pre></td></tr></table></figure>
-<h1 id="今日体重">今日体重</h1>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080019434.png" alt="image-20210808001912353" /></p>
-]]></content>
-      <categories>
-        <category>CSAPP</category>
-        <category>计算机组成原理</category>
-      </categories>
-      <tags>
-        <tag>CSAPP</tag>
-        <tag>浮点数</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CSAPP阅读笔记4——数据编码4</title>
     <url>/2021/08/08/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%814/</url>
     <content><![CDATA[<h1 id="浮点数2">浮点数2</h1>
@@ -698,62 +632,69 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
-    <title>C语言函数参数传递的错误与避免</title>
-    <url>/2021/08/04/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E4%BC%A0%E9%80%92/</url>
-    <content><![CDATA[<blockquote>
-<p>今日第二更嘿嘿</p>
-<p>前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习</p>
-</blockquote>
-<h1 id="函数参数的调用">函数参数的调用</h1>
+    <title>CSAPP阅读笔记3——数据编码3</title>
+    <url>/2021/08/07/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/</url>
+    <content><![CDATA[<h1 id="浮点数">浮点数</h1>
+<p>浮点数的定义： <span class="math display">\[
+d=\sum_{i=-n}^m2^i \times d_i
+\]</span> 这个定义导致我们只有在表示<span class="math inline">\(\frac{x}{2^k}\)</span>时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。</p>
+<h2 id="ieee-浮点数标准">IEEE 浮点数标准</h2>
+<p>以下内容引用自文章<a href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p>
+<p>IEEE 的浮点数标准更多是从数值角度来建立的，对于舍入，上溢出和下溢出都有比较统一的处理方法。但与此同时也给硬件优化带来了比较大的困难。因为和平时使用的数制也有一定差异，从理解的角度来看不够直观，但是好在主流的 CPU 都支持浮点数，所以我们不必过多涉及这方面的细节。</p>
+<p>在 IEEE 标准中，我们用下面的公式来表达浮点数： <span class="math display">\[
+(−1)^sM2^E
+\]</span> <a id="more"></a></p>
+<p>其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：其中 s 是符号位，决定正负；M 通常是一个值在 [1.0, 2.0) 的小数；E 是次方数。具体编码时结构如下，这里用单精度、双精度和扩展精度为例：</p>
+<p>下图中 <code>s</code> 对应着符号位，<code>exp</code> 对应着 E（注意，不一定等于 E，因为位数限制表达能力有限），<code>frac</code> 对应着 <code>M</code>（注意，不一定等于 <code>M</code>，因为位数限制表达能力有限）。不同的位数就代表了不同的表示能力，也就是单精度，双精度，扩展精度的来源。</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108081400558.png" alt="image-20210808140048419" /></p>
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: center;">调用类型</th>
-<th style="text-align: center;">描述</th>
+<th style="text-align: center;">形式</th>
+<th style="text-align: center;">指数</th>
+<th style="text-align: center;">小数部分</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-value.html">传值调用</a></td>
-<td style="text-align: center;">该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1<br/>在这种情况下，修改函数内的形式参数不会影响实际参数。</td>
+<td style="text-align: center;">零</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-pointer.html">引用调用</a></td>
-<td style="text-align: center;">通过指针传递方式，形参为指向实参地址的指针，对应正确写法<br/>当对形参的指向操作时，就相当于对实参本身进行的操作。</td>
+<td style="text-align: center;">非规约形式</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">大于0小于1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">规约形式</td>
+<td style="text-align: center;">1到<span class="math inline">\(2^e-2\)</span></td>
+<td style="text-align: center;">大于等于1小于2</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">无穷</td>
+<td style="text-align: center;"><span class="math inline">\(2^e-1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">NaN</td>
+<td style="text-align: center;"><span class="math inline">\(2^e-1\)</span></td>
+<td style="text-align: center;">非0</td>
 </tr>
 </tbody>
 </table>
-<h1 id="例利用swap函数交换变量ab的常见错误">例：利用Swap函数交换变量a，b的常见错误</h1>
-<a id="more"></a>
-<h2 id="error1使用局部变量代替原始变量">ERROR1——使用局部变量代替原始变量</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error1</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error1(a,b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
-<p>局部变量：定义在函数内部的变量，只能在函数内部使用。 上面代码里在main函数中定义的a，b与Swap函数中a，b只是同名，只在Swap函数中交换a与b的值而不影响main函数中的原始变量a与b的值</p>
-<h2 id="error2只交换了地址">ERROR2——只交换了地址</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = p1;<span class="comment">//将a的地址赋值给tmp</span></span><br><span class="line">    p1 = p2;</span><br><span class="line">    p2 = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error2(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
-<p>可以看到上述代码并没有完成对ab的交换。</p>
-<p>在上面代码中Swap函数虽然使用了指针，但是未做取值运算，所以只是将两个变量a,b的存储位置交换了一下</p>
-<h2 id="error3野指针">ERROR3——野指针</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp=*p1;<span class="comment">//野指针</span></span><br><span class="line">    *p1=*p2;</span><br><span class="line">    *p2=*tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error3(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">———————————</span><br><span class="line"></span><br><span class="line">Process returned <span class="number">-1073741819</span> (<span class="number">0xC0000005</span>)   execution <span class="type">time</span> : <span class="number">1.663</span> s</span><br><span class="line">Press <span class="keyword">any</span> key <span class="keyword">to</span> <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
-<p>上述程序在运行了一段时间之后就崩了，没有输出任何东西，这是因为我们在给tmp初始化的时候直接把P1的值，也即a的值当做地址赋给了tmp，导致tmp指向了不能访问的地区导致了程序崩溃。</p>
-<p>野指针（悬挂指针）：没有访问权限的指针，这个指针有可能存在也有可能不存在，但是你不能访问。（野指针不好判断） 1、地址不存在（例如电话号码少一位）。 2、地址存在，但是不能访问（例如电话号码写成别人）。 3、地址之前可以访问，但现在不可以（更换电话号码）</p>
-<h2 id="正确写法">正确写法</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *p1;<span class="comment">//tmp＝a</span></span><br><span class="line">    *p1 = *p2;<span class="comment">//a＝b</span></span><br><span class="line">    *p2 = tmp;<span class="comment">//b＝tmp</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结论 一个函数（父函数）调用另一个函数（子函数），想通过子函数修改父函数的数据，必须传指针，子函数内部解引用。也就是子函数的改变要想影响父函数的数据必须传指针和解引用。 error1中既没有指针也没有解引用，error2中只是传指针但在Swap函数中没有使用解引用 error3中传了野指针导致程序崩溃。</p>
-<p>参考文章：<a href="https://blog.csdn.net/qq_51663917/article/details/109206266">C语言中利用Swap函数交换变量a，b</a></p>
-<p><a href="https://www.runoob.com/cprogramming/c-functions.html">菜鸟教程——C函数</a></p>
+<p>例子如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">    s exp  frac   E   值</span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">000</span>   -<span class="number">6</span>   <span class="number">0</span>   <span class="comment"># 这部分是非规范化数值，下一部分是规范化值</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> 001   -<span class="number">6</span>   <span class="number">1</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">1</span>/<span class="number">512</span> <span class="comment"># 能表示的最接近零的值</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> 010   -<span class="number">6</span>   <span class="number">2</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">2</span>/<span class="number">512</span> </span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">110</span>   -<span class="number">6</span>   <span class="number">6</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">6</span>/<span class="number">512</span></span><br><span class="line">    <span class="number">0</span> <span class="number">0000</span> <span class="number">111</span>   -<span class="number">6</span>   <span class="number">7</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">7</span>/<span class="number">512</span> <span class="comment"># 能表示的最大非规范化值</span></span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> 0001 <span class="number">000</span>   -<span class="number">6</span>   <span class="number">8</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">8</span>/<span class="number">512</span> <span class="comment"># 能表示的最小规范化值</span></span><br><span class="line">    <span class="number">0</span> 0001 001   -<span class="number">6</span>   <span class="number">9</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">64</span> = <span class="number">9</span>/<span class="number">512</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> 0110 <span class="number">110</span>   -<span class="number">1</span>   <span class="number">14</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">2</span> = <span class="number">14</span>/<span class="number">16</span></span><br><span class="line">    <span class="number">0</span> 0110 <span class="number">111</span>   -<span class="number">1</span>   <span class="number">15</span>/<span class="number">8</span> * <span class="number">1</span>/<span class="number">2</span> = <span class="number">15</span>/<span class="number">16</span> <span class="comment"># 最接近且小于 1 的值</span></span><br><span class="line">    <span class="number">0</span> 0111 <span class="number">000</span>    <span class="number">0</span>   <span class="number">8</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">1</span></span><br><span class="line">    <span class="number">0</span> 0111 001    <span class="number">0</span>   <span class="number">9</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">9</span>/<span class="number">8</span>      <span class="comment"># 最接近且大于 1 的值</span></span><br><span class="line">    <span class="number">0</span> 0111 010    <span class="number">0</span>   <span class="number">10</span>/<span class="number">8</span> * <span class="number">1</span> = <span class="number">10</span>/<span class="number">8</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="number">0</span> <span class="number">1110</span> <span class="number">110</span>    <span class="number">7</span>   <span class="number">14</span>/<span class="number">8</span> * <span class="number">128</span> = <span class="number">224</span></span><br><span class="line">    <span class="number">0</span> <span class="number">1110</span> <span class="number">111</span>    <span class="number">7</span>   <span class="number">15</span>/<span class="number">8</span> * <span class="number">128</span> = <span class="number">240</span>   <span class="comment"># 能表示的最大规范化值</span></span><br><span class="line">------------------------------------------------------------------</span><br><span class="line">    <span class="number">0</span> <span class="number">1111</span> <span class="number">000</span>   n/a  无穷               <span class="comment"># 特殊值</span></span><br></pre></td></tr></table></figure>
+<h1 id="今日体重">今日体重</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080019434.png" alt="image-20210808001912353" /></p>
 ]]></content>
       <categories>
-        <category>C语言</category>
+        <category>CSAPP</category>
+        <category>计算机组成原理</category>
       </categories>
       <tags>
-        <tag>冒泡排序</tag>
-        <tag>插入排序</tag>
+        <tag>CSAPP</tag>
+        <tag>浮点数</tag>
       </tags>
   </entry>
   <entry>
@@ -1254,6 +1195,65 @@ d=\sum_{i=-n}^m2^i \times d_i
       <tags>
         <tag>Excel</tag>
         <tag>办公学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言函数参数传递的错误与避免</title>
+    <url>/2021/08/04/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E4%BC%A0%E9%80%92/</url>
+    <content><![CDATA[<blockquote>
+<p>今日第二更嘿嘿</p>
+<p>前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习</p>
+</blockquote>
+<h1 id="函数参数的调用">函数参数的调用</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">调用类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-value.html">传值调用</a></td>
+<td style="text-align: center;">该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1<br/>在这种情况下，修改函数内的形式参数不会影响实际参数。</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-pointer.html">引用调用</a></td>
+<td style="text-align: center;">通过指针传递方式，形参为指向实参地址的指针，对应正确写法<br/>当对形参的指向操作时，就相当于对实参本身进行的操作。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="例利用swap函数交换变量ab的常见错误">例：利用Swap函数交换变量a，b的常见错误</h1>
+<a id="more"></a>
+<h2 id="error1使用局部变量代替原始变量">ERROR1——使用局部变量代替原始变量</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error1</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error1(a,b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
+<p>局部变量：定义在函数内部的变量，只能在函数内部使用。 上面代码里在main函数中定义的a，b与Swap函数中a，b只是同名，只在Swap函数中交换a与b的值而不影响main函数中的原始变量a与b的值</p>
+<h2 id="error2只交换了地址">ERROR2——只交换了地址</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = p1;<span class="comment">//将a的地址赋值给tmp</span></span><br><span class="line">    p1 = p2;</span><br><span class="line">    p2 = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error2(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
+<p>可以看到上述代码并没有完成对ab的交换。</p>
+<p>在上面代码中Swap函数虽然使用了指针，但是未做取值运算，所以只是将两个变量a,b的存储位置交换了一下</p>
+<h2 id="error3野指针">ERROR3——野指针</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp=*p1;<span class="comment">//野指针</span></span><br><span class="line">    *p1=*p2;</span><br><span class="line">    *p2=*tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error3(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">———————————</span><br><span class="line"></span><br><span class="line">Process returned <span class="number">-1073741819</span> (<span class="number">0xC0000005</span>)   execution <span class="type">time</span> : <span class="number">1.663</span> s</span><br><span class="line">Press <span class="keyword">any</span> key <span class="keyword">to</span> <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
+<p>上述程序在运行了一段时间之后就崩了，没有输出任何东西，这是因为我们在给tmp初始化的时候直接把P1的值，也即a的值当做地址赋给了tmp，导致tmp指向了不能访问的地区导致了程序崩溃。</p>
+<p>野指针（悬挂指针）：没有访问权限的指针，这个指针有可能存在也有可能不存在，但是你不能访问。（野指针不好判断） 1、地址不存在（例如电话号码少一位）。 2、地址存在，但是不能访问（例如电话号码写成别人）。 3、地址之前可以访问，但现在不可以（更换电话号码）</p>
+<h2 id="正确写法">正确写法</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *p1;<span class="comment">//tmp＝a</span></span><br><span class="line">    *p1 = *p2;<span class="comment">//a＝b</span></span><br><span class="line">    *p2 = tmp;<span class="comment">//b＝tmp</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结论 一个函数（父函数）调用另一个函数（子函数），想通过子函数修改父函数的数据，必须传指针，子函数内部解引用。也就是子函数的改变要想影响父函数的数据必须传指针和解引用。 error1中既没有指针也没有解引用，error2中只是传指针但在Swap函数中没有使用解引用 error3中传了野指针导致程序崩溃。</p>
+<p>参考文章：<a href="https://blog.csdn.net/qq_51663917/article/details/109206266">C语言中利用Swap函数交换变量a，b</a></p>
+<p><a href="https://www.runoob.com/cprogramming/c-functions.html">菜鸟教程——C函数</a></p>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>冒泡排序</tag>
+        <tag>插入排序</tag>
       </tags>
   </entry>
   <entry>
@@ -1998,6 +1998,36 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
+    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
+    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
+    <content><![CDATA[<h1 id="图4-哈利波特的考试-25-分">07-图4 哈利·波特的考试 (25 分)</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
+<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
+<h2 id="输出格式">输出格式:</h2>
+<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
+<a id="more"></a>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例">输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1 id="题目理解与思路">题目理解与思路</h1>
+<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
+        <tag>Floyd算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据结构与算法刷题笔记4——六度空间</title>
     <url>/2021/07/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E5%85%AD%E5%BA%A6%E7%A9%BA%E9%97%B4/</url>
     <content><![CDATA[<h1 id="图3-六度空间-30-分">06-图3 六度空间 (30 分)</h1>
@@ -2030,36 +2060,6 @@ d=\sum_{i=-n}^m2^i \times d_i
       <tags>
         <tag>数据结构与算法</tag>
         <tag>BFS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
-    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
-    <content><![CDATA[<h1 id="图4-哈利波特的考试-25-分">07-图4 哈利·波特的考试 (25 分)</h1>
-<h2 id="题目描述">题目描述</h2>
-<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
-<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
-<h2 id="输出格式">输出格式:</h2>
-<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
-<a id="more"></a>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1 id="题目理解与思路">题目理解与思路</h1>
-<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-        <tag>Floyd算法</tag>
       </tags>
   </entry>
   <entry>
@@ -2296,41 +2296,6 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
-    <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
-    <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
-    <content><![CDATA[<h1 id="图1-列出连通集-25-分pta">06-图1 列出连通集 (25 分)——PTA</h1>
-<p>给定一个有<em>N</em>个顶点和<em>E</em>条边的无向图，请用DFS和BFS分别列出其所有的连通集。假设顶点从0到<em>N</em>−1编号。进行搜索时，假设我们总是从编号最小的顶点出发，按编号递增的顺序访问邻接点。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入第1行给出2个整数<em>N</em>(0&lt;<em>N</em>≤10)和<em>E</em>，分别是图的顶点数和边数。随后<em>E</em>行，每行给出一条边的两个端点。每行中的数字之间用1空格分隔。</p>
-<h2 id="输出格式">输出格式:</h2>
-<p>按照"{ <em>v</em>1 <em>v</em>2 ... *v**k* }"的格式，每行输出一个连通集。先输出DFS的结果，再输出BFS的结果。</p>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8 6</span><br><span class="line">0 7</span><br><span class="line">0 1</span><br><span class="line">2 0</span><br><span class="line">4 1</span><br><span class="line">2 4</span><br><span class="line">3 5</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; 0 1 4 2 7 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br><span class="line">&#123; 0 1 2 7 4 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="题目理解">题目理解</h2>
-<p>本题给了我们几组数据用来建图，在建图完成后需要我们使用DFS与BFS遍历整个图然后按照遍历的顺序输出每个连通的图的节点的值</p>
-<h2 id="解题思路">解题思路</h2>
-<p>根据要求走就行了，建图，然后DFS和BFS//第一个完全靠自己写出来的图的题，不容易啊😭😭😭</p>
-<p>本文使用的是邻接矩阵来表示图</p>
-<p>在使用BFS进行遍历时，因为数据量比较小，所以只需要使用一个数组和两个作为头尾的数字就能作为队列</p>
-<a id="more"></a>
-<h2 id="代码">代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVertexNum 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> E,V;<span class="comment">//分别为边数E和顶点数V</span></span><br><span class="line">    <span class="keyword">int</span> G[MaxVertexNum][MaxVertexNum];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Visited[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//是否访问过该节点</span></span><br><span class="line"><span class="keyword">int</span> Q[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//用来做队列的数组</span></span><br><span class="line"><span class="function">MGraph <span class="title">CreatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//建图，初始化图的边和节点值</span></span><br><span class="line">    <span class="keyword">int</span> i,m,n;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph -&gt; V = V;</span><br><span class="line">    Graph -&gt; E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;m,&amp;n);</span><br><span class="line">        Graph-&gt;G[m][n] = <span class="number">1</span>;</span><br><span class="line">        Graph-&gt;G[n][m] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入一个节点就把访问过的标记为True</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,x);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((Graph-&gt;G[i][x] == <span class="number">1</span>) &amp;&amp; (!Visited[i]))<span class="comment">//使用DFS访问节点x相邻且没有被访问过的节点</span></span><br><span class="line">        &#123;</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetGraph</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;MaxVertexNum;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,head,rear;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;</span><br><span class="line">    Q[<span class="number">0</span>] = x;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入BFS时把BFS的入口节点视为访问过</span></span><br><span class="line">    <span class="keyword">while</span>(head != rear)<span class="comment">//当队列不为空</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Q[head]);<span class="comment">//输出头结点</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;<span class="comment">//遍历所有节点，如果是头结点的邻接点且没有被访问过则入队</span></span><br><span class="line">            <span class="keyword">if</span>(!Visited[i] &amp;&amp; (Graph-&gt;G[i][Q[head]] == <span class="number">1</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                rear++;</span><br><span class="line">                Q[rear] = i;</span><br><span class="line">                Visited[i] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E,i;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    Graph = CreatGraph(V,E);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ResetGraph(Graph);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            BFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-        <category>BFS</category>
-        <category>DFS</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-        <tag>DFS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构刷题笔记3——拯救詹姆斯邦德</title>
     <url>/2021/07/29/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%8B%AF%E6%95%91%E8%A9%B9%E5%A7%86%E6%96%AF%E9%82%A6%E5%BE%B7/</url>
     <content><![CDATA[<h1 id="图2-saving-james-bond---easy-version-25-分">06-图2 Saving James Bond - Easy Version (25 分)</h1>
@@ -2371,6 +2336,41 @@ d=\sum_{i=-n}^m2^i \times d_i
       <tags>
         <tag>BFS</tag>
         <tag>数据结构</tag>
+        <tag>DFS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构刷题笔记2——使用DFS和BFS列出连通集</title>
+    <url>/2021/07/28/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8DFS%E5%92%8CBFS%E5%88%97%E5%87%BA%E8%BF%9E%E9%80%9A%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="图1-列出连通集-25-分pta">06-图1 列出连通集 (25 分)——PTA</h1>
+<p>给定一个有<em>N</em>个顶点和<em>E</em>条边的无向图，请用DFS和BFS分别列出其所有的连通集。假设顶点从0到<em>N</em>−1编号。进行搜索时，假设我们总是从编号最小的顶点出发，按编号递增的顺序访问邻接点。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入第1行给出2个整数<em>N</em>(0&lt;<em>N</em>≤10)和<em>E</em>，分别是图的顶点数和边数。随后<em>E</em>行，每行给出一条边的两个端点。每行中的数字之间用1空格分隔。</p>
+<h2 id="输出格式">输出格式:</h2>
+<p>按照"{ <em>v</em>1 <em>v</em>2 ... *v**k* }"的格式，每行输出一个连通集。先输出DFS的结果，再输出BFS的结果。</p>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8 6</span><br><span class="line">0 7</span><br><span class="line">0 1</span><br><span class="line">2 0</span><br><span class="line">4 1</span><br><span class="line">2 4</span><br><span class="line">3 5</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例">输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123; 0 1 4 2 7 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br><span class="line">&#123; 0 1 2 7 4 &#125;</span><br><span class="line">&#123; 3 5 &#125;</span><br><span class="line">&#123; 6 &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="题目理解">题目理解</h2>
+<p>本题给了我们几组数据用来建图，在建图完成后需要我们使用DFS与BFS遍历整个图然后按照遍历的顺序输出每个连通的图的节点的值</p>
+<h2 id="解题思路">解题思路</h2>
+<p>根据要求走就行了，建图，然后DFS和BFS//第一个完全靠自己写出来的图的题，不容易啊😭😭😭</p>
+<p>本文使用的是邻接矩阵来表示图</p>
+<p>在使用BFS进行遍历时，因为数据量比较小，所以只需要使用一个数组和两个作为头尾的数字就能作为队列</p>
+<a id="more"></a>
+<h2 id="代码">代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVertexNum 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> E,V;<span class="comment">//分别为边数E和顶点数V</span></span><br><span class="line">    <span class="keyword">int</span> G[MaxVertexNum][MaxVertexNum];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> Visited[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//是否访问过该节点</span></span><br><span class="line"><span class="keyword">int</span> Q[MaxVertexNum] = &#123;<span class="number">0</span>&#125;;<span class="comment">//用来做队列的数组</span></span><br><span class="line"><span class="function">MGraph <span class="title">CreatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;<span class="comment">//建图，初始化图的边和节点值</span></span><br><span class="line">    <span class="keyword">int</span> i,m,n;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph -&gt; V = V;</span><br><span class="line">    Graph -&gt; E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;m,&amp;n);</span><br><span class="line">        Graph-&gt;G[m][n] = <span class="number">1</span>;</span><br><span class="line">        Graph-&gt;G[n][m] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入一个节点就把访问过的标记为True</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,x);</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((Graph-&gt;G[i][x] == <span class="number">1</span>) &amp;&amp; (!Visited[i]))<span class="comment">//使用DFS访问节点x相邻且没有被访问过的节点</span></span><br><span class="line">        &#123;</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ResetGraph</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;MaxVertexNum;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BFS</span><span class="params">(MGraph Graph,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,head,rear;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    rear = <span class="number">0</span>;</span><br><span class="line">    Q[<span class="number">0</span>] = x;</span><br><span class="line">    Visited[x] = <span class="number">1</span>;<span class="comment">//进入BFS时把BFS的入口节点视为访问过</span></span><br><span class="line">    <span class="keyword">while</span>(head != rear)<span class="comment">//当队列不为空</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Q[head]);<span class="comment">//输出头结点</span></span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i &lt; Graph-&gt;V;i++)</span><br><span class="line">        &#123;<span class="comment">//遍历所有节点，如果是头结点的邻接点且没有被访问过则入队</span></span><br><span class="line">            <span class="keyword">if</span>(!Visited[i] &amp;&amp; (Graph-&gt;G[i][Q[head]] == <span class="number">1</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                rear++;</span><br><span class="line">                Q[rear] = i;</span><br><span class="line">                Visited[i] = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E,i;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    Graph = CreatGraph(V,E);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V ;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            DFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ResetGraph(Graph);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!Visited[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#123; &quot;</span>);</span><br><span class="line">            BFS(Graph,i);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;&#125;\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>BFS</category>
+        <category>DFS</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
         <tag>DFS</tag>
       </tags>
   </entry>
