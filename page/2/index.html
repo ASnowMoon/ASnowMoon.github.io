@@ -341,7 +341,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="从C到机器代码"><a class="header-anchor" href="#从C到机器代码">¶</a>从C到机器代码</h1>
+          <h1 id="从c到机器代码">从C到机器代码</h1>
 <p>机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。</p>
 <p>C-&gt;可执行程序：</p>
 <ul>
@@ -462,11 +462,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="快速排序"><a class="header-anchor" href="#快速排序">¶</a>快速排序</h1>
-<h2 id="算法思想"><a class="header-anchor" href="#算法思想">¶</a>算法思想</h2>
+          <h1 id="快速排序">快速排序</h1>
+<h2 id="算法思想">算法思想</h2>
 <p>每次排序先选出一个主元，然后将比主元小的数放到左边，比主元大的放右边然后再分别进入左边右边快排。</p>
 <p>需要注意的是</p>
-<ol>
+<ol type="1">
 <li>主元的选取方法，一般是选择头中尾三个数中的中位数，而非固定的某个位置的数字</li>
 <li>当数据规模剩下的比较小的时候采用其它的排序来完成剩下的排序，防止数据规模不大时候仍然各种递归导致处理得很慢</li>
 <li>遇到相等的元素也要进行交换，防止得到的两个子集大小相差较大</li>
@@ -563,7 +563,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>652</span>
+      <span>640</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -582,7 +582,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>今天不写技术，天天写也累了，今天换换口味，记录一下最近看的电影</p>
-<h1 id="教父系列"><a class="header-anchor" href="#教父系列">¶</a>教父系列</h1>
+<h1 id="教父系列">教父系列</h1>
 <p>首先谈谈这几天看的《教父》系列电影，目前只看了前两部，不过给我的触动也还是挺深的，两代教父有着完全不同的境遇，所谓打江山难，守江山更难呐！</p>
 <p>一代教父白手起家，从西西里镇被追杀来到当时充满希望和梦想的美国，一步步开始为美国的意大利人提供保护，重感情的品质加上雷厉风行的行事风格，总体感觉一代的维多克里昂是个很可靠的教父，最终的结局也还算可以，在与孙子的玩耍中逝去。</p>
 <p>二代目虽然继承了一代目的处事能力与判断力，但是对于亲情和家庭的重视不太够，在第二部里众叛亲离，最后柯里昂家族基本只剩下他一个人结局算是比较悲惨的。不过这个人物的形象在这部剧里还是很饱满的</p>
@@ -696,10 +696,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="09-排序1-排序-堆、归并"><a class="header-anchor" href="#09-排序1-排序-堆、归并">¶</a><strong>09-排序1 排序 (堆、归并)</strong></h1>
+          <h1 id="排序1-排序-堆归并"><strong>09-排序1 排序 (堆、归并)</strong></h1>
 <p>题目全文见此文<a href="https://www.snowmoon.top/2021/08/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/#more">数据结构与算法刷题笔记8——排序（冒泡、插入、希尔）</a></p>
-<h1 id="堆排序"><a class="header-anchor" href="#堆排序">¶</a>堆排序</h1>
-<h2 id="中心思想"><a class="header-anchor" href="#中心思想">¶</a>中心思想</h2>
+<h1 id="堆排序">堆排序</h1>
+<h2 id="中心思想">中心思想</h2>
 <p>选择排序的优化版，选择排序是顺序扫描整个数组，找到最大值然后放到末尾，堆排序是使用了一个最大堆来存储最大值，然后每次找最大值就使用删除首节点的方法，最终继续使用选择排序完成剩下的排序过程。</p>
           <!--noindex-->
             <div class="post-button">
@@ -824,27 +824,21 @@
 <li>题解和思路</li>
 <li>解题代码</li>
 </ul>
-<h1 id="isLessOrEqual"><a class="header-anchor" href="#isLessOrEqual">¶</a>isLessOrEqual</h1>
-<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
+<h1 id="islessorequal">isLessOrEqual</h1>
+<h2 id="题目描述">题目描述</h2>
 <p>如果x&lt;=y，返回1，否则返回</p>
-<h2 id="题解与思路"><a class="header-anchor" href="#题解与思路">¶</a>题解与思路</h2>
+<h2 id="题解与思路">题解与思路</h2>
 <p>本来刚开始一看：诶，这简单嘛，让y-x&gt;=0就行了嘛，就想着写个y+x的相反数然后判断它的符号位，然后没想到又是该死的TMin，这该死的按位取反加一仍然为它本身的数字！还有一个原因是如果相减的结果大于Tmax会溢出为负数，也会有错误，所以修改了实现的逻辑</p>
-<p>分成两种情况：x和y符号相同和不同时：y为正为真<br>
-x和y符号相同时：y-x&gt;0为真<br>
-由于溢出只有在x和y异号的时候才会出现，所以这种方法巧妙的规避了溢出的情况</p>
-<h1 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h1>
+<p>分成两种情况：x和y符号相同和不同时：y为正为真 x和y符号相同时：y-x&gt;0为真 由于溢出只有在x和y异号的时候才会出现，所以这种方法巧妙的规避了溢出的情况</p>
+<h1 id="代码">代码</h1>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * isLessOrEqual - if x &lt;= y  then return 1, else return 0 </span></span><br><span class="line"><span class="comment"> *   Example: isLessOrEqual(4,5) = 1.</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 24</span></span><br><span class="line"><span class="comment"> *   Rating: 3</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isLessOrEqual</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> xsign = x&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> ysign = y&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> check = xsign^ysign;</span><br><span class="line">  <span class="keyword">int</span> yminusx = (y+~x+<span class="number">1</span>)&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">return</span> (check&amp;(!ysign))|(!check&amp;(!yminusx));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="logicalNeg"><a class="header-anchor" href="#logicalNeg">¶</a>logicalNeg</h1>
-<h2 id="题目描述-v2"><a class="header-anchor" href="#题目描述-v2">¶</a>题目描述</h2>
-<p>不使用逻辑非 ‘!’ 实现逻辑非 ‘!’</p>
-<h2 id="题解与思路-v2"><a class="header-anchor" href="#题解与思路-v2">¶</a>题解与思路</h2>
-<ol>
-<li>
-<p>在所有数字中，只有0和Tmin取它的补码相反数后还为它本身，也即<code>~0+1=0,~Tmin+1=Tmin</code>而Tmin为0x80000000，符号位为1，所以可以将x取补码的相反数后判断符号位是否为0</p>
-</li>
-<li>
-<p>转换为考虑筛选出<code>x&lt;0&amp;&amp;x&gt;=1</code>的数字然后返回0</p>
-</li>
+<h1 id="logicalneg">logicalNeg</h1>
+<h2 id="题目描述-1">题目描述</h2>
+<p>不使用逻辑非 '!' 实现逻辑非 '!'</p>
+<h2 id="题解与思路-1">题解与思路</h2>
+<ol type="1">
+<li><p>在所有数字中，只有0和Tmin取它的补码相反数后还为它本身，也即<code>~0+1=0,~Tmin+1=Tmin</code>而Tmin为0x80000000，符号位为1，所以可以将x取补码的相反数后判断符号位是否为0</p></li>
+<li><p>转换为考虑筛选出<code>x&lt;0&amp;&amp;x&gt;=1</code>的数字然后返回0</p></li>
 </ol>
           <!--noindex-->
             <div class="post-button">
@@ -925,7 +919,7 @@ x和y符号相同时：y-x&gt;0为真<br>
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:45</span>
+    <span title="站点阅读时长">3:44</span>
   </span>
 </div>
 <div class="busuanzi-count">

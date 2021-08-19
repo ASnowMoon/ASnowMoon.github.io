@@ -354,18 +354,18 @@
 <li>题解和思路</li>
 <li>解题代码</li>
 </ul>
-<h1 id="bitXor"><a class="header-anchor" href="#bitXor">¶</a>bitXor</h1>
-<h2 id="题目描述"><a class="header-anchor" href="#题目描述">¶</a>题目描述</h2>
+<h1 id="bitxor">bitXor</h1>
+<h2 id="题目描述">题目描述</h2>
 <p>只使用按位与非逻辑实现按位异或逻辑</p>
-<h2 id="题解与思路"><a class="header-anchor" href="#题解与思路">¶</a>题解与思路</h2>
+<h2 id="题解与思路">题解与思路</h2>
 <p>排除掉两个不能通过的逻辑，写成的代码就能通过。</p>
 <p>即：把x与y相同的答案都否定掉</p>
-<h2 id="代码"><a class="header-anchor" href="#代码">¶</a>代码</h2>
+<h2 id="代码">代码</h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * bitXor - x^y using only ~ and &amp; </span></span><br><span class="line"><span class="comment"> *   Example: bitXor(4, 5) = 1</span></span><br><span class="line"><span class="comment"> *   Legal ops: ~ &amp;</span></span><br><span class="line"><span class="comment"> *   Max ops: 14</span></span><br><span class="line"><span class="comment"> *   Rating: 1</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bitXor</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> ~(~x&amp;~y)&amp;~(x&amp;y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="tmin"><a class="header-anchor" href="#tmin">¶</a>tmin</h1>
-<h2 id="题目描述-v2"><a class="header-anchor" href="#题目描述-v2">¶</a>题目描述</h2>
+<h1 id="tmin">tmin</h1>
+<h2 id="题目描述-1">题目描述</h2>
 <p>返回补码表示数字的最小值。</p>
-<h2 id="题解与思路-v2"><a class="header-anchor" href="#题解与思路-v2">¶</a>题解与思路</h2>
+<h2 id="题解与思路-1">题解与思路</h2>
 <p>补码的最小值是符号位为1，其余均为0，所以返回这个数字就行了。</p>
 <p>我的思路也很简单粗暴，直接通过移位得到</p>
           <!--noindex-->
@@ -482,8 +482,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="浮点数2"><a class="header-anchor" href="#浮点数2">¶</a>浮点数2</h1>
-<h2 id="舍入"><a class="header-anchor" href="#舍入">¶</a>舍入</h2>
+          <h1 id="浮点数2">浮点数2</h1>
+<h2 id="舍入">舍入</h2>
 <p>对于浮点数的加法和乘法来说，我们可以先计算出准确值，然后转换到合适的精度。在这个过程中，既可能会溢出，也可能需要舍入来满足 frac 的精度。</p>
 <p>在二进制中，我们舍入到最近的偶数，即如果出现在中间的情况，舍入之后最右边的值要是偶数，对于十进制数，例子如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  原数值       舍入结果    原因</span><br><span class="line"><span class="number">2.8949999</span>      <span class="number">2.89</span>    <span class="comment">#不到一半，正常四舍五入</span></span><br><span class="line"><span class="number">2.8950001</span>      <span class="number">2.90</span>    <span class="comment">#超过一般，正常四舍五入</span></span><br><span class="line"><span class="number">2.8950000</span>      <span class="number">2.90</span>    <span class="comment">#刚好在一半时，保证最后一位是偶数，所以向上舍入</span></span><br><span class="line"><span class="number">2.8850000</span>      <span class="number">2.88</span>    <span class="comment">#刚好在一半时，保证最后一位是偶数，所以向下舍入</span></span><br></pre></td></tr></table></figure>
@@ -603,19 +603,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="浮点数"><a class="header-anchor" href="#浮点数">¶</a>浮点数</h1>
-<p>浮点数的定义：<br>
-$$<br>
-d=\sum_{i=-n}<sup>m2</sup>i \times d_i<br>
-$$<br>
-这个定义导致我们只有在表示$\frac{x}{2^k}$时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。</p>
-<h2 id="IEEE-浮点数标准"><a class="header-anchor" href="#IEEE-浮点数标准">¶</a>IEEE 浮点数标准</h2>
+          <h1 id="浮点数">浮点数</h1>
+<p>浮点数的定义： <span class="math display">\[
+d=\sum_{i=-n}^m2^i \times d_i
+\]</span> 这个定义导致我们只有在表示<span class="math inline">\(\frac{x}{2^k}\)</span>时候是精确的，其它数字的小数部分都会变成循环小数。而由于这些数字的编码长度都是有限的，通过这种表达方式表示的浮点数都是有限的。</p>
+<h2 id="ieee-浮点数标准">IEEE 浮点数标准</h2>
 <p>以下内容引用自文章<a target="_blank" rel="noopener" href="https://wdxtub.com/csapp/thin-csapp-1/2016/04/16/">【读薄 CSAPP】壹 数据表示</a></p>
 <p>IEEE 的浮点数标准更多是从数值角度来建立的，对于舍入，上溢出和下溢出都有比较统一的处理方法。但与此同时也给硬件优化带来了比较大的困难。因为和平时使用的数制也有一定差异，从理解的角度来看不够直观，但是好在主流的 CPU 都支持浮点数，所以我们不必过多涉及这方面的细节。</p>
-<p>在 IEEE 标准中，我们用下面的公式来表达浮点数：<br>
-$$<br>
-(−1)<sup>sM2</sup>E<br>
-$$</p>
+<p>在 IEEE 标准中，我们用下面的公式来表达浮点数： <span class="math display">\[
+(−1)^sM2^E
+\]</span>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/08/07/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/#more" rel="contents">
@@ -730,14 +727,14 @@ $$</p>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="整形变量Integer"><a class="header-anchor" href="#整形变量Integer">¶</a>整形变量Integer</h1>
-<h2 id="类型拓展与截取"><a class="header-anchor" href="#类型拓展与截取">¶</a>类型拓展与截取</h2>
+          <h1 id="整形变量integer">整形变量Integer</h1>
+<h2 id="类型拓展与截取">类型拓展与截取</h2>
 <p><strong>无符号数的零拓展</strong>：无符号数转换为更大的数据类型，只需要在开头添加0即可，这种运算也被称为零拓展。</p>
-<p>**补码数的符号拓展：**补码数转换为更大的数据类型需要在开头添加最高有效位的值，即：如果为负数，需要在拓展出来的开头位置添加数个1，正数需要添加数个0。</p>
-<h2 id="截断数字"><a class="header-anchor" href="#截断数字">¶</a>截断数字</h2>
+<p><strong>补码数的符号拓展：</strong>补码数转换为更大的数据类型需要在开头添加最高有效位的值，即：如果为负数，需要在拓展出来的开头位置添加数个1，正数需要添加数个0。</p>
+<h2 id="截断数字">截断数字</h2>
 <p>当我们将一个位数为 w 的数字截断为 k 位的数字时，我们会丢弃最高的w-k位。</p>
-<p>**截断无符号数：**相当于做mod运算，$x’=x\ mod\ 2^k$</p>
-<p>**截断补码数值：**和无符号值相似，不过需要将最高位转换为符号位</p>
+<p><strong>截断无符号数：</strong>相当于做mod运算，<span class="math inline">\(x&#39;=x\ mod\ 2^k\)</span></p>
+<p><strong>截断补码数值：</strong>和无符号值相似，不过需要将最高位转换为符号位</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%812/#more" rel="contents">
@@ -834,7 +831,7 @@ $$</p>
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.6k</span>
+      <span>1.7k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -852,33 +849,27 @@ $$</p>
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="数据编码"><a class="header-anchor" href="#数据编码">¶</a>数据编码</h1>
-<p>假设字长(word size)为 $w$,也即数据的位数，则二进制向十进制的转换分别是：</p>
+          <h1 id="数据编码">数据编码</h1>
+<p>假设字长(word size)为 <span class="math inline">\(w\)</span>,也即数据的位数，则二进制向十进制的转换分别是：</p>
 <ul>
-<li>无符号数：<br>
-$$<br>
-B2U(X)=\sum_{i=0}<sup>{w-1}x_i\cdot2</sup>i<br>
-$$</li>
-<li>有符号数：<br>
-$$<br>
-B2T(X)=-x_{w-1}\cdot2<sup>{w-1}+\sum_{i=0}</sup>{w-2}x_i\cdot2^{i}<br>
-$$</li>
+<li>无符号数： <span class="math display">\[
+B2U(X)=\sum_{i=0}^{w-1}x_i\cdot2^i
+\]</span></li>
+<li>有符号数： <span class="math display">\[
+B2T(X)=-x_{w-1}\cdot2^{w-1}+\sum_{i=0}^{w-2}x_i\cdot2^{i}
+\]</span></li>
 </ul>
 <p>左移：x向左移动k位，丢弃最高的k位，在右端补k个0；</p>
 <p>逻辑右移 ：在左端补k个0</p>
 <p>算术右移：在左端补k个最高有效位的值</p>
-<p>PS：移位操作优先级低于±，</p>
-<p>无符号数编码定义：<br>
-$$<br>
-B2U_w(x)=\sum_{i=0}<sup>{w-1}x_i2</sup>i<br>
-$$<br>
-原码：正数是其二进制本身；负数是符号位为1,数值部分取X绝对值的二进制。</p>
-<p>最高位是符号位，用来确定剩下的位是应该取负权还是正权。<br>
-$$<br>
-B2S_w(x)=(-1)<sup>{x_{w-1}}\cdot(\sum_{i=0}</sup>{w-2}x_i2^i)<br>
-$$<br>
-补码：正数的补码和原码，反码相同；负数是符号位为1，其它位是原码按位取反，未位加1。（或者说负数的补码是其绝对值反码未位加1）</p>
-<p>最高位$x_{w-1}$也称为符号位，其权重为$-2^{w-1}$​</p>
+<p>PS：移位操作优先级低于+-，</p>
+<p>无符号数编码定义： <span class="math display">\[
+B2U_w(x)=\sum_{i=0}^{w-1}x_i2^i
+\]</span> 原码：正数是其二进制本身；负数是符号位为1,数值部分取X绝对值的二进制。</p>
+<p>最高位是符号位，用来确定剩下的位是应该取负权还是正权。 <span class="math display">\[
+B2S_w(x)=(-1)^{x_{w-1}}\cdot(\sum_{i=0}^{w-2}x_i2^i)
+\]</span> 补码：正数的补码和原码，反码相同；负数是符号位为1，其它位是原码按位取反，未位加1。（或者说负数的补码是其绝对值反码未位加1）</p>
+<p>最高位<span class="math inline">\(x_{w-1}\)</span>也称为符号位，其权重为<span class="math inline">\(-2^{w-1}\)</span>​</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/08/05/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/#more" rel="contents">
@@ -958,7 +949,7 @@ $$<br>
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:45</span>
+    <span title="站点阅读时长">3:44</span>
   </span>
 </div>
 <div class="busuanzi-count">
