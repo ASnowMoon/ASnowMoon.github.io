@@ -27,23 +27,23 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"www.snowmoon.top","root":"/","images":"/images","scheme":"Gemini","version":"8.2.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"buttons","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处">
+<meta name="description" content="汇编入门（二） x86-64 架构中的整型寄存器如下图所示（暂时不考虑浮点数的部分）  仔细看看寄存器的分布，我们可以发现有不同的颜色以及不同的寄存器名称，黄色部分是 16 位寄存器，也就是 16 位处理器 8086 的设计，然后绿色部分是 32 位寄存器（这里我是按照比例画的），给 32 位处理器使用，而蓝色部分是为 64 位处理器设计的。这样的设计保证了令人震惊的向下兼容性，几十年前的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CSAPP5——程序机器级表示">
-<meta property="og:url" content="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/index.html">
+<meta property="og:title" content="CSAPP6——程序机器级表示2">
+<meta property="og:url" content="https://www.snowmoon.top/2021/08/15/CSAPP6/index.html">
 <meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
-<meta property="og:description" content="从C到机器代码 机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。 C-&gt;可执行程序：  C 语言代码(a.c)经过编译器的处理(gcc -0g -S)成为汇编代码(a.s) 汇编代码(a.s)经过汇编器的处">
+<meta property="og:description" content="汇编入门（二） x86-64 架构中的整型寄存器如下图所示（暂时不考虑浮点数的部分）  仔细看看寄存器的分布，我们可以发现有不同的颜色以及不同的寄存器名称，黄色部分是 16 位寄存器，也就是 16 位处理器 8086 的设计，然后绿色部分是 32 位寄存器（这里我是按照比例画的），给 32 位处理器使用，而蓝色部分是为 64 位处理器设计的。这样的设计保证了令人震惊的向下兼容性，几十年前的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png">
-<meta property="article:published_time" content="2021-08-14T00:30:00.000Z">
-<meta property="article:modified_time" content="2021-08-19T06:09:22.245Z">
+<meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191422580.jpeg">
+<meta property="article:published_time" content="2021-08-15T00:30:00.000Z">
+<meta property="article:modified_time" content="2021-08-19T06:23:22.823Z">
 <meta property="article:author" content="Zheng Haoyu">
 <meta property="article:tag" content="CSAPP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png">
+<meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191422580.jpeg">
 
 
-<link rel="canonical" href="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/">
+<link rel="canonical" href="https://www.snowmoon.top/2021/08/15/CSAPP6/">
 
 
 <script class="page-configurations">
@@ -55,7 +55,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>CSAPP5——程序机器级表示 | SnowMoon-Haoyu's Blog</title>
+<title>CSAPP6——程序机器级表示2 | SnowMoon-Haoyu's Blog</title>
   
 
 
@@ -196,7 +196,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8Ec%E5%88%B0%E6%9C%BA%E5%99%A8%E4%BB%A3%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">从C到机器代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#cpu-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">CPU 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BE%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">一个实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.2.</span> <span class="nav-text">push 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.3.</span> <span class="nav-text">call 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mov-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.4.</span> <span class="nav-text">mov 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#add-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.5.</span> <span class="nav-text">add 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.1.6.</span> <span class="nav-text">pop 指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">2.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E5%85%A5%E9%97%A8%E4%BA%8C"><span class="nav-number">1.</span> <span class="nav-text">汇编入门（二）</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -271,7 +271,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/">
+    <link itemprop="mainEntityOfPage" href="https://www.snowmoon.top/2021/08/15/CSAPP6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/Avatar.jpg">
@@ -284,7 +284,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          CSAPP5——程序机器级表示
+          CSAPP6——程序机器级表示2
         </h1>
 
         <div class="post-meta-container">
@@ -295,14 +295,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2021-08-14 08:30:00" itemprop="dateCreated datePublished" datetime="2021-08-14T08:30:00+08:00">2021-08-14</time>
+      <time title="创建时间：2021-08-15 08:30:00" itemprop="dateCreated datePublished" datetime="2021-08-15T08:30:00+08:00">2021-08-15</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-08-19 14:09:22" itemprop="dateModified" datetime="2021-08-19T14:09:22+08:00">2021-08-19</time>
+        <time title="修改时间：2021-08-19 14:23:22" itemprop="dateModified" datetime="2021-08-19T14:23:22+08:00">2021-08-19</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -322,7 +322,7 @@
       <span class="post-meta-item-text">阅读次数：</span>
       <span id="busuanzi_value_page_pv"></span>
     </span>
-    <span id="/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/" class="post-meta-item leancloud_visitors" data-flag-title="CSAPP5——程序机器级表示" title="阅读次数">
+    <span id="/2021/08/15/CSAPP6/" class="post-meta-item leancloud_visitors" data-flag-title="CSAPP6——程序机器级表示2" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -337,14 +337,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.6k</span>
+      <span>2.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>7 分钟</span>
+      <span>6 分钟</span>
     </span>
 </div>
 
@@ -355,97 +355,81 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="从c到机器代码">从C到机器代码</h1>
-<p>机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。</p>
-<p>C-&gt;可执行程序：</p>
+        <h1 id="汇编入门二">汇编入门（二）</h1>
+<p>x86-64 架构中的整型寄存器如下图所示（暂时不考虑浮点数的部分）</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191422580.jpeg" alt="img" /></p>
+<p>仔细看看寄存器的分布，我们可以发现有不同的颜色以及不同的寄存器名称，黄色部分是 16 位寄存器，也就是 16 位处理器 8086 的设计，然后绿色部分是 32 位寄存器（这里我是按照比例画的），给 32 位处理器使用，而蓝色部分是为 64 位处理器设计的。这样的设计保证了令人震惊的向下兼容性，几十年前的 x86 代码现在仍然可以运行！</p>
+<p>前六个寄存器(%rax, %rbx, %rcx, %rdx, %rsi, %rdi)称为通用寄存器，有其『特定』的用途：</p>
 <ul>
-<li>C 语言代码(a.c)经过编译器的处理(<code>gcc -0g -S</code>)成为汇编代码(a.s)</li>
-<li>汇编代码(a.s)经过汇编器的处理(<code>gcc</code> 或 <code>as</code>)成为对象程序(a.o)</li>
-<li>对象程序(a.o)以及所需静态库(lib.a)经过链接器的处理(<code>gcc</code> 或 <code>ld</code>)最终成为计算机可执行的程序</li>
+<li>%rax(%eax) 用于做累加</li>
+<li>%rcx(%ecx) 用于计数</li>
+<li>%rdx(%edx) 用于保存数据</li>
+<li>%rbx(%ebx) 用于做内存查找的基础地址</li>
+<li>%rsi(%esi) 用于保存源索引值</li>
+<li>%rdi(%edi) 用于保存目标索引值</li>
 </ul>
-<p>先来看一段C代码及其经过汇编产生的代码</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C 代码</span></span><br><span class="line">*dest = t;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的汇编代码</span></span><br><span class="line">movq    %rax, (%rbx)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的对象代码</span></span><br><span class="line"><span class="number">0x40059e</span>:   <span class="number">46</span> <span class="number">89</span> <span class="number">03</span></span><br></pre></td></tr></table></figure>
-<p>C 代码的意思很简单，就是把值 <code>t</code> 存储到指针 <code>dest</code> 指向的内存中。对应到汇编代码，就是把 8字节（也就是四个字, Quad words）移动到内存中（这也就是为什叫做 <code>movq</code>）。<code>t</code> 的值保存在寄存器 %rax 中，<code>dest</code> 指向的地址保存在 %rbx 中，而 <code>*dest</code> 是取地址操作，对应于在内存中找到对应的值，也就是 <code>M[%rbx]</code>，在汇编代码中用小括号表示取地址，即 <code>(%rbx)</code>。最后转换成 3 个字节的指令，并保存在 <code>0x40059e</code> 这个地址中。</p>
+<p>而 %rsp(%esp) 和 %rbp(%ebp) 则是作为栈指针和基指针来使用的。下面我们通过 <code>movq</code> 这个指令来了解操作数的三种基本类型：立即数(Imm)、寄存器值(Reg)和内存值(Mem)。</p>
 <a id="more"></a>
-<h2 id="cpu-指令">CPU 指令</h2>
-<h3 id="一个实例">一个实例</h3>
-<p>了解寄存器和内存模型以后，就可以来看汇编语言到底是什么了。下面是一个简单的程序<code>example.c</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int add_a_and_b(int a, int b) &#123;</span><br><span class="line">return a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">return add_a_and_b(2, 3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>gcc 将这个程序转成汇编语言。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -S example.c</span><br></pre></td></tr></table></figure>
-<p>上面的命令执行以后，会生成一个文本文件<code>example.s</code>，里面就是汇编语言，包含了几十行指令。这么说吧，一个高级语言的简单操作，底层可能由几个，甚至几十个 CPU 指令构成。CPU 依次执行这些指令，完成这一步操作。</p>
-<p><code>example.s</code>经过简化以后，大概是下面的样子。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">_add_a_and_b:</span><br><span class="line">push   %ebx</span><br><span class="line">mov    %eax, [%esp+8] </span><br><span class="line">mov    %ebx, [%esp+12]</span><br><span class="line">add    %eax, %ebx </span><br><span class="line">pop    %ebx </span><br><span class="line">ret  </span><br><span class="line"></span><br><span class="line">_main:</span><br><span class="line">push   3</span><br><span class="line">push   2</span><br><span class="line">call   _add_a_and_b </span><br><span class="line">add    %esp, 8</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>可以看到，原程序的两个函数<code>add_a_and_b</code>和<code>main</code>，对应两个标签<code>_add_a_and_b</code>和<code>_main</code>。每个标签里面是该函数所转成的 CPU 运行流程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
-<p>这一行里面，<code>push</code>是 CPU 指令，<code>%ebx</code>是该指令要用到的运算子。一个 CPU 指令可以有零个到多个运算子。</p>
-<p>下面我就一行一行讲解这个汇编程序，建议读者最好把这个程序，在另一个窗口拷贝一份，省得阅读的时候再把页面滚动上来。</p>
-<h3 id="push-指令">push 指令</h3>
-<p>根据约定，程序从<code>_main</code>标签开始执行，这时会在 Stack 上为<code>main</code>建立一个帧，并将 Stack 所指向的地址，写入 ESP 寄存器。后面如果有数据要写入<code>main</code>这个帧，就会写在 ESP 寄存器所保存的地址。</p>
-<p>然后，开始执行第一行代码。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   3</span><br></pre></td></tr></table></figure>
-<p><code>push</code>指令用于将运算子放入 Stack，这里就是将<code>3</code>写入<code>main</code>这个帧。</p>
-</blockquote>
-<p>虽然看上去很简单，<code>push</code>指令其实有一个前置操作。它会先取出 ESP 寄存器里面的地址，将其减去4个字节，然后将新地址写入 ESP 寄存器。使用减法是因为 Stack 从高位向低位发展，4个字节则是因为<code>3</code>的类型是<code>int</code>，占用4个字节。得到新地址以后， 3 就会写入这个地址开始的四个字节。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   2</span><br></pre></td></tr></table></figure>
-<p>第二行也是一样，<code>push</code>指令将<code>2</code>写入<code>main</code>这个帧，位置紧贴着前面写入的<code>3</code>。这时，ESP 寄存器会再减去 4个字节（累计减去8）。</p>
-</blockquote>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png" alt="img" /></p>
-<h3 id="call-指令">call 指令</h3>
-<p>第三行的<code>call</code>指令用来调用函数。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call   _add_a_and_b</span><br></pre></td></tr></table></figure>
-<p>上面的代码表示调用<code>add_a_and_b</code>函数。这时，程序就会去找<code>_add_a_and_b</code>标签，并为该函数建立一个新的帧。</p>
-</blockquote>
-<p>下面就开始执行<code>_add_a_and_b</code>的代码。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
-<p>这一行表示将 EBX 寄存器里面的值，写入<code>_add_a_and_b</code>这个帧。这是因为后面要用到这个寄存器，就先把里面的值取出来，用完后再写回去。</p>
-</blockquote>
-<p>这时，<code>push</code>指令会再将 ESP 寄存器里面的地址减去4个字节（累计减去12）。</p>
-<h3 id="mov-指令">mov 指令</h3>
-<p><code>mov</code>指令用于将一个值写入某个寄存器。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov    %eax, [%esp+8] </span><br></pre></td></tr></table></figure>
-<p>这一行代码表示，先将 ESP 寄存器里面的地址加上8个字节，得到一个新的地址，然后按照这个地址在 Stack 取出数据。根据前面的步骤，可以推算出这里取出的是<code>2</code>，再将<code>2</code>写入 EAX 寄存器。</p>
-</blockquote>
-<p>下一行代码也是干同样的事情。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov    %ebx, [%esp+12] </span><br></pre></td></tr></table></figure>
-<p>上面的代码将 ESP 寄存器的值加12个字节，再按照这个地址在 Stack 取出数据，这次取出的是<code>3</code>，将其写入 EBX 寄存器。</p>
-</blockquote>
-<h3 id="add-指令">add 指令</h3>
-<p><code>add</code>指令用于将两个运算子相加，并将结果写入第一个运算子。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add    %eax, %ebx</span><br></pre></td></tr></table></figure>
-<p>上面的代码将 EAX 寄存器的值（即2）加上 EBX 寄存器的值（即3），得到结果5，再将这个结果写入第一个运算子 EAX 寄存器。</p>
-</blockquote>
-<h3 id="pop-指令">pop 指令</h3>
-<p><code>pop</code>指令用于取出 Stack 最近一个写入的值（即最低位地址的值），并将这个值写入运算子指定的位置。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pop    %ebx</span><br></pre></td></tr></table></figure>
-<p>上面的代码表示，取出 Stack 最近写入的值（即 EBX 寄存器的原始值），再将这个值写回 EBX 寄存器（因为加法已经做完了，EBX 寄存器用不到了）。</p>
-</blockquote>
-<p>注意，<code>pop</code>指令还会将 ESP 寄存器里面的地址加4，即回收4个字节。ret 指令</p>
-<p><code>ret</code>指令用于终止当前函数的执行，将运行权交还给上层函数。也就是，当前函数的帧将被回收。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>可以看到，该指令没有运算子。</p>
-</blockquote>
-<p>随着<code>add_a_and_b</code>函数终止执行，系统就回到刚才<code>main</code>函数中断的地方，继续往下执行。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add    %esp, 8 </span><br></pre></td></tr></table></figure>
-<p>上面的代码表示，将 ESP 寄存器里面的地址，手动加上8个字节，再写回 ESP 寄存器。这是因为 ESP 寄存器的是 Stack 的写入开始地址，前面的<code>pop</code>操作已经回收了4个字节，这里再回收8个字节，等于全部回收。</p>
-</blockquote>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>最后，<code>main</code>函数运行结束，<code>ret</code>指令退出程序执行。</p>
-</blockquote>
-<h1 id="参考文章">参考文章</h1>
-<p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></p>
-<p><a target="_blank" rel="noopener" href="https://wdxtub.com/csapp/thin-csapp-2/2016/04/16/">【读薄 CSAPP】贰 机器指令与程序优化</a></p>
+<p>对于 <code>movq</code> 指令来说，需要源操作数和目标操作数，源操作数可以是立即数、寄存器值或内存值的任意一种，但目标操作数只能是寄存器值或内存值。指令的具体格式可以这样写 <code>movq [Imm|Reg|Mem], [Reg|Mem]</code>，第一个是源操作数，第二个是目标操作数，例如：</p>
+<ul>
+<li><code>movq Imm, Reg</code> -&gt; <code>mov $0x5, %rax</code> -&gt; <code>temp = 0x5;</code></li>
+<li><code>movq Imm, Mem</code> -&gt; <code>mov $0x5, (%rax)</code> -&gt; <code>*p = 0x5;</code></li>
+<li><code>movq Reg, Reg</code> -&gt; <code>mov %rax, %rdx</code> -&gt; <code>temp2 = temp1;</code></li>
+<li><code>movq Reg, Mem</code> -&gt; <code>mov %rax, (%rdx)</code> -&gt; <code>*p = temp;</code></li>
+<li><code>movq Mem, Reg</code> -&gt; <code>mov (%rax), %rdx</code> -&gt; <code>temp = *p;</code></li>
+</ul>
+<p>这里有一种情况是不存在的，没有 <code>movq Mem, Mem</code> 这个方式，也就是说，我们没有办法用一条指令完成内存间的数据交换。</p>
+<p>上面的例子中有些操作数是带括号的，括号的意思就是寻址，这也分两种情况：</p>
+<ul>
+<li>普通模式，(R)，相当于 <code>Mem[Reg[R]]</code>，也就是说寄存器 R 指定内存地址，类似于 C 语言中的指针，语法为：<code>movq (%rcx), %rax</code> 也就是说以 %rcx 寄存器中存储的地址去内存里找对应的数据，存到寄存器 %rax 中</li>
+<li>移位模式，D(R)，相当于 <code>Mem[Reg[R]+D]</code>，寄存器 R 给出起始的内存地址，然后 D 是偏移量，语法为：<code>movq 8(%rbp),%rdx</code> 也就是说以 %rbp 寄存器中存储的地址再加上 8 个偏移量去内存里找对应的数据，存到寄存器 %rdx 中</li>
+</ul>
+<p>因为寻址这个内容比较重要，所以多说两句，不然之后接触指针会比较吃力。对于寻址来说，比较通用的格式是 <code>D(Rb, Ri, S)</code> -&gt; <code>Mem[Reg[Rb]+S*Reg[Ri]+D]</code>，其中：</p>
+<ul>
+<li><code>D</code> - 常数偏移量</li>
+<li><code>Rb</code> - 基寄存器</li>
+<li><code>Ri</code> - 索引寄存器，不能是 %rsp</li>
+<li><code>S</code> - 系数</li>
+</ul>
+<p>除此之外，还有如下三种特殊情况</p>
+<ul>
+<li><code>(Rb, Ri)</code> -&gt; <code>Mem[Reg[Rb]+Reg[Ri]]</code></li>
+<li><code>D(Rb, Ri)</code> -&gt; <code>Mem[Reg[Rb]+Reg[Ri]+D]</code></li>
+<li><code>(Rb, Ri, S)</code> -&gt; <code>Mem[Reg[Rb]+S*Reg[Ri]]</code></li>
+</ul>
+<p>我们通过具体的例子来巩固一下，这里假设 %rdx 中的存着 <code>0xf000</code>，%rcx 中存着 <code>0x0100</code>，那么</p>
+<ul>
+<li><code>0x8(%rdx)</code> = <code>0xf000</code> + <code>0x8</code> = <code>0xf008</code></li>
+<li><code>(%rdx, %rcx)</code> = <code>0xf000</code> + <code>0x100</code> = <code>0xf100</code></li>
+<li><code>(%rdx, %rcx, 4)</code> = <code>0xf000</code> + <code>4*0x100</code> = <code>0xf400</code></li>
+<li><code>0x80(, %rdx, 2)</code> = <code>2*0xf000</code> + <code>0x80</code> = <code>0x1e080</code></li>
+</ul>
+<p>了解了寻址之后，我们来看看运算指令，这里以 <code>leaq</code> 指令为例子。具体格式为 <code>leaq Src, Dst</code>，其中 <code>Src</code> 是地址的表达式，然后把计算的值存入 <code>Dst</code> 指定的寄存器，也就是说，无须内存引用就可以计算，类似于 <code>p = &amp;x[i];</code>。我们来看一个具体的例子，假设一个 C 函数是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">m12</span><span class="params">(<span class="keyword">long</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">12</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<p>对应的汇编代码为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">leaq (%rdi, %rdi, 2), %rax # t &lt;- x+x*2</span><br><span class="line">salq $2, %rax              # return t &lt;&lt; 2</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<p>可以看到是直接对 %rdi 寄存器中存的数据（地址）进行运算，然后赋值给 %rax。最后给出一些常见的算术运算指令，注意参数的顺序，而且对于有符号和无符号数都是一样的，更多的信息可以参考 Intel 官方文档[3]。</p>
+<p>需要两个操作数的指令</p>
+<ul>
+<li><code>addq Src, Dest</code> -&gt; <code>Dest = Dest + Src</code></li>
+<li><code>subq Src, Dest</code> -&gt; <code>Dest = Dest - Src</code></li>
+<li><code>imulq Src, Dest</code> -&gt; <code>Dest = Dest * Src</code></li>
+<li><code>salq Src, Dest</code> -&gt; <code>Dest = Dest &lt;&lt; Src</code></li>
+<li><code>sarq Src, Dest</code> -&gt; <code>Dest = Dest &gt;&gt; Src</code></li>
+<li><code>shrq Src, Dest</code> -&gt; <code>Dest = Dest &gt;&gt; Src</code></li>
+<li><code>xorq Src, Dest</code> -&gt; <code>Dest = Dest ^ Src</code></li>
+<li><code>andq Src, Dest</code> -&gt; <code>Dest = Dest &amp; Src</code></li>
+<li><code>orq Src, Dest</code> -&gt; <code>Dest = Dest | Src</code></li>
+</ul>
+<p>需要一个操作数的指令</p>
+<ul>
+<li><code>incq Dest</code> -&gt; <code>Dest = Dest + 1</code></li>
+<li><code>decq Dest</code> -&gt; <code>Dest = Dest - 1</code></li>
+<li><code>negq Dest</code> -&gt; <code>Dest = -Dest</code></li>
+<li><code>notq Dest</code> -&gt; <code>Dest = ~Dest</code></li>
+</ul>
 
     </div>
 
@@ -481,7 +465,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://www.snowmoon.top/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/" title="CSAPP5——程序机器级表示">https://www.snowmoon.top/2021/08/14/CSAPP5 - 副本/</a>
+      <a href="https://www.snowmoon.top/2021/08/15/CSAPP6/" title="CSAPP6——程序机器级表示2">https://www.snowmoon.top/2021/08/15/CSAPP6/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -497,14 +481,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/08/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B010/" rel="prev" title="数据结构与算法刷题笔记10——排序算法(快排)">
-                  <i class="fa fa-chevron-left"></i> 数据结构与算法刷题笔记10——排序算法(快排)
+                <a href="/2021/08/14/CSAPP5/" rel="prev" title="CSAPP5——程序机器级表示">
+                  <i class="fa fa-chevron-left"></i> CSAPP5——程序机器级表示
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/08/14/CSAPP5/" rel="next" title="CSAPP5——程序机器级表示">
-                  CSAPP5——程序机器级表示 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -560,14 +541,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">71k</span>
+    <span title="站点总字数">70k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:16</span>
+    <span title="站点阅读时长">3:15</span>
   </span>
 </div>
 <div class="busuanzi-count">
@@ -715,7 +696,7 @@ NexT.utils.loadComments('#valine-comments', () => {
   NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
     new Valine(Object.assign({"enable":true,"appId":"3KOoIsaAaSWKOX8j2cD4Jv5N-MdYXbMMI","appKey":"mwj9vkzzQ2hHQztp3tNVPN1t","serverURLs":null,"placeholder":"无需输入头像 昵称 网址 即可评论(*^▽^*)&#10valine评论不一定能及时看到，如果需要回复可以戳我主页的联系方式(～￣▽￣)～","avatar":"robohash","meta":["nick","mail","link"],"pageSize":10,"lang":null,"visitor":true,"comment_count":true,"recordIP":false,"enableQQ":false,"requiredFields":[]}, {
       el: '#valine-comments',
-      path: "/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/",
+      path: "/2021/08/15/CSAPP6/",
       serverURLs: "https://3kooisaa.api.lncldglobal.com"
     }));
   }, window.Valine);

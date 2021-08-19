@@ -149,105 +149,132 @@
       </tags>
   </entry>
   <entry>
-    <title>CSAPP5——程序机器级表示</title>
-    <url>/2021/08/14/CSAPP5%20-%20%E5%89%AF%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="从c到机器代码">从C到机器代码</h1>
-<p>机器代码就是处理器能够直接执行的字节层面上的程序，但是对于人类来说基本上是不可读的，所以把字节按照具体含义进行『翻译』，就成了人类可读的汇编代码。注意这里的用词是『翻译』而不是『编译』，可以认为汇编代码就是机器代码的可读形式。</p>
-<p>C-&gt;可执行程序：</p>
+    <title>CSAPP6——程序机器级表示2</title>
+    <url>/2021/08/15/CSAPP6/</url>
+    <content><![CDATA[<h1 id="汇编入门二">汇编入门（二）</h1>
+<p>x86-64 架构中的整型寄存器如下图所示（暂时不考虑浮点数的部分）</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191422580.jpeg" alt="img" /></p>
+<p>仔细看看寄存器的分布，我们可以发现有不同的颜色以及不同的寄存器名称，黄色部分是 16 位寄存器，也就是 16 位处理器 8086 的设计，然后绿色部分是 32 位寄存器（这里我是按照比例画的），给 32 位处理器使用，而蓝色部分是为 64 位处理器设计的。这样的设计保证了令人震惊的向下兼容性，几十年前的 x86 代码现在仍然可以运行！</p>
+<p>前六个寄存器(%rax, %rbx, %rcx, %rdx, %rsi, %rdi)称为通用寄存器，有其『特定』的用途：</p>
 <ul>
-<li>C 语言代码(a.c)经过编译器的处理(<code>gcc -0g -S</code>)成为汇编代码(a.s)</li>
-<li>汇编代码(a.s)经过汇编器的处理(<code>gcc</code> 或 <code>as</code>)成为对象程序(a.o)</li>
-<li>对象程序(a.o)以及所需静态库(lib.a)经过链接器的处理(<code>gcc</code> 或 <code>ld</code>)最终成为计算机可执行的程序</li>
+<li>%rax(%eax) 用于做累加</li>
+<li>%rcx(%ecx) 用于计数</li>
+<li>%rdx(%edx) 用于保存数据</li>
+<li>%rbx(%ebx) 用于做内存查找的基础地址</li>
+<li>%rsi(%esi) 用于保存源索引值</li>
+<li>%rdi(%edi) 用于保存目标索引值</li>
 </ul>
-<p>先来看一段C代码及其经过汇编产生的代码</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// C 代码</span></span><br><span class="line">*dest = t;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的汇编代码</span></span><br><span class="line">movq    %rax, (%rbx)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对应的对象代码</span></span><br><span class="line"><span class="number">0x40059e</span>:   <span class="number">46</span> <span class="number">89</span> <span class="number">03</span></span><br></pre></td></tr></table></figure>
-<p>C 代码的意思很简单，就是把值 <code>t</code> 存储到指针 <code>dest</code> 指向的内存中。对应到汇编代码，就是把 8字节（也就是四个字, Quad words）移动到内存中（这也就是为什叫做 <code>movq</code>）。<code>t</code> 的值保存在寄存器 %rax 中，<code>dest</code> 指向的地址保存在 %rbx 中，而 <code>*dest</code> 是取地址操作，对应于在内存中找到对应的值，也就是 <code>M[%rbx]</code>，在汇编代码中用小括号表示取地址，即 <code>(%rbx)</code>。最后转换成 3 个字节的指令，并保存在 <code>0x40059e</code> 这个地址中。</p>
+<p>而 %rsp(%esp) 和 %rbp(%ebp) 则是作为栈指针和基指针来使用的。下面我们通过 <code>movq</code> 这个指令来了解操作数的三种基本类型：立即数(Imm)、寄存器值(Reg)和内存值(Mem)。</p>
 <a id="more"></a>
-<h2 id="cpu-指令">CPU 指令</h2>
-<h3 id="一个实例">一个实例</h3>
-<p>了解寄存器和内存模型以后，就可以来看汇编语言到底是什么了。下面是一个简单的程序<code>example.c</code>。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int add_a_and_b(int a, int b) &#123;</span><br><span class="line">return a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">return add_a_and_b(2, 3);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>gcc 将这个程序转成汇编语言。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ gcc -S example.c</span><br></pre></td></tr></table></figure>
-<p>上面的命令执行以后，会生成一个文本文件<code>example.s</code>，里面就是汇编语言，包含了几十行指令。这么说吧，一个高级语言的简单操作，底层可能由几个，甚至几十个 CPU 指令构成。CPU 依次执行这些指令，完成这一步操作。</p>
-<p><code>example.s</code>经过简化以后，大概是下面的样子。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">_add_a_and_b:</span><br><span class="line">push   %ebx</span><br><span class="line">mov    %eax, [%esp+8] </span><br><span class="line">mov    %ebx, [%esp+12]</span><br><span class="line">add    %eax, %ebx </span><br><span class="line">pop    %ebx </span><br><span class="line">ret  </span><br><span class="line"></span><br><span class="line">_main:</span><br><span class="line">push   3</span><br><span class="line">push   2</span><br><span class="line">call   _add_a_and_b </span><br><span class="line">add    %esp, 8</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>可以看到，原程序的两个函数<code>add_a_and_b</code>和<code>main</code>，对应两个标签<code>_add_a_and_b</code>和<code>_main</code>。每个标签里面是该函数所转成的 CPU 运行流程。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
-<p>这一行里面，<code>push</code>是 CPU 指令，<code>%ebx</code>是该指令要用到的运算子。一个 CPU 指令可以有零个到多个运算子。</p>
-<p>下面我就一行一行讲解这个汇编程序，建议读者最好把这个程序，在另一个窗口拷贝一份，省得阅读的时候再把页面滚动上来。</p>
-<h3 id="push-指令">push 指令</h3>
-<p>根据约定，程序从<code>_main</code>标签开始执行，这时会在 Stack 上为<code>main</code>建立一个帧，并将 Stack 所指向的地址，写入 ESP 寄存器。后面如果有数据要写入<code>main</code>这个帧，就会写在 ESP 寄存器所保存的地址。</p>
-<p>然后，开始执行第一行代码。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">push   3</span><br></pre></td></tr></table></figure>
-<p><code>push</code>指令用于将运算子放入 Stack，这里就是将<code>3</code>写入<code>main</code>这个帧。</p>
-</blockquote>
-<p>虽然看上去很简单，<code>push</code>指令其实有一个前置操作。它会先取出 ESP 寄存器里面的地址，将其减去4个字节，然后将新地址写入 ESP 寄存器。使用减法是因为 Stack 从高位向低位发展，4个字节则是因为<code>3</code>的类型是<code>int</code>，占用4个字节。得到新地址以后， 3 就会写入这个地址开始的四个字节。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">push   2</span><br></pre></td></tr></table></figure>
-<p>第二行也是一样，<code>push</code>指令将<code>2</code>写入<code>main</code>这个帧，位置紧贴着前面写入的<code>3</code>。这时，ESP 寄存器会再减去 4个字节（累计减去8）。</p>
-</blockquote>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108191407057.png" alt="img" /></p>
-<h3 id="call-指令">call 指令</h3>
-<p>第三行的<code>call</code>指令用来调用函数。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">call   _add_a_and_b</span><br></pre></td></tr></table></figure>
-<p>上面的代码表示调用<code>add_a_and_b</code>函数。这时，程序就会去找<code>_add_a_and_b</code>标签，并为该函数建立一个新的帧。</p>
-</blockquote>
-<p>下面就开始执行<code>_add_a_and_b</code>的代码。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">push   %ebx</span><br></pre></td></tr></table></figure>
-<p>这一行表示将 EBX 寄存器里面的值，写入<code>_add_a_and_b</code>这个帧。这是因为后面要用到这个寄存器，就先把里面的值取出来，用完后再写回去。</p>
-</blockquote>
-<p>这时，<code>push</code>指令会再将 ESP 寄存器里面的地址减去4个字节（累计减去12）。</p>
-<h3 id="mov-指令">mov 指令</h3>
-<p><code>mov</code>指令用于将一个值写入某个寄存器。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov    %eax, [%esp+8] </span><br></pre></td></tr></table></figure>
-<p>这一行代码表示，先将 ESP 寄存器里面的地址加上8个字节，得到一个新的地址，然后按照这个地址在 Stack 取出数据。根据前面的步骤，可以推算出这里取出的是<code>2</code>，再将<code>2</code>写入 EAX 寄存器。</p>
-</blockquote>
-<p>下一行代码也是干同样的事情。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov    %ebx, [%esp+12] </span><br></pre></td></tr></table></figure>
-<p>上面的代码将 ESP 寄存器的值加12个字节，再按照这个地址在 Stack 取出数据，这次取出的是<code>3</code>，将其写入 EBX 寄存器。</p>
-</blockquote>
-<h3 id="add-指令">add 指令</h3>
-<p><code>add</code>指令用于将两个运算子相加，并将结果写入第一个运算子。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add    %eax, %ebx</span><br></pre></td></tr></table></figure>
-<p>上面的代码将 EAX 寄存器的值（即2）加上 EBX 寄存器的值（即3），得到结果5，再将这个结果写入第一个运算子 EAX 寄存器。</p>
-</blockquote>
-<h3 id="pop-指令">pop 指令</h3>
-<p><code>pop</code>指令用于取出 Stack 最近一个写入的值（即最低位地址的值），并将这个值写入运算子指定的位置。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pop    %ebx</span><br></pre></td></tr></table></figure>
-<p>上面的代码表示，取出 Stack 最近写入的值（即 EBX 寄存器的原始值），再将这个值写回 EBX 寄存器（因为加法已经做完了，EBX 寄存器用不到了）。</p>
-</blockquote>
-<p>注意，<code>pop</code>指令还会将 ESP 寄存器里面的地址加4，即回收4个字节。ret 指令</p>
-<p><code>ret</code>指令用于终止当前函数的执行，将运行权交还给上层函数。也就是，当前函数的帧将被回收。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>可以看到，该指令没有运算子。</p>
-</blockquote>
-<p>随着<code>add_a_and_b</code>函数终止执行，系统就回到刚才<code>main</code>函数中断的地方，继续往下执行。</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add    %esp, 8 </span><br></pre></td></tr></table></figure>
-<p>上面的代码表示，将 ESP 寄存器里面的地址，手动加上8个字节，再写回 ESP 寄存器。这是因为 ESP 寄存器的是 Stack 的写入开始地址，前面的<code>pop</code>操作已经回收了4个字节，这里再回收8个字节，等于全部回收。</p>
-</blockquote>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ret</span><br></pre></td></tr></table></figure>
-<p>最后，<code>main</code>函数运行结束，<code>ret</code>指令退出程序执行。</p>
-</blockquote>
-<h1 id="参考文章">参考文章</h1>
-<p><a href="https://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></p>
-<p><a href="https://wdxtub.com/csapp/thin-csapp-2/2016/04/16/">【读薄 CSAPP】贰 机器指令与程序优化</a></p>
+<p>对于 <code>movq</code> 指令来说，需要源操作数和目标操作数，源操作数可以是立即数、寄存器值或内存值的任意一种，但目标操作数只能是寄存器值或内存值。指令的具体格式可以这样写 <code>movq [Imm|Reg|Mem], [Reg|Mem]</code>，第一个是源操作数，第二个是目标操作数，例如：</p>
+<ul>
+<li><code>movq Imm, Reg</code> -&gt; <code>mov $0x5, %rax</code> -&gt; <code>temp = 0x5;</code></li>
+<li><code>movq Imm, Mem</code> -&gt; <code>mov $0x5, (%rax)</code> -&gt; <code>*p = 0x5;</code></li>
+<li><code>movq Reg, Reg</code> -&gt; <code>mov %rax, %rdx</code> -&gt; <code>temp2 = temp1;</code></li>
+<li><code>movq Reg, Mem</code> -&gt; <code>mov %rax, (%rdx)</code> -&gt; <code>*p = temp;</code></li>
+<li><code>movq Mem, Reg</code> -&gt; <code>mov (%rax), %rdx</code> -&gt; <code>temp = *p;</code></li>
+</ul>
+<p>这里有一种情况是不存在的，没有 <code>movq Mem, Mem</code> 这个方式，也就是说，我们没有办法用一条指令完成内存间的数据交换。</p>
+<p>上面的例子中有些操作数是带括号的，括号的意思就是寻址，这也分两种情况：</p>
+<ul>
+<li>普通模式，(R)，相当于 <code>Mem[Reg[R]]</code>，也就是说寄存器 R 指定内存地址，类似于 C 语言中的指针，语法为：<code>movq (%rcx), %rax</code> 也就是说以 %rcx 寄存器中存储的地址去内存里找对应的数据，存到寄存器 %rax 中</li>
+<li>移位模式，D(R)，相当于 <code>Mem[Reg[R]+D]</code>，寄存器 R 给出起始的内存地址，然后 D 是偏移量，语法为：<code>movq 8(%rbp),%rdx</code> 也就是说以 %rbp 寄存器中存储的地址再加上 8 个偏移量去内存里找对应的数据，存到寄存器 %rdx 中</li>
+</ul>
+<p>因为寻址这个内容比较重要，所以多说两句，不然之后接触指针会比较吃力。对于寻址来说，比较通用的格式是 <code>D(Rb, Ri, S)</code> -&gt; <code>Mem[Reg[Rb]+S*Reg[Ri]+D]</code>，其中：</p>
+<ul>
+<li><code>D</code> - 常数偏移量</li>
+<li><code>Rb</code> - 基寄存器</li>
+<li><code>Ri</code> - 索引寄存器，不能是 %rsp</li>
+<li><code>S</code> - 系数</li>
+</ul>
+<p>除此之外，还有如下三种特殊情况</p>
+<ul>
+<li><code>(Rb, Ri)</code> -&gt; <code>Mem[Reg[Rb]+Reg[Ri]]</code></li>
+<li><code>D(Rb, Ri)</code> -&gt; <code>Mem[Reg[Rb]+Reg[Ri]+D]</code></li>
+<li><code>(Rb, Ri, S)</code> -&gt; <code>Mem[Reg[Rb]+S*Reg[Ri]]</code></li>
+</ul>
+<p>我们通过具体的例子来巩固一下，这里假设 %rdx 中的存着 <code>0xf000</code>，%rcx 中存着 <code>0x0100</code>，那么</p>
+<ul>
+<li><code>0x8(%rdx)</code> = <code>0xf000</code> + <code>0x8</code> = <code>0xf008</code></li>
+<li><code>(%rdx, %rcx)</code> = <code>0xf000</code> + <code>0x100</code> = <code>0xf100</code></li>
+<li><code>(%rdx, %rcx, 4)</code> = <code>0xf000</code> + <code>4*0x100</code> = <code>0xf400</code></li>
+<li><code>0x80(, %rdx, 2)</code> = <code>2*0xf000</code> + <code>0x80</code> = <code>0x1e080</code></li>
+</ul>
+<p>了解了寻址之后，我们来看看运算指令，这里以 <code>leaq</code> 指令为例子。具体格式为 <code>leaq Src, Dst</code>，其中 <code>Src</code> 是地址的表达式，然后把计算的值存入 <code>Dst</code> 指定的寄存器，也就是说，无须内存引用就可以计算，类似于 <code>p = &amp;x[i];</code>。我们来看一个具体的例子，假设一个 C 函数是：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">m12</span><span class="params">(<span class="keyword">long</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">12</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<p>对应的汇编代码为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">leaq (%rdi, %rdi, 2), %rax # t &lt;- x+x*2</span><br><span class="line">salq $2, %rax              # return t &lt;&lt; 2</span><br></pre></td></tr></table></figure>
+<p>复制</p>
+<p>可以看到是直接对 %rdi 寄存器中存的数据（地址）进行运算，然后赋值给 %rax。最后给出一些常见的算术运算指令，注意参数的顺序，而且对于有符号和无符号数都是一样的，更多的信息可以参考 Intel 官方文档[3]。</p>
+<p>需要两个操作数的指令</p>
+<ul>
+<li><code>addq Src, Dest</code> -&gt; <code>Dest = Dest + Src</code></li>
+<li><code>subq Src, Dest</code> -&gt; <code>Dest = Dest - Src</code></li>
+<li><code>imulq Src, Dest</code> -&gt; <code>Dest = Dest * Src</code></li>
+<li><code>salq Src, Dest</code> -&gt; <code>Dest = Dest &lt;&lt; Src</code></li>
+<li><code>sarq Src, Dest</code> -&gt; <code>Dest = Dest &gt;&gt; Src</code></li>
+<li><code>shrq Src, Dest</code> -&gt; <code>Dest = Dest &gt;&gt; Src</code></li>
+<li><code>xorq Src, Dest</code> -&gt; <code>Dest = Dest ^ Src</code></li>
+<li><code>andq Src, Dest</code> -&gt; <code>Dest = Dest &amp; Src</code></li>
+<li><code>orq Src, Dest</code> -&gt; <code>Dest = Dest | Src</code></li>
+</ul>
+<p>需要一个操作数的指令</p>
+<ul>
+<li><code>incq Dest</code> -&gt; <code>Dest = Dest + 1</code></li>
+<li><code>decq Dest</code> -&gt; <code>Dest = Dest - 1</code></li>
+<li><code>negq Dest</code> -&gt; <code>Dest = -Dest</code></li>
+<li><code>notq Dest</code> -&gt; <code>Dest = ~Dest</code></li>
+</ul>
 ]]></content>
       <categories>
         <category>CSAPP</category>
       </categories>
       <tags>
         <tag>CSAPP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSAPPLAB1——Datalab(下)</title>
+    <url>/2021/08/10/CSAPPLAB2%E2%80%94%E2%80%94Datalab(%E4%B8%8B)/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：本文为CSAPP3.0配套Lab的刷题笔记，这是第一个lab——Datalab的笔记</p>
+</blockquote>
+<p>每个实验题目将采用以下格式来记录</p>
+<ul>
+<li>题目描述</li>
+<li>题解和思路</li>
+<li>解题代码</li>
+</ul>
+<h1 id="islessorequal">isLessOrEqual</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>如果x&lt;=y，返回1，否则返回</p>
+<h2 id="题解与思路">题解与思路</h2>
+<p>本来刚开始一看：诶，这简单嘛，让y-x&gt;=0就行了嘛，就想着写个y+x的相反数然后判断它的符号位，然后没想到又是该死的TMin，这该死的按位取反加一仍然为它本身的数字！还有一个原因是如果相减的结果大于Tmax会溢出为负数，也会有错误，所以修改了实现的逻辑</p>
+<p>分成两种情况：x和y符号相同和不同时：y为正为真 x和y符号相同时：y-x&gt;0为真 由于溢出只有在x和y异号的时候才会出现，所以这种方法巧妙的规避了溢出的情况</p>
+<h1 id="代码">代码</h1>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * isLessOrEqual - if x &lt;= y  then return 1, else return 0 </span></span><br><span class="line"><span class="comment"> *   Example: isLessOrEqual(4,5) = 1.</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 24</span></span><br><span class="line"><span class="comment"> *   Rating: 3</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isLessOrEqual</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> xsign = x&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> ysign = y&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> check = xsign^ysign;</span><br><span class="line">  <span class="keyword">int</span> yminusx = (y+~x+<span class="number">1</span>)&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">return</span> (check&amp;(!ysign))|(!check&amp;(!yminusx));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="logicalneg">logicalNeg</h1>
+<h2 id="题目描述-1">题目描述</h2>
+<p>不使用逻辑非 '!' 实现逻辑非 '!'</p>
+<h2 id="题解与思路-1">题解与思路</h2>
+<ol type="1">
+<li><p>在所有数字中，只有0和Tmin取它的补码相反数后还为它本身，也即<code>~0+1=0,~Tmin+1=Tmin</code>而Tmin为0x80000000，符号位为1，所以可以将x取补码的相反数后判断符号位是否为0</p></li>
+<li><p>转换为考虑筛选出<code>x&lt;0&amp;&amp;x&gt;=1</code>的数字然后返回0</p></li>
+</ol>
+<a id="more"></a>
+<h2 id="代码-1">代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * logicalNeg - implement the ! operator, using all of </span></span><br><span class="line"><span class="comment"> *              the legal operators except !</span></span><br><span class="line"><span class="comment"> *   Examples: logicalNeg(3) = 0, logicalNeg(0) = 1</span></span><br><span class="line"><span class="comment"> *   Legal ops: ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 12</span></span><br><span class="line"><span class="comment"> *   Rating: 4 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">logicalNeg</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> ((x&gt;&gt;<span class="number">31</span>)+<span class="number">1</span>)&amp;((x+~<span class="number">1</span>+<span class="number">1</span>&gt;&gt;<span class="number">31</span>)&amp;<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="今日体重">今日体重</h1>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108110029080.png" alt="image-20210811002904543" /></p>
+]]></content>
+      <categories>
+        <category>CSAPPLAB</category>
+        <category>计算机组成原理</category>
+      </categories>
+      <tags>
+        <tag>CSAPP</tag>
+        <tag>Datalab</tag>
       </tags>
   </entry>
   <entry>
@@ -329,46 +356,64 @@
       </tags>
   </entry>
   <entry>
-    <title>CSAPPLAB1——Datalab(下)</title>
-    <url>/2021/08/10/CSAPPLAB2%E2%80%94%E2%80%94Datalab(%E4%B8%8B)/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：本文为CSAPP3.0配套Lab的刷题笔记，这是第一个lab——Datalab的笔记</p>
-</blockquote>
-<p>每个实验题目将采用以下格式来记录</p>
-<ul>
-<li>题目描述</li>
-<li>题解和思路</li>
-<li>解题代码</li>
-</ul>
-<h1 id="islessorequal">isLessOrEqual</h1>
-<h2 id="题目描述">题目描述</h2>
-<p>如果x&lt;=y，返回1，否则返回</p>
-<h2 id="题解与思路">题解与思路</h2>
-<p>本来刚开始一看：诶，这简单嘛，让y-x&gt;=0就行了嘛，就想着写个y+x的相反数然后判断它的符号位，然后没想到又是该死的TMin，这该死的按位取反加一仍然为它本身的数字！还有一个原因是如果相减的结果大于Tmax会溢出为负数，也会有错误，所以修改了实现的逻辑</p>
-<p>分成两种情况：x和y符号相同和不同时：y为正为真 x和y符号相同时：y-x&gt;0为真 由于溢出只有在x和y异号的时候才会出现，所以这种方法巧妙的规避了溢出的情况</p>
-<h1 id="代码">代码</h1>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * isLessOrEqual - if x &lt;= y  then return 1, else return 0 </span></span><br><span class="line"><span class="comment"> *   Example: isLessOrEqual(4,5) = 1.</span></span><br><span class="line"><span class="comment"> *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 24</span></span><br><span class="line"><span class="comment"> *   Rating: 3</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isLessOrEqual</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> xsign = x&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> ysign = y&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">int</span> check = xsign^ysign;</span><br><span class="line">  <span class="keyword">int</span> yminusx = (y+~x+<span class="number">1</span>)&gt;&gt;<span class="number">31</span>;</span><br><span class="line">  <span class="keyword">return</span> (check&amp;(!ysign))|(!check&amp;(!yminusx));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="logicalneg">logicalNeg</h1>
-<h2 id="题目描述-1">题目描述</h2>
-<p>不使用逻辑非 '!' 实现逻辑非 '!'</p>
-<h2 id="题解与思路-1">题解与思路</h2>
-<ol type="1">
-<li><p>在所有数字中，只有0和Tmin取它的补码相反数后还为它本身，也即<code>~0+1=0,~Tmin+1=Tmin</code>而Tmin为0x80000000，符号位为1，所以可以将x取补码的相反数后判断符号位是否为0</p></li>
-<li><p>转换为考虑筛选出<code>x&lt;0&amp;&amp;x&gt;=1</code>的数字然后返回0</p></li>
-</ol>
+    <title>CSAPP阅读笔记2——数据编码2</title>
+    <url>/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%812/</url>
+    <content><![CDATA[<h1 id="整形变量integer">整形变量Integer</h1>
+<h2 id="类型拓展与截取">类型拓展与截取</h2>
+<p><strong>无符号数的零拓展</strong>：无符号数转换为更大的数据类型，只需要在开头添加0即可，这种运算也被称为零拓展。</p>
+<p><strong>补码数的符号拓展：</strong>补码数转换为更大的数据类型需要在开头添加最高有效位的值，即：如果为负数，需要在拓展出来的开头位置添加数个1，正数需要添加数个0。</p>
+<h2 id="截断数字">截断数字</h2>
+<p>当我们将一个位数为 w 的数字截断为 k 位的数字时，我们会丢弃最高的w-k位。</p>
+<p><strong>截断无符号数：</strong>相当于做mod运算，<span class="math inline">\(x&#39;=x\ mod\ 2^k\)</span></p>
+<p><strong>截断补码数值：</strong>和无符号值相似，不过需要将最高位转换为符号位</p>
 <a id="more"></a>
-<h2 id="代码-1">代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * logicalNeg - implement the ! operator, using all of </span></span><br><span class="line"><span class="comment"> *              the legal operators except !</span></span><br><span class="line"><span class="comment"> *   Examples: logicalNeg(3) = 0, logicalNeg(0) = 1</span></span><br><span class="line"><span class="comment"> *   Legal ops: ~ &amp; ^ | + &lt;&lt; &gt;&gt;</span></span><br><span class="line"><span class="comment"> *   Max ops: 12</span></span><br><span class="line"><span class="comment"> *   Rating: 4 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">logicalNeg</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> ((x&gt;&gt;<span class="number">31</span>)+<span class="number">1</span>)&amp;((x+~<span class="number">1</span>+<span class="number">1</span>&gt;&gt;<span class="number">31</span>)&amp;<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运算与溢出">运算与溢出</h2>
+<p>无符号数字加法：溢出时会丢弃最高位，实际上相当于做了个mod操作 <span class="math display">\[
+x+^u_wy=
+\left\{
+\begin{array}{l}
+    x+y,\quad x+y&lt;2^w\\
+    x+y-2^w, \quad 2^w\leq x+y&lt;2^{w+1}\\
+\end{array}
+\right.
+\]</span> 检测无符号数是否溢出：当<span class="math inline">\(s&lt;x\)</span>或<span class="math inline">\(s&lt;y\)</span>时发生了溢出</p>
+<p>补码加法：溢出时会产生正溢出和负溢出，正溢出是数字太大，把符号位改成了1而变成了负数，负溢出为数字太小把符号位改成了0而变成了正数</p>
+<p>对于满足<span class="math inline">\(-2^{w-1} \leq x,y&lt;2^{w-1}\)</span>​的整数，有： <span class="math display">\[
+x+^t_wy = \left\{
+\begin
+{array}{l}
+x+y-2^w,\qquad 2^{w-1} \leq x+y\qquad \quad 正溢出\\
+x+y,\qquad -2^{w-1}\leq x+y &lt; 2^{w-1}\qquad 正常\\
+x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
+\end{array}
+\right.
+\]</span> 对于乘法来说，值的范围会大很多，这里分情况讨论一下，假设两个乘数是 x,y 并且都是 w 位的：</p>
+<ul>
+<li>无符号数：至多 2w 位
+<ul>
+<li>范围$ 0≤x×y≤(2w−1)<sup>2=2</sup>{2w}−2^{w+1}+1$</li>
+</ul></li>
+<li>有符号数，最小的负数：至多 2w - 1 位
+<ul>
+<li>范围<span class="math inline">\(x×y≥(−2^{w−1})×(2^{w−1}−1)=−2^{2w−2}+2^{w−1}\)</span></li>
+</ul></li>
+<li>有符号数，最大的正数：至多 2w 位，只有<span class="math inline">\((TMin_w)^2\)</span>一种情况
+<ul>
+<li>范围 <span class="math inline">\(x×y≤(−2^{w−1})^2=2^{2w−2}\)</span></li>
+</ul></li>
+</ul>
+<p>如果需要保证精度，就需要用软件来实现了。另外，计算的无符号乘法的时候，会忽略最高的 w 位，相当于 <span class="math inline">\(UMult_w(u,v)=u⋅v\ mod\ 2^w\)</span></p>
 <h1 id="今日体重">今日体重</h1>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108110029080.png" alt="image-20210811002904543" /></p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080018693.png" alt="image-20210808001824599" /></p>
 ]]></content>
       <categories>
-        <category>CSAPPLAB</category>
+        <category>CSAPP</category>
         <category>计算机组成原理</category>
       </categories>
       <tags>
         <tag>CSAPP</tag>
-        <tag>Datalab</tag>
+        <tag>原码</tag>
+        <tag>补码</tag>
       </tags>
   </entry>
   <entry>
@@ -524,6 +569,65 @@ B2O_w(x)=-x_{w-1}(2^{w-1}-1)+\sum_{i=0}^{w-2}x_i2^i
       </tags>
   </entry>
   <entry>
+    <title>C语言函数参数传递的错误与避免</title>
+    <url>/2021/08/04/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E4%BC%A0%E9%80%92/</url>
+    <content><![CDATA[<blockquote>
+<p>今日第二更嘿嘿</p>
+<p>前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习</p>
+</blockquote>
+<h1 id="函数参数的调用">函数参数的调用</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">调用类型</th>
+<th style="text-align: center;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-value.html">传值调用</a></td>
+<td style="text-align: center;">该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1<br/>在这种情况下，修改函数内的形式参数不会影响实际参数。</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-pointer.html">引用调用</a></td>
+<td style="text-align: center;">通过指针传递方式，形参为指向实参地址的指针，对应正确写法<br/>当对形参的指向操作时，就相当于对实参本身进行的操作。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="例利用swap函数交换变量ab的常见错误">例：利用Swap函数交换变量a，b的常见错误</h1>
+<a id="more"></a>
+<h2 id="error1使用局部变量代替原始变量">ERROR1——使用局部变量代替原始变量</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error1</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error1(a,b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
+<p>局部变量：定义在函数内部的变量，只能在函数内部使用。 上面代码里在main函数中定义的a，b与Swap函数中a，b只是同名，只在Swap函数中交换a与b的值而不影响main函数中的原始变量a与b的值</p>
+<h2 id="error2只交换了地址">ERROR2——只交换了地址</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = p1;<span class="comment">//将a的地址赋值给tmp</span></span><br><span class="line">    p1 = p2;</span><br><span class="line">    p2 = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error2(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
+<p>可以看到上述代码并没有完成对ab的交换。</p>
+<p>在上面代码中Swap函数虽然使用了指针，但是未做取值运算，所以只是将两个变量a,b的存储位置交换了一下</p>
+<h2 id="error3野指针">ERROR3——野指针</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp=*p1;<span class="comment">//野指针</span></span><br><span class="line">    *p1=*p2;</span><br><span class="line">    *p2=*tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error3(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">———————————</span><br><span class="line"></span><br><span class="line">Process returned <span class="number">-1073741819</span> (<span class="number">0xC0000005</span>)   execution <span class="type">time</span> : <span class="number">1.663</span> s</span><br><span class="line">Press <span class="keyword">any</span> key <span class="keyword">to</span> <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
+<p>上述程序在运行了一段时间之后就崩了，没有输出任何东西，这是因为我们在给tmp初始化的时候直接把P1的值，也即a的值当做地址赋给了tmp，导致tmp指向了不能访问的地区导致了程序崩溃。</p>
+<p>野指针（悬挂指针）：没有访问权限的指针，这个指针有可能存在也有可能不存在，但是你不能访问。（野指针不好判断） 1、地址不存在（例如电话号码少一位）。 2、地址存在，但是不能访问（例如电话号码写成别人）。 3、地址之前可以访问，但现在不可以（更换电话号码）</p>
+<h2 id="正确写法">正确写法</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *p1;<span class="comment">//tmp＝a</span></span><br><span class="line">    *p1 = *p2;<span class="comment">//a＝b</span></span><br><span class="line">    *p2 = tmp;<span class="comment">//b＝tmp</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结论 一个函数（父函数）调用另一个函数（子函数），想通过子函数修改父函数的数据，必须传指针，子函数内部解引用。也就是子函数的改变要想影响父函数的数据必须传指针和解引用。 error1中既没有指针也没有解引用，error2中只是传指针但在Swap函数中没有使用解引用 error3中传了野指针导致程序崩溃。</p>
+<p>参考文章：<a href="https://blog.csdn.net/qq_51663917/article/details/109206266">C语言中利用Swap函数交换变量a，b</a></p>
+<p><a href="https://www.runoob.com/cprogramming/c-functions.html">菜鸟教程——C函数</a></p>
+]]></content>
+      <categories>
+        <category>C语言</category>
+      </categories>
+      <tags>
+        <tag>冒泡排序</tag>
+        <tag>插入排序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CSAPP阅读笔记3——数据编码3</title>
     <url>/2021/08/07/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%813/</url>
     <content><![CDATA[<h1 id="浮点数">浮点数</h1>
@@ -590,67 +694,6 @@ d=\sum_{i=-n}^m2^i \times d_i
       </tags>
   </entry>
   <entry>
-    <title>CSAPP阅读笔记2——数据编码2</title>
-    <url>/2021/08/06/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%812/</url>
-    <content><![CDATA[<h1 id="整形变量integer">整形变量Integer</h1>
-<h2 id="类型拓展与截取">类型拓展与截取</h2>
-<p><strong>无符号数的零拓展</strong>：无符号数转换为更大的数据类型，只需要在开头添加0即可，这种运算也被称为零拓展。</p>
-<p><strong>补码数的符号拓展：</strong>补码数转换为更大的数据类型需要在开头添加最高有效位的值，即：如果为负数，需要在拓展出来的开头位置添加数个1，正数需要添加数个0。</p>
-<h2 id="截断数字">截断数字</h2>
-<p>当我们将一个位数为 w 的数字截断为 k 位的数字时，我们会丢弃最高的w-k位。</p>
-<p><strong>截断无符号数：</strong>相当于做mod运算，<span class="math inline">\(x&#39;=x\ mod\ 2^k\)</span></p>
-<p><strong>截断补码数值：</strong>和无符号值相似，不过需要将最高位转换为符号位</p>
-<a id="more"></a>
-<h2 id="运算与溢出">运算与溢出</h2>
-<p>无符号数字加法：溢出时会丢弃最高位，实际上相当于做了个mod操作 <span class="math display">\[
-x+^u_wy=
-\left\{
-\begin{array}{l}
-    x+y,\quad x+y&lt;2^w\\
-    x+y-2^w, \quad 2^w\leq x+y&lt;2^{w+1}\\
-\end{array}
-\right.
-\]</span> 检测无符号数是否溢出：当<span class="math inline">\(s&lt;x\)</span>或<span class="math inline">\(s&lt;y\)</span>时发生了溢出</p>
-<p>补码加法：溢出时会产生正溢出和负溢出，正溢出是数字太大，把符号位改成了1而变成了负数，负溢出为数字太小把符号位改成了0而变成了正数</p>
-<p>对于满足<span class="math inline">\(-2^{w-1} \leq x,y&lt;2^{w-1}\)</span>​的整数，有： <span class="math display">\[
-x+^t_wy = \left\{
-\begin
-{array}{l}
-x+y-2^w,\qquad 2^{w-1} \leq x+y\qquad \quad 正溢出\\
-x+y,\qquad -2^{w-1}\leq x+y &lt; 2^{w-1}\qquad 正常\\
-x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
-\end{array}
-\right.
-\]</span> 对于乘法来说，值的范围会大很多，这里分情况讨论一下，假设两个乘数是 x,y 并且都是 w 位的：</p>
-<ul>
-<li>无符号数：至多 2w 位
-<ul>
-<li>范围$ 0≤x×y≤(2w−1)<sup>2=2</sup>{2w}−2^{w+1}+1$</li>
-</ul></li>
-<li>有符号数，最小的负数：至多 2w - 1 位
-<ul>
-<li>范围<span class="math inline">\(x×y≥(−2^{w−1})×(2^{w−1}−1)=−2^{2w−2}+2^{w−1}\)</span></li>
-</ul></li>
-<li>有符号数，最大的正数：至多 2w 位，只有<span class="math inline">\((TMin_w)^2\)</span>一种情况
-<ul>
-<li>范围 <span class="math inline">\(x×y≤(−2^{w−1})^2=2^{2w−2}\)</span></li>
-</ul></li>
-</ul>
-<p>如果需要保证精度，就需要用软件来实现了。另外，计算的无符号乘法的时候，会忽略最高的 w 位，相当于 <span class="math inline">\(UMult_w(u,v)=u⋅v\ mod\ 2^w\)</span></p>
-<h1 id="今日体重">今日体重</h1>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108080018693.png" alt="image-20210808001824599" /></p>
-]]></content>
-      <categories>
-        <category>CSAPP</category>
-        <category>计算机组成原理</category>
-      </categories>
-      <tags>
-        <tag>CSAPP</tag>
-        <tag>原码</tag>
-        <tag>补码</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CSAPP阅读笔记4——数据编码4</title>
     <url>/2021/08/08/CSAPP%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%814/</url>
     <content><![CDATA[<h1 id="浮点数2">浮点数2</h1>
@@ -711,65 +754,6 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       <tags>
         <tag>CSAPP</tag>
         <tag>浮点数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言函数参数传递的错误与避免</title>
-    <url>/2021/08/04/C%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E4%BC%A0%E9%80%92/</url>
-    <content><![CDATA[<blockquote>
-<p>今日第二更嘿嘿</p>
-<p>前言：博主在实现各种排序算法时很多函数的参数传递方法啥的出现了很多记忆的错误，因此停下来总结一下这些容易犯的错误同时方便自己将来复习</p>
-</blockquote>
-<h1 id="函数参数的调用">函数参数的调用</h1>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">调用类型</th>
-<th style="text-align: center;">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-value.html">传值调用</a></td>
-<td style="text-align: center;">该方法把参数的实际值复制给函数的形式参数。对应下述ERROR1<br/>在这种情况下，修改函数内的形式参数不会影响实际参数。</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><a href="https://www.runoob.com/cprogramming/c-function-call-by-pointer.html">引用调用</a></td>
-<td style="text-align: center;">通过指针传递方式，形参为指向实参地址的指针，对应正确写法<br/>当对形参的指向操作时，就相当于对实参本身进行的操作。</td>
-</tr>
-</tbody>
-</table>
-<h1 id="例利用swap函数交换变量ab的常见错误">例：利用Swap函数交换变量a，b的常见错误</h1>
-<a id="more"></a>
-<h2 id="error1使用局部变量代替原始变量">ERROR1——使用局部变量代替原始变量</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error1</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error1(a,b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
-<p>局部变量：定义在函数内部的变量，只能在函数内部使用。 上面代码里在main函数中定义的a，b与Swap函数中a，b只是同名，只在Swap函数中交换a与b的值而不影响main函数中的原始变量a与b的值</p>
-<h2 id="error2只交换了地址">ERROR2——只交换了地址</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = p1;<span class="comment">//将a的地址赋值给tmp</span></span><br><span class="line">    p1 = p2;</span><br><span class="line">    p2 = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error2(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">a = <span class="number">10</span></span><br><span class="line">b = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">Process returned <span class="number">0</span> (<span class="number">0x0</span>)   execution time : <span class="number">0.015</span> s</span><br><span class="line">Press any key to <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
-<p>可以看到上述代码并没有完成对ab的交换。</p>
-<p>在上面代码中Swap函数虽然使用了指针，但是未做取值运算，所以只是将两个变量a,b的存储位置交换了一下</p>
-<h2 id="error3野指针">ERROR3——野指针</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp=*p1;<span class="comment">//野指针</span></span><br><span class="line">    *p1=*p2;</span><br><span class="line">    *p2=*tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp_error3(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出结果：</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">———————————</span><br><span class="line"></span><br><span class="line">Process returned <span class="number">-1073741819</span> (<span class="number">0xC0000005</span>)   execution <span class="type">time</span> : <span class="number">1.663</span> s</span><br><span class="line">Press <span class="keyword">any</span> key <span class="keyword">to</span> <span class="keyword">continue</span>.</span><br></pre></td></tr></table></figure>
-<p>上述程序在运行了一段时间之后就崩了，没有输出任何东西，这是因为我们在给tmp初始化的时候直接把P1的值，也即a的值当做地址赋给了tmp，导致tmp指向了不能访问的地区导致了程序崩溃。</p>
-<p>野指针（悬挂指针）：没有访问权限的指针，这个指针有可能存在也有可能不存在，但是你不能访问。（野指针不好判断） 1、地址不存在（例如电话号码少一位）。 2、地址存在，但是不能访问（例如电话号码写成别人）。 3、地址之前可以访问，但现在不可以（更换电话号码）</p>
-<h2 id="正确写法">正确写法</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Sawp_error2</span><span class="params">(<span class="keyword">int</span> *p1,<span class="keyword">int</span> *p2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *p1;<span class="comment">//tmp＝a</span></span><br><span class="line">    *p1 = *p2;<span class="comment">//a＝b</span></span><br><span class="line">    *p2 = tmp;<span class="comment">//b＝tmp</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    Sawp(&amp;a,&amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a = %d\nb = %d\n&quot;</span>,a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结论 一个函数（父函数）调用另一个函数（子函数），想通过子函数修改父函数的数据，必须传指针，子函数内部解引用。也就是子函数的改变要想影响父函数的数据必须传指针和解引用。 error1中既没有指针也没有解引用，error2中只是传指针但在Swap函数中没有使用解引用 error3中传了野指针导致程序崩溃。</p>
-<p>参考文章：<a href="https://blog.csdn.net/qq_51663917/article/details/109206266">C语言中利用Swap函数交换变量a，b</a></p>
-<p><a href="https://www.runoob.com/cprogramming/c-functions.html">菜鸟教程——C函数</a></p>
-]]></content>
-      <categories>
-        <category>C语言</category>
-      </categories>
-      <tags>
-        <tag>冒泡排序</tag>
-        <tag>插入排序</tag>
       </tags>
   </entry>
   <entry>
@@ -1382,6 +1366,58 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       </tags>
   </entry>
   <entry>
+    <title>HEXO博客部署到github并将个人域名解析至github</title>
+    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
+</blockquote>
+<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
+<h1 id="部署到github">部署到github</h1>
+<p>首先在github中新建一个repository</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319" /></p>
+<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
+<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
+<p>找到<code>deploy</code>并配置以下内容</p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+<p>其中git仓库位置需要改为你自己新建的</p>
+<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
+<h1 id="域名注册和解析到github">域名注册和解析到github</h1>
+<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
+<h2 id="解析域名">解析域名</h2>
+<p>进入控制台，点击解析-添加记录</p>
+<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
+<h2 id="添加cname文件">添加CNAME文件</h2>
+<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
+<p>退出后<strong><em>删除.txt后缀文件名</em></strong></p>
+<p>最终CNAME的配置效果：</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886" /></p>
+<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681" /></p>
+<p>这时候已经配置好了，再次部署到github上</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
+<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
+<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
+<h1 id="参考文章">参考文章</h1>
+<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
+<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
+<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>网站建设</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Excel学习笔记3——函数求和及常见函数</title>
     <url>/2021/02/17/Excel%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E6%B1%82%E5%92%8C%E5%8F%8A%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<blockquote>
@@ -1554,58 +1590,6 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       </tags>
   </entry>
   <entry>
-    <title>HEXO博客部署到github并将个人域名解析至github</title>
-    <url>/2021/03/10/HEXO%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0github%E4%B8%8A/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：由于最近GFW查的比较严，本人的博客是部署在国外服务器上的，已经被封禁了七八次了，所以打算把本人的个人博客迁移到github上，使用阿里云的oss服务来存储照片，提高博客的访问速度</p>
-</blockquote>
-<p>首先将自己本地的hexo博客部署好，我这边已经配置过了就不再赘述，具体配置过程可移步<a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">这篇文章</a>（博主真的写的相当相当用心，墙裂推荐！你想怎么折腾都能看这篇文章，就是有些部分有点过时了）</p>
-<h1 id="部署到github">部署到github</h1>
-<p>首先在github中新建一个repository</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318211201.png" alt="image-20210318211154319" /></p>
-<p>repository name一定要填你的github名称.github.io，否则无法使用github提供的域名访问。填写示例：<code>ASnowMoon.github.io</code>，别的选项随便选</p>
-<p>新建完成后在本地博客的根目录下安装Git部署的插件</p>
-<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
-<p>安装完成后打开博客根目录下的<strong>站点</strong>配置文件<code>~/blog/_config.yml</code></p>
-<p>找到<code>deploy</code>并配置以下内容</p>
-<a id="more"></a>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#部署</span></span><br><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="comment">## Docs: https://hexo.io/docs/one-command-deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">git@github.com:ASnowMoon/ASnowMoon.github.io.git</span>   <span class="comment">#用户名@服务器Ip:git仓库位置</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
-<p>其中git仓库位置需要改为你自己新建的</p>
-<p>更改完成后在<code>gitbash</code>中输入以下命令即可把它部署到你的github上</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
-<p>在浏览器输入 <code>https://帐号名.github.io/</code> 查看你有没有部署完成</p>
-<h1 id="域名注册和解析到github">域名注册和解析到github</h1>
-<p>首先购买域名，腾讯云、阿里云都还不错，博主用的是腾讯云</p>
-<h2 id="解析域名">解析域名</h2>
-<p>进入控制台，点击解析-添加记录</p>
-<p>主机类型选择www,记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<p>再选择<code>@</code>类型主机，保证主域名和包含www的域名都能成功解析，同样的，记录类型选择CNAME，记录值填入刚刚新建的github的域名<code>ASnowMoon.github.io</code>-保存</p>
-<h2 id="添加cname文件">添加CNAME文件</h2>
-<p>在博客根目录下的<code>source</code>文件下新建一个文本文档<code>CNAME.txt</code>打开文本编辑器输入你的域名www.snowmoon.top保存，退出</p>
-<p>退出后<strong><em>删除.txt后缀文件名</em></strong></p>
-<p>最终CNAME的配置效果：</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214322.png" alt="image-20210318214322886" /></p>
-<p>再打开你刚刚新建的github仓库，选择<code>settings</code>，在<code>Options</code>里找到<code>Github Pages</code>，在<code>Custom domain</code>里输入自己的域名</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img20210318214711.png" alt="image-20210318214711681" /></p>
-<p>这时候已经配置好了，再次部署到github上</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">hexo clean <span class="meta">&amp;&amp; hexo g -d</span></span><br></pre></td></tr></table></figure>
-<p>输入自己的域名进行测试发现打开之后访问的页面不是自己博客的页面</p>
-<p>发现访问的是<code>main</code>分支，打开<code>Settings</code>找到<code>Branches</code>把<code>master</code>分支设置为默认分支并删除<code>main</code>分支后可以正常访问</p>
-<h1 id="参考文章">参考文章</h1>
-<p><a href="https://blog.csdn.net/qq_38225558/article/details/95026111">使用Hexo搭建个人博客并部署到GitHub或码云上全过程</a></p>
-<p><a href="https://segmentfault.com/a/1190000023662389">部署在GitHub的个人博客如何绑定个人域名</a></p>
-<p><a href="https://io-oi.me/tech/hexo-next-optimization/#%E5%BF%85%E8%AF%BB-%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化</a></p>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>网站建设</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo博客部署到云服务器</title>
     <url>/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
     <content><![CDATA[<blockquote>
@@ -1644,6 +1628,60 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       <tags>
         <tag>网站建设</tag>
         <tag>博客部署</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题美化——背景图片、动画</title>
+    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
+    <content><![CDATA[<blockquote>
+<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
+<p>next版本：8.2.1</p>
+</blockquote>
+<h1 id="添加背景图片">添加背景图片</h1>
+<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/background.jpg);</span><br><span class="line"> 	<span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>:fixed;</span><br><span class="line">    <span class="attribute">background-position</span>:<span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>background:url</code>为图片路径，也可以直接使用链接。 <code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕 <code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定 <code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
+<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
+<a id="more"></a>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.swig</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.swig</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.swig</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.swig</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.swig</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.swig</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.swig</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+<p>再将对应的#去除就可以了</p>
+<h1 id="博客内容透明化">博客内容透明化</h1>
+<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//博客内容透明化</span></span><br><span class="line"><span class="comment">//文章内容的透明度设置</span></span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-inner</span> &#123; </span><br><span class="line">   <span class="comment">// margin-top: 60px;</span></span><br><span class="line">   <span class="comment">// padding: 60px 60px 60px 60px;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//菜单栏的透明度设置</span></span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.8</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜索框（local-search）的透明度设置</span></span><br><span class="line"><span class="selector-class">.popup</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
+<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.post-block &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line">.sidebar &#123;</span><br><span class="line">  opacity: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.sidebar-inner &#123;</span><br><span class="line">  background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
+<h2 id="评论区透明度">评论区透明度</h2>
+<p>在上述代码后添加以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.comments &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="添加圆角">添加圆角</h1>
+<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 20px 20px 20px 20px;</span><br><span class="line">$border-radius           = 20px;</span><br></pre></td></tr></table></figure>
+<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  variable: source/_data/variables.styl</span><br></pre></td></tr></table></figure>
+<h1 id="添加阴影效果">添加阴影效果</h1>
+<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 主页文章添加阴影效果</span></span><br><span class="line"><span class="selector-class">.post</span> &#123;</span><br><span class="line">   <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">   <span class="attribute">margin-bottom</span>: <span class="number">60px</span>;</span><br><span class="line">   -webkit-<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> rgba(<span class="number">120</span>, <span class="number">128</span>, <span class="number">114</span>, <span class="number">1.5</span>);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="动画">动画</h1>
+<h2 id="动画效果">动画效果</h2>
+<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
+<h2 id="动画的持续速度">动画的持续速度</h2>
+<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
+]]></content>
+      <categories>
+        <category>网站建设</category>
+        <category>个人博客</category>
+      </categories>
+      <tags>
+        <tag>个人博客</tag>
+        <tag>hexo</tag>
+        <tag>next</tag>
       </tags>
   </entry>
   <entry>
@@ -1715,48 +1753,57 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       </tags>
   </entry>
   <entry>
-    <title>next主题美化——背景图片、动画</title>
-    <url>/2021/02/21/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
-    <content><![CDATA[<blockquote>
-<p>前言：NexT 主题本身是没有背景图片的，显得有点单调，博主觉得没有背景图片显得我的博客很丑，于是就想添加一个背景图片</p>
-<p>next版本：8.2.1</p>
-</blockquote>
-<h1 id="添加背景图片">添加背景图片</h1>
-<p>把想设置的背景放入<code>./themes/next/source/images</code>中，命名为<code>background.jpg</code>。在根目录的<code>source</code>文件夹下新建文件夹<code>_data</code>与style文件<code>source/_data/styles.styl</code>，输入以下代码</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line"> 	background:url(/images/background.jpg);</span><br><span class="line"> 	<span class="attribute">background-repeat</span>: no-repeat;</span><br><span class="line">    <span class="attribute">background-attachment</span>:fixed;</span><br><span class="line">    <span class="attribute">background-position</span>:<span class="number">100%</span> <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>background:url</code>为图片路径，也可以直接使用链接。 <code>background-repeat</code>：若果背景图片不能全屏，那么是否平铺显示，充满屏幕 <code>background-attachment</code>：背景是否随着网页上下滚动而滚动，fixed为固定 <code>background-position</code>：图片展示大小这里设置 100%，100% 的意义为：如果背景图片不能全屏，那么是否通过拉伸的方式将背景强制拉伸至全屏显示。</p>
-<p>再在主题<code>_config.yml</code>文件中找到对应的<code>custom_file_path</code></p>
+    <title>数据结构与算法刷题笔记10——排序算法(快排)</title>
+    <url>/2021/08/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B010/</url>
+    <content><![CDATA[<h1 id="快速排序">快速排序</h1>
+<h2 id="算法思想">算法思想</h2>
+<p>每次排序先选出一个主元，然后将比主元小的数放到左边，比主元大的放右边然后再分别进入左边右边快排。</p>
+<p>需要注意的是</p>
+<ol type="1">
+<li>主元的选取方法，一般是选择头中尾三个数中的中位数，而非固定的某个位置的数字</li>
+<li>当数据规模剩下的比较小的时候采用其它的排序来完成剩下的排序，防止数据规模不大时候仍然各种递归导致处理得很慢</li>
+<li>遇到相等的元素也要进行交换，防止得到的两个子集大小相差较大</li>
+</ol>
 <a id="more"></a>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.swig</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.swig</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.swig</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.swig</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.swig</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.swig</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.swig</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
-<p>再将对应的#去除就可以了</p>
-<h1 id="博客内容透明化">博客内容透明化</h1>
-<p>NexT 主题的博客文章均是不透明的，这样读者就不能好好欣赏背景图片了，在上文中新建的<code>style.styl</code>文件中可以使博客内容透明化：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line"><span class="comment">//博客内容透明化</span></span><br><span class="line"><span class="comment">//文章内容的透明度设置</span></span><br><span class="line"><span class="selector-class">.content-wrap</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.main-inner</span> &#123; </span><br><span class="line">   <span class="comment">// margin-top: 60px;</span></span><br><span class="line">   <span class="comment">// padding: 60px 60px 60px 60px;</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line"><span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//菜单栏的透明度设置</span></span><br><span class="line"><span class="selector-class">.header-inner</span> &#123;</span><br><span class="line">  <span class="attribute">background</span>: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.8</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//搜索框（local-search）的透明度设置</span></span><br><span class="line"><span class="selector-class">.popup</span> &#123;</span><br><span class="line">  <span class="attribute">opacity</span>: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>更新：上述做法会导致字体透明度也被改变，很不优雅，解决方案：</p>
-<p>删除<code>.main-inner</code>中的<code>opacity</code>选项，在上述代码后添加如下代码</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.post-block &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>同样，此时的侧边栏头像及站点概览等透明度也被改变了，需要将</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//侧边框的透明度设置</span></span><br><span class="line">.sidebar &#123;</span><br><span class="line">  opacity: <span class="number">0.8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>改为</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.sidebar-inner &#123;</span><br><span class="line">  background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>（这个设置就不会改变侧边栏中头像等的透明度了，其它的欢迎自行探索）</p>
-<h2 id="评论区透明度">评论区透明度</h2>
-<p>在上述代码后添加以下代码：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">.comments &#123;</span><br><span class="line">    background: rgba(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>,<span class="number">0.7</span>) none repeat scroll !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="添加圆角">添加圆角</h1>
-<p>在<code>source/_data/variables.styl</code>中输入以下代码，注意，<code>$</code>并不是多余的</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 圆角设置</span></span><br><span class="line">$border-radius-inner     = 20px 20px 20px 20px;</span><br><span class="line">$border-radius           = 20px;</span><br></pre></td></tr></table></figure>
-<p>然后在 NexT 的配置文件 <code>_config.next.yml</code> 中取消 <code>variables.styl</code> 的注释：</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  variable: source/_data/variables.styl</span><br></pre></td></tr></table></figure>
-<h1 id="添加阴影效果">添加阴影效果</h1>
-<p>在<code>source/_data/style.styl</code>文件中添加如下代码</p>
-<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">    <span class="comment">// 主页文章添加阴影效果</span></span><br><span class="line"><span class="selector-class">.post</span> &#123;</span><br><span class="line">   <span class="attribute">margin-top</span>: <span class="number">60px</span>;</span><br><span class="line">   <span class="attribute">padding</span>: <span class="number">20px</span>;</span><br><span class="line">   <span class="attribute">margin-bottom</span>: <span class="number">60px</span>;</span><br><span class="line">   -webkit-<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">5px</span> rgba(<span class="number">120</span>, <span class="number">128</span>, <span class="number">114</span>, <span class="number">1.5</span>);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="动画">动画</h1>
-<h2 id="动画效果">动画效果</h2>
-<p>在主题<code>_config.yml</code>文件中搜索motion，可更改动画效果，参考配置如下</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use Animate.css to animate everything.</span></span><br><span class="line"><span class="comment"># Use velocity to animate everything.</span></span><br><span class="line"><span class="attr">motion:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">async:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">transition:</span></span><br><span class="line">    <span class="comment"># Transition variants:</span></span><br><span class="line">    <span class="comment"># fadeIn | fadeOut | flipXIn | flipXOut | flipYIn | flipYOut | flipBounceXIn | flipBounceXOut | flipBounceYIn | flipBounceYOut</span></span><br><span class="line">    <span class="comment"># swoopIn | swoopOut | whirlIn | whirlOut | shrinkIn | shrinkOut | expandIn | expandOut</span></span><br><span class="line">    <span class="comment"># bounceIn | bounceOut | bounceUpIn | bounceUpOut | bounceDownIn | bounceDownOut | bounceLeftIn | bounceLeftOut | bounceRightIn | bounceRightOut</span></span><br><span class="line">    <span class="comment"># slideUpIn | slideUpOut | slideDownIn | slideDownOut | slideLeftIn | slideLeftOut | slideRightIn | slideRightOut</span></span><br><span class="line">    <span class="comment"># slideUpBigIn | slideUpBigOut | slideDownBigIn | slideDownBigOut | slideLeftBigIn | slideLeftBigOut | slideRightBigIn | slideRightBigOut</span></span><br><span class="line">    <span class="comment"># perspectiveUpIn | perspectiveUpOut | perspectiveDownIn | perspectiveDownOut | perspectiveLeftIn | perspectiveLeftOut | perspectiveRightIn | perspectiveRightOut</span></span><br><span class="line">    <span class="attr">post_block:</span> <span class="string">fadeIn</span></span><br><span class="line">    <span class="attr">post_header:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">post_body:</span> <span class="string">slideDownIn</span></span><br><span class="line">    <span class="attr">coll_header:</span> <span class="string">slideLeftIn</span></span><br><span class="line">    <span class="comment"># Only for Pisces | Gemini.</span></span><br><span class="line">    <span class="attr">sidebar:</span> <span class="string">slideDownBigOut</span></span><br></pre></td></tr></table></figure>
-<h2 id="动画的持续速度">动画的持续速度</h2>
-<p>在主题的<code>/source/js</code>文件夹下可找到<code>motion.js</code>文件，搜索duration可更改持续时间</p>
+<h2 id="算法实现">算法实现</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Quick_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Qsort</span><span class="params">(<span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insertion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Median3</span><span class="params">(<span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right )</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> Cutoff = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Quick_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Quick_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Qsort( Data, <span class="number">0</span>, N<span class="number">-1</span> );</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *A;</span><br><span class="line">    *A = *B;</span><br><span class="line">    *B = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Qsort</span><span class="params">(<span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> Pivot, i, j;</span><br><span class="line">    <span class="keyword">if</span>( Cutoff &lt;= Right-Left )&#123;</span><br><span class="line">        Pivot = Median3( Data, Left, Right );</span><br><span class="line">        i = Left; j = Right - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">while</span>( Data[++i] &lt; Pivot );</span><br><span class="line">            <span class="keyword">while</span>( Data[--j] &gt; Pivot );</span><br><span class="line">            <span class="keyword">if</span>( i &lt; j )</span><br><span class="line">                swap( &amp;Data[i], &amp;Data[j] );</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        swap( &amp;Data[i], &amp;Data[Right<span class="number">-1</span>]);</span><br><span class="line">        Qsort( Data, Left, i<span class="number">-1</span> );</span><br><span class="line">        Qsort( Data, i+<span class="number">1</span>, Right);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Insertion_sort(Data+Left,Right-Left+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insertion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        tmp = Data[i];</span><br><span class="line">        <span class="keyword">for</span>(j = i;j &gt; <span class="number">0</span> &amp;&amp; tmp &lt; Data[j<span class="number">-1</span>];j--)</span><br><span class="line">            Data[j] = Data[j<span class="number">-1</span>];</span><br><span class="line">        Data[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Median3</span><span class="params">( <span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> center = ( Left + Right ) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span>( Data[Left] &gt; Data[center] )</span><br><span class="line">        swap( &amp;Data[Left], &amp;Data[center] );</span><br><span class="line">    <span class="keyword">if</span>( Data[Left] &gt; Data[Right] )</span><br><span class="line">        swap( &amp;Data[Left], &amp;Data[Right] );</span><br><span class="line">    <span class="keyword">if</span>( Data[center] &gt; Data[Right] )</span><br><span class="line">        swap( &amp;Data[center], &amp;Data[Right] );</span><br><span class="line">    swap( &amp;Data[center], &amp;Data[Right<span class="number">-1</span>]);</span><br><span class="line">    <span class="keyword">return</span> Data[Right<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试结果">测试结果</h2>
+<p>快速排序不愧是实际使用中最快的排序算法，总体而言已经很快了</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108181739081.png" alt="image-20210818173934940" /></p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+      </categories>
+      <tags>
+        <tag>快速排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
+    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
+    <content><![CDATA[<blockquote>
+<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误</p>
+</blockquote>
+<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id="title"&gt;title&lt;/h2&gt;</code>的代码</p>
+<p>现在会被编译为<code>&lt;h2&gt;&lt;span id="title"&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
+<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
+<h2 id="方法1">方法1</h2>
+<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
+<p>但是我的hexo中并没有找到这个目录</p>
+<p>所以我找了另外的</p>
+<h2 id="方法2">方法2</h2>
+<a id="more"></a>
+<p>首先安装<code>markdown-it-named-headings</code>插件</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">parser.use(<span class="built_in">require</span>(<span class="string">&#x27;markdown-it-named-headings&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>尝试以上两种方法，均未成功</p>
+<p>时间不早了，后面有时间再解决</p>
+<blockquote>
+<p>参考文章:</p>
+<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a> <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
+</blockquote>
 ]]></content>
       <categories>
         <category>网站建设</category>
@@ -1764,8 +1811,73 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       </categories>
       <tags>
         <tag>个人博客</tag>
-        <tag>hexo</tag>
+        <tag>网站建设</tag>
         <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
+    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
+    <content><![CDATA[<h1 id="图4-哈利波特的考试-25-分">07-图4 哈利·波特的考试 (25 分)</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
+<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
+<h2 id="输出格式">输出格式:</h2>
+<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
+<a id="more"></a>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例">输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1 id="题目理解与思路">题目理解与思路</h1>
+<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
+        <tag>Floyd算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记4——六度空间</title>
+    <url>/2021/07/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E5%85%AD%E5%BA%A6%E7%A9%BA%E9%97%B4/</url>
+    <content><![CDATA[<h1 id="图3-六度空间-30-分">06-图3 六度空间 (30 分)</h1>
+<h2 id="题目描述">题目描述</h2>
+<p>“六度空间”理论又称作“六度分隔（Six Degrees of Separation）”理论。这个理论可以通俗地阐述为：“你和任何一个陌生人之间所间隔的人不会超过六个，也就是说，最多通过五个人你就能够认识任何一个陌生人。”如图1所示。</p>
+<p><img src="https://images.ptausercontent.com/35" alt="img" /> 图1 六度空间示意图</p>
+<p>“六度空间”理论虽然得到广泛的认同，并且正在得到越来越多的应用。但是数十年来，试图验证这个理论始终是许多社会学家努力追求的目标。然而由于历史的原因，这样的研究具有太大的局限性和困难。随着当代人的联络主要依赖于电话、短信、微信以及因特网上即时通信等工具，能够体现社交网络关系的一手数据已经逐渐使得“六度空间”理论的验证成为可能。</p>
+<p>假如给你一个社交网络图，请你对每个节点计算符合“六度空间”理论的结点占结点总数的百分比。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入第1行给出两个正整数，分别表示社交网络图的结点数<em>N</em>（1&lt;<em>N</em>≤103，表示人数）、边数<em>M</em>（≤33×<em>N</em>，表示社交关系数）。随后的<em>M</em>行对应<em>M</em>条边，每行给出一对正整数，分别是该条边直接连通的两个结点的编号（节点从1到<em>N</em>编号）。 <a id="more"></a> ## 输出格式:</p>
+<p>对每个结点输出与该结点距离不超过6的结点数占结点总数的百分比，精确到小数点后2位。每个结节点输出一行，格式为“结点编号:（空格）百分比%”。</p>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10 9</span><br><span class="line">1 2</span><br><span class="line">2 3</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br><span class="line">5 6</span><br><span class="line">6 7</span><br><span class="line">7 8</span><br><span class="line">8 9</span><br><span class="line">9 10</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h3 id="输出样例">输出样例:</h3>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1: 70.00%</span><br><span class="line">2: 80.00%</span><br><span class="line">3: 90.00%</span><br><span class="line">4: 100.00%</span><br><span class="line">5: 100.00%</span><br><span class="line">6: 100.00%</span><br><span class="line">7: 100.00%</span><br><span class="line">8: 90.00%</span><br><span class="line">9: 80.00%</span><br><span class="line">10: 70.00%</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1 id="思路与题解">思路与题解</h1>
+<h2 id="思路">思路</h2>
+<p>根据题目描述，我们只需要建立一个图，而六层的统计要求就比较容易想到从输入的第一个节点进行广度优先搜索遍历所有节点，然后统计六层内的节点数量百分比即可 1000个节点的数据而节点间的连接又小于33个，所以可以认为是比较稀疏的图，使用邻接表来存储是比较合算的 难点在于遍历的层数的统计 有两种解决办法</p>
+<ol type="1">
+<li>在结构体内加入一个数据记录节点层数</li>
+<li>每次遍历记录末尾数字和上一次的末尾数字，相同时层数++ 本文采用第二种方法进行记录，代码如下 ## 代码 &gt; 第一次使用邻接表存储的图来写算法，虽然不是标准的邻接表，但也感觉有被烦到。。。 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span> *<span class="title">AdjList</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex Value;</span><br><span class="line">    AdjList Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> Visited[MaxVer];</span><br><span class="line"><span class="keyword">int</span> Que[MaxVer];<span class="comment">//使用数组作为队列</span></span><br><span class="line">AdjList G[MaxVer];</span><br><span class="line"><span class="keyword">int</span> N,E;<span class="comment">//存储节点的数量和边的数量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GraphInit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="comment">/*建图*/</span></span><br><span class="line">    <span class="keyword">int</span> i,V1,V2;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;N,&amp;E);</span><br><span class="line">    AdjList NewNode;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化节点*/</span></span><br><span class="line">        G[i] = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        G[i]-&gt;Next = <span class="literal">NULL</span>;</span><br><span class="line">        G[i]-&gt;Value = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化边*/</span></span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V1,&amp;V2);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V1连向V2的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V1]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V2;</span><br><span class="line">        G[V1]-&gt;Next = NewNode;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V2连向V1的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V2]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V1;</span><br><span class="line">        G[V2]-&gt;Next = NewNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BFS</span><span class="params">(<span class="keyword">int</span> Num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> head,rear,Last,Tail,Level,count;</span><br><span class="line">    AdjList P;</span><br><span class="line">    Level = rear = <span class="number">0</span>;</span><br><span class="line">    count = <span class="number">1</span>;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    Que[<span class="number">0</span>] = Num;</span><br><span class="line">    Visited[Num] = <span class="number">1</span>;</span><br><span class="line">    Last = Tail = Num;</span><br><span class="line">    <span class="keyword">while</span>(head &lt; rear )<span class="comment">//当链表为空时</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        P = G[Que[head]]-&gt;Next;</span><br><span class="line">        <span class="keyword">while</span>( P )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!Visited[P-&gt;Value])</span><br><span class="line">            &#123;   </span><br><span class="line">                Visited[P-&gt;Value] =<span class="number">1</span>;</span><br><span class="line">                rear++;</span><br><span class="line">                Que[rear] = P-&gt;Value;</span><br><span class="line">                Tail = P-&gt;Value;</span><br><span class="line">                count++;<span class="comment">/*每个节点出来时都需要统计它的邻接点，</span></span><br><span class="line"><span class="comment">                		如果是在这个遍历外统计节点时最后的尾结</span></span><br><span class="line"><span class="comment">                		点统计会出现一些小问题*/</span></span><br><span class="line">            &#125;</span><br><span class="line">            P = P-&gt;Next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Que[head] == Last)<span class="comment">//如果当前出队列元素为这层的末尾元素</span></span><br><span class="line">        &#123;</span><br><span class="line">            Last = Tail;</span><br><span class="line">            Level++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Level == <span class="number">6</span>) <span class="keyword">break</span>;<span class="comment">//超过六层就退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    GraphInit();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d: %.2f%%\n&quot;</span>,i,<span class="number">100.0</span> * BFS(i) / N);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>图</category>
+        <category>BFS</category>
+        <category>邻接表</category>
+      </categories>
+      <tags>
+        <tag>数据结构与算法</tag>
+        <tag>BFS</tag>
       </tags>
   </entry>
   <entry>
@@ -1821,174 +1933,6 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       </tags>
   </entry>
   <entry>
-    <title>next踩坑记录——markdown-it引擎渲染导致标题TOC错误</title>
-    <url>/2021/03/03/next%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95%E2%80%94%E2%80%94markdown-it%E5%BC%95%E6%93%8E%E6%B8%B2%E6%9F%93%E5%AF%BC%E8%87%B4%E6%A0%87%E9%A2%98TOC%E9%94%99%E8%AF%AF/</url>
-    <content><![CDATA[<blockquote>
-<p>前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误</p>
-</blockquote>
-<p>分析原因： 经过排查，发现原本会被编译为<code>h2 id="title"&gt;title&lt;/h2&gt;</code>的代码</p>
-<p>现在会被编译为<code>&lt;h2&gt;&lt;span id="title"&gt;title&lt;/span&gt;&lt;/h2&gt;</code></p>
-<p>因此导致了在hexo生成TOC时，标题的元素的id未定义，以上变更是由于hexo-toc变更导致的</p>
-<h2 id="方法1">方法1</h2>
-<p>进入根目录下<code>node_modules\hexo-toc\lib\filter.js</code>脚本将28-31行修改为</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$title.attr(<span class="string">&#x27;id&#x27;</span>, id);</span><br><span class="line"><span class="comment">// $title.children(&#x27;a&#x27;).remove();</span></span><br><span class="line"><span class="comment">// $title.html( &#x27;&lt;span id=&quot;&#x27; + id + &#x27;&quot;&gt;&#x27; + $title.html() + &#x27;&lt;/span&gt;&#x27; );</span></span><br><span class="line"><span class="comment">// $title.removeAttr(&#x27;id&#x27;);</span></span><br></pre></td></tr></table></figure>
-<p>但是我的hexo中并没有找到这个目录</p>
-<p>所以我找了另外的</p>
-<h2 id="方法2">方法2</h2>
-<a id="more"></a>
-<p>首先安装<code>markdown-it-named-headings</code>插件</p>
-<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">npm install markdown-<span class="keyword">it</span>-named-headings <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
-<p>然后进入你项目的根目录，修改根目录下 <code>node_modules\hexo-renderer-markdown-it\lib\renderer.js</code> 文件，在 <code>renderer.js</code> 中添加一行以使用此插件：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">parser.use(<span class="built_in">require</span>(<span class="string">&#x27;markdown-it-named-headings&#x27;</span>))</span><br></pre></td></tr></table></figure>
-<p>尝试以上两种方法，均未成功</p>
-<p>时间不早了，后面有时间再解决</p>
-<blockquote>
-<p>参考文章:</p>
-<p><a href="https://convivae.top/posts/hexo-bo-ke-cai-keng/#%E6%96%B9%E6%B3%95-2">Hexo 博客踩坑</a> <a href="https://github.com/hexojs/hexo-renderer-markdown-it/issues/40">Cannot render headings with ids?</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>网站建设</category>
-        <category>个人博客</category>
-      </categories>
-      <tags>
-        <tag>个人博客</tag>
-        <tag>网站建设</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记10——排序算法(快排)</title>
-    <url>/2021/08/13/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B010/</url>
-    <content><![CDATA[<h1 id="快速排序">快速排序</h1>
-<h2 id="算法思想">算法思想</h2>
-<p>每次排序先选出一个主元，然后将比主元小的数放到左边，比主元大的放右边然后再分别进入左边右边快排。</p>
-<p>需要注意的是</p>
-<ol type="1">
-<li>主元的选取方法，一般是选择头中尾三个数中的中位数，而非固定的某个位置的数字</li>
-<li>当数据规模剩下的比较小的时候采用其它的排序来完成剩下的排序，防止数据规模不大时候仍然各种递归导致处理得很慢</li>
-<li>遇到相等的元素也要进行交换，防止得到的两个子集大小相差较大</li>
-</ol>
-<a id="more"></a>
-<h2 id="算法实现">算法实现</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Quick_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Qsort</span><span class="params">(<span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insertion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Median3</span><span class="params">(<span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right )</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> Cutoff = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Quick_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Quick_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Qsort( Data, <span class="number">0</span>, N<span class="number">-1</span> );</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp;</span><br><span class="line">    tmp = *A;</span><br><span class="line">    *A = *B;</span><br><span class="line">    *B = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Qsort</span><span class="params">(<span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> Pivot, i, j;</span><br><span class="line">    <span class="keyword">if</span>( Cutoff &lt;= Right-Left )&#123;</span><br><span class="line">        Pivot = Median3( Data, Left, Right );</span><br><span class="line">        i = Left; j = Right - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">while</span>( Data[++i] &lt; Pivot );</span><br><span class="line">            <span class="keyword">while</span>( Data[--j] &gt; Pivot );</span><br><span class="line">            <span class="keyword">if</span>( i &lt; j )</span><br><span class="line">                swap( &amp;Data[i], &amp;Data[j] );</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        swap( &amp;Data[i], &amp;Data[Right<span class="number">-1</span>]);</span><br><span class="line">        Qsort( Data, Left, i<span class="number">-1</span> );</span><br><span class="line">        Qsort( Data, i+<span class="number">1</span>, Right);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Insertion_sort(Data+Left,Right-Left+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insertion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        tmp = Data[i];</span><br><span class="line">        <span class="keyword">for</span>(j = i;j &gt; <span class="number">0</span> &amp;&amp; tmp &lt; Data[j<span class="number">-1</span>];j--)</span><br><span class="line">            Data[j] = Data[j<span class="number">-1</span>];</span><br><span class="line">        Data[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Median3</span><span class="params">( <span class="keyword">int</span> *Data, <span class="keyword">int</span> Left, <span class="keyword">int</span> Right )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> center = ( Left + Right ) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span>( Data[Left] &gt; Data[center] )</span><br><span class="line">        swap( &amp;Data[Left], &amp;Data[center] );</span><br><span class="line">    <span class="keyword">if</span>( Data[Left] &gt; Data[Right] )</span><br><span class="line">        swap( &amp;Data[Left], &amp;Data[Right] );</span><br><span class="line">    <span class="keyword">if</span>( Data[center] &gt; Data[Right] )</span><br><span class="line">        swap( &amp;Data[center], &amp;Data[Right] );</span><br><span class="line">    swap( &amp;Data[center], &amp;Data[Right<span class="number">-1</span>]);</span><br><span class="line">    <span class="keyword">return</span> Data[Right<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试结果">测试结果</h2>
-<p>快速排序不愧是实际使用中最快的排序算法，总体而言已经很快了</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108181739081.png" alt="image-20210818173934940" /></p>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-      </categories>
-      <tags>
-        <tag>快速排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记4——六度空间</title>
-    <url>/2021/07/30/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E5%85%AD%E5%BA%A6%E7%A9%BA%E9%97%B4/</url>
-    <content><![CDATA[<h1 id="图3-六度空间-30-分">06-图3 六度空间 (30 分)</h1>
-<h2 id="题目描述">题目描述</h2>
-<p>“六度空间”理论又称作“六度分隔（Six Degrees of Separation）”理论。这个理论可以通俗地阐述为：“你和任何一个陌生人之间所间隔的人不会超过六个，也就是说，最多通过五个人你就能够认识任何一个陌生人。”如图1所示。</p>
-<p><img src="https://images.ptausercontent.com/35" alt="img" /> 图1 六度空间示意图</p>
-<p>“六度空间”理论虽然得到广泛的认同，并且正在得到越来越多的应用。但是数十年来，试图验证这个理论始终是许多社会学家努力追求的目标。然而由于历史的原因，这样的研究具有太大的局限性和困难。随着当代人的联络主要依赖于电话、短信、微信以及因特网上即时通信等工具，能够体现社交网络关系的一手数据已经逐渐使得“六度空间”理论的验证成为可能。</p>
-<p>假如给你一个社交网络图，请你对每个节点计算符合“六度空间”理论的结点占结点总数的百分比。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入第1行给出两个正整数，分别表示社交网络图的结点数<em>N</em>（1&lt;<em>N</em>≤103，表示人数）、边数<em>M</em>（≤33×<em>N</em>，表示社交关系数）。随后的<em>M</em>行对应<em>M</em>条边，每行给出一对正整数，分别是该条边直接连通的两个结点的编号（节点从1到<em>N</em>编号）。 <a id="more"></a> ## 输出格式:</p>
-<p>对每个结点输出与该结点距离不超过6的结点数占结点总数的百分比，精确到小数点后2位。每个结节点输出一行，格式为“结点编号:（空格）百分比%”。</p>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10 9</span><br><span class="line">1 2</span><br><span class="line">2 3</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br><span class="line">5 6</span><br><span class="line">6 7</span><br><span class="line">7 8</span><br><span class="line">8 9</span><br><span class="line">9 10</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h3 id="输出样例">输出样例:</h3>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1: 70.00%</span><br><span class="line">2: 80.00%</span><br><span class="line">3: 90.00%</span><br><span class="line">4: 100.00%</span><br><span class="line">5: 100.00%</span><br><span class="line">6: 100.00%</span><br><span class="line">7: 100.00%</span><br><span class="line">8: 90.00%</span><br><span class="line">9: 80.00%</span><br><span class="line">10: 70.00%</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1 id="思路与题解">思路与题解</h1>
-<h2 id="思路">思路</h2>
-<p>根据题目描述，我们只需要建立一个图，而六层的统计要求就比较容易想到从输入的第一个节点进行广度优先搜索遍历所有节点，然后统计六层内的节点数量百分比即可 1000个节点的数据而节点间的连接又小于33个，所以可以认为是比较稀疏的图，使用邻接表来存储是比较合算的 难点在于遍历的层数的统计 有两种解决办法</p>
-<ol type="1">
-<li>在结构体内加入一个数据记录节点层数</li>
-<li>每次遍历记录末尾数字和上一次的末尾数字，相同时层数++ 本文采用第二种方法进行记录，代码如下 ## 代码 &gt; 第一次使用邻接表存储的图来写算法，虽然不是标准的邻接表，但也感觉有被烦到。。。 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> Vertex;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span> *<span class="title">AdjList</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    Vertex Value;</span><br><span class="line">    AdjList Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> Visited[MaxVer];</span><br><span class="line"><span class="keyword">int</span> Que[MaxVer];<span class="comment">//使用数组作为队列</span></span><br><span class="line">AdjList G[MaxVer];</span><br><span class="line"><span class="keyword">int</span> N,E;<span class="comment">//存储节点的数量和边的数量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">GraphInit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="comment">/*建图*/</span></span><br><span class="line">    <span class="keyword">int</span> i,V1,V2;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;N,&amp;E);</span><br><span class="line">    AdjList NewNode;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化节点*/</span></span><br><span class="line">        G[i] = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        G[i]-&gt;Next = <span class="literal">NULL</span>;</span><br><span class="line">        G[i]-&gt;Value = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;<span class="comment">/*初始化边*/</span></span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V1,&amp;V2);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V1连向V2的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V1]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V2;</span><br><span class="line">        G[V1]-&gt;Next = NewNode;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*插入V2连向V1的边*/</span></span><br><span class="line">        NewNode = (AdjList)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">        NewNode-&gt;Next = G[V2]-&gt;Next;</span><br><span class="line">        NewNode-&gt;Value = V1;</span><br><span class="line">        G[V2]-&gt;Next = NewNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BFS</span><span class="params">(<span class="keyword">int</span> Num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> head,rear,Last,Tail,Level,count;</span><br><span class="line">    AdjList P;</span><br><span class="line">    Level = rear = <span class="number">0</span>;</span><br><span class="line">    count = <span class="number">1</span>;</span><br><span class="line">    head = <span class="number">-1</span>;</span><br><span class="line">    Que[<span class="number">0</span>] = Num;</span><br><span class="line">    Visited[Num] = <span class="number">1</span>;</span><br><span class="line">    Last = Tail = Num;</span><br><span class="line">    <span class="keyword">while</span>(head &lt; rear )<span class="comment">//当链表为空时</span></span><br><span class="line">    &#123;</span><br><span class="line">        head++;</span><br><span class="line">        P = G[Que[head]]-&gt;Next;</span><br><span class="line">        <span class="keyword">while</span>( P )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!Visited[P-&gt;Value])</span><br><span class="line">            &#123;   </span><br><span class="line">                Visited[P-&gt;Value] =<span class="number">1</span>;</span><br><span class="line">                rear++;</span><br><span class="line">                Que[rear] = P-&gt;Value;</span><br><span class="line">                Tail = P-&gt;Value;</span><br><span class="line">                count++;<span class="comment">/*每个节点出来时都需要统计它的邻接点，</span></span><br><span class="line"><span class="comment">                		如果是在这个遍历外统计节点时最后的尾结</span></span><br><span class="line"><span class="comment">                		点统计会出现一些小问题*/</span></span><br><span class="line">            &#125;</span><br><span class="line">            P = P-&gt;Next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Que[head] == Last)<span class="comment">//如果当前出队列元素为这层的末尾元素</span></span><br><span class="line">        &#123;</span><br><span class="line">            Last = Tail;</span><br><span class="line">            Level++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( Level == <span class="number">6</span>) <span class="keyword">break</span>;<span class="comment">//超过六层就退出</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">        Visited[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    GraphInit();</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>;i &lt;= N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d: %.2f%%\n&quot;</span>,i,<span class="number">100.0</span> * BFS(i) / N);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-        <category>BFS</category>
-        <category>邻接表</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记5——哈利波特的考试</title>
-    <url>/2021/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E5%93%88%E5%88%A9%E6%B3%A2%E7%89%B9%E7%9A%84%E8%80%83%E8%AF%95/</url>
-    <content><![CDATA[<h1 id="图4-哈利波特的考试-25-分">07-图4 哈利·波特的考试 (25 分)</h1>
-<h2 id="题目描述">题目描述</h2>
-<p>哈利·波特要考试了，他需要你的帮助。这门课学的是用魔咒将一种动物变成另一种动物的本事。例如将猫变成老鼠的魔咒是haha，将老鼠变成鱼的魔咒是hehe等等。反方向变化的魔咒就是简单地将原来的魔咒倒过来念，例如ahah可以将老鼠变成猫。另外，如果想把猫变成鱼，可以通过念一个直接魔咒lalala，也可以将猫变老鼠、老鼠变鱼的魔咒连起来念：hahahehe。</p>
-<p>现在哈利·波特的手里有一本教材，里面列出了所有的变形魔咒和能变的动物。老师允许他自己带一只动物去考场，要考察他把这只动物变成任意一只指定动物的本事。于是他来问你：带什么动物去可以让最难变的那种动物（即该动物变为哈利·波特自己带去的动物所需要的魔咒最长）需要的魔咒最短？例如：如果只有猫、鼠、鱼，则显然哈利·波特应该带鼠去，因为鼠变成另外两种动物都只需要念4个字符；而如果带猫去，则至少需要念6个字符才能把猫变成鱼；同理，带鱼去也不是最好的选择。</p>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入说明：输入第1行给出两个正整数<em>N</em> (≤100)和<em>M</em>，其中<em>N</em>是考试涉及的动物总数，<em>M</em>是用于直接变形的魔咒条数。为简单起见，我们将动物按1~<em>N</em>编号。随后<em>M</em>行，每行给出了3个正整数，分别是两种动物的编号、以及它们之间变形需要的魔咒的长度(≤100)，数字之间用空格分隔。</p>
-<h2 id="输出格式">输出格式:</h2>
-<p>输出哈利·波特应该带去考场的动物的编号、以及最长的变形魔咒的长度，中间以空格分隔。如果只带1只动物是不可能完成所有变形要求的，则输出0。如果有若干只动物都可以备选，则输出编号最小的那只。</p>
-<a id="more"></a>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 11</span><br><span class="line">3 4 70</span><br><span class="line">1 2 1</span><br><span class="line">5 4 50</span><br><span class="line">2 6 50</span><br><span class="line">5 6 60</span><br><span class="line">1 3 70</span><br><span class="line">4 6 60</span><br><span class="line">3 6 80</span><br><span class="line">5 1 100</span><br><span class="line">2 4 60</span><br><span class="line">5 2 80</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 70</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1 id="题目理解与思路">题目理解与思路</h1>
-<p>这题可抽象为计算多个源点与其它所有点的最小距离然后取出每个点到其它所有点的距离的最大值比较来找出花销最少的节点并记录、输出</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxAnimal 105</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGraph</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxAnimal][MaxAnimal];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGraph MGraph;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">CreateGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,V1,V2,Num;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;Num);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Num;</span><br><span class="line">        Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = Num;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FindMaxDist</span><span class="params">(<span class="keyword">int</span> D[][MaxAnimal],<span class="keyword">int</span> i, <span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MaxDist,j;</span><br><span class="line">    MaxDist = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;V;j++)</span><br><span class="line">        <span class="keyword">if</span>(i!=j &amp;&amp; D[i][j]&gt;MaxDist)</span><br><span class="line">            MaxDist = D[i][j];</span><br><span class="line">    <span class="keyword">return</span> MaxDist;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Floyd</span><span class="params">(MGraph Graph,<span class="keyword">int</span> D[][MaxAnimal])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,k;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">            D[i][j] = Graph-&gt;G[i][j];</span><br><span class="line">    <span class="keyword">for</span>(k = <span class="number">0</span>;k&lt;Graph-&gt;V;k++)</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i&lt;Graph-&gt;V;i++)</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">0</span>;j&lt;Graph-&gt;V;j++)</span><br><span class="line">                <span class="keyword">if</span>(D[i][k] + D[k][j] &lt; D[i][j])</span><br><span class="line">                    D[i][j] = D[i][k] + D[k][j];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Findanimal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> D[MaxAnimal][MaxAnimal];</span><br><span class="line">    <span class="keyword">int</span> Animal,i,MinDist,MaxDist;</span><br><span class="line">    </span><br><span class="line">    Floyd(Graph,D);</span><br><span class="line">    </span><br><span class="line">    MinDist = Inf;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;V;i++)&#123;</span><br><span class="line">        MaxDist = FindMaxDist(D,i,Graph-&gt;V);</span><br><span class="line">        <span class="keyword">if</span>(MinDist &gt; MaxDist)</span><br><span class="line">        &#123;</span><br><span class="line">            MinDist = MaxDist;</span><br><span class="line">            Animal = i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MaxDist == Inf)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0\n&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>,Animal,MinDist);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = CreateGraph(V,E);</span><br><span class="line">    Findanimal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-      </categories>
-      <tags>
-        <tag>数据结构与算法</tag>
-        <tag>BFS</tag>
-        <tag>Floyd算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据结构与算法刷题笔记7——公路村村通</title>
-    <url>/2021/08/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B07%E2%80%94%E2%80%94%E5%85%AC%E8%B7%AF%E6%9D%91%E6%9D%91%E9%80%9A/</url>
-    <content><![CDATA[<h1 id="图7-公路村村通-30-分">08-图7 公路村村通 (30 分)</h1>
-<blockquote>
-<p>前言：本题来自浙大PTA上的数据结构练习题 ## 题目描述 现有村落间道路的统计数据表中，列出了有可能建设成标准公路的若干条道路的成本，求使每个村落都有公路连通所需要的最低成本。</p>
-</blockquote>
-<h2 id="输入格式">输入格式:</h2>
-<p>输入数据包括城镇数目正整数<em>N</em>（≤1000）和候选道路数目<em>M</em>（≤3<em>N</em>）；随后的<em>M</em>行对应<em>M</em>条道路，每行给出3个正整数，分别是该条道路直接连通的两个城镇的编号以及该道路改建的预算成本。为简单起见，城镇从1到<em>N</em>编号。</p>
-<h2 id="输出格式">输出格式:</h2>
-<p>输出村村通需要的最低成本。如果输入数据不足以保证畅通，则输出−1，表示需要建设更多公路。</p>
-<h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 15</span><br><span class="line">1 2 5</span><br><span class="line">1 3 3</span><br><span class="line">1 4 7</span><br><span class="line">1 5 4</span><br><span class="line">1 6 2</span><br><span class="line">2 3 4</span><br><span class="line">2 4 6</span><br><span class="line">2 5 2</span><br><span class="line">2 6 6</span><br><span class="line">3 4 6</span><br><span class="line">3 5 1</span><br><span class="line">3 6 1</span><br><span class="line">4 5 10</span><br><span class="line">4 6 8</span><br><span class="line">5 6 3结尾无空行</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">12</span><br></pre></td></tr></table></figure>
-<h1 id="题目理解与思路">题目理解与思路</h1>
-<p>本题是最小生成树的问题，可以采用Kruskal算法加并查集实现，或者使用简单的Prim算法实现。</p>
-<p>本文使用Kruskal算法来解题，代码如下</p>
-<h2 id="kruskal">Kruskal</h2>
-<blockquote>
-<p>本解法越写越复杂，而且由于博主今日不在状态，写不动了，还没有通过测试，等待后续完善</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGNode</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V;</span><br><span class="line">    <span class="keyword">int</span> E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxVer][MaxVer];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGNode MGraph;</span><br><span class="line"><span class="keyword">int</span> collected[MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> S[MaxVer];</span><br><span class="line"><span class="keyword">int</span> VisitedE[MaxVer][MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">creatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,V1,V2,D,j;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">            &#123;</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">                S[i] = <span class="number">-1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;D);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = D;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">findRoot</span><span class="params">(<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(S[V] &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> S[V] = findRoot(S[V]);<span class="comment">//路径压缩</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Union</span><span class="params">(<span class="keyword">int</span> Root1,<span class="keyword">int</span> Root2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(S[Root1] &lt; S[Root2])</span><br><span class="line">    &#123;</span><br><span class="line">        S[Root1] += S[Root2];</span><br><span class="line">        S[Root2] = Root1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        S[Root2] += S[Root1];</span><br><span class="line">        S[Root1] = Root2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Kruskal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MinEdge,sum;</span><br><span class="line">    <span class="keyword">int</span> V1,V2,p1,p2;</span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> num = Graph-&gt;V;</span><br><span class="line">    <span class="keyword">while</span>(num &gt; <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        MinEdge = Inf;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;E;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(j=i;j&lt;Graph-&gt;E;j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>((Graph-&gt;G[i][j] &lt; MinEdge)&amp;&amp;(VisitedE[i][j] == <span class="number">0</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    MinEdge = Graph-&gt;G[i][j];</span><br><span class="line">                    V1 = i,V2 = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MinEdge == Inf)<span class="keyword">break</span>;</span><br><span class="line">        VisitedE[V1][V2] = <span class="number">1</span>;</span><br><span class="line">        VisitedE[V2][V1] = <span class="number">1</span>;</span><br><span class="line">        p1 = findRoot(V1);</span><br><span class="line">        p2 = findRoot(V2);</span><br><span class="line">        <span class="keyword">if</span>(p1 != p2)&#123;</span><br><span class="line">        sum += MinEdge;</span><br><span class="line">        num--;</span><br><span class="line">        Union(V1,V2);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(num &gt; <span class="number">1</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;-1\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,sum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = creatGraph(V,E);</span><br><span class="line">    Kruskal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="后记">后记</h1>
-<p>今日体重</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108031650116.png" alt="image-20210803165011918" /></p>
-<p>今天的体重是脱了鞋称的，所以比昨天轻很多2333</p>
-]]></content>
-      <categories>
-        <category>数据结构与算法</category>
-        <category>图</category>
-        <category>Prim</category>
-      </categories>
-      <tags>
-        <tag>最小生成树</tag>
-        <tag>Prim</tag>
-        <tag>Kruskal</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据结构与算法刷题笔记6——旅游规划最短路径问题</title>
     <url>/2021/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%97%85%E6%B8%B8%E8%A7%84%E5%88%92%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="图6-旅游规划-25-分">07-图6 旅游规划 (25 分)</h1>
@@ -2039,73 +1983,43 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       </tags>
   </entry>
   <entry>
-    <title>数据结构与算法刷题笔记8——排序（冒泡、插入、希尔）</title>
-    <url>/2021/08/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="排序1-排序冒泡插入希尔">09-排序1 排序（冒泡、插入、希尔）</h1>
-<p>给定<em>N</em>个（长整型范围内的）整数，要求输出从小到大排序后的结果。</p>
-<p>本题旨在测试各种不同的排序算法在各种数据情况下的表现。各组测试数据特点如下：</p>
-<p>数据1：只有<span class="math inline">\(1\)</span>个元素；</p>
-<p>数据2：<span class="math inline">\(11\)</span>个不相同的整数，测试基本正确性；</p>
-<p>数据3：<span class="math inline">\(10^3\)</span>个随机整数；</p>
-<p>数据4：<span class="math inline">\(10^4\)</span>个随机整数；</p>
-<p>数据5：<span class="math inline">\(10^5\)</span>个随机整数；</p>
-<p>数据6：<span class="math inline">\(10^5\)</span>个顺序整数；</p>
-<p>数据7：<span class="math inline">\(10^5\)</span>个逆序整数；</p>
-<p>数据8：<span class="math inline">\(10^5\)</span>个基本有序的整数；</p>
-<p>数据9：<span class="math inline">\(10^5\)</span>个随机正整数，每个数字不超过<span class="math inline">\(1000\)</span>。</p>
+    <title>数据结构与算法刷题笔记7——公路村村通</title>
+    <url>/2021/08/03/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B07%E2%80%94%E2%80%94%E5%85%AC%E8%B7%AF%E6%9D%91%E6%9D%91%E9%80%9A/</url>
+    <content><![CDATA[<h1 id="图7-公路村村通-30-分">08-图7 公路村村通 (30 分)</h1>
+<blockquote>
+<p>前言：本题来自浙大PTA上的数据结构练习题 ## 题目描述 现有村落间道路的统计数据表中，列出了有可能建设成标准公路的若干条道路的成本，求使每个村落都有公路连通所需要的最低成本。</p>
+</blockquote>
 <h2 id="输入格式">输入格式:</h2>
-<p>输入第一行给出正整数<em>N</em><span class="math inline">\((≤10^5)\)</span>，随后一行给出<em>N</em>个（长整型范围内的）整数，其间以空格分隔。</p>
-<a id="more"></a>
+<p>输入数据包括城镇数目正整数<em>N</em>（≤1000）和候选道路数目<em>M</em>（≤3<em>N</em>）；随后的<em>M</em>行对应<em>M</em>条道路，每行给出3个正整数，分别是该条道路直接连通的两个城镇的编号以及该道路改建的预算成本。为简单起见，城镇从1到<em>N</em>编号。</p>
 <h2 id="输出格式">输出格式:</h2>
-<p>在一行中输出从小到大排序后的结果，数字间以1个空格分隔，行末不得有多余空格。</p>
+<p>输出村村通需要的最低成本。如果输入数据不足以保证畅通，则输出−1，表示需要建设更多公路。</p>
 <h2 id="输入样例">输入样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">11</span><br><span class="line">4 981 10 -17 0 -20 29 50 8 43 -5</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">6 15</span><br><span class="line">1 2 5</span><br><span class="line">1 3 3</span><br><span class="line">1 4 7</span><br><span class="line">1 5 4</span><br><span class="line">1 6 2</span><br><span class="line">2 3 4</span><br><span class="line">2 4 6</span><br><span class="line">2 5 2</span><br><span class="line">2 6 6</span><br><span class="line">3 4 6</span><br><span class="line">3 5 1</span><br><span class="line">3 6 1</span><br><span class="line">4 5 10</span><br><span class="line">4 6 8</span><br><span class="line">5 6 3结尾无空行</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <h2 id="输出样例">输出样例:</h2>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-20 -17 -5 0 4 8 10 29 43 50 981</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
-<h1 id="冒泡排序">冒泡排序</h1>
-<h2 id="中心思想">中心思想</h2>
-<p>多次遍历数组，如果相邻的数字左边比右边大就交换，一趟遍历完后最后一位是最大的数，第二趟遍历后，次大的在倒二；</p>
-<h2 id="代码">代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Bubble_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,flag;</span><br><span class="line">    <span class="keyword">for</span>(i = N<span class="number">-1</span>;i &gt;= <span class="number">0</span>;i--)</span><br><span class="line">    &#123;</span><br><span class="line">        flag = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; i;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Data[j] &gt; Data[j+<span class="number">1</span>])</span><br><span class="line">            &#123;</span><br><span class="line">                swap(&amp;Data[j],&amp;Data[j+<span class="number">1</span>]);</span><br><span class="line">                flag = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(flag)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = *A;</span><br><span class="line">    *A = *B;</span><br><span class="line">    *B = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试结果">测试结果</h2>
-<p>可以看到数据量才涨到<span class="math inline">\(10^3\)</span>的时候冒泡排序的效率就已经比较差了，等数据量更大了之后如果不是输入已经有序都是超时的</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042102637.png" alt="image-20210804210235543" /></p>
-<h2 id="小结">小结</h2>
-<ul>
-<li>小结 <strong>最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>​​​，如果数组基本有序，那么经过若干趟排序之后数组就可能是有序的，所以可能复杂度是<span class="math inline">\(O(N)\)</span>​，所以通过了测试点7</strong> 评价：交换排序，简单排序，最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>，在数组基本有序的情况下时间复杂度可能是<span class="math inline">\(O(N)\)</span>​​​​。空间复杂度<span class="math inline">\(O(1)\)</span>。</li>
-</ul>
-<h1 id="插入排序">插入排序</h1>
-<h2 id="中心思想-1">中心思想：</h2>
-<p>就像打牌时候整理手牌，一张张的摸牌，每拿入一张牌都插入到手牌中合适的位置，保证每次插入后都是有序的</p>
-<p>可以做的一点优化是用移位来代替交换；</p>
-<h2 id="代码-1">代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> Data[],<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Insersion_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        tmp = Data[i];</span><br><span class="line">        <span class="keyword">for</span>(j = i;j &gt; <span class="number">0</span> &amp;&amp; tmp &lt; Data[j<span class="number">-1</span>];j--)</span><br><span class="line">            Data[j] = Data[j<span class="number">-1</span>];</span><br><span class="line">        Data[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试结果-1">测试结果</h2>
-<p>可以看到插入排序的效果貌似略好于冒泡排序，因为它的稳定性比较好，比较的次数大概率是小于冒泡排序的</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042310285.png" alt="image-20210804231041200" /></p>
-<p>可以看出来插入排序虽然全部测试点都通过了，但是有几个测试点的数据依然比较慢，但是插入排序的测试结果整体是好于冒泡的；</p>
-<p>插入排序的空间复杂度为<span class="math inline">\(O(1)\)</span>，插入排序的时间复杂度最坏是<span class="math inline">\(O(N^2)\)</span>​，是所有数据都处于逆序状态时才会遇到的情况，绝大多数情况下不会遇到，而在数组基本有序的情况下，插入排序甚至都不用移动几次就能够完成排序，所以时间复杂度可能直接降为<span class="math inline">\(O(N)\)</span>​；</p>
-<p>插入和冒泡需要完成的交换次数都是相当的，这是由于插入和冒泡每次都只交换相邻的两个元素，这使得他们每次交换都只能消去一个<strong>逆序对</strong>，由此，为了使每次交换都消除更多的逆序对便产生了对插入排序优化后的希尔排序</p>
-<h1 id="希尔排序">希尔排序</h1>
-<p>与插入排序类似，但是每次比较的不是相邻的数，而是距离为某个值的两个元素。要定义一个间隔序列： 从大到小，最后是1 如Sedgewick序列： int Sedgewick[] = {929, 505, 209, 109, 41, 19, 5, 1, 0}; 这个序列中的元素一般要是互质的，这样希尔排序性能才会并较好。</p>
-<h2 id="代码-2">代码</h2>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*原始希尔排序*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp,D;</span><br><span class="line">    <span class="keyword">for</span>(D = N/<span class="number">2</span>;D &gt; <span class="number">0</span>;D = D/<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 希尔排序 - 用Sedgewick增量序列 */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">     <span class="keyword">int</span> Si, D, P, i,j,tmp;</span><br><span class="line">     <span class="comment">/* 这里只列出一小部分增量 */</span></span><br><span class="line">     <span class="keyword">int</span> Sedgewick[] = &#123;<span class="number">929</span>, <span class="number">505</span>, <span class="number">209</span>, <span class="number">109</span>, <span class="number">41</span>, <span class="number">19</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">for</span> ( Si=<span class="number">0</span>; Sedgewick[Si]&gt;=N; Si++ );</span><br><span class="line">    <span class="comment">/* 初始的增量Sedgewick[Si]不能超过待排序列长度 */</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span> ( D=Sedgewick[Si]; D&gt;<span class="number">0</span>; D=Sedgewick[++Si] )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="测试结果-2">测试结果</h2>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042340791.png" alt="image-20210804234044710" /></p>
-<p>从测试结果来看，希尔排序相对于插入排序已经快了很多，说明相对于插入排序已经优化了很多，但是希尔排序需要它的序列选取比较好才会有比较好的效果，目前人们一般认为对于Sedgewick增量序列：<span class="math inline">\(9\times 4^i-9\times2^i\)</span>​或<span class="math inline">\(4^i-3\times2^i+1\)</span>​的时间复杂度为<span class="math inline">\(T_{arg} = O(N^{7/6})\)</span>,<span class="math inline">\(T_{worst} = O(4/3)\)</span></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">12</span><br></pre></td></tr></table></figure>
+<h1 id="题目理解与思路">题目理解与思路</h1>
+<p>本题是最小生成树的问题，可以采用Kruskal算法加并查集实现，或者使用简单的Prim算法实现。</p>
+<p>本文使用Kruskal算法来解题，代码如下</p>
+<h2 id="kruskal">Kruskal</h2>
+<blockquote>
+<p>本解法越写越复杂，而且由于博主今日不在状态，写不动了，还没有通过测试，等待后续完善</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MaxVer 1005</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> Inf 65535</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">GNode</span>* <span class="title">PtrToGNode</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GNode</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> V;</span><br><span class="line">    <span class="keyword">int</span> E;</span><br><span class="line">    <span class="keyword">int</span> G[MaxVer][MaxVer];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> PtrToGNode MGraph;</span><br><span class="line"><span class="keyword">int</span> collected[MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> S[MaxVer];</span><br><span class="line"><span class="keyword">int</span> VisitedE[MaxVer][MaxVer] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">MGraph <span class="title">creatGraph</span><span class="params">(<span class="keyword">int</span> V,<span class="keyword">int</span> E)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,V1,V2,D,j;</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = (MGraph)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct GNode));</span><br><span class="line">    Graph-&gt;V = V;</span><br><span class="line">    Graph-&gt;E = E;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; V;i++)</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; V;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j)</span><br><span class="line">            &#123;</span><br><span class="line">                Graph-&gt;G[i][j] = <span class="number">0</span>;</span><br><span class="line">                S[i] = <span class="number">-1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Graph-&gt;G[i][j] = Inf;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; Graph-&gt;E;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d\n&quot;</span>,&amp;V1,&amp;V2,&amp;D);</span><br><span class="line">        Graph-&gt;G[V1<span class="number">-1</span>][V2<span class="number">-1</span>] = Graph-&gt;G[V2<span class="number">-1</span>][V1<span class="number">-1</span>] = D;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Graph;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">findRoot</span><span class="params">(<span class="keyword">int</span> V)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(S[V] &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> V;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> S[V] = findRoot(S[V]);<span class="comment">//路径压缩</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Union</span><span class="params">(<span class="keyword">int</span> Root1,<span class="keyword">int</span> Root2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(S[Root1] &lt; S[Root2])</span><br><span class="line">    &#123;</span><br><span class="line">        S[Root1] += S[Root2];</span><br><span class="line">        S[Root2] = Root1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        S[Root2] += S[Root1];</span><br><span class="line">        S[Root1] = Root2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Kruskal</span><span class="params">(MGraph Graph)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> MinEdge,sum;</span><br><span class="line">    <span class="keyword">int</span> V1,V2,p1,p2;</span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> num = Graph-&gt;V;</span><br><span class="line">    <span class="keyword">while</span>(num &gt; <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        MinEdge = Inf;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;Graph-&gt;E;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(j=i;j&lt;Graph-&gt;E;j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>((Graph-&gt;G[i][j] &lt; MinEdge)&amp;&amp;(VisitedE[i][j] == <span class="number">0</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    MinEdge = Graph-&gt;G[i][j];</span><br><span class="line">                    V1 = i,V2 = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(MinEdge == Inf)<span class="keyword">break</span>;</span><br><span class="line">        VisitedE[V1][V2] = <span class="number">1</span>;</span><br><span class="line">        VisitedE[V2][V1] = <span class="number">1</span>;</span><br><span class="line">        p1 = findRoot(V1);</span><br><span class="line">        p2 = findRoot(V2);</span><br><span class="line">        <span class="keyword">if</span>(p1 != p2)&#123;</span><br><span class="line">        sum += MinEdge;</span><br><span class="line">        num--;</span><br><span class="line">        Union(V1,V2);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(num &gt; <span class="number">1</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;-1\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,sum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> V,E;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d\n&quot;</span>,&amp;V,&amp;E);</span><br><span class="line">    MGraph Graph;</span><br><span class="line">    Graph = creatGraph(V,E);</span><br><span class="line">    Kruskal(Graph);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="后记">后记</h1>
-<p>今日体重，82.95kg，测量于晚饭后，早上刚起床时候还是81.9kg，感觉很不真实，就没有把欺骗自己的体重放出来</p>
-<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042002600.png" /></p>
-<h1 id="参考文章">参考文章</h1>
-<p><a href="https://blog.csdn.net/bobo1356/article/details/71749720">排序算法-09-排序1 排序 (25分)-第一部分</a></p>
+<p>今日体重</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108031650116.png" alt="image-20210803165011918" /></p>
+<p>今天的体重是脱了鞋称的，所以比昨天轻很多2333</p>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
-        <category>排序算法</category>
+        <category>图</category>
+        <category>Prim</category>
       </categories>
       <tags>
-        <tag>冒泡排序</tag>
-        <tag>插入排序</tag>
+        <tag>最小生成树</tag>
+        <tag>Prim</tag>
+        <tag>Kruskal</tag>
       </tags>
   </entry>
   <entry>
@@ -2207,13 +2121,83 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       <categories>
         <category>数据结构与算法</category>
         <category>图</category>
-        <category>DFS</category>
         <category>BFS</category>
+        <category>DFS</category>
       </categories>
       <tags>
         <tag>数据结构与算法</tag>
         <tag>BFS</tag>
         <tag>DFS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据结构与算法刷题笔记8——排序（冒泡、插入、希尔）</title>
+    <url>/2021/08/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="排序1-排序冒泡插入希尔">09-排序1 排序（冒泡、插入、希尔）</h1>
+<p>给定<em>N</em>个（长整型范围内的）整数，要求输出从小到大排序后的结果。</p>
+<p>本题旨在测试各种不同的排序算法在各种数据情况下的表现。各组测试数据特点如下：</p>
+<p>数据1：只有<span class="math inline">\(1\)</span>个元素；</p>
+<p>数据2：<span class="math inline">\(11\)</span>个不相同的整数，测试基本正确性；</p>
+<p>数据3：<span class="math inline">\(10^3\)</span>个随机整数；</p>
+<p>数据4：<span class="math inline">\(10^4\)</span>个随机整数；</p>
+<p>数据5：<span class="math inline">\(10^5\)</span>个随机整数；</p>
+<p>数据6：<span class="math inline">\(10^5\)</span>个顺序整数；</p>
+<p>数据7：<span class="math inline">\(10^5\)</span>个逆序整数；</p>
+<p>数据8：<span class="math inline">\(10^5\)</span>个基本有序的整数；</p>
+<p>数据9：<span class="math inline">\(10^5\)</span>个随机正整数，每个数字不超过<span class="math inline">\(1000\)</span>。</p>
+<h2 id="输入格式">输入格式:</h2>
+<p>输入第一行给出正整数<em>N</em><span class="math inline">\((≤10^5)\)</span>，随后一行给出<em>N</em>个（长整型范围内的）整数，其间以空格分隔。</p>
+<a id="more"></a>
+<h2 id="输出格式">输出格式:</h2>
+<p>在一行中输出从小到大排序后的结果，数字间以1个空格分隔，行末不得有多余空格。</p>
+<h2 id="输入样例">输入样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">11</span><br><span class="line">4 981 10 -17 0 -20 29 50 8 43 -5</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h2 id="输出样例">输出样例:</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-20 -17 -5 0 4 8 10 29 43 50 981</span><br><span class="line">&#x2F;&#x2F;结尾无空行</span><br></pre></td></tr></table></figure>
+<h1 id="冒泡排序">冒泡排序</h1>
+<h2 id="中心思想">中心思想</h2>
+<p>多次遍历数组，如果相邻的数字左边比右边大就交换，一趟遍历完后最后一位是最大的数，第二趟遍历后，次大的在倒二；</p>
+<h2 id="代码">代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Bubble_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bubble_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,flag;</span><br><span class="line">    <span class="keyword">for</span>(i = N<span class="number">-1</span>;i &gt;= <span class="number">0</span>;i--)</span><br><span class="line">    &#123;</span><br><span class="line">        flag = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>;j &lt; i;j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Data[j] &gt; Data[j+<span class="number">1</span>])</span><br><span class="line">            &#123;</span><br><span class="line">                swap(&amp;Data[j],&amp;Data[j+<span class="number">1</span>]);</span><br><span class="line">                flag = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(flag)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *A,<span class="keyword">int</span> *B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *tmp;</span><br><span class="line">    tmp = *A;</span><br><span class="line">    *A = *B;</span><br><span class="line">    *B = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试结果">测试结果</h2>
+<p>可以看到数据量才涨到<span class="math inline">\(10^3\)</span>的时候冒泡排序的效率就已经比较差了，等数据量更大了之后如果不是输入已经有序都是超时的</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042102637.png" alt="image-20210804210235543" /></p>
+<h2 id="小结">小结</h2>
+<ul>
+<li>小结 <strong>最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>​​​，如果数组基本有序，那么经过若干趟排序之后数组就可能是有序的，所以可能复杂度是<span class="math inline">\(O(N)\)</span>​，所以通过了测试点7</strong> 评价：交换排序，简单排序，最坏时间复杂度是<span class="math inline">\(O(N^2)\)</span>，在数组基本有序的情况下时间复杂度可能是<span class="math inline">\(O(N)\)</span>​​​​。空间复杂度<span class="math inline">\(O(1)\)</span>。</li>
+</ul>
+<h1 id="插入排序">插入排序</h1>
+<h2 id="中心思想-1">中心思想：</h2>
+<p>就像打牌时候整理手牌，一张张的摸牌，每拿入一张牌都插入到手牌中合适的位置，保证每次插入后都是有序的</p>
+<p>可以做的一点优化是用移位来代替交换；</p>
+<h2 id="代码-1">代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> Data[],<span class="keyword">int</span> N)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,N,*Data;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d\n&quot;</span>,&amp;N);</span><br><span class="line">    Data = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(N*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N;i++)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d &quot;</span>,&amp;Data[i]);</span><br><span class="line">    Insersion_sort(Data,N);</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; N<span class="number">-1</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>,Data[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,Data[N<span class="number">-1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Insersion_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; N;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        tmp = Data[i];</span><br><span class="line">        <span class="keyword">for</span>(j = i;j &gt; <span class="number">0</span> &amp;&amp; tmp &lt; Data[j<span class="number">-1</span>];j--)</span><br><span class="line">            Data[j] = Data[j<span class="number">-1</span>];</span><br><span class="line">        Data[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试结果-1">测试结果</h2>
+<p>可以看到插入排序的效果貌似略好于冒泡排序，因为它的稳定性比较好，比较的次数大概率是小于冒泡排序的</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042310285.png" alt="image-20210804231041200" /></p>
+<p>可以看出来插入排序虽然全部测试点都通过了，但是有几个测试点的数据依然比较慢，但是插入排序的测试结果整体是好于冒泡的；</p>
+<p>插入排序的空间复杂度为<span class="math inline">\(O(1)\)</span>，插入排序的时间复杂度最坏是<span class="math inline">\(O(N^2)\)</span>​，是所有数据都处于逆序状态时才会遇到的情况，绝大多数情况下不会遇到，而在数组基本有序的情况下，插入排序甚至都不用移动几次就能够完成排序，所以时间复杂度可能直接降为<span class="math inline">\(O(N)\)</span>​；</p>
+<p>插入和冒泡需要完成的交换次数都是相当的，这是由于插入和冒泡每次都只交换相邻的两个元素，这使得他们每次交换都只能消去一个<strong>逆序对</strong>，由此，为了使每次交换都消除更多的逆序对便产生了对插入排序优化后的希尔排序</p>
+<h1 id="希尔排序">希尔排序</h1>
+<p>与插入排序类似，但是每次比较的不是相邻的数，而是距离为某个值的两个元素。要定义一个间隔序列： 从大到小，最后是1 如Sedgewick序列： int Sedgewick[] = {929, 505, 209, 109, 41, 19, 5, 1, 0}; 这个序列中的元素一般要是互质的，这样希尔排序性能才会并较好。</p>
+<h2 id="代码-2">代码</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*原始希尔排序*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j,tmp,D;</span><br><span class="line">    <span class="keyword">for</span>(D = N/<span class="number">2</span>;D &gt; <span class="number">0</span>;D = D/<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 希尔排序 - 用Sedgewick增量序列 */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Shell_sort</span><span class="params">(<span class="keyword">int</span> *Data,<span class="keyword">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">     <span class="keyword">int</span> Si, D, P, i,j,tmp;</span><br><span class="line">     <span class="comment">/* 这里只列出一小部分增量 */</span></span><br><span class="line">     <span class="keyword">int</span> Sedgewick[] = &#123;<span class="number">929</span>, <span class="number">505</span>, <span class="number">209</span>, <span class="number">109</span>, <span class="number">41</span>, <span class="number">19</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">for</span> ( Si=<span class="number">0</span>; Sedgewick[Si]&gt;=N; Si++ );</span><br><span class="line">    <span class="comment">/* 初始的增量Sedgewick[Si]不能超过待排序列长度 */</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">for</span> ( D=Sedgewick[Si]; D&gt;<span class="number">0</span>; D=Sedgewick[++Si] )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(i = D; i &lt; N;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            tmp = Data[i];</span><br><span class="line">            <span class="keyword">for</span>(j = i;j &gt;= D &amp;&amp; tmp &lt; Data[j-D];j-=D)</span><br><span class="line">                Data[j] = Data[j-D];</span><br><span class="line">            Data[j] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试结果-2">测试结果</h2>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042340791.png" alt="image-20210804234044710" /></p>
+<p>从测试结果来看，希尔排序相对于插入排序已经快了很多，说明相对于插入排序已经优化了很多，但是希尔排序需要它的序列选取比较好才会有比较好的效果，目前人们一般认为对于Sedgewick增量序列：<span class="math inline">\(9\times 4^i-9\times2^i\)</span>​或<span class="math inline">\(4^i-3\times2^i+1\)</span>​的时间复杂度为<span class="math inline">\(T_{arg} = O(N^{7/6})\)</span>,<span class="math inline">\(T_{worst} = O(4/3)\)</span></p>
+<h1 id="后记">后记</h1>
+<p>今日体重，82.95kg，测量于晚饭后，早上刚起床时候还是81.9kg，感觉很不真实，就没有把欺骗自己的体重放出来</p>
+<p><img src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/img202108042002600.png" /></p>
+<h1 id="参考文章">参考文章</h1>
+<p><a href="https://blog.csdn.net/bobo1356/article/details/71749720">排序算法-09-排序1 排序 (25分)-第一部分</a></p>
+]]></content>
+      <categories>
+        <category>数据结构与算法</category>
+        <category>排序算法</category>
+      </categories>
+      <tags>
+        <tag>冒泡排序</tag>
+        <tag>插入排序</tag>
       </tags>
   </entry>
   <entry>
@@ -2251,8 +2235,8 @@ x+y+2^w,\quad x+y&lt;-2^{w-1} \qquad \quad负溢出
       <categories>
         <category>数据结构与算法</category>
         <category>图</category>
-        <category>DFS</category>
         <category>BFS</category>
+        <category>DFS</category>
       </categories>
       <tags>
         <tag>BFS</tag>
