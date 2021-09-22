@@ -35,10 +35,10 @@
 <meta property="og:description" content="前言： 博主为了使用emoji🎃将next主题自带的markdown渲染引擎改成了markdown-it渲染引擎，但是导致了文章左侧的目录的跳转功能出现了错误 # TOC定向错误  分析原因： 经过排查，发现原本会被编译为h2 id&#x3D;&quot;title&quot;&gt;title&lt;&#x2F;h2&gt;的代码 现在会被编译为&lt;h2&gt;&lt;span id&#x3D;&quot;title&quot;&gt;title&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-03T12:42:53.000Z">
-<meta property="article:modified_time" content="2021-03-03T15:50:23.166Z">
+<meta property="article:modified_time" content="2021-09-22T16:37:39.246Z">
 <meta property="article:author" content="Zheng Haoyu">
-<meta property="article:tag" content="网站建设">
 <meta property="article:tag" content="个人博客">
+<meta property="article:tag" content="网站建设">
 <meta property="article:tag" content="next">
 <meta name="twitter:card" content="summary">
 
@@ -136,10 +136,10 @@
   <ul class="main-menu menu">
         <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
         <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-tech"><a href="/categories/%E7%BC%96%E7%A8%8B" rel="section"><i class="fa fa-code fa-fw"></i>技术</a></li>
+        <li class="menu-item menu-item-essay"><a href="/categories/%E7%94%9F%E6%B4%BB" rel="section"><i class="fas fa-cannabis fa-fw"></i>随笔</a></li>
         <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
         <li class="menu-item menu-item-guestbook"><a href="/guestbook/" rel="section"><i class="fas fa-book fa-fw"></i>留言</a></li>
-        <li class="menu-item menu-item-essay"><a href="/essay/" rel="section"><i class="fas fa-cannabis fa-fw"></i>随笔</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -218,8 +218,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-          
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -294,21 +293,27 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-03-03 20:42:53 / 修改时间：23:50:23" itemprop="dateCreated datePublished" datetime="2021-03-03T20:42:53+08:00">2021-03-03</time>
+      <time title="创建时间：2021-03-03 20:42:53" itemprop="dateCreated datePublished" datetime="2021-03-03T20:42:53+08:00">2021-03-03</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-09-23 00:37:39" itemprop="dateModified" datetime="2021-09-23T00:37:39+08:00">2021-09-23</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" itemprop="url" rel="index"><span itemprop="name">网站建设</span></a>
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">个人博客</span></a>
+          <a href="/categories/%E7%BC%96%E7%A8%8B/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
         </span>
     </span>
 
@@ -420,8 +425,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" rel="tag"><i class="fas fa-tag"></i> 网站建设</a>
               <a href="/tags/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="tag"><i class="fas fa-tag"></i> 个人博客</a>
+              <a href="/tags/%E7%BD%91%E7%AB%99%E5%BB%BA%E8%AE%BE/" rel="tag"><i class="fas fa-tag"></i> 网站建设</a>
               <a href="/tags/next/" rel="tag"><i class="fas fa-tag"></i> next</a>
           </div>
 
@@ -434,8 +439,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/03/04/%E8%87%AA%E5%BB%BASSR%E6%95%99%E7%A8%8B/" rel="next" title="自建SSR教程">
-                  自建SSR教程 <i class="fa fa-chevron-right"></i>
+                <a href="/2021/03/04/hexo%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="next" title="hexo博客部署到云服务器">
+                  hexo博客部署到云服务器 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -492,14 +497,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">107k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">5:14</span>
+    <span title="站点阅读时长">4:58</span>
   </span>
 </div>
 <div class="busuanzi-count">
