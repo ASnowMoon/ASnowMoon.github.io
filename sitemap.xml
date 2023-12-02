@@ -578,15 +578,6 @@
   </url>
   
   <url>
-    <loc>https://www.snowmoon.top/site/census/index.html</loc>
-    
-    <lastmod>2023-03-22</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.snowmoon.top/personal/bb/index.html</loc>
     
     <lastmod>2023-03-22</lastmod>
@@ -605,7 +596,7 @@
   </url>
   
   <url>
-    <loc>https://www.snowmoon.top/life/games/index.html</loc>
+    <loc>https://www.snowmoon.top/site/census/index.html</loc>
     
     <lastmod>2023-03-22</lastmod>
     
@@ -614,7 +605,7 @@
   </url>
   
   <url>
-    <loc>https://www.snowmoon.top/life/movies/index.html</loc>
+    <loc>https://www.snowmoon.top/life/games/index.html</loc>
     
     <lastmod>2023-03-22</lastmod>
     
@@ -633,6 +624,15 @@
   
   <url>
     <loc>https://www.snowmoon.top/social/fcircle/index.html</loc>
+    
+    <lastmod>2023-03-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.snowmoon.top/life/movies/index.html</loc>
     
     <lastmod>2023-03-22</lastmod>
     
@@ -855,21 +855,14 @@
   </url>
   
   <url>
-    <loc>https://www.snowmoon.top/tags/hexo/</loc>
-    <lastmod>2023-12-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.snowmoon.top/tags/next/</loc>
-    <lastmod>2023-12-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.snowmoon.top/tags/%E5%8D%9A%E5%AE%A2%E9%83%A8%E7%BD%B2/</loc>
+    <lastmod>2023-12-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.snowmoon.top/tags/hexo/</loc>
     <lastmod>2023-12-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -884,6 +877,13 @@
   
   <url>
     <loc>https://www.snowmoon.top/tags/PA/</loc>
+    <lastmod>2023-12-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.snowmoon.top/tags/next/</loc>
     <lastmod>2023-12-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -981,14 +981,14 @@
   </url>
   
   <url>
-    <loc>https://www.snowmoon.top/tags/BFS/</loc>
+    <loc>https://www.snowmoon.top/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</loc>
     <lastmod>2023-12-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.snowmoon.top/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</loc>
+    <loc>https://www.snowmoon.top/tags/BFS/</loc>
     <lastmod>2023-12-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
