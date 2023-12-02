@@ -675,7 +675,7 @@ if (document.body.clientWidth > 992) {
         borderRadius: 5 + 'px',
         right: 55.6 + 'px',
         nekoImg: "https://haoyu-album.oss-cn-shanghai.aliyuncs.com/62d812db74be9.png",
-        hoverMsg: "春天啦~",
+        hoverMsg: "你好，喵~",
         color: "var(--theme-color)",
         during: 500,
         blog_body: "body",
@@ -2518,7 +2518,7 @@ if (m == 12 && dd == 25) {//圣诞节
     sessionStorage.setItem("isPopupWindow", "1");
   }
 }
-if (m == 8 && dd == 11) {//站长生日
+if (m == 2 && dd == 19) {//站长生日
   if (sessionStorage.getItem("isPopupWindow") != "1") {
     Swal.fire("祝站长" + (y - 1998).toString() + "岁生日快乐！🥝");
     sessionStorage.setItem("isPopupWindow", "1");
