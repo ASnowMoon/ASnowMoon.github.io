@@ -4,35 +4,6 @@
   
     
     <entry>
-      <title>Uboot——启动流程与裁剪移植</title>
-      <link href="/2023/12/01/Uboot%E2%80%94%E2%80%94%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%A3%81%E5%89%AA%E7%A7%BB%E6%A4%8D/"/>
-      <url>/2023/12/01/Uboot%E2%80%94%E2%80%94%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%A3%81%E5%89%AA%E7%A7%BB%E6%A4%8D/</url>
-      
-        <content type="html"><![CDATA[<h1>前言</h1>]]></content>
-      
-      
-      <categories>
-          
-          <category> SnowMoonの嵌入式笔记 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Uboot </tag>
-            
-            <tag> 嵌入式Linux </tag>
-            
-            <tag> Imx6ull </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>考研复习日记</title>
       <link href="/2022/08/26/%E8%80%83%E7%A0%94%E5%A4%8D%E4%B9%A0%E6%97%A5%E8%AE%B0/"/>
       <url>/2022/08/26/%E8%80%83%E7%A0%94%E5%A4%8D%E4%B9%A0%E6%97%A5%E8%AE%B0/</url>
@@ -1377,9 +1348,9 @@
       
         <tags>
             
-            <tag> 网站建设 </tag>
-            
             <tag> 个人博客 </tag>
+            
+            <tag> 网站建设 </tag>
             
         </tags>
       
@@ -1458,9 +1429,9 @@
       
         <tags>
             
-            <tag> 网站建设 </tag>
-            
             <tag> 个人博客 </tag>
+            
+            <tag> 网站建设 </tag>
             
             <tag> next </tag>
             

@@ -6,7 +6,7 @@
   <link href="https://www.snowmoon.top/atom.xml" rel="self"/>
   
   <link href="https://www.snowmoon.top/"/>
-  <updated>2023-12-01T14:20:11.319Z</updated>
+  <updated>2023-11-30T16:40:10.636Z</updated>
   <id>https://www.snowmoon.top/</id>
   
   <author>
@@ -15,35 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Uboot——启动流程与裁剪移植</title>
-    <link href="https://www.snowmoon.top/2023/12/01/Uboot%E2%80%94%E2%80%94%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%A3%81%E5%89%AA%E7%A7%BB%E6%A4%8D/"/>
-    <id>https://www.snowmoon.top/2023/12/01/Uboot%E2%80%94%E2%80%94%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%A3%81%E5%89%AA%E7%A7%BB%E6%A4%8D/</id>
-    <published>2023-12-01T10:59:24.000Z</published>
-    <updated>2023-12-01T14:20:11.319Z</updated>
-    
-    <content type="html"><![CDATA[<h1>前言</h1>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;前言&lt;/h1&gt;
-</summary>
-      
-    
-    
-    
-    <category term="SnowMoonの嵌入式笔记" scheme="https://www.snowmoon.top/categories/SnowMoon%E3%81%AE%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%AC%94%E8%AE%B0/"/>
-    
-    
-    <category term="Uboot" scheme="https://www.snowmoon.top/tags/Uboot/"/>
-    
-    <category term="嵌入式Linux" scheme="https://www.snowmoon.top/tags/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux/"/>
-    
-    <category term="Imx6ull" scheme="https://www.snowmoon.top/tags/Imx6ull/"/>
-    
-  </entry>
   
   <entry>
     <title>考研复习日记</title>
@@ -694,6 +665,37 @@
     <category term="链表" scheme="https://www.snowmoon.top/tags/%E9%93%BE%E8%A1%A8/"/>
     
     <category term="二叉搜索树" scheme="https://www.snowmoon.top/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>剑指offer刷题4——字符串（简单）</title>
+    <link href="https://www.snowmoon.top/2021/08/23/%E5%89%91%E6%8C%87offer4/"/>
+    <id>https://www.snowmoon.top/2021/08/23/%E5%89%91%E6%8C%87offer4/</id>
+    <published>2021-08-23T00:30:00.000Z</published>
+    <updated>2023-11-30T16:45:06.774Z</updated>
+    
+    <content type="html"><![CDATA[<h1><a href="https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/">剑指 Offer 05. 替换空格</a></h1><p>难度简单152收藏分享切换为英文接收动态反馈</p><p>请实现一个函数，把字符串 <code>s</code> 中的每个空格替换成&quot;%20&quot;。</p><p><strong>示例 1：</strong></p><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = <span class="string">&quot;We are happy.&quot;</span></span><br><span class="line">输出：<span class="string">&quot;We%20are%20happy.&quot;</span></span><br></pre></td></tr></table></figure><p><strong>限制：</strong></p><figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">0 </span>&lt;= s 的长度 &lt;= <span class="number">10000</span></span><br></pre></td></tr></table></figure><span id="more"></span><h2 id="思路">思路</h2><p>建立一个大小为3*Size（保证足够用来替换）的新的字符串str，遍历s并复制进入str中，每次遇到空格就复制<code>&quot;%20&quot;</code>，最后新建一个大小为替换后的字符数的字符串STR，把str中有效位复制进STR并返回</p><h3 id="代码">代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">string <span class="title">replaceSpace</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> i,Size,j;</span><br><span class="line">        Size = s.<span class="built_in">length</span>();</span><br><span class="line">        <span class="function">string <span class="title">str</span><span class="params">(<span class="number">3</span>*Size,<span class="string">&#x27;0&#x27;</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>,j = <span class="number">0</span>; i &lt; Size;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(s[i] == <span class="string">&#x27; &#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                str[j++] = <span class="string">&#x27;%&#x27;</span>;</span><br><span class="line">                str[j++] = <span class="string">&#x27;2&#x27;</span>;</span><br><span class="line">                str[j++] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                str[j++] = s[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function">string <span class="title">STR</span><span class="params">(j,<span class="string">&#x27; &#x27;</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; j;i++)</span><br><span class="line">            STR[i] = str[i];</span><br><span class="line">        <span class="keyword">return</span> STR;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><h1><a href="https://leetcode-cn.com/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/">剑指 Offer 58 - II. 左旋转字符串</a></h1><p>难度简单144收藏分享切换为英文接收动态反馈</p><p>字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串&quot;abcdefg&quot;和数字2，该函数将返回左旋转两位得到的结果&quot;cdefgab&quot;。</p><p><strong>示例 1：</strong></p><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="attr">s</span> = <span class="string">&quot;abcdefg&quot;</span>, <span class="attr">k</span> = <span class="number">2</span></span><br><span class="line">输出: <span class="string">&quot;cdefgab&quot;</span></span><br></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="attr">s</span> = <span class="string">&quot;lrloseumgh&quot;</span>, <span class="attr">k</span> = <span class="number">6</span></span><br><span class="line">输出: <span class="string">&quot;umghlrlose&quot;</span></span><br></pre></td></tr></table></figure><p><strong>限制：</strong></p><ul><li><code>1 &lt;= k &lt; s.length &lt;= 10000</code></li></ul><h2 id="思路-2">思路</h2><ol><li><p>把需要翻转的前N位复制进str；</p></li><li><p>遍历s，把前 length()-n 位向前移动n位</p></li><li><p>把str复制进入后n位</p></li></ol><h3 id="代码-2">代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">string <span class="title">reverseLeftWords</span><span class="params">(string s, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="function">string <span class="title">str</span><span class="params">(s,<span class="number">0</span>,n)</span></span>;</span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; s.<span class="built_in">length</span>();i++)</span><br><span class="line">        &#123;   </span><br><span class="line">            <span class="keyword">if</span>(i &lt; s.<span class="built_in">length</span>()-n)</span><br><span class="line">                s[i] = s[i+n];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                s[i] = str[i-(s.<span class="built_in">length</span>()-n)];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+    <summary type="html">&lt;h1&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/&quot;&gt;剑指 Offer 05. 替换空格&lt;/a&gt;&lt;/h1&gt;
+&lt;p&gt;难度简单152收藏分享切换为英文接收动态反馈&lt;/p&gt;
+&lt;p&gt;请实现一个函数，把字符串 &lt;code&gt;s&lt;/code&gt; 中的每个空格替换成&amp;quot;%20&amp;quot;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;示例 1：&lt;/strong&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight perl&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;输入：s = &lt;span class=&quot;string&quot;&gt;&amp;quot;We are happy.&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;输出：&lt;span class=&quot;string&quot;&gt;&amp;quot;We%20are%20happy.&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;&lt;strong&gt;限制：&lt;/strong&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight basic&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;symbol&quot;&gt;0 &lt;/span&gt;&amp;lt;= s 的长度 &amp;lt;= &lt;span class=&quot;number&quot;&gt;10000&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="SnowMoonの刷题记录" scheme="https://www.snowmoon.top/categories/SnowMoon%E3%81%AE%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    
+    
+    <category term="数据结构与算法" scheme="https://www.snowmoon.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="剑指offer" scheme="https://www.snowmoon.top/tags/%E5%89%91%E6%8C%87offer/"/>
+    
+    <category term="字符串" scheme="https://www.snowmoon.top/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
     
   </entry>
   
