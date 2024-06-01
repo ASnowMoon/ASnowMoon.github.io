@@ -49,9 +49,9 @@
       
         <tags>
             
-            <tag> 嵌入式Linux </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> 嵌入式Linux </tag>
             
             <tag> CPU </tag>
             
@@ -1149,9 +1149,11 @@
       
         <tags>
             
-            <tag> 插入排序 </tag>
-            
             <tag> 冒泡排序 </tag>
+            
+            <tag> C语言 </tag>
+            
+            <tag> 指针 </tag>
             
         </tags>
       
