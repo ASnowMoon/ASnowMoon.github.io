@@ -1,0 +1,1019 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>SnowMoon-Haoyu's Blog | SnowMoon-Haoyu's Blog</title><meta name="author" content="雪月"><meta name="copyright" content="雪月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="[TOC]  Linux内核设计与实现  第3章 进程管理  3.1 进程  进程：处于执行期的程序以及相关资源（打开的文件、挂起的信号、内核内部数据、处理器状态等）的总称 线程：是在进程中活动的对象，每个线程都拥有一个独立的程序计数器、进程栈和一组进程寄存器。内核调度的对象是线程，不是进程 Linux不区分进程和线程，对它来说，线程只不过是一种特殊的进程而已  现代操作系统的两种虚拟机制：  虚">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:url" content="https://www.snowmoon.top/2024/06/01/%E4%B9%A6%E7%B1%8D%E5%AD%98%E6%A1%A3-Linux-kernel-notes-master-Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:description" content="[TOC]  Linux内核设计与实现  第3章 进程管理  3.1 进程  进程：处于执行期的程序以及相关资源（打开的文件、挂起的信号、内核内部数据、处理器状态等）的总称 线程：是在进程中活动的对象，每个线程都拥有一个独立的程序计数器、进程栈和一组进程寄存器。内核调度的对象是线程，不是进程 Linux不区分进程和线程，对它来说，线程只不过是一种特殊的进程而已  现代操作系统的两种虚拟机制：  虚">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_7.webp">
+<meta property="article:published_time" content="2024-06-01T05:46:44.947Z">
+<meta property="article:modified_time" content="2024-10-19T15:22:29.418Z">
+<meta property="article:author" content="雪月">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_7.webp"><link rel="shortcut icon" href="/"><link rel="canonical" href="https://www.snowmoon.top/2024/06/01/%E4%B9%A6%E7%B1%8D%E5%AD%98%E6%A1%A3-Linux-kernel-notes-master-Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.staticfile.org/fancyapps-ui/4.0.31/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdnjs.cloudflare.com/ajax/libs/flickr-justified-gallery/2.1.2/fjGallery.min.js',
+      css: 'https://cdnjs.cloudflare.com/ajax/libs/flickr-justified-gallery/2.1.2/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SnowMoon-Haoyu\'s Blog',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-19 23:22:29'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn1.tianli0.top/npm/element-ui@2.15.6/packages/theme-chalk/lib/index.css"><style id="themeColor"></style><style id="rightSide"></style><style id="transPercent"></style><style id="blurNum"></style><style id="settingStyle"></style><span id="fps"></span><style id="defineBg"></style><style id="menu_shadow"></style><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="SnowMoon-Haoyu's Blog" type="application/atom+xml">
+</head><body><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><div class="loading-img"></div><div class="loading-image-dot"></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/Avatar.jpg" onerror="onerror=null;src='/assets/r1.jpg'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">58</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-home"></use></svg><span class="menu_word" style="font-size:17px"> 首页</span></a></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon--article"></use></svg><span class="menu_word" style="font-size:17px"> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-guidang1">                   </use></svg><span class="menu_word" style="font-size:17px"> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-sekuaibiaoqian">                   </use></svg><span class="menu_word" style="font-size:17px"> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-fenlei">                   </use></svg><span class="menu_word" style="font-size:17px"> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-shejiaoxinxi"></use></svg><span class="menu_word" style="font-size:17px"> 杂记</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/social/fcircle/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-pengyouquan">                   </use></svg><span class="menu_word" style="font-size:17px"> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-liuyan">                   </use></svg><span class="menu_word" style="font-size:17px"> 留言板</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/personal/diary/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-love-sign">                   </use></svg><span class="menu_word" style="font-size:17px"> 日记</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">SnowMoon-Haoyu's Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-home"></use></svg><span class="menu_word" style="font-size:17px"> 首页</span></a></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon--article"></use></svg><span class="menu_word" style="font-size:17px"> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-guidang1">                   </use></svg><span class="menu_word" style="font-size:17px"> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-sekuaibiaoqian">                   </use></svg><span class="menu_word" style="font-size:17px"> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-fenlei">                   </use></svg><span class="menu_word" style="font-size:17px"> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-shejiaoxinxi"></use></svg><span class="menu_word" style="font-size:17px"> 杂记</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/social/fcircle/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-pengyouquan">                   </use></svg><span class="menu_word" style="font-size:17px"> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-liuyan">                   </use></svg><span class="menu_word" style="font-size:17px"> 留言板</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/personal/diary/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-love-sign">                   </use></svg><span class="menu_word" style="font-size:17px"> 日记</span></a></li></ul></div></div><center id="name-container"><a id="page-name" href="javascript:scrollToTop()">PAGE_NAME</a></center><div id="nav-right"><div id="search-button"><a class="search faa-parent animated-hover" title="检索站内任何你想要的信息"><svg class="faa-tada icon" style="height:24px;width:24px;fill:currentColor;position:relative;top:6px" aria-hidden="true"><use xlink:href="#icon-valentine_-search-love-find-heart"></use></svg><span> 搜索</span></a></div><a class="meihua faa-parent animated-hover" onclick="toggleWinbox()" title="美化设置-自定义你的风格" id="meihua-button"><svg class="faa-tada icon" style="height:26px;width:26px;fill:currentColor;position:relative;top:8px" aria-hidden="true"><use xlink:href="#icon-tupian1"></use></svg></a><a class="sun_moon faa-parent animated-hover" onclick="switchNightMode()" title="浅色和深色模式转换" id="nightmode-button"><svg class="faa-tada" style="height:25px;width:25px;fill:currentColor;position:relative;top:7px" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon">       </use></svg></a><div id="toggle-menu"><a><i class="fas fa-bars fa-fw"></i></a></div></div></div></nav><div id="post-info"><h1 class="post-title">无题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><svg class="meta_icon post-meta-icon" style="width:30px;height:30px;position:relative;top:10px"><use xlink:href="#icon-rili"></use></svg><span class="post-meta-label">发表于 </span><time class="post-meta-date-created" datetime="2024-06-01T05:46:44.947Z" title="发表于 2024-06-01 13:46:44">2024-06-01</time><span class="post-meta-separator">|</span><svg class="meta_icon post-meta-icon" style="width:18px;height:18px;position:relative;top:5px"><use xlink:href="#icon-gengxin1"></use></svg><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-19T15:22:29.418Z" title="更新于 2024-10-19 23:22:29">2024-10-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><svg class="meta_icon post-meta-icon" style="width:18px;height:18px;position:relative;top:5px"><use xlink:href="#icon-biaoqian"></use></svg><a class="post-meta-categories" href="/categories/%E4%B9%A6%E7%B1%8D%E5%AD%98%E6%A1%A3/">书籍存档</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><svg class="meta_icon post-meta-icon" style="width:25px;height:25px;position:relative;top:8px"><use xlink:href="#icon-charuword"></use></svg><span class="post-meta-label">字数总计:</span><span class="word-count">1.3w</span><span class="post-meta-separator">|</span><svg class="meta_icon post-meta-icon" style="width:20px;height:20px;position:relative;top:5px"><use xlink:href="#icon-shizhong"></use></svg><span class="post-meta-label">阅读时长:</span><span>40分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><svg class="meta_icon post-meta-icon" style="width:25px;height:25px;position:relative;top:5px"><use xlink:href="#icon-eye"></use></svg><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>[TOC]</p>
+<h1 id="linux内核设计与实现"><a class="markdownIt-Anchor" href="#linux内核设计与实现"></a> Linux内核设计与实现</h1>
+<h2 id="第3章-进程管理"><a class="markdownIt-Anchor" href="#第3章-进程管理"></a> 第3章 进程管理</h2>
+<h3 id="31-进程"><a class="markdownIt-Anchor" href="#31-进程"></a> 3.1 进程</h3>
+<blockquote>
+<p>进程：处于执行期的程序以及相关资源（打开的文件、挂起的信号、内核内部数据、处理器状态等）的总称</p>
+<p>线程：是在进程中活动的对象，每个线程都拥有一个独立的程序计数器、进程栈和一组进程寄存器。内核调度的对象是线程，不是进程</p>
+<p>Linux不区分进程和线程，对它来说，线程只不过是一种特殊的进程而已</p>
+</blockquote>
+<p>现代操作系统的两种<strong>虚拟机制</strong>：</p>
+<ul>
+<li>虚拟处理器：给进程一种假象，让它觉得自己在独享处理器</li>
+<li>虚拟内存：让进程在分配和管理内存时觉得自己拥有整个系统的内存资源</li>
+</ul>
+<p><strong>注意</strong>：线程之间可以共享虚拟内存，但是都拥有自己的虚拟处理器</p>
+<h3 id="32-进程描述"><a class="markdownIt-Anchor" href="#32-进程描述"></a> 3.2 进程描述</h3>
+<p>内核把进程的列表存放在叫做<strong>任务队列</strong>的双向循环链表中。链表中的每一项类型为<code>task_struct</code>，称为<strong>进程描述符</strong>的结构，描述了一个具体进程的所有信息</p>
+<h4 id="321-分配进程描述符"><a class="markdownIt-Anchor" href="#321-分配进程描述符"></a> 3.2.1 分配进程描述符</h4>
+<p>Linux通过slab分配器分配<code>task_struct</code>结构，这样能够<strong>对象复用</strong>和<strong>缓存着色</strong>。</p>
+<p>每个任务的<code>thread_info</code>结构在它的内核栈尾端分配，其中<code>task</code>域存放的是指向该任务实际<code>task_struct</code>的指针</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">thread_info</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">task</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">exec_domain</span> *<span class="title">exec_domain</span>;</span></span><br><span class="line">    </span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="322-进程描述符的存放"><a class="markdownIt-Anchor" href="#322-进程描述符的存放"></a> 3.2.2 进程描述符的存放</h4>
+<p>在内核中，访问任务需要获取指向<code>task_struct</code>结构的指针，通过<code>current</code>宏查找到当前进程的进程描述符，这个查找的<strong>速度</strong>很重要</p>
+<p>有的硬件体系结构拿出一个专门的寄存器存放当前进程的<code>task_struct</code>指针，而有些像x86的体系结构（寄存器不太富余），就只能在<strong>内核栈的尾部</strong>创建<code>thread_info</code>结构，通过计算偏移量间接找到<code>task_struct</code>结构</p>
+<h4 id="323-进程状态"><a class="markdownIt-Anchor" href="#323-进程状态"></a> 3.2.3 进程状态</h4>
+<p>进程描述符中的<code>state</code>域描述了进程的当前状态。系统中进程的状态包括：</p>
+<ul>
+<li><strong>TASK_RUNNING</strong>(运行或就绪)：进程是可执行的</li>
+<li><strong>TASK_INTERRUPTIBLE</strong>(可中断睡眠)</li>
+<li><strong>TASK_UNINTERRUPTIBLE</strong>(不可中断睡眠)</li>
+<li><strong>__TASK_TRACED</strong>：被其他进程跟踪的进程，例如ptrace调试的程序</li>
+<li><strong>__TASK_STOPPED</strong>：被暂停执行的任务，通常在接收到<strong>SIGSTOP</strong>,<strong>SIGTSTP</strong>,<strong>SIGTTIN</strong>,<strong>SIGTTOU</strong>等信号时</li>
+</ul>
+<h4 id="324-设置当前状态"><a class="markdownIt-Anchor" href="#324-设置当前状态"></a> 3.2.4 设置当前状态</h4>
+<p>使用<code>set_task_state(task,state)</code>函数</p>
+<h4 id="326-进程家族树"><a class="markdownIt-Anchor" href="#326-进程家族树"></a> 3.2.6 进程家族树</h4>
+<p>所有的进程都是PID为1的init进程的后代，内核在系统启动的最后阶段启动init进程，该进程读取系统的初始化脚本（initsctript）并执行其他的相关程序，最终完成系统启动的整个过程</p>
+<p>每个<code>task_struct</code>结构都包含一个指向其父进程<code>task_struct</code>结构的<code>parent</code>指针，还包含一个<code>children</code>的子进程链表</p>
+<h3 id="33-进程创建"><a class="markdownIt-Anchor" href="#33-进程创建"></a> 3.3 进程创建</h3>
+<p>Unix将进程的创建分解到两个单独的函数中去执行：fork()和exec()</p>
+<p>首先，fork()通过拷贝当前进程创建一个子进程，exec()负责读取可执行文件并将其载入地址空间开始运行</p>
+<h4 id="331-写时拷贝"><a class="markdownIt-Anchor" href="#331-写时拷贝"></a> 3.3.1 写时拷贝</h4>
+<p>Linux的fork()使用<strong>写时拷贝</strong>页实现，是一种推迟甚至免除拷贝数据的技术，在创建子进程时，内核并不复制整个进程地址空间，而是让父子进程共享一个拷贝，只有在写入的时候，数据才会被复制。在页根本不会被写入的情况下，例如fork()之后马上exec()，进程的地址空间就不用复制了</p>
+<p>fork()的实际开销：复制父进程的页表以及给子进程创建唯一的进程描述符</p>
+<h4 id="332-fork"><a class="markdownIt-Anchor" href="#332-fork"></a> 3.3.2 fork()</h4>
+<p>Linux通过clone()实现fork()，clone()通过一系列参数指明父子进程需要共享的资源。fork(),vfork()和__clone()库函数都根据各自需要的参数标志去调用clone()，然后在clone()中调用do_fork()</p>
+<p>do_fork()调用copy_process()函数，然后让进程运行。copy_process()函数的过程：</p>
+<ul>
+<li>调用<code>dup_task_struct()</code>为进程创建一个内核栈、thread_info结构和task_struct，与父进程的值相同，此时父子进程的描述符是相同的</li>
+<li>检查创建子进程后，当前用户拥有的进程数不超过分配资源限制</li>
+<li>子进程开始将自己与父进程区分开：进程描述符内的很多成员清0或者初始化，大部分的数据未被修改</li>
+<li>子进程状态设置为UNINTERRUPTIBAL，保证它不会投入运行</li>
+<li>copy_process()调用copy_flags()更新task_struct的flags成员：其中代表进程是否拥有超级用户权限的PF_SUPERPRIV标志清0，代表进程还没有调用exec()函数的PF_FORKNOEXEC的标志被设置</li>
+<li>调用alloc_pid()为子进程分配PID</li>
+<li>根据clone()传递进来的参数标志，copy_process()拷贝或共享打开的文件、文件系统信息、信号处理函数、进程地址空间和命名空间等。（一般这些资源会被进程的<strong>所有线程共享</strong>）</li>
+<li>最后，copy_process()做扫尾工作并返回一个指向子进程的指针</li>
+</ul>
+<p>copy_process()返回到do_fork()函数，如果copy_process()返回成功，新创建的子进程被唤醒并投入运行</p>
+<p><strong>注意</strong>：内核有意选择子进程首先执行，因为一般子进程会调用exec()函数，这样可以避免写时拷贝的额外开销</p>
+<h4 id="333-vfork"><a class="markdownIt-Anchor" href="#333-vfork"></a> 3.3.3 vfork()</h4>
+<p>除了<strong>不拷贝父进程的页表项</strong>，vfork()和fork()的功能相同</p>
+<h3 id="34-线程在linux中的实现"><a class="markdownIt-Anchor" href="#34-线程在linux中的实现"></a> 3.4 线程在Linux中的实现</h3>
+<p>Linux实现线程的机制非常独特，从内核的角度来说，并没有线程这个概念，Linux把所有的<strong>线程当做进程</strong>来实现。线程仅仅被视为一个与其他进程共享某些资源的进程，拥有唯一隶属于自己的<code>task_struct</code>。</p>
+<p>Windows和Sun Solaris等系统都提供了专门支持线程的机制（将线程称为<strong>轻量级进程</strong>），相较于重量级的进程，线程被抽象成一种耗费较少资源，运行迅速的执行单元。而对于Linux，线程只是<strong>进程间共享资源的一种手段</strong>。</p>
+<p>举例说明：对于一个包含四个线程的进程，在提供专门线程支持的系统，通常会有一个包含指向四个不同线程的指针的进程描述符，该描述符负责描述像地址空间、打开的文件等共享资源。而Linux只是创建四个进程并分配四个普通的<code>task_struct</code>结构，并指定它们共享某些资源。</p>
+<h4 id="341-创建线程"><a class="markdownIt-Anchor" href="#341-创建线程"></a> 3.4.1 创建线程</h4>
+<p>线程的创建和普通进程类似，只是需要在调用clone()时传递一些参数标志来指明共享的资源：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clone(CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>调用的结果和fork()差不多，只是父子进程<strong>共享地址空间、文件系统资源、打开的文件描述符和信号处理程序</strong></p>
+<p>传递给clone()的参数标志决定了<strong>新创建进程的行为方式和父子进程之间共享的资源种类</strong>，详见<strong>P29 表3-1</strong></p>
+<h4 id="342-内核线程"><a class="markdownIt-Anchor" href="#342-内核线程"></a> 3.4.2 内核线程</h4>
+<blockquote>
+<p>内核线程用于内核在后台执行一些任务，他们是独立运行在内核空间的标准进程</p>
+<p>内核线程和普通进程的区别是：<strong>内核线程没有独立的地址空间</strong>（指向地址空间的mm指针为NULL），它们只在内核空间运行，不切换到用户空间。</p>
+</blockquote>
+<p>例如软中断ksoftirqd和flush都是内核线程的例子</p>
+<p>内核是通过从kthreadd内核进程衍生出所有新的内核线程，从现有内核线程创建一个新的内核线程的方法如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> task_struct *<span class="title function_">thread_create</span><span class="params">(<span class="type">int</span> (*threadfn)(<span class="type">void</span> *data), <span class="type">void</span> *data, <span class="type">const</span> <span class="type">char</span> namefmt[], ...)</span></span><br></pre></td></tr></table></figure>
+<p>新的内核线程是由kthreadd进程通过clone()系统调用创建，它们将运行threadfn函数，传递的参数是data，进程命名为namefmt。</p>
+<p>新创建的进程处于不可运行状态，需要通过wake_up_process()唤醒来运行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> task_struct *<span class="title function_">thread_run</span><span class="params">(<span class="type">int</span> (*threadfn)(<span class="type">void</span> *data), <span class="type">void</span> *data, <span class="type">const</span> <span class="type">char</span> namefmt[], ...)</span></span><br></pre></td></tr></table></figure>
+<p><code>thread_run</code>方法先调用<code>thread_run</code>方法，然后调用<code>wake_up_process()</code></p>
+<p>内核线程启动后一直运行直到调用<code>do_exit()</code>退出，或者内核的其他部分调用<code>kthread_stop()</code>退出（传递给kthread_stop()的参数是kthread_create()返回的task_struct结构地址）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">kthread_stop</span><span class="params">(<span class="keyword">struct</span> task_struct *k)</span></span><br></pre></td></tr></table></figure>
+<h3 id="35-进程终结"><a class="markdownIt-Anchor" href="#35-进程终结"></a> 3.5 进程终结</h3>
+<p>进程终结的几种情况：</p>
+<ul>
+<li>显式的调用<code>exit()</code></li>
+<li>隐式地在某个程序的主函数返回（C语言在main(）函数的返回点防止调用exit()的代码）</li>
+<li>接收到不能处理也不能忽略的信号或者异常时，被动地终结</li>
+</ul>
+<p>不管进程如何终结，大部分都是靠<code>do_exit()</code>（定义在kernel/exit.c）来完成，它的主要工作包括：</p>
+<ul>
+<li>将task_struct的标志成员设置为PF_EXITING</li>
+<li>调用<code>del_timer_sync()</code>删除任一内核定时器，确保没有定时器在排队，且没有定时器处理程序在运行</li>
+<li>如果BSD记账功能开启，调用<code>acct_update_intergrals()</code>来输出记账信息</li>
+<li>调用<code>exit_mm()</code>函数释放进程占用的mm_struct，如果没有别的进程在使用它（没有被共享），就彻底释放它们</li>
+<li>调用<code>sem__exit()</code>函数，如果进程排队等候IPC信号，则它离开队列</li>
+<li>调用<code>exit_files()</code>和<code>exit_fs()</code>来分别递减文件描述符和文件系统数据的引用计数，如果引用计数降为0，就可以直接释放</li>
+<li>接着将存放在task_struct的exit_code成员中的任务退出代码置为<code>exit()</code>提供的退出代码。<strong>退出代码存放在这里供父进程检索</strong></li>
+<li>调用<code>exit_notify()</code>向父进程发送信号，给自己的子进程重新找<strong>养父</strong>（为进程组的其他线程或者init进程），并把进程的状态（task_struct中的exit_state）设置为EXIT_ZOMBIE</li>
+<li>调用<code>schedule()</code>切换到新的进程，因为EXIT_ZOMBIE状态的进程不会再被调度，所以这是进程执行的最后一段代码。<code>do_exit()</code>永不返回</li>
+</ul>
+<p>至此，与进程相关联的所有资源都释放掉了（假设该进程是这些资源的唯一使用者），进程不可运行且处于EXIT_ZOMBIE状态，他占用的所有内存包括<strong>内核栈、thread_info结构和task_struct结构</strong>。此时存在的唯一目的就是向它的父进程提供信息用于检索，父进程通知内核都是无关的信息后，进程所持有的剩余内存被释放，归还给系统使用</p>
+<h4 id="351-删除进程描述符"><a class="markdownIt-Anchor" href="#351-删除进程描述符"></a> 3.5.1 删除进程描述符</h4>
+<p>在调用<code>do_exit()</code>后，进程处于僵死状态不再运行，但是系统保留了它的进程描述符，这样可以<strong>让系统能在进程中杰后仍能获取它的信息</strong>。可以看到，<strong>进程终结时所做的清理工作和进程描述符的删除是分开执行的</strong>，在父进程获得已终结的子进程信息后，通知内核它不关注这些信息后，子进程的task_struct结构被释放</p>
+<p>回收子进程状态是通过wait()一族函数实现，他们都是通过唯一的系统调用<code>wait4()</code>来实现，它首先会挂起调用它的进程，直到有一个子进程退出，此时函数返回子进程的PID，调用<strong>该函数提供的指针指向子进程的退出代码</strong></p>
+<p>当需要释放进程描述符时，会调用<code>release_task()</code>函数，它的工作包括：</p>
+<ul>
+<li>调用<code>__exit_signal()</code>，该函数调用<code>_unhash_process()</code>，后者再调用<code>detach_pid()</code>从pidhash上删除该进程，同时从任务列表中删除该进程</li>
+<li><code>__exit_signal()</code>函数释放目前僵死进程所使用的所有剩余资源，进行最终统计和记录</li>
+<li>如果这个进程是进程组的最后一个进程，且领头进程（进程组首进程）已经死掉，那么<code>release_task()</code>就通知僵死的领头进程的父进程</li>
+<li><code>release_task()</code>调用<code>put_task_struct()</code>释放进程内核栈和thread_info结构所占的内存页，并释放task_struct占用的slab高速缓存</li>
+</ul>
+<p>至此，进程描述符和所有进程独享的资源全部释放</p>
+<h4 id="352-孤儿进程造成的进退维谷"><a class="markdownIt-Anchor" href="#352-孤儿进程造成的进退维谷"></a> 3.5.2 孤儿进程造成的进退维谷</h4>
+<p>当父进程在子进程之前推出时，需要保证子进程找到一个新的父进程，否则这些孤儿进程就会在退出时一直处于僵死状态。</p>
+<p>解决方法是：给子进程在当前进程组找一个进程作为父亲，如果不行，就让init进程作为父进程</p>
+<p>在<code>do_exit()</code>中会调用<code>exit_nodify()</code>，该函数调用<code>forget_original_parent()</code>，后者再调用<code>find_new_reaper()</code>进程寻父过程。</p>
+<p>代码中会遍历两个链表：<strong>子进程链表和ptrace子进程链表</strong>，给每个子进程设置新的父进程。</p>
+<p><strong>注意</strong>：当一个进程被跟踪时，它的临时父亲被设置为调试进程，如果他们真正的父进程退出，系统会为它及其兄弟进程找一个父进程。以前的内核版本中需要遍历系统所有的进程来找到这些子进程，现在只需要遍历这个单独ptrace的子进程链表，减轻了遍历的时间消耗</p>
+<h2 id="第4章-进程调度"><a class="markdownIt-Anchor" href="#第4章-进程调度"></a> 第4章 进程调度</h2>
+<blockquote>
+<p>进程调度程序：在可运行态进程之间分配有限处理器时间资源的<strong>内核子系统</strong>。</p>
+</blockquote>
+<h3 id="41-多任务"><a class="markdownIt-Anchor" href="#41-多任务"></a> 4.1 多任务</h3>
+<blockquote>
+<p>多任务操作系统是同时并发地交互执行多个进程的操作系统，能使多个进程处于阻塞或者睡眠状态，这些任务位于内存中，但是并不处于可运行状态，他们利用内核阻塞自己，直到某一时间（键盘输入、网络数据等）发生。</p>
+</blockquote>
+<p>多任务系统分为两类：</p>
+<ul>
+<li>非抢占式多任务</li>
+<li>抢占式多任务</li>
+</ul>
+<p>Linux提供了抢占式的多任务模式，由调度程序决定什么时候停止一个进程的运行，以便其他进程得到运行机会，这个强制的挂起动作叫做抢占。</p>
+<p>时间片：可运行进程在被抢占之前预先设置好的处理器时间段。</p>
+<p>非抢占任务模式下，除非进程自己主动停止运行，否则他会一直运行。进程主动挂起自己的操作称为<strong>让步</strong>（yielding）</p>
+<p>非抢占任务模式的缺点：调度程序无法对每个进程该执行多长时间做出统一规定，进程独占的CPU时间可能超出预期，另外，一个绝不做出让步的悬挂进程就能使系统崩溃</p>
+<h3 id="42-linux的进程调度"><a class="markdownIt-Anchor" href="#42-linux的进程调度"></a> 4.2 Linux的进程调度</h3>
+<p>2.6内核系统开发初期，为了提供对交互程序的调度性能，引入新的调度算法，最为著名的是<strong>反转电梯最后期限调度算法</strong>（RSDL），在2.6.3版本替代了<strong>O(1)调度算法</strong>，最后被称为<strong>完全公平调度算法(CFS)</strong></p>
+<h3 id="43-策略"><a class="markdownIt-Anchor" href="#43-策略"></a> 4.3 策略</h3>
+<h4 id="431-io消耗型和cpu消耗型的进程"><a class="markdownIt-Anchor" href="#431-io消耗型和cpu消耗型的进程"></a> 4.3.1 I/O消耗型和CPU消耗型的进程</h4>
+<p>CPU消耗型进程把时间大多用在了执行代码上，不属于I/O驱动类型，从系统响应速度考虑，调度策略往往是降低它们的调度频率，而延长其运行时间</p>
+<p>调度策略的主要矛盾是：<strong>进程响应迅速和最大系统利用率（高吞吐量）</strong></p>
+<p>Unix系统的调度程序更倾向于I/O消耗型程序，以提供更好的响应速度。Linux为了保证交互式应用和桌面系统的性能，对进程的响应做了优化（缩短响应时间），更倾向于调度I/O消耗型进程。</p>
+<h4 id="432-进程优先级"><a class="markdownIt-Anchor" href="#432-进程优先级"></a> 4.3.2 进程优先级</h4>
+<p>调度程序总是选择时间片为用尽而且优先级最高的进程运行</p>
+<p>Linux采用了两种不同的优先级范围：</p>
+<ul>
+<li>第一种用nice值，范围-20~+19，默认值0；越大的nice值优先级越低。相比高nice值（低优先级）的进程，低nice值（高优先级）的进程可以获得更多的处理器时间</li>
+<li>第二种是实时优先级，数值可配置，默认范围是0~99，数值越大优先级越高。任何实时进程的优先级都比普通进程高，实时优先级和nice优先级处于互不相交的范畴</li>
+</ul>
+<h4 id="433-时间片"><a class="markdownIt-Anchor" href="#433-时间片"></a> 4.3.3 时间片</h4>
+<p>调度策略选择合适的时间片并不简单，时间片太短会增加进程切换的处理器消耗，太长会导致系统的交互响应变差</p>
+<p>Linux的CFS调度器没有直接分配时间片到进程，它是将<strong>处理器的使用比</strong>划分给进程，所以进程所获得的时间片时间是和**系统负载（系统活跃的进程数）**密切相关的</p>
+<p>Linux中新的CFS调度器，它的进程抢占时机取决于<strong>新的可运行程序消耗了多少处理器使用比</strong>。如果消耗的处理器使用比比当前进程小，则新进程投入运行（当前进程被强占），否则，推迟运行。</p>
+<p><strong>总而言之，CFS会先根据进程的nice值预期设定每个进程的cpu使用比，而在进程调度时，需要将新的被唤醒进程实际消耗的cpu使用比和当前进程比较，如果更小，则抢占当前进程，投入运行，否则，推迟运行</strong></p>
+<h3 id="44-linux调度算法"><a class="markdownIt-Anchor" href="#44-linux调度算法"></a> 4.4 Linux调度算法</h3>
+<h4 id="441-调度器类"><a class="markdownIt-Anchor" href="#441-调度器类"></a> 4.4.1 调度器类</h4>
+<p>Linux调度器以模块提供，允许不同类型的进程针对性地选择调度算法，这种模块化结构成为<strong>调度器类</strong>，它允许多种不同的可动态添加的调度算法并存，调度属于自己范畴的进程。</p>
+<p>完全公平调度(CFS)是一个针对普通进程的调度类，称为<strong>SCHED_NORMAL</strong>，具体算法实现定义在文件kernel/sched_fair.c中</p>
+<h4 id="442-unix系统中的进程调度"><a class="markdownIt-Anchor" href="#442-unix系统中的进程调度"></a> 4.4.2 Unix系统中的进程调度</h4>
+<p>传统Unix系统调度：进程启动会有默认的时间片，具有高优先级的进程将运行的更频繁，而且被赋予更多的时间片。存在的问题如下：</p>
+<ul>
+<li>nice映射到时间片，就会将nice单位值对应到处理器的绝对时间，这样将会导致进程切换无法最优化进行，同时会导致进程获得的处理器时间很大程度上取决于其nice初始值。场景实例详见<strong>P40</strong></li>
+<li>时间片一般为系统定时器节拍的整数倍，它会随着定时器节拍改变</li>
+</ul>
+<p>CFS采用的方法是：<strong>完全摒弃时间片而是分配给进程一个处理器使用比重</strong>，确保了调度中恒定的公平性，切换频率是在动态变化中</p>
+<h4 id="443-公平调度"><a class="markdownIt-Anchor" href="#443-公平调度"></a> 4.4.3 公平调度</h4>
+<blockquote>
+<p>完美的多任务系统：每个进程获得1/<em>n</em>的处理器时间（<em>n</em>是指可运行进程的数量），同时调度给他们无限小的时间周期（交互性会很好）</p>
+</blockquote>
+<p>CFS的做法：<strong>允许每个进程运行一段时间、循环轮转、选择运行最少的进程作为下一个运行进程</strong>，在所有进程总数基础上计算一个进程应该运行多久，不在依靠nice值计算绝对的时间片，而是作为<strong>进程获得的处理器运行比的权重</strong>，越高的nice值获得更低的处理器使用权重。</p>
+<p>每个进程按照其权重在全部可运行进程中所占比例的“时间片”来运行，由于越小的调度周期（重新调度所有可运行进程所花的时间）交互性会越好，也就更接近完美的所任务，CFS为调度周期设定一个目标（无限小的调度周期近似值）。</p>
+<p>当可运行任务数量区域无限大时，他们所获得的处理器使用比和时间片将趋近于0（这会增加CPU的切换消耗）。因此，CFS引入每个进程获得的时间片底线，称为最小粒度。而当进程数非常多时，由于这个最小粒度的存在，调度周期会比较长，因此CFS并非完美的多任务。</p>
+<p><strong>总之，在CFS中任何进程所获得的的处理器时间是由它自己和其他所有可运行进程nice值的相对差值决定的，nice值对时间片的作用不再是算数加权，而是几何加权，CFS是近乎完美的多任务</strong></p>
+<h3 id="45-linux调度的实现"><a class="markdownIt-Anchor" href="#45-linux调度的实现"></a> 4.5  Linux调度的实现</h3>
+<p>Linux调度主要关注四个部分：</p>
+<ul>
+<li>时间记账</li>
+<li>进程选择</li>
+<li>调度器入口</li>
+<li>睡眠和唤醒</li>
+</ul>
+<h4 id="451-时间记账"><a class="markdownIt-Anchor" href="#451-时间记账"></a> 4.5.1 时间记账</h4>
+<ol>
+<li>
+<p>调度器实体结构</p>
+<p>CFS不再有时间片的概念，但是它会维护每个进程运行的时间记账，需要确保每个进程在分配给它的处理器时间内运行。CFS使用<strong>调度器实体</strong>（文件&lt;linux/sched.h&gt;中的struct_sched_entity中）来追踪进程运行记账</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sched_entity</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">load_weight</span> <span class="title">load</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> <span class="title">run_node</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">group_node</span>;</span></span><br><span class="line">    ...</span><br><span class="line">    u64 vruntime;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>调度器实体结构作为一个名为se的成员变量，嵌入在进程描述符task_struct内</p>
+</li>
+<li>
+<p>虚拟实时</p>
+<p>vruntime变量存放进程的虚拟运行时间，这个数值的计算是经过所有可运行进程总数的标准化，以ns为单位，与定时器节拍无关</p>
+<p>定义在kernel/sched_fair.h文件中的update_curr()函数实现记账功能，它是系统定时器周期性调用，无论进程是在可运行态还是阻塞状态</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">update_curr</span><span class="params">(<span class="keyword">struct</span> cfs_rq *cfs_rq)</span></span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    __update_curr(cfs_rq, curr, delta_exec)</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="452-进程选择"><a class="markdownIt-Anchor" href="#452-进程选择"></a> 4.5.2 进程选择</h4>
+<p><strong>CFS</strong>算法调度核心：<strong>当CFS需要选择下一个运行进程时，选择具有最小vruntime的进程</strong></p>
+<p><strong>CFS</strong>使用红黑树组织可运行进程队列，红黑树的键值为vruntime，检索对应节点的时间复杂度为对数级别</p>
+<ol>
+<li>
+<p>挑选下一个任务</p>
+<p>CFS选择进程的算法为：运行rbtree中最左边叶子结点代表的那个进程。实现的函数是<code>__pick_next_entity()</code>，定义在kernel/sched_fair.c中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">sched_entity</span> *__<span class="title">pick_next_entity</span>(<span class="keyword">struct</span> <span class="title">cfs_rq</span> *<span class="title">cfs_rq</span>)</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> *<span class="title">left</span> =</span> cfs_rq-&gt;rb_leftmost;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(!left)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> rb_entry(left, <span class="keyword">struct</span> sched_entity, run_node)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：如果该函数返回值为NULL，说明树中没有任何节点，代表没有可运行进程，CFS调度器选择idle任务运行</p>
+</li>
+<li>
+<p>向树中加入进程</p>
+<p>当<strong>进程变为可运行状态（被唤醒）或者通过fork()调用第一次创建进程时</strong>，会将进程加入到rbtree。<code>enqueue_entity()</code>函数实现了这个过程，代码详见P45</p>
+</li>
+<li>
+<p>从树中删除进程</p>
+<p>删除动作发生在<strong>进程阻塞（变为不可运行状态）或者终止（结束运行）</strong>，是由函数<code>dequeue_entity()</code>函数完成</p>
+</li>
+</ol>
+<h4 id="453-调度器入口"><a class="markdownIt-Anchor" href="#453-调度器入口"></a> 4.5.3 调度器入口</h4>
+<p>进程调度的入口函数是<code>schedule()</code>，定义在kernel/sched.c文件，<strong>它是内核其他部分调用进程调度器的入口</strong>。</p>
+<p><code>schedule()</code>通常需要和一个调度类相关联，它会先找到一个最高优先级的调度类，后者要有自己的可运行进程队列，然后这个调度类决定下一个可运行的进程。</p>
+<p>因此，<code>schedule()</code>函数的逻辑比较简单，它的主要逻辑就是调用<code>pick_next_task()</code>，这个函数会以优先级为序，从高到低一次检查每个调度器类，从最高优先级的调度类中选择下一个运行的进程。详细代码见<strong>P48</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="keyword">struct</span> <span class="title class_">task_struct</span> *<span class="built_in">pick_next_task</span>(<span class="keyword">struct</span> rq *rq)</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个调度类都实现了<code>pick_next_task()</code>函数，它会返回指向下一个可运行进程的指针，在CFS中<code>pick_next_task()</code>会调用<code>pick_next_entity()</code>，该函数会调用 [4.5.2节](#4.5.2 进程选择) 提到的<code>__pick_next_entity()</code></p>
+<p><strong>函数优化</strong>：由于CFS是普通进程的调度类，而系统绝大多数进程是普通进程。函数使用了一个小技巧，当所有可运行进程数等于CFS类对应的可运行进程数时，直接返回CFS调度类的下一个运行进程</p>
+<h4 id="454-睡眠和唤醒"><a class="markdownIt-Anchor" href="#454-睡眠和唤醒"></a> 4.5.4 睡眠和唤醒</h4>
+<p>睡眠（或阻塞）的进程处于一个特殊的不可运行状态。</p>
+<p>进程睡眠时，进程把自己标记为休眠状态，从可执行进程对应的红黑树中移出，放入等待队列，然后调用<code>schedule()</code>调度下一个进程；唤醒的过程相反：进程被设置成可执行状态，然后从等待队列移到可执行红黑树中</p>
+<ol>
+<li>
+<p>等待队列</p>
+<p>等待队列是由<strong>等待某些事件发生的进程组成的简单链表</strong>，内核用<code>wake_queue_head_t</code>代表等待队列</p>
+<p>进程加入等待队列的详细过程和代码详见<strong>P50</strong></p>
+</li>
+<li>
+<p>唤醒</p>
+<p>唤醒操作通过函数<code>wake_up()</code>进行，它会唤醒等待队列上的所有进程，它调用函数<code>tey_to_wake_up()</code>将进程状态设置为<strong>TASK_RUNNING</strong>，调用<code>enqueue_task()</code>将此进程放入红黑树，如果被唤醒的进程比当前正在执行的进程优先级高（这里不是指nice值，而是根据CFS调度的cpu使用比规则得出的结果），还要设置进程的need_resched标志。</p>
+<p><strong>注意</strong>：通常哪段代码促使等待条件达成，它就要负责调用<code>wake_up()</code>函数。例如，当磁盘数据到来时，VFS需要负责对等待队列调用<code>wake_upe()</code>。</p>
+</li>
+</ol>
+<h3 id="46-抢占和上下文切换"><a class="markdownIt-Anchor" href="#46-抢占和上下文切换"></a> 4.6 抢占和上下文切换</h3>
+<p>上下文切换由定义在kernel/sched.c中的context_switch()函数负责处理。每当一个新的进程被选出来投入运行的时候，schedule()会调用函数context_switch()，后者完成两项工作：</p>
+<ul>
+<li>调用声明在&lt;asm/mmu_context.h&gt;中的switch_mm()函数，它负责将虚拟内存从上一个进程映射切换到新进程中</li>
+<li>调用声明在&lt;asm/system.h&gt;的switch_to()，负责从上一个进程的处理器状态切换到新进程的处理器状态，其中包括<strong>保存、恢复栈信息和寄存器信息</strong></li>
+</ul>
+<p>内核提供一个<code>need_resched</code>标志标明是否需要重新执行一次调度，2.2以前放在全局变量，2.2~2.4在每个进程的进程描述符中（由于current宏速度很快并且进程描述符通常是在高速缓存中，访问<code>task_struct</code>内的数值比全局变量更快），而在2.6版本中，它放在thread_info结构体中，用一个特别的标志变量的一位来表示。</p>
+<p><code>need_resched</code>标志被设置的时机：</p>
+<ul>
+<li>当某个进程应该被抢占时，scheduler_tick()函数会设置这个标志</li>
+<li>当一个优先级更高的进程进入可运行状态时，try_to_wake_up()也会设置这个标志</li>
+</ul>
+<p>然后内核检查该标志，确认被设置后，会调用schedule()切换到一个新进程</p>
+<h4 id="461-用户抢占"><a class="markdownIt-Anchor" href="#461-用户抢占"></a> 4.6.1 用户抢占</h4>
+<p>内核在中断处理程序或者系统调用返回后，都会检查<code>need_resched</code>标志。从中断处理程序或者系统调用返回的返回路径都是跟体系结构相关，在entry.S(包含内核入口和退出的代码)文件通过汇编实现</p>
+<p>当内核将返回用户空间的时候，如果<code>need_resched</code>标志被设置，会导致schedule()调用，会发生用户抢占</p>
+<p>因此，用户抢占发生在以下情况：</p>
+<ul>
+<li>系统调用返回用户空间时</li>
+<li>中断处理程序返回用户空间时</li>
+</ul>
+<h4 id="462-内核抢占"><a class="markdownIt-Anchor" href="#462-内核抢占"></a> 4.6.2 内核抢占</h4>
+<blockquote>
+<p>在没有内核抢占的系统中，调度程序没有办法在一个内核级的任务正在执行时重新调度，内核中的任务以协作方式调度，不具备抢占性，内核代码一直执行到完成（返回用户空间）或者阻塞为止</p>
+</blockquote>
+<p>在2.6版本，Linux内核引入抢占能力，只要重新调度是<strong>安全的</strong>（没有持有锁的情况），内核可以在任何时间抢占正在执行的任务。</p>
+<p>在每个进程的thread_info结构中加入preempt_count计数，代表进程使用锁的个数。</p>
+<ul>
+<li>在中断返回内核空间的时候，会检查need_resched和preempt_count，如果need_resched被设置且preempt_count为0，则可以进行安全的抢占，调度程序schedule()会被调用，否则，中断直接返回当前进程</li>
+<li>如果进程持有的所有锁被释放，preempt_count会减为0，此时释放锁的代码会检查need_resched标志，如果被设置，则调用schedule()</li>
+</ul>
+<p>因此，内核抢占发生在：</p>
+<ul>
+<li>中断处理程序正在执行，且返回内核空间之前</li>
+<li>进程在内核空间释放锁的时候</li>
+<li>内核任务显式的调用schedule()</li>
+<li>内核中的任务阻塞</li>
+</ul>
+<h3 id="47-实时调度策略"><a class="markdownIt-Anchor" href="#47-实时调度策略"></a> 4.7 实时调度策略</h3>
+<blockquote>
+<p>Linux提供了一种软实时的工作方式</p>
+<p>软实时的定义：内核调度进程尽力使进程在规定时间到来前运行，但是内核不能总是满足这些进程的要求</p>
+<p>硬实时的定义：保证在一定条件下，可以完全满足进程在规定的时间内完成操作</p>
+</blockquote>
+<p>Linux提供了两种实时调度策略：SCHED_FIFO和SCHED_RR，普通的、非实时的调度策略是SCHED_NORMAL。实时策略不被CFS调度器管理，而是被一个特殊的实时调度器管理</p>
+<p>SCHED_FIFO实现了<strong>简单的、先入先出的调度算法</strong>，它不使用时间片，SCHED_RR和前者大致相同，不同点在于它使用时间片，是一种<strong>实时轮转调度算法</strong></p>
+<h2 id="第5章-系统调用"><a class="markdownIt-Anchor" href="#第5章-系统调用"></a> 第5章 系统调用</h2>
+<h2 id="第6章-内核数据结构"><a class="markdownIt-Anchor" href="#第6章-内核数据结构"></a> 第6章 内核数据结构</h2>
+<h2 id="第7章-中断和中断处理"><a class="markdownIt-Anchor" href="#第7章-中断和中断处理"></a> 第7章 中断和中断处理</h2>
+<h2 id="第8章-下半部和推后执行的工作"><a class="markdownIt-Anchor" href="#第8章-下半部和推后执行的工作"></a> 第8章 下半部和推后执行的工作</h2>
+<h2 id="第12章-内存管理"><a class="markdownIt-Anchor" href="#第12章-内存管理"></a> 第12章 内存管理</h2>
+<blockquote>
+<p>内核不能像用户空间那样奢侈的使用内存，获取内存币用户空间复杂很多</p>
+</blockquote>
+<h3 id="121-页"><a class="markdownIt-Anchor" href="#121-页"></a> 12.1 页</h3>
+<p>内核把物理页作为内核管理的基本单元，内存管理单元（MMU）是管理内存并将虚拟内存转换为物理内存的硬件，它以页为单位来管理系统中的页表</p>
+<p>结构体struct page表示系统中的每个物理页</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">page</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span>        flags,</span><br><span class="line">    <span class="type">atomic_t</span>             _count,</span><br><span class="line">    <span class="type">atomic_t</span>             _mapcount,</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span>        private,</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">address_space</span> *<span class="title">mapping</span>,</span></span><br><span class="line"><span class="class">    <span class="title">pgoff_t</span>              <span class="title">index</span>,</span></span><br><span class="line"><span class="class">    <span class="keyword">struct</span> <span class="title">list_head</span>     <span class="title">lru</span>,</span></span><br><span class="line"><span class="class">    <span class="title">void</span>                 *<span class="title">virtual</span></span></span><br><span class="line"><span class="class">&#125;;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>flags</code>域，用来存放页的状态（包括是不是脏的，是不是锁定在内存），每一位单独表示一种状态，至少可以表示32中不同的状态</li>
+<li><code>_count</code>域，存放页的引用计数，-1时内核没有引用该页，在新的内存分配中可以使用。内核调用<code>page_count()</code>检查该域，返回0表示页空闲，返回正整数表示正在使用</li>
+<li>页可以由页缓存使用（此时，mapping域指向页关联的address_space对象），或者作为私有数据（<code>private</code>指向），或者作为进程页表中的映射</li>
+<li><code>virtual</code>域，页的虚拟地址，当页在高端内存（不会永久映射到内核空间）中时，这个域为<code>NULL</code></li>
+</ul>
+<p><strong>注意</strong>：</p>
+<ol>
+<li><code>page</code>结构与物理页相关，并非与虚拟页相关，它仅仅描述当前时刻在相关物理中存放的数据（由于交换等原因，关联的数据继续存在，但是和当前物理页不再关联），它对于页的描述是短暂的</li>
+<li>页的拥有者可能是用户空间进程、动态分配的内核数据，静态内核数据或者页高速缓存等</li>
+</ol>
+<h3 id="122-区"><a class="markdownIt-Anchor" href="#122-区"></a> 12.2 区</h3>
+<p>Linux主要使用四种区：</p>
+<ul>
+<li>ZONE_DMA，其中包含的页只能进行DMA操作（直接内存访问）</li>
+<li>ZONE_DMA32，和ZONE_DMA类似，不同之处是只能被32位设备访问</li>
+<li>ZONE_NORMAL，包含能够正常映射的页</li>
+<li>ZONE_HIGHMEM，包含“高端内存”，其中的页不能永久地映射到内核空间</li>
+</ul>
+<blockquote>
+<p>高端内存，由于一些体系结构的物理内存比虚拟内存大的多，为了充分利用物理内存，将物理内存中的部分区域划分为高端内存，他们不能永久地映射到内核空间，而是动态的映射</p>
+<p>在32位x86体系中，ZONE_HIGHMEM为高于896MB的所有物理内存，其余内存为低端内存，其中ZONE_NORMAL为16MB到896MB的物理内存，ZONE_DMA为小于16MB的物理内存</p>
+<p>x86-64系统没有高端内存区</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">区</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">物理内存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ZONE_DMA</td>
+<td style="text-align:center">DMA使用的页</td>
+<td style="text-align:center">&lt; 16MB</td>
+</tr>
+<tr>
+<td style="text-align:center">ZONE_NORMAL</td>
+<td style="text-align:center">正常可寻址的页</td>
+<td style="text-align:center">16~896MB</td>
+</tr>
+<tr>
+<td style="text-align:center">ZONE_HIGHMEM</td>
+<td style="text-align:center">动态映射的页</td>
+<td style="text-align:center">&gt; 896MB</td>
+</tr>
+</tbody>
+</table>
+<p>每个区使用结构体<code>zone</code>表示，具体结构详见<strong>P206</strong></p>
+<p>域说明：</p>
+<ul>
+<li><code>lock</code>域，是一个自旋锁，防止结构被并发访问，这个域只保护结构，不保护驻留在这个区中的页</li>
+<li><code>watermark</code>域，水位值，为每个内存区设置合理的内存消耗基准</li>
+<li><code>name</code>域，表示区的名字，三个区的名字分别为&quot;DMA&quot;,“Normal”,“HighMem”</li>
+</ul>
+<h3 id="123-获得页"><a class="markdownIt-Anchor" href="#123-获得页"></a> 12.3 获得页</h3>
+<ul>
+<li>分配2<sup>order</sup>(1&lt;&lt;order)个<strong>连续</strong>的物理内存页，返回的指针指向第一个页的page结构体</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> page *<span class="title function_">alloc_pages</span><span class="params">(<span class="type">gfp_t</span> gfp_mask, <span class="type">unsigned</span> <span class="type">int</span> order)</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将指定的物理页转换为它的逻辑地址（虚拟内存地址），返回的指针指向物理页所在的逻辑地址</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">page_address</span><span class="params">(<span class="keyword">struct</span> page *page)</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>和<code>alloc_pages()</code>功能类似，不过它直接返回请求的第一个页的逻辑地址</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> __get_free_pages(<span class="type">gfp_t</span> fp_mask, <span class="type">unsigned</span> <span class="type">int</span> order)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>只分配一页的函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> page *<span class="title function_">alloc_page</span><span class="params">(<span class="type">gfp_t</span> gfp_mask)</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> __get_free_page(<span class="type">gfp_t</span> fp_mask)</span><br></pre></td></tr></table></figure>
+<h4 id="1231-获得填充为0的页"><a class="markdownIt-Anchor" href="#1231-获得填充为0的页"></a> 12.3.1 获得填充为0的页</h4>
+<ul>
+<li>分配的所有页内容全为0，返回执行逻辑地址的指针</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> <span class="title function_">get_zeroed_page</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> gfp_mask)</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：为了防止页中留下一般随机的垃圾信息包含一些敏感信息，一般用户空间在获取页的时候，内容最好全部填充为0</p>
+<h4 id="1232-释放页"><a class="markdownIt-Anchor" href="#1232-释放页"></a> 12.3.2 释放页</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __free_pages(<span class="keyword">struct</span> page *page, <span class="type">unsigned</span> <span class="type">int</span> order);</span><br><span class="line"><span class="type">void</span> <span class="title function_">free_pages</span><span class="params">(<span class="type">unsigned</span> <span class="type">long</span> addr, <span class="type">unsigned</span> <span class="type">int</span> order)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">free_page</span><span class="params">(<span class="type">unsigned</span> <span class="type">long</span> addr)</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：传递了错误的struct page、地址或者order参数，都可能导致系统崩溃，因为内核是完全相信自己的</p>
+<h3 id="124-kmalloc"><a class="markdownIt-Anchor" href="#124-kmalloc"></a> 12.4 kmalloc()</h3>
+<ul>
+<li>以字节为单位分配内存</li>
+<li>可以获得以字节为单位的一块内核内存</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">kmalloc</span><span class="params">(<span class="type">size_t</span> size, <span class="type">gfp_t</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="1241-gfp_mask标志"><a class="markdownIt-Anchor" href="#1241-gfp_mask标志"></a> 12.4.1 gfp_mask标志</h4>
+<p>标志分为三类：</p>
+<ul>
+<li>行为修饰符</li>
+<li>区修饰符</li>
+<li>类型修饰符</li>
+</ul>
+<p>标志具体说明详见<strong>P209</strong></p>
+<h4 id="1242-kfree"><a class="markdownIt-Anchor" href="#1242-kfree"></a> 12.4.2 kfree()</h4>
+<ul>
+<li>释放由<code>kmalloc()</code>分配的内存</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">kfree</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *ptr)</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="125-vmalloc"><a class="markdownIt-Anchor" href="#125-vmalloc"></a> 12.5 vmalloc()</h3>
+<p>和<code>kmalloc()</code>类似，不同之处在于<code>vmalloc()</code>分配的内存虚拟内存连续，但是物理内存不一定连续，而<code>kmalloc()</code>分配的物理内存也是连续的</p>
+<p><code>vmalloc()</code>正是用户空间分配内存的方式：有<code>malloc()</code>分配的内存页在进程的虚拟内存中是连续的，但是物理内存不保证连续。大多情况下，只有硬件设备才需要连续的物理内存，他们不理解什么是虚拟内存</p>
+<h3 id="126-slab层"><a class="markdownIt-Anchor" href="#126-slab层"></a> 12.6 slab层</h3>
+<blockquote>
+<p>Linux内核提供slab层（即slab分配器），作为通用数据结构缓存层</p>
+</blockquote>
+<h4 id="1261-slab的设计"><a class="markdownIt-Anchor" href="#1261-slab的设计"></a> 12.6.1 slab的设计</h4>
+<blockquote>
+<p>slab层将不同的对象划分为<strong>高速缓存组</strong>，每个高速缓存组存放不同类型的对象，例如，分别存放进程描述符(task_struct结构的空闲链表)，索引节点对象(struct inode)</p>
+</blockquote>
+<ul>
+<li><code>kmalloc()</code>建立在slab层之上，使用了一组通用高速缓存</li>
+<li>一般slab仅仅由一页组成，每个高速缓存由多个slab组成</li>
+<li>每个slab包含一些对象成员，对象指的是被缓存的数据结构</li>
+<li>slab包含三种状态：满、部分满或空</li>
+</ul>
+<p>高速缓存使用结构体<code>kmem_cache</code>表示，这个结构包括三个链表：<code>slabs_full</code>, <code>slabs_partial</code>和<code>slabs_empty</code>，这些链表包含高速缓存中的所有slab</p>
+<p>slab使用slab描述符表示，详见<strong>P216</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">slab</span> &#123;</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>slab分配器使用<code>__get_free_pages()</code>创建新的slab</p>
+<h4 id="1262-slab分配器的接口"><a class="markdownIt-Anchor" href="#1262-slab分配器的接口"></a> 12.6.2 slab分配器的接口</h4>
+<ul>
+<li>创建一个新的高速缓存
+<ul>
+<li><code>name</code>：高速缓存的名字</li>
+<li><code>size</code>：高速缓存中每个元素的大小</li>
+<li><code>align</code>：slab内第一个对象的偏移量，用来确保在页内进行特定的对齐</li>
+<li><code>flags</code>：可选的设置项，控制高速缓存的行为，详见<strong>P218</strong></li>
+<li><code>ctor</code>：高速缓存的构造函数（Linux的高速缓存不使用构造函数）</li>
+<li>返回指向高速缓存的指针</li>
+<li>函数调用可能会睡眠，不能再中断上下文使用</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> kmem_cache *<span class="title function_">kmem_cache_create</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name, </span></span><br><span class="line"><span class="params">                                    <span class="type">size_t</span> size,</span></span><br><span class="line"><span class="params">                                    <span class="type">size_t</span> align,</span></span><br><span class="line"><span class="params">                                    <span class="type">unsigned</span> <span class="type">long</span> flags,</span></span><br><span class="line"><span class="params">                                    <span class="type">void</span> (*ctor)(<span class="type">void</span> *))</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>撤销一个高速缓存（可能睡眠，不能再中断上下文使用）</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">kmem_cache_destroy</span><span class="params">(<span class="keyword">struct</span> kmem_cache *cachep)</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：调用<code>kmem_cache_destroy</code>之前要确保两个条件：</p>
+<ol>
+<li>高速缓存中的所有slab为空</li>
+<li>在调用此函数过程中不在访问这个高速缓存</li>
+</ol>
+<ul>
+<li>从已经创建的缓存中分配释放对象，使用示例详见<strong>P219</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">kmem_cache_alloc</span><span class="params">(<span class="keyword">struct</span> kmem_cache *cachep, <span class="type">gfp_t</span> flags)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">kmem_cache_free</span><span class="params">(<span class="keyword">struct</span> kmem_cache *cachep, <span class="type">void</span> *objp)</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="127-栈上的静态分配"><a class="markdownIt-Anchor" href="#127-栈上的静态分配"></a> 12.7 栈上的静态分配</h3>
+<blockquote>
+<p>不同于用户栈，内核栈小而且固定，内核栈一般是两个页大小</p>
+</blockquote>
+<h4 id="1271-单页内核栈"><a class="markdownIt-Anchor" href="#1271-单页内核栈"></a> 12.7.1 单页内核栈</h4>
+<p>2.6内核之后，引入选项可以设置<strong>单页内核栈</strong>，激活这个选项，每个进程的内核栈只有一页大小</p>
+<p>引入的原因有两点：</p>
+<ol>
+<li>可以让每个进程减少内存消耗，另外随着机器运行时间增加，寻找两个连续的物理页变得越来越困难</li>
+<li>当内核栈使用两页时，中断处理程序使用它所中断进程的内核栈，而当进程使用单页的内核栈时，中断处理程序不放在进程内核栈中，而是放在<strong>中段栈</strong>中。</li>
+</ol>
+<blockquote>
+<p>中断栈：为每个进程提供运行中断处理程序的栈，一页大小。</p>
+</blockquote>
+<p>总之，历史上，进程和中断处理程序共享一个栈空间，当1页栈的选项激活之后，中断处理程序获得了自己的栈。</p>
+<h4 id="1272-在栈上工作"><a class="markdownIt-Anchor" href="#1272-在栈上工作"></a> 12.7.2 在栈上工作</h4>
+<p>在任何函数，都要尽量节省内核栈的使用，让所有局部变量大小不要超过几百字节。栈溢出非常危险，所出的数据会直接覆盖紧邻堆栈末端的数据（例如<code>thread_info</code>结构就是紧邻进程堆栈末端）。</p>
+<p>因此，推荐使用动态分配。</p>
+<h3 id="128-高端内存的映射"><a class="markdownIt-Anchor" href="#128-高端内存的映射"></a> 12.8 高端内存的映射</h3>
+<h4 id="1281-永久映射"><a class="markdownIt-Anchor" href="#1281-永久映射"></a> 12.8.1 永久映射</h4>
+<p>映射给定的page结构到内核地址空间，使用如下函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">kmap</span><span class="params">(<span class="keyword">struct</span> page *page)</span>;</span><br></pre></td></tr></table></figure>
+<p>函数在对于高端内存或者低端内存都能使用：</p>
+<ol>
+<li>如果page对应低端内存的一页，函数会单纯返回该物理页对应的虚拟地址</li>
+<li>如果page对应高端内存页，函数会建立一个永久映射，在返回对应的虚拟地址</li>
+<li>函数可以睡眠，只能在进程上下文中使用</li>
+</ol>
+<p>当不再需要高端内存中的这一个页时，使用如下函数解除映射</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">kunmap</span><span class="params">(<span class="keyword">struct</span> page *page)</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="1282-临时映射"><a class="markdownIt-Anchor" href="#1282-临时映射"></a> 12.8.2 临时映射</h4>
+<blockquote>
+<p>当必须创建映射而上下文不能睡眠是，内核提供了临时映射（原子映射）</p>
+</blockquote>
+<p>临时映射可以用在像中断上下文一样的不能睡眠的地方，使用如下函数建立心是映射：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">kmap_atomic</span><span class="params">(<span class="keyword">struct</span> page *page, <span class="keyword">enum</span> km_type type)</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>函数禁止了内核抢占（因为映射对每个处理器都是唯一的？？？）</li>
+</ul>
+<h3 id="129-每个cpu的分配"><a class="markdownIt-Anchor" href="#129-每个cpu的分配"></a> 12.9 每个CPU的分配</h3>
+<blockquote>
+<p>SMP定义：一个操作系统的实例可以同时管理所有CPU内核，且应用并不绑定某一个内核。</p>
+<p>支持SMP的操作系统使用每个CPU上的数据，对于给定的处理器其数据是唯一的，每个CPU的数据存放在一个数组中，数组的每一个元素对应一个存在的处理器</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">long</span> my_percpu[NR_CPUS];</span><br></pre></td></tr></table></figure>
+<p>访问cpu数据过程：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> cpu;</span><br><span class="line"></span><br><span class="line">cpu = get_cpu();  <span class="comment">//获取当前CPU，并且禁止内核抢占</span></span><br><span class="line">data = my_percpu[cpu];</span><br><span class="line">....       <span class="comment">// 使用data的过程</span></span><br><span class="line">put_cpu();</span><br></pre></td></tr></table></figure>
+<p>代码中没有出现锁，因为数据对当前处理器是唯一的，没有其他处理器可以接触这个数据，没有多个处理器并发访问的问题，但是会有内核抢占的问题：</p>
+<ol>
+<li>如果代码被其他处理器抢占并重新调度，这是cpu变量data会变成无效，因为它对应了错误的处理器</li>
+<li>如果另一个进程抢占了代码，有可能在一个处理器上并发访问data数据的问题</li>
+</ol>
+<p>因此，在获取当前cpu时，就已经禁止了内核抢占。</p>
+<h3 id="1210-新的每个cpu接口"><a class="markdownIt-Anchor" href="#1210-新的每个cpu接口"></a> 12.10 新的每个CPU接口</h3>
+<blockquote>
+<p>描述了一些为每个CPU分配内存的接口，详见<strong>P223</strong></p>
+</blockquote>
+<h3 id="1211-使用每个cpu数据的原因"><a class="markdownIt-Anchor" href="#1211-使用每个cpu数据的原因"></a> 12.11 使用每个CPU数据的原因</h3>
+<p>使用每个CPU的好处有：</p>
+<ol>
+<li>减少数据锁定，每个处理器访问每个CPU数据，不用加锁</li>
+<li>使用每个CPU数据大大减少了缓存失效，失效发生在处理器试图使他们的缓存保持同步时，如果一个处理器操作数据时，该数据又存放在其他处理器缓存中，那么存放该数据的那个处理器必须刷新或者清理自己的缓存，频繁的缓存失效会造成<strong>缓存抖动</strong></li>
+</ol>
+<p>而使用每个CPU数据唯一的要求是需要<strong>禁止内核抢占</strong></p>
+<h2 id="第13章-虚拟文件系统"><a class="markdownIt-Anchor" href="#第13章-虚拟文件系统"></a> 第13章 虚拟文件系统</h2>
+<blockquote>
+<p>虚拟文件系统（VFS）： 作为内核子系统，为用户空间程序提供了文件和文件系统相关的接口</p>
+</blockquote>
+<h3 id="131-通用文件系统接口"><a class="markdownIt-Anchor" href="#131-通用文件系统接口"></a> 13.1 通用文件系统接口</h3>
+<blockquote>
+<p>VFS使得用户可以直接使用统一的系统调用，无需考虑具体的文件系统和物理介质</p>
+</blockquote>
+<h3 id="132-文件系统抽象层"><a class="markdownIt-Anchor" href="#132-文件系统抽象层"></a> 13.2 文件系统抽象层</h3>
+<blockquote>
+<p>内核在底层文件系统接口上建立了一个抽象层，使得Linux能够支持各种文件系统。</p>
+<p>实际文件系统的代码在统一的接口和数据结构下隐藏各自具体的实现细节，它们通过编程提供VFS所期望的抽象接口和数据结构</p>
+</blockquote>
+<h3 id="133-unix文件系统"><a class="markdownIt-Anchor" href="#133-unix文件系统"></a> 13.3 Unix文件系统</h3>
+<blockquote>
+<p>四个基本要素：文件、目录项、索引节点和安装点（挂载点）</p>
+</blockquote>
+<ul>
+<li>目录项：路径中的每一部分都被称为目录条目，统称为目录项</li>
+<li>索引节点：Unix系统将文件的相关信息和文件本身这两个概念加以区分（如访问控制权限、大小、创建时间等），文件的相关信息（文件的元数据信息）被存储在一个单独的数据结构，称为索引节点（inode）</li>
+<li>超级块：是一种包含文件系统控制信息的数据结构，这些信息称为文件系统数据元</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://static001.geekbang.org/resource/image/32/47/328d942a38230a973f11bae67307be47.png" alt="img" /></p>
+<h3 id="134-vfs对象及数据结构"><a class="markdownIt-Anchor" href="#134-vfs对象及数据结构"></a> 13.4 VFS对象及数据结构</h3>
+<h4 id="对象类型"><a class="markdownIt-Anchor" href="#对象类型"></a> 对象类型</h4>
+<p>VFS的四个对象类型：</p>
+<ul>
+<li>超级块对象：代表具体的文件系统</li>
+<li>索引节点对象：代表具体文件</li>
+<li>目录项对象：代表目录项，是路径的一个组成部分</li>
+<li>文件对象：代表进程打开的文件</li>
+</ul>
+<p><strong>注意</strong>：VFS将目录作为一个文件来处理，不存在目录对象；目录项不同于目录</p>
+<h4 id="操作对象"><a class="markdownIt-Anchor" href="#操作对象"></a> 操作对象</h4>
+<blockquote>
+<p>每个对象中都包含一个操作对象，其中描述了内核针对主要对象可以使用的方法</p>
+</blockquote>
+<ul>
+<li><code>super_operations</code>对象：内核针对特定文件系统调用的方法，如<code>write_inode(), sync_fs()</code></li>
+<li><code>inode_operations</code>对象：内核针对特定文件调用的方法，如<code>create(), link()</code></li>
+<li><code>dentry_operations</code>对象：内核针对特定目录项所能调用的方法，如<code>d_compare(), d_delete()</code></li>
+<li><code>file_operations</code>对象：进程针对已打开文件所能调用的方法，如<code>read(), write()</code></li>
+</ul>
+<p><strong>注意</strong>：操作对象作为结构体，其中包含操作父对象的函数指针，实际的文件系统可以继承VFS提供的通用函数。</p>
+<h3 id="135-超级块对象"><a class="markdownIt-Anchor" href="#135-超级块对象"></a> 13.5 超级块对象</h3>
+<blockquote>
+<p>各种文件系统都必须实现超级块对象，该对象存储特定文件系统的信息，对应于存放在磁盘<strong>特定扇区</strong>中文件系统超级块或者文件系统控制块。（非基于磁盘的文件系统，会在使用现场创建超级块并保存在内存中）</p>
+</blockquote>
+<ul>
+<li>超级块对象有<code>super_block</code>结构体表示，详见<strong>P231</strong></li>
+</ul>
+<p><strong>注意</strong>：超级块对象通过<code>alloc_super()</code>函数创建并初始化，在安装文件系统时，文件系统会调用这个函数从<strong>磁盘</strong>读取文件系统超级块，并将其中的数据<strong>填充到内存中的超级块对象对应的结构体</strong>中。</p>
+<h3 id="136-超级块操作"><a class="markdownIt-Anchor" href="#136-超级块操作"></a> 13.6 超级块操作</h3>
+<blockquote>
+<p>超级块对象中s_op指针，指向超级块的操作函数表，由<code>super_operations()</code>表示</p>
+</blockquote>
+<p><strong>详见P233</strong></p>
+<h3 id="137-索引节点对象"><a class="markdownIt-Anchor" href="#137-索引节点对象"></a> 13.7 索引节点对象</h3>
+<blockquote>
+<p>索引节点对象：包含内核在操作文件系统或者目录时需要的全部信息（对于Unix风格的系统，直接从磁盘的索引节点读入），索引节点对象必须在<strong>内存</strong>中创建。</p>
+</blockquote>
+<ul>
+<li>结构体<code>inode</code>表示，<strong>详见P235</strong></li>
+<li>索引节点代表<strong>普通文件</strong>或者<strong>设备、管道</strong>等特殊文件</li>
+</ul>
+<h3 id="138-索引节点操作"><a class="markdownIt-Anchor" href="#138-索引节点操作"></a> 13.8 索引节点操作</h3>
+<p><code>inode_operation</code>结构体，<strong>详见P239</strong></p>
+<h3 id="139-目录项对象"><a class="markdownIt-Anchor" href="#139-目录项对象"></a> 13.9 目录项对象</h3>
+<blockquote>
+<p>每个dentry代表路径中的一个特定部分，比如路径/bin/vi，其中/,bin,vi都是目录项，前两个是<strong>目录</strong>，最后一个是<strong>普通文件</strong>。</p>
+<p><strong>注意</strong>：在路径中，包含普通文件在内，每一项都是目录项对象。</p>
+</blockquote>
+<ul>
+<li>
+<p>结构体<code>dentry</code>表示，详见<strong>P239</strong></p>
+</li>
+<li>
+<p>VFS在执行目录项操作时，会现场创建目录项对象</p>
+</li>
+</ul>
+<p><strong>注意</strong>：目录项对象没有对应的磁盘数据结构，并非保存在磁盘上，<code>dentry</code>结构体中没有是否被修改的标志（是否为脏、是否需要写会磁盘）</p>
+<h4 id="1391-目录项状态"><a class="markdownIt-Anchor" href="#1391-目录项状态"></a> 13.9.1 目录项状态</h4>
+<blockquote>
+<p>三种状态：被使用、未使用和负状态</p>
+</blockquote>
+<ul>
+<li>被使用的目录项：对应一个有效的索引节点，<code>d_node</code>指向相应的索引节点，<code>d_count</code>代表使用者的数量；不能被丢弃</li>
+<li>未被使用的目录项：对应有效的索引节点，但是<code>d_count</code>为0，仍然指向一个有效对象，被保存在缓存中</li>
+<li>负状态的目录项：没有对应的有效索引节点，<code>d_node</code>为NULL，索引节点已被删除，或者路径不不再正确</li>
+</ul>
+<p><strong>注意</strong>：目录项释放后也可以保存在<strong>slab缓存</strong>中。</p>
+<h4 id="1392-目录项缓存"><a class="markdownIt-Anchor" href="#1392-目录项缓存"></a> 13.9.2 目录项缓存</h4>
+<blockquote>
+<p>内核将目录项对象缓存在目录项缓存dcache中</p>
+</blockquote>
+<p>目录项分为三个部分：</p>
+<ul>
+<li><strong>“被使用的”</strong> 目录项链表：索引节点中<code>i_dentry</code>链接相关的目录项（一个索引节点可能有多个链接，对应多个目录项），因此用一个链表连接他们</li>
+<li><strong>“最近被使用的”</strong> 双向链表：包含未被使用和负状态的目录项对象（总是在头部插入新的目录项，需要回收内存时，会再尾部删除旧的目录项）</li>
+<li><strong>散列表</strong>和相应的<strong>散列函数</strong>：快速将给定路径解析（哈希）成相关的目录项对象</li>
+</ul>
+<p>散列表由数组<code>dentry_hashtable</code>表示，每个元素指向具有相同键值的目录项组成的链表头指针；散列值有<code>d_hash</code>计算（内核系统提供给文件系统<strong>唯一</strong>的散列函数）</p>
+<p><strong>注意</strong>：</p>
+<ol>
+<li><code>dcache</code>一定意义上提供了对于索引节点的缓存（<code>icache</code>），和目录项相关的索引节点对象不会被释放（因为索引节点的使用计数&gt;0），这样确保了索引节点留在内存中</li>
+<li>文件访问呈现空间和时间的局部性：时间局部性体现在程序在一段时间内可能会访问相同的文件；空间局部性体现在同一个目录下的文件很可能都被访问。</li>
+</ol>
+<h3 id="1310-目录项操作"><a class="markdownIt-Anchor" href="#1310-目录项操作"></a> 13.10 目录项操作</h3>
+<p><code>dentry_operation</code>结构体，<strong>详见P241</strong></p>
+<h3 id="1311-文件对象"><a class="markdownIt-Anchor" href="#1311-文件对象"></a> 13.11 文件对象</h3>
+<blockquote>
+<p>文件对象是已打开的文件在内存中的表示</p>
+</blockquote>
+<ul>
+<li>
+<p>结构体<code>file</code>表示</p>
+</li>
+<li>
+<p>由<code>open()</code>系统调用创建，<code>close()撤销</code></p>
+</li>
+<li>
+<p>多个进程可以打开同一个文件，所以同一个文件存在多个对应的文件对象</p>
+</li>
+<li>
+<p>文件对象仅仅在观点上代表已打开文件，它反过来指向目录项对象，而目录项对象反过来指向索引节点</p>
+</li>
+</ul>
+<p><strong>注意</strong>：类似于目录项对象，文件对象没有对应的磁盘数据，通过<code>file</code>结构体中<code>f_dentry</code>指针指向相关的目录项对象，而目录项对象指向相关的索引节点，索引节点会记录文件是否为脏</p>
+<h3 id="1312-文件操作"><a class="markdownIt-Anchor" href="#1312-文件操作"></a> 13.12 文件操作</h3>
+<p>结构体<code>file_operation</code>，详见<strong>P242</strong>，文件相关的操作方法和<strong>系统调用</strong>很类似</p>
+<ul>
+<li>具体的文件系统可以为每一种操作方法实现各自的代码，如果存在通用操作，则使用通用操作</li>
+</ul>
+<h3 id="1313-和文件系统相关的数据结构"><a class="markdownIt-Anchor" href="#1313-和文件系统相关的数据结构"></a> 13.13 和文件系统相关的数据结构</h3>
+<h4 id="结构体-file_system_type"><a class="markdownIt-Anchor" href="#结构体-file_system_type"></a> 结构体 file_system_type</h4>
+<blockquote>
+<p>描述特定文件系统类型，详见<strong>P248</strong></p>
+</blockquote>
+<ul>
+<li>主要方法<code>get_sb()</code>：从磁盘读取超级块，在文件系统安装时，在内存中组装超级块对象</li>
+<li>剩余的函数描述文件系统的属性</li>
+<li>每种文件系统，不管有多少实例，都只有一个<code>file_system_type</code>结构体</li>
+</ul>
+<h4 id="结构体-vfsmount"><a class="markdownIt-Anchor" href="#结构体-vfsmount"></a> 结构体 vfsmount</h4>
+<blockquote>
+<p>描述安装的文件系统的实例，详见<strong>P248</strong></p>
+</blockquote>
+<ul>
+<li>在文件系统实际被安装时，会有一个<code>vfsmount</code>结构体在安装点创建，它代表文件系统的<strong>实例</strong>（也代表一个<strong>安装点</strong>）</li>
+<li><code>vfsmount</code>结构体中维护了各种链表，用于跟踪文件系统和所有安装点之间的关系</li>
+</ul>
+<h3 id="1314-和进程相关的数据结构"><a class="markdownIt-Anchor" href="#1314-和进程相关的数据结构"></a> 13.14 和进程相关的数据结构</h3>
+<blockquote>
+<p>三种结构体：<code>file_struct</code>, <code>fs_struct</code>, <code>namespace</code></p>
+</blockquote>
+<h4 id="结构体-file_struct"><a class="markdownIt-Anchor" href="#结构体-file_struct"></a> 结构体 file_struct</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_struct</span>&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">fd_array</span>[<span class="title">NR_OPEN_DEFAULT</span>];</span> <span class="comment">/*缺省的文件对象数组*/</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fdtable</span> *<span class="title">fdt</span>    /*指向其他<span class="title">fd</span>的指针*/</span></span><br><span class="line"><span class="class">    ...</span></span><br><span class="line"><span class="class">    </span></span><br><span class="line"><span class="class">&#125;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>由进程描述符中的<code>files</code>指向</li>
+<li><code>fd_array</code>数组指针：指向已打开的文件对象，<code>NR_OPEN_DEFAULT</code>默认64，如果进程打开的文件超过64，内核将分配一个新数组，并且将<code>fdt</code>指针指向它</li>
+<li>当访问的文件对象的数量小于64时，执行比较快，因为是对静态数组的操作；如果大于64，内核需要建立新数组，访问速度相对慢一些</li>
+<li>管理员可以增大<code>NR_OPEN_DEFAULT</code>选项优化性能</li>
+</ul>
+<h4 id="结构体-fs_struct"><a class="markdownIt-Anchor" href="#结构体-fs_struct"></a> 结构体 fs_struct</h4>
+<ul>
+<li>由进程描述符的<code>fs</code>域指向，包含文件系统和进程相关的信息</li>
+<li>包含进程的当前工作目录（<code>pwd</code>）和根目录</li>
+</ul>
+<h4 id="结构体-namespace"><a class="markdownIt-Anchor" href="#结构体-namespace"></a> 结构体 namespace</h4>
+<ul>
+<li>进程描述符的<code>mmt_namespace</code>域指向，它使得每个进程在系统中看到唯一的文件系统（唯一的根目录和文件系统结构层次）</li>
+</ul>
+<p><strong>注意</strong>：</p>
+<ol>
+<li>对于多数进程，它们的描述符都指向自己独有的<code>file_struct</code>和<code>fs_struct</code>，除非使用克隆标志<code>CLONE_FILES</code>或者<code>CLONE_FS</code>创建的进程会共享这两个结构体</li>
+<li><code>namespace</code>结构体使用方法和前两种结构完全不同，默认情况下，所有进程共享同样的命名空间（都从相同的挂载表中看到同一个文件系统层次结构，除非在<code>cloen()</code>操作时使用<code>CLONE_NEWS</code>标志，才会给进程一个命名空间结构体的拷贝）</li>
+</ol>
+<h2 id="第14章-块io层"><a class="markdownIt-Anchor" href="#第14章-块io层"></a> 第14章 块I/O层</h2>
+<h2 id="第15章-进程地址空间"><a class="markdownIt-Anchor" href="#第15章-进程地址空间"></a> 第15章 进程地址空间</h2>
+<h2 id="第16章-页高速缓存和页回写"><a class="markdownIt-Anchor" href="#第16章-页高速缓存和页回写"></a> 第16章 页高速缓存和页回写</h2>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h></h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="https://www.snowmoon.top/2024/06/01/%E4%B9%A6%E7%B1%8D%E5%AD%98%E6%A1%A3-Linux-kernel-notes-master-Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">https://www.snowmoon.top/2024/06/01/书籍存档-Linux-kernel-notes-master-Linux内核设计与实现/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>雪月</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2024-06-01</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2024-10-19</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"></div></div><link rel="stylesheet" href="/css/coin.css" media="defer" onload="this.media='all'"/><div class="post-reward"><button class="tip-button reward-button"><span class="tip-button__text">投喂作者</span><div class="coin-wrapper"><div class="coin"><div class="coin__middle"></div><div class="coin__back"></div><div class="coin__front"></div></div></div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/alipay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/alipay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></button></div><audio id="coinAudio" src="https://npm.elemecdn.com/akilar-candyassets@1.0.36/audio/aowu.m4a"></audio><script defer="defer" src="/js/coin.js"></script><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/06/01/%E4%B9%A6%E7%B1%8D%E5%AD%98%E6%A1%A3-Linux-kernel-notes-master-Linux%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_43.webp" onerror="onerror=null;src='/assets/r2.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2024/06/01/%E4%B9%A6%E7%B1%8D%E5%AD%98%E6%A1%A3-Linux-kernel-notes-master-Linux%E5%86%85%E6%A0%B8/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_42.webp" onerror="onerror=null;src='/assets/r2.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><svg class="meta_icon" style="width:22px;height:22px;position:relative;top:5px"><use xlink:href="#icon-mulu1"></use></svg><span style="font-weight:bold">目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="toc-text"> Linux内核设计与实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC3%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="toc-text"> 第3章 进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E8%BF%9B%E7%A8%8B"><span class="toc-text"> 3.1 进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E8%BF%9B%E7%A8%8B%E6%8F%8F%E8%BF%B0"><span class="toc-text"> 3.2 进程描述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#321-%E5%88%86%E9%85%8D%E8%BF%9B%E7%A8%8B%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-text"> 3.2.1 分配进程描述符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#322-%E8%BF%9B%E7%A8%8B%E6%8F%8F%E8%BF%B0%E7%AC%A6%E7%9A%84%E5%AD%98%E6%94%BE"><span class="toc-text"> 3.2.2 进程描述符的存放</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#323-%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-text"> 3.2.3 进程状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#324-%E8%AE%BE%E7%BD%AE%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81"><span class="toc-text"> 3.2.4 设置当前状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#326-%E8%BF%9B%E7%A8%8B%E5%AE%B6%E6%97%8F%E6%A0%91"><span class="toc-text"> 3.2.6 进程家族树</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA"><span class="toc-text"> 3.3 进程创建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#331-%E5%86%99%E6%97%B6%E6%8B%B7%E8%B4%9D"><span class="toc-text"> 3.3.1 写时拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#332-fork"><span class="toc-text"> 3.3.2 fork()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#333-vfork"><span class="toc-text"> 3.3.3 vfork()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-%E7%BA%BF%E7%A8%8B%E5%9C%A8linux%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text"> 3.4 线程在Linux中的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#341-%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B"><span class="toc-text"> 3.4.1 创建线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#342-%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B"><span class="toc-text"> 3.4.2 内核线程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#35-%E8%BF%9B%E7%A8%8B%E7%BB%88%E7%BB%93"><span class="toc-text"> 3.5 进程终结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#351-%E5%88%A0%E9%99%A4%E8%BF%9B%E7%A8%8B%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-text"> 3.5.1 删除进程描述符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#352-%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%E9%80%A0%E6%88%90%E7%9A%84%E8%BF%9B%E9%80%80%E7%BB%B4%E8%B0%B7"><span class="toc-text"> 3.5.2 孤儿进程造成的进退维谷</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC4%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text"> 第4章 进程调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%A4%9A%E4%BB%BB%E5%8A%A1"><span class="toc-text"> 4.1 多任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-linux%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text"> 4.2 Linux的进程调度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%AD%96%E7%95%A5"><span class="toc-text"> 4.3 策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#431-io%E6%B6%88%E8%80%97%E5%9E%8B%E5%92%8Ccpu%E6%B6%88%E8%80%97%E5%9E%8B%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="toc-text"> 4.3.1 I&#x2F;O消耗型和CPU消耗型的进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#432-%E8%BF%9B%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text"> 4.3.2 进程优先级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#433-%E6%97%B6%E9%97%B4%E7%89%87"><span class="toc-text"> 4.3.3 时间片</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-linux%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-text"> 4.4 Linux调度算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#441-%E8%B0%83%E5%BA%A6%E5%99%A8%E7%B1%BB"><span class="toc-text"> 4.4.1 调度器类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#442-unix%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text"> 4.4.2 Unix系统中的进程调度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#443-%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6"><span class="toc-text"> 4.4.3 公平调度</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-linux%E8%B0%83%E5%BA%A6%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text"> 4.5  Linux调度的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#451-%E6%97%B6%E9%97%B4%E8%AE%B0%E8%B4%A6"><span class="toc-text"> 4.5.1 时间记账</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#452-%E8%BF%9B%E7%A8%8B%E9%80%89%E6%8B%A9"><span class="toc-text"> 4.5.2 进程选择</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#453-%E8%B0%83%E5%BA%A6%E5%99%A8%E5%85%A5%E5%8F%A3"><span class="toc-text"> 4.5.3 调度器入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#454-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92"><span class="toc-text"> 4.5.4 睡眠和唤醒</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-%E6%8A%A2%E5%8D%A0%E5%92%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text"> 4.6 抢占和上下文切换</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#461-%E7%94%A8%E6%88%B7%E6%8A%A2%E5%8D%A0"><span class="toc-text"> 4.6.1 用户抢占</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#462-%E5%86%85%E6%A0%B8%E6%8A%A2%E5%8D%A0"><span class="toc-text"> 4.6.2 内核抢占</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#47-%E5%AE%9E%E6%97%B6%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="toc-text"> 4.7 实时调度策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC5%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-text"> 第5章 系统调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC6%E7%AB%A0-%E5%86%85%E6%A0%B8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text"> 第6章 内核数据结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC7%E7%AB%A0-%E4%B8%AD%E6%96%AD%E5%92%8C%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86"><span class="toc-text"> 第7章 中断和中断处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC8%E7%AB%A0-%E4%B8%8B%E5%8D%8A%E9%83%A8%E5%92%8C%E6%8E%A8%E5%90%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="toc-text"> 第8章 下半部和推后执行的工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC12%E7%AB%A0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-text"> 第12章 内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#121-%E9%A1%B5"><span class="toc-text"> 12.1 页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#122-%E5%8C%BA"><span class="toc-text"> 12.2 区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#123-%E8%8E%B7%E5%BE%97%E9%A1%B5"><span class="toc-text"> 12.3 获得页</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1231-%E8%8E%B7%E5%BE%97%E5%A1%AB%E5%85%85%E4%B8%BA0%E7%9A%84%E9%A1%B5"><span class="toc-text"> 12.3.1 获得填充为0的页</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1232-%E9%87%8A%E6%94%BE%E9%A1%B5"><span class="toc-text"> 12.3.2 释放页</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#124-kmalloc"><span class="toc-text"> 12.4 kmalloc()</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1241-gfp_mask%E6%A0%87%E5%BF%97"><span class="toc-text"> 12.4.1 gfp_mask标志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1242-kfree"><span class="toc-text"> 12.4.2 kfree()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#125-vmalloc"><span class="toc-text"> 12.5 vmalloc()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#126-slab%E5%B1%82"><span class="toc-text"> 12.6 slab层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1261-slab%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-text"> 12.6.1 slab的设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1262-slab%E5%88%86%E9%85%8D%E5%99%A8%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="toc-text"> 12.6.2 slab分配器的接口</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#127-%E6%A0%88%E4%B8%8A%E7%9A%84%E9%9D%99%E6%80%81%E5%88%86%E9%85%8D"><span class="toc-text"> 12.7 栈上的静态分配</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1271-%E5%8D%95%E9%A1%B5%E5%86%85%E6%A0%B8%E6%A0%88"><span class="toc-text"> 12.7.1 单页内核栈</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1272-%E5%9C%A8%E6%A0%88%E4%B8%8A%E5%B7%A5%E4%BD%9C"><span class="toc-text"> 12.7.2 在栈上工作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#128-%E9%AB%98%E7%AB%AF%E5%86%85%E5%AD%98%E7%9A%84%E6%98%A0%E5%B0%84"><span class="toc-text"> 12.8 高端内存的映射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1281-%E6%B0%B8%E4%B9%85%E6%98%A0%E5%B0%84"><span class="toc-text"> 12.8.1 永久映射</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1282-%E4%B8%B4%E6%97%B6%E6%98%A0%E5%B0%84"><span class="toc-text"> 12.8.2 临时映射</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#129-%E6%AF%8F%E4%B8%AAcpu%E7%9A%84%E5%88%86%E9%85%8D"><span class="toc-text"> 12.9 每个CPU的分配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1210-%E6%96%B0%E7%9A%84%E6%AF%8F%E4%B8%AAcpu%E6%8E%A5%E5%8F%A3"><span class="toc-text"> 12.10 新的每个CPU接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1211-%E4%BD%BF%E7%94%A8%E6%AF%8F%E4%B8%AAcpu%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-text"> 12.11 使用每个CPU数据的原因</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC13%E7%AB%A0-%E8%99%9A%E6%8B%9F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text"> 第13章 虚拟文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#131-%E9%80%9A%E7%94%A8%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%8E%A5%E5%8F%A3"><span class="toc-text"> 13.1 通用文件系统接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#132-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%8A%BD%E8%B1%A1%E5%B1%82"><span class="toc-text"> 13.2 文件系统抽象层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#133-unix%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text"> 13.3 Unix文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#134-vfs%E5%AF%B9%E8%B1%A1%E5%8F%8A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text"> 13.4 VFS对象及数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 对象类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E5%AF%B9%E8%B1%A1"><span class="toc-text"> 操作对象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#135-%E8%B6%85%E7%BA%A7%E5%9D%97%E5%AF%B9%E8%B1%A1"><span class="toc-text"> 13.5 超级块对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#136-%E8%B6%85%E7%BA%A7%E5%9D%97%E6%93%8D%E4%BD%9C"><span class="toc-text"> 13.6 超级块操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#137-%E7%B4%A2%E5%BC%95%E8%8A%82%E7%82%B9%E5%AF%B9%E8%B1%A1"><span class="toc-text"> 13.7 索引节点对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#138-%E7%B4%A2%E5%BC%95%E8%8A%82%E7%82%B9%E6%93%8D%E4%BD%9C"><span class="toc-text"> 13.8 索引节点操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#139-%E7%9B%AE%E5%BD%95%E9%A1%B9%E5%AF%B9%E8%B1%A1"><span class="toc-text"> 13.9 目录项对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1391-%E7%9B%AE%E5%BD%95%E9%A1%B9%E7%8A%B6%E6%80%81"><span class="toc-text"> 13.9.1 目录项状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1392-%E7%9B%AE%E5%BD%95%E9%A1%B9%E7%BC%93%E5%AD%98"><span class="toc-text"> 13.9.2 目录项缓存</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1310-%E7%9B%AE%E5%BD%95%E9%A1%B9%E6%93%8D%E4%BD%9C"><span class="toc-text"> 13.10 目录项操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1311-%E6%96%87%E4%BB%B6%E5%AF%B9%E8%B1%A1"><span class="toc-text"> 13.11 文件对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1312-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="toc-text"> 13.12 文件操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1313-%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text"> 13.13 和文件系统相关的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93-file_system_type"><span class="toc-text"> 结构体 file_system_type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93-vfsmount"><span class="toc-text"> 结构体 vfsmount</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1314-%E5%92%8C%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text"> 13.14 和进程相关的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93-file_struct"><span class="toc-text"> 结构体 file_struct</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93-fs_struct"><span class="toc-text"> 结构体 fs_struct</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93-namespace"><span class="toc-text"> 结构体 namespace</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC14%E7%AB%A0-%E5%9D%97io%E5%B1%82"><span class="toc-text"> 第14章 块I&#x2F;O层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC15%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="toc-text"> 第15章 进程地址空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC16%E7%AB%A0-%E9%A1%B5%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E5%92%8C%E9%A1%B5%E5%9B%9E%E5%86%99"><span class="toc-text"> 第16章 页高速缓存和页回写</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-color: transparent;"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"></div></div></div></div><div class="copyright"><span><b>&copy;2021-2024</b></span><span><b>&nbsp;&nbsp;By 雪月</b></span></div><div id="workboard"></div><p id="ghbdages"></p></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button class="share" type="button" title="右键模式" onclick="changeMouseMode()"><i class="fas fa-mouse"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog right_side"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button class="share" type="button" title="分享链接" onclick="share()"><i class="fas fa-share-nodes"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i><span id="percent">0<span>%</span></span></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div class="js-pjax" id="rightMenu"><div class="rightMenu-group rightMenu-small"><a class="rightMenu-item" href="javascript:window.history.back();"><i class="fa fa-arrow-left"></i></a><a class="rightMenu-item" href="javascript:window.history.forward();"><i class="fa fa-arrow-right"></i></a><a class="rightMenu-item" href="javascript:window.location.reload();"><i class="fa fa-refresh"></i></a><a class="rightMenu-item" href="javascript:rmf.scrollToTop();"><i class="fa fa-arrow-up"></i></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-text"><a class="rightMenu-item" href="javascript:rmf.copySelect();"><i class="fa fa-copy"></i><span>复制</span></a><a class="rightMenu-item" href="javascript:window.open(&quot;https://www.baidu.com/s?wd=&quot;+window.getSelection().toString());window.location.reload();"><i class="fa fa-search"></i><span>百度搜索</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-too"><a class="rightMenu-item" href="javascript:window.open(window.getSelection().toString());window.location.reload();"><i class="fa fa-link"></i><span>转到链接</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-paste"><a class="rightMenu-item" href="javascript:rmf.paste()"><i class="fa fa-copy"></i><span>粘贴</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-post"><a class="rightMenu-item" href="#post-comment"><i class="fas fa-comment"></i><span>空降评论</span></a><a class="rightMenu-item" href="javascript:rmf.copyWordsLink()"><i class="fa fa-link"></i><span>复制本文地址</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-to"><a class="rightMenu-item" href="javascript:rmf.openWithNewTab()"><i class="fa fa-window-restore"></i><span>新窗口打开</span></a><a class="rightMenu-item" id="menu-too" href="javascript:rmf.open()"><i class="fa fa-link"></i><span>转到链接</span></a><a class="rightMenu-item" href="javascript:rmf.copyLink()"><i class="fa fa-copy"></i><span>复制链接</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-img"><a class="rightMenu-item" href="javascript:rmf.saveAs()"><i class="fa fa-download"></i><span>保存图片</span></a><a class="rightMenu-item" href="javascript:rmf.openWithNewTab()"><i class="fa fa-window-restore"></i><span>在新窗口打开</span></a><a class="rightMenu-item" href="javascript:rmf.copyLink()"><i class="fa fa-copy"></i><span>复制图片链接</span></a></div><div class="rightMenu-group rightMenu-line"><a class="rightMenu-item" href="javascript:randomPost()"><i class="fa fa-paper-plane"></i><span>随便逛逛</span></a><a class="rightMenu-item" href="javascript:switchNightMode();"><i class="fa fa-moon"></i><span>昼夜切换</span></a><a class="rightMenu-item" href="javascript:toggleWinbox();"><i class="fas fa-cog"></i><span>美化设置</span></a><a class="rightMenu-item" href="javascript:rmf.fullScreen();"><i class="fas fa-expand"></i><span>切换全屏</span></a><a class="rightMenu-item" href="javascript:window.print();"><i class="fa-solid fa-print"></i><span>打印页面</span></a></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.staticfile.org/fancyapps-ui/4.0.31/fancybox.umd.min.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/instant.page/5.1.0/instantpage.min.js" type="module"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())
+setTimeout(function(){preloader.endLoading();}, 5000);
+document.getElementById('loading-box').addEventListener('click',()=> {preloader.endLoading()})</script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-comments-rho.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-comments-rho.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.staticfile.org/twikoo/1.6.8/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script><script async src="https://cdn1.tianli0.top/npm/vue@2.6.14/dist/vue.min.js"></script><script async src="https://cdn1.tianli0.top/npm/element-ui@2.15.6/lib/index.js"></script><script async src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script><script defer type="text/javascript" src="https://cdn1.tianli0.top/npm/sweetalert2@8.19.0/dist/sweetalert2.all.js"></script><script async src="//npm.elemecdn.com/pace-js@1.2.4/pace.min.js"></script><script defer src="https://cdn1.tianli0.top/gh/nextapps-de/winbox/dist/winbox.bundle.min.js"></script><script async src="//at.alicdn.com/t/c/font_3586335_hsivh70x0fm.js"></script><script async src="//at.alicdn.com/t/c/font_3636804_gr02jmjr3y9.js"></script><script async src="//at.alicdn.com/t/c/font_3612150_kfv55xn3u2g.js"></script><script async src="https://cdn.wpon.cn/2022-sucai/Gold-ingot.js"></script><canvas id="universe"></canvas><canvas id="snow"></canvas><script defer src="/js/fomal.js"></script><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdn1.tianli0.top/npm/js-heo@1.0.12/metingjs/Meting.min.js"></script><script src="https://lib.baomitu.com/pjax/0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show","#web_bg",".js-pjax","#bibi","body > title","#app","#tag-echarts","#posts-echart","#categories-echarts"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの生活随笔/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍡 SnowMoonの生活随笔 (4)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの基础教程/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍼 SnowMoonの基础教程 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの计算机基础知识/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍉 SnowMoonの计算机基础知识 (4)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの刷题记录/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍟 SnowMoonの刷题记录 (31)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの嵌入式笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍨 SnowMoonの嵌入式笔记 (4)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの项目记录/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍥 SnowMoonの项目记录 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="https://www.snowmoon.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #e9e9e9;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: var(--text-bg-hover)}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/08/09/SnowMoonの项目记录-CSAPPLAB1——Datalab-上/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_13.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-08-09</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/08/09/SnowMoonの项目记录-CSAPPLAB1——Datalab-上/&quot;);" href="javascript:void(0);" alt="">CSAPPLAB1——Datalab(上)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/08/09/SnowMoonの项目记录-CSAPPLAB1——Datalab-上/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-自建SSR教程/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_19.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-03-04</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-自建SSR教程/&quot;);" href="javascript:void(0);" alt="">自建SSR教程</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-自建SSR教程/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/02/21/SnowMoonの基础教程-next主题美化/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_28.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-02-21</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/02/21/SnowMoonの基础教程-next主题美化/&quot;);" href="javascript:void(0);" alt="">next主题美化——背景图片、动画</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/02/21/SnowMoonの基础教程-next主题美化/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-hexo博客部署到云服务器/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_17.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-03-04</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-hexo博客部署到云服务器/&quot;);" href="javascript:void(0);" alt="">hexo博客部署到云服务器</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-hexo博客部署到云服务器/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2022/08/09/Markdown语法与外挂标签写法汇总/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_47.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-08-09</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2022/08/09/Markdown语法与外挂标签写法汇总/&quot;);" href="javascript:void(0);" alt="">Markdown语法与外挂标签写法汇总</a><div class="blog-slider__text">🥧本文汇总Markdown格式以及外挂标签在网页端的渲染效果，可作为文档进行查询</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2022/08/09/Markdown语法与外挂标签写法汇总/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>

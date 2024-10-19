@@ -1,0 +1,610 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><div id="myscoll"></div><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Linux调试原理及方法2——内存占用调优 | SnowMoon-Haoyu's Blog</title><meta name="keywords" content="Linux,Memory,Cache"><meta name="author" content="雪月"><meta name="copyright" content="雪月"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="记录关于Linux Memory性能调试的白皮书">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux调试原理及方法2——内存占用调优">
+<meta property="og:url" content="https://www.snowmoon.top/2024/06/01/SnowMoon%E3%81%AE%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%AC%94%E8%AE%B0-Linux-Memory%E5%8D%A0%E7%94%A8%E8%B0%83%E4%BC%98-Processing/index.html">
+<meta property="og:site_name" content="SnowMoon-Haoyu&#39;s Blog">
+<meta property="og:description" content="记录关于Linux Memory性能调试的白皮书">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/202406012052898.webp">
+<meta property="article:published_time" content="2024-06-01T05:16:28.000Z">
+<meta property="article:modified_time" content="2024-10-19T14:16:33.108Z">
+<meta property="article:author" content="雪月">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Memory">
+<meta property="article:tag" content="Cache">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/202406012052898.webp"><link rel="shortcut icon" href="/"><link rel="canonical" href="https://www.snowmoon.top/2024/06/01/SnowMoon%E3%81%AE%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%AC%94%E8%AE%B0-Linux-Memory%E5%8D%A0%E7%94%A8%E8%B0%83%E4%BC%98-Processing/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.staticfile.org/fancyapps-ui/4.0.31/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdnjs.cloudflare.com/ajax/libs/flickr-justified-gallery/2.1.2/fjGallery.min.js',
+      css: 'https://cdnjs.cloudflare.com/ajax/libs/flickr-justified-gallery/2.1.2/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux调试原理及方法2——内存占用调优',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-19 22:16:33'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://cdn1.tianli0.top/npm/element-ui@2.15.6/packages/theme-chalk/lib/index.css"><style id="themeColor"></style><style id="rightSide"></style><style id="transPercent"></style><style id="blurNum"></style><style id="settingStyle"></style><span id="fps"></span><style id="defineBg"></style><style id="menu_shadow"></style><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="SnowMoon-Haoyu's Blog" type="application/atom+xml">
+</head><body><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><div class="loading-img"></div><div class="loading-image-dot"></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/Avatar.jpg" onerror="onerror=null;src='/assets/r1.jpg'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">58</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-home"></use></svg><span class="menu_word" style="font-size:17px"> 首页</span></a></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon--article"></use></svg><span class="menu_word" style="font-size:17px"> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-guidang1">                   </use></svg><span class="menu_word" style="font-size:17px"> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-sekuaibiaoqian">                   </use></svg><span class="menu_word" style="font-size:17px"> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-fenlei">                   </use></svg><span class="menu_word" style="font-size:17px"> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-shejiaoxinxi"></use></svg><span class="menu_word" style="font-size:17px"> 杂记</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/social/fcircle/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-pengyouquan">                   </use></svg><span class="menu_word" style="font-size:17px"> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-liuyan">                   </use></svg><span class="menu_word" style="font-size:17px"> 留言板</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/personal/diary/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-love-sign">                   </use></svg><span class="menu_word" style="font-size:17px"> 日记</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">SnowMoon-Haoyu's Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page faa-parent animated-hover" href="/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-home"></use></svg><span class="menu_word" style="font-size:17px"> 首页</span></a></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon--article"></use></svg><span class="menu_word" style="font-size:17px"> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-guidang1">                   </use></svg><span class="menu_word" style="font-size:17px"> 归档</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-sekuaibiaoqian">                   </use></svg><span class="menu_word" style="font-size:17px"> 标签</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-fenlei">                   </use></svg><span class="menu_word" style="font-size:17px"> 分类</span></a></li></ul></div><div class="menus_item"><a class="site-page group faa-parent animated-hover hide" href="javascript:void(0);"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-shejiaoxinxi"></use></svg><span class="menu_word" style="font-size:17px"> 杂记</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/social/fcircle/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-pengyouquan">                   </use></svg><span class="menu_word" style="font-size:17px"> 朋友圈</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-liuyan">                   </use></svg><span class="menu_word" style="font-size:17px"> 留言板</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/personal/diary/"><svg class="menu_icon faa-tada" aria-hidden="true" style="width:1.30em;height:1.30em;vertical-align:-0.15em;fill:currentColor;overflow:hidden;"><use xlink:href="#icon-love-sign">                   </use></svg><span class="menu_word" style="font-size:17px"> 日记</span></a></li></ul></div></div><center id="name-container"><a id="page-name" href="javascript:scrollToTop()">PAGE_NAME</a></center><div id="nav-right"><div id="search-button"><a class="search faa-parent animated-hover" title="检索站内任何你想要的信息"><svg class="faa-tada icon" style="height:24px;width:24px;fill:currentColor;position:relative;top:6px" aria-hidden="true"><use xlink:href="#icon-valentine_-search-love-find-heart"></use></svg><span> 搜索</span></a></div><a class="meihua faa-parent animated-hover" onclick="toggleWinbox()" title="美化设置-自定义你的风格" id="meihua-button"><svg class="faa-tada icon" style="height:26px;width:26px;fill:currentColor;position:relative;top:8px" aria-hidden="true"><use xlink:href="#icon-tupian1"></use></svg></a><a class="sun_moon faa-parent animated-hover" onclick="switchNightMode()" title="浅色和深色模式转换" id="nightmode-button"><svg class="faa-tada" style="height:25px;width:25px;fill:currentColor;position:relative;top:7px" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon">       </use></svg></a><div id="toggle-menu"><a><i class="fas fa-bars fa-fw"></i></a></div></div></div></nav><div id="post-info"><h1 class="post-title">Linux调试原理及方法2——内存占用调优</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><svg class="meta_icon post-meta-icon" style="width:30px;height:30px;position:relative;top:10px"><use xlink:href="#icon-rili"></use></svg><span class="post-meta-label">发表于 </span><time class="post-meta-date-created" datetime="2024-06-01T05:16:28.000Z" title="发表于 2024-06-01 13:16:28">2024-06-01</time><span class="post-meta-separator">|</span><svg class="meta_icon post-meta-icon" style="width:18px;height:18px;position:relative;top:5px"><use xlink:href="#icon-gengxin1"></use></svg><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-19T14:16:33.108Z" title="更新于 2024-10-19 22:16:33">2024-10-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><svg class="meta_icon post-meta-icon" style="width:18px;height:18px;position:relative;top:5px"><use xlink:href="#icon-biaoqian"></use></svg><a class="post-meta-categories" href="/categories/SnowMoon%E3%81%AE%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%AC%94%E8%AE%B0/">SnowMoonの嵌入式笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><svg class="meta_icon post-meta-icon" style="width:25px;height:25px;position:relative;top:8px"><use xlink:href="#icon-charuword"></use></svg><span class="post-meta-label">字数总计:</span><span class="word-count">4016</span><span class="post-meta-separator">|</span><svg class="meta_icon post-meta-icon" style="width:20px;height:20px;position:relative;top:5px"><use xlink:href="#icon-shizhong"></use></svg><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux调试原理及方法2——内存占用调优"><svg class="meta_icon post-meta-icon" style="width:25px;height:25px;position:relative;top:5px"><use xlink:href="#icon-eye"></use></svg><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="linux-调试系列文章"><a class="markdownIt-Anchor" href="#linux-调试系列文章"></a> Linux 调试系列文章</h1>
+<p>[[Linux CPU 占用调优]]<br />
+[[Linux Memory占用调优(Processing)]]</p>
+<h1 id="调试工具总览"><a class="markdownIt-Anchor" href="#调试工具总览"></a> 调试工具总览</h1>
+<p>Brendan D. Gregg 维护了一份Linux性能调优工具的蓝图<a target="_blank" rel="noopener" href="http://www.brendangregg.com/linuxperf.html">Linux Performance Tools</a>，针对Linux系统的各个组件都有相应的分析工具，一目了然。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/202406012053732.webp" alt="image.png" /></p>
+<h1 id="基本原理"><a class="markdownIt-Anchor" href="#基本原理"></a> 基本原理</h1>
+<h2 id="linux内核内存管理"><a class="markdownIt-Anchor" href="#linux内核内存管理"></a> linux内核内存管理</h2>
+<ul>
+<li>
+<p>【批发】linux内核基于伙伴算法管理物理内存页</p>
+</li>
+<li>
+<p>【零售】linux内核基于slab管理内存</p>
+</li>
+<li>
+<p>linux内核所用物理内存大小统计</p>
+</li>
+</ul>
+<h2 id="linux进程内存管理"><a class="markdownIt-Anchor" href="#linux进程内存管理"></a> linux进程内存管理</h2>
+<p>malloc() 是 C 标准库提供的内存分配函数，对应到系统调用上，有两种实现方式，即 brk() 和 mmap()</p>
+<p>对小块内存（小于 128K），C 标准库使用 brk() 来分配，也就是通过移动堆顶的位置来分配内存。这些内存释放后并不会立刻归还系统，而是被缓存起来，这样就可以重复使用。</p>
+<p>对大块内存（大于 128K），则直接使用内存映射 mmap() 来分配，也就是在文件映射段找一块空闲内存分配出去</p>
+<p>各自的<strong>优缺点</strong>：</p>
+<ul>
+<li>
+<p>brk() 方式的缓存，可以减少缺页异常的发生，提高内存访问效率；不过，由于这些内存没有归还系统，在内存工作繁忙时，频繁的内存分配和释放会造成内存碎片</p>
+</li>
+<li>
+<p>mmap() 方式分配的内存，会在释放时直接归还系统，所以每次 mmap 都会发生缺页异常。在内存工作繁忙时，频繁的内存分配会导致大量的缺页异常，使内核的管理负担增大</p>
+</li>
+</ul>
+<p>整体来说，Linux 使用<strong>伙伴系统</strong>来管理内存分配。前面我们提到过，这些内存在 MMU 中以页为单位进行管理，伙伴系统也一样，以页为单位来管理内存，并且会通过相邻页的合并，减少内存碎片化（比如 brk 方式造成的内存碎片）</p>
+<h3 id="虚拟内存"><a class="markdownIt-Anchor" href="#虚拟内存"></a> 虚拟内存</h3>
+<blockquote>
+<ul>
+<li>进程独享虚拟地址空间（32位）  ０～３Ｇ</li>
+<li>进程内分段管理内存空间</li>
+</ul>
+<blockquote>
+<p>代码段<br />
+数据段<br />
+heap<br />
+malloc()<br />
+stack<br />
+文件映射，匿名映射 mmap()</p>
+</blockquote>
+</blockquote>
+<p>进程内存按照用途分类</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://cdn.processon.com/62c842730e3e740a4750ac02?e=1657294979&amp;token=trhI0BY8QfVrIGn9nENop6JAc6l5nZuxhjQ62UfM:QcniUfzyckg6p1p7BtzFkoetjOY=" alt="" /></p>
+<h3 id="物理内存"><a class="markdownIt-Anchor" href="#物理内存"></a> 物理内存</h3>
+<h4 id="进程所用物理内存大小统计"><a class="markdownIt-Anchor" href="#进程所用物理内存大小统计"></a> 进程所用物理内存大小统计</h4>
+<ul>
+<li>PSS</li>
+</ul>
+<blockquote>
+<p>一个进程所使用的内存可通过PSS和RSS来衡量。 计算进程的Pss: $ cat /proc/1/smaps | grep Pss | awk ‘{total+=$2}; END {print total}’<br />
+把一个共享库占用的内存，分摊到使用了这个共享库的各个进程头上</p>
+</blockquote>
+<ul>
+<li>RSS(不合理)</li>
+</ul>
+<blockquote>
+<p>把共享库占用的内存直接加到每个进程头上</p>
+</blockquote>
+<ul>
+<li>USS</li>
+</ul>
+<blockquote>
+<p>进程独自占用的物理内存（不包含共享库占用的内存）</p>
+</blockquote>
+<h2 id="内存回收"><a class="markdownIt-Anchor" href="#内存回收"></a> 内存回收</h2>
+<p>在用户空间，malloc 通过 brk() 分配的内存，在释放时并不立即归还系统，而是缓存起来重复利用。在内核空间，Linux 通过 slab 分配器来管理小内存，可以把 slab 看成构建在<strong>伙伴系统上的一个缓存</strong>，主要作用就是分配并释放内核中的小对象</p>
+<p>系统也不会任由某个进程用完所有内存。在发现内存紧张时，系统就会通过一系列机制来回收内存：</p>
+<ul>
+<li>
+<p>回收缓存，比如使用 LRU（Least Recently Used）算法，回收最近使用最少的内存页面</p>
+</li>
+<li>
+<p>回收不常访问的内存，把不常用的内存通过交换分区直接写到磁盘中（会用到交换分区）</p>
+</li>
+<li>
+<p>杀死进程，内存紧张时系统还会通过 OOM（Out of Memory），直接杀掉占用大量内存的进程</p>
+</li>
+</ul>
+<p>OOM是内核的一种保护机制。它监控进程的内存使用情况，并且使用 oom_score 为每个进程的内存使用情况进行评分：</p>
+<ul>
+<li>
+<p>进程消耗的内存越大，oom_score 就越大</p>
+</li>
+<li>
+<p>进程运行占用的 CPU 越多，oom_score 就越小</p>
+</li>
+</ul>
+<p>可以手动设置进程的oom_adj来调整oom_score。oom_adj的范围是[-17, 15]，数值越大，进程越容易被OOM杀死；反之，越不容易被OOM杀死</p>
+<h3 id="回收时机"><a class="markdownIt-Anchor" href="#回收时机"></a> 回收时机</h3>
+<ul>
+<li>内存紧缺回收(alloc_pages的时候)</li>
+<li>周期性内存回收：linux内存回收总结：<a target="_blank" rel="noopener" href="https://cfn2lv4v46.feishu.cn/docx/P914dlXpro6CHnxErshcFuaNnYg">从swapd触发到回收3部曲</a></li>
+<li>手动回收</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; /proc/sys/vm/drop_caches   # &quot;clean&quot; page cache</span><br><span class="line">echo 2 &gt; /proc/sys/vm/drop_caches # shrink slab(dentry &amp; inode)</span><br><span class="line">echo 3 &gt; /proc/sys/vm/drop_caches</span><br></pre></td></tr></table></figure>
+<h3 id="回收方式"><a class="markdownIt-Anchor" href="#回收方式"></a> 回收方式</h3>
+<ul>
+<li>页回写 直接释放物理页面</li>
+<li>页交换 回写到swap分区，然后释放物理页面</li>
+<li>OOM Killer （较为暴力，应尽量避免）</li>
+</ul>
+<h2 id="性能指标"><a class="markdownIt-Anchor" href="#性能指标"></a> 性能指标</h2>
+<h3 id="系统内存使用量"><a class="markdownIt-Anchor" href="#系统内存使用量"></a> 系统内存使用量</h3>
+<p>buffer, cache, used</p>
+<h4 id="相关工具"><a class="markdownIt-Anchor" href="#相关工具"></a> 相关工具</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/proc/meminfo</span><br><span class="line"></span><br><span class="line">free</span><br><span class="line"></span><br><span class="line">sar -r 1</span><br><span class="line"></span><br><span class="line">vmstat </span><br></pre></td></tr></table></figure>
+<p><strong>系统内存余量</strong><br />
+free, available</p>
+<p>available等于“空闲内存减去所有zones的lowmem reserve和high watermark，再加上page cache和slab中可以回收的部分“</p>
+<h3 id="进程虚拟内存"><a class="markdownIt-Anchor" href="#进程虚拟内存"></a> 进程虚拟内存</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pid=%d\n&quot;</span>, getpid());</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>/proc/{id}/maps</p>
+<p>pmap -p 1</p>
+<p>进程内存使用量</p>
+<h4 id="相关工具-2"><a class="markdownIt-Anchor" href="#相关工具-2"></a> 相关工具</h4>
+<p>ps -aux</p>
+<p>top</p>
+<p>RES：常驻内存大小<br />
+RES=RSan+RSfd+RSsh</p>
+<p>RSan：常驻匿名内存大小</p>
+<p>RSfd：常驻文件映射内存大小</p>
+<p>RSsh：常驻被锁定内存大小</p>
+<p>SHR：共享内存大小</p>
+<p>/proc/{pid}/status</p>
+<p>smem -k -s rss| more</p>
+<h3 id="缓存与缓冲区命中率"><a class="markdownIt-Anchor" href="#缓存与缓冲区命中率"></a> 缓存与缓冲区命中率</h3>
+<p>缓存命中率，是指直接通过缓存获取数据的请求次数，占所有数据请求次数的百分比。</p>
+<h4 id="相关工具-3"><a class="markdownIt-Anchor" href="#相关工具-3"></a> 相关工具</h4>
+<p>cachestat/cachestat-bpfcc（系统整体）</p>
+<p>HITS ，表示page cache命中的次数； MISSES ，表示page caceh未命中的次数； DIRTIES， Number of dirty pages added to the page cache； BUFFERS_MB，表示 Buffers 的大小，以 MB 为单位； CACHED_MB，表示 Cache 的大小，以 MB 为单位； HITRATIO，表示 page cache 命中率；</p>
+<p>cachetop/cachetop-bpfcc（进程）</p>
+<p>pcstat （进程&amp;文件）</p>
+<h3 id="swap分区使用量"><a class="markdownIt-Anchor" href="#swap分区使用量"></a> swap分区使用量</h3>
+<p>swap分区的作用是在系统物理内存不足时,将一部分物理内存中的数据交换到swap分区（磁盘上），从而把这部分物理内存释放出来给需要的程序来使用。 一、哪部分内存会被交换到swap分区？ １、匿名页(AnonPages)； ２、Shmem(基于tmpfs实现)虽然未统计在AnonPages里，但它们背后没有硬盘文件，所以也是需要交换区的。 二、从进程角度看，以下的函数或者机制分配的内存在物理内存不足时会被交换到swap分区，包括： - stack - malloc() - brk()/sbrk()  - mmap(PRIVATE, ANON) - POSIX shm* - mmap(SHARED, ANON) - tmpfs</p>
+<h4 id="相关工具-4"><a class="markdownIt-Anchor" href="#相关工具-4"></a> 相关工具</h4>
+<p>free（系统整体）</p>
+<p>sar -S 1（系统整体）</p>
+<p>smem -k（进程）</p>
+<p>计算所有进程的swap总的大小： $ smem | awk ‘{if(NR&gt;1) total+=$(NF-3)}; END{printf total}’</p>
+<h3 id="内存泄露情况"><a class="markdownIt-Anchor" href="#内存泄露情况"></a> 内存泄露情况</h3>
+<h4 id="相关工具-5"><a class="markdownIt-Anchor" href="#相关工具-5"></a> 相关工具</h4>
+<p>memleak -a -p {pid}</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">leak.c</span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">test</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> *p = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="number">128</span> * <span class="keyword">sizeof</span>(<span class="type">char</span>));</span><br><span class="line">    p = (<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="number">64</span> * <span class="keyword">sizeof</span>(<span class="type">char</span>));</span><br><span class="line">    <span class="built_in">free</span>(p);</span><br><span class="line">    p = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pid=%d\n&quot;</span>, getpid());</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="缺页异常主-次"><a class="markdownIt-Anchor" href="#缺页异常主-次"></a> 缺页异常（主、次）</h3>
+<p>缺页异常：cpu拿到虚拟地址，让MMU进行地址转换的时候，MMU找不到虚拟地址的页表映射关系。 主缺页：需要从磁盘加载 memory page； 次缺页：不需要从磁盘加载 memory page；</p>
+<h4 id="相关工具-6"><a class="markdownIt-Anchor" href="#相关工具-6"></a> 相关工具</h4>
+<p>进程自启动以来发生的缺页事件的总和：<br />
+ps -eo min_flt,maj_flt,cmd | more</p>
+<p>进程每秒缺页错误次数：<br />
+pidstat -r</p>
+<h2 id="工具汇总"><a class="markdownIt-Anchor" href="#工具汇总"></a> 工具汇总</h2>
+<h3 id="free命令"><a class="markdownIt-Anchor" href="#free命令"></a> free命令</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注意不同版本的free输出可能会有所不同</span></span><br><span class="line">$ free</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:        8169348      263524     6875352         668     1030472     7611064</span><br><span class="line">Swap:             0           0           0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一列，total 是总内存大小；</li>
+<li>第二列，used 是已使用内存的大小，包含了共享内存；</li>
+<li>第三列，free 是未使用内存的大小；</li>
+<li>第四列，shared 是共享内存的大小；</li>
+<li>第五列，buff/cache 是缓存和缓冲区的大小；</li>
+<li>最后一列，available 是新进程可用内存的大小</li>
+</ul>
+<p><strong>注意</strong>：available 不仅包含未使用内存，还包括了可回收的缓存，所以一般会比未使用内存更大。不过，并不是所有缓存都可以回收，因为有些缓存可能正在使用中</p>
+<h3 id="top命令"><a class="markdownIt-Anchor" href="#top命令"></a> top命令</h3>
+<p>可以查看每个进程的内存使用情况</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 按下M切换到内存排序</span></span><br><span class="line">$ top</span><br><span class="line">...</span><br><span class="line">KiB Mem :  8169348 total,  6871440 free,   267096 used,  1030812 buff/cache</span><br><span class="line">KiB Swap:        0 total,        0 free,        0 used.  7607492 avail Mem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</span><br><span class="line">  430 root      19  -1  122360  35588  23748 S   0.0  0.4   0:32.17 systemd-journal</span><br><span class="line"> 1075 root      20   0  771860  22744  11368 S   0.0  0.3   0:38.89 snapd</span><br><span class="line"> 1048 root      20   0  170904  17292   9488 S   0.0  0.2   0:00.24 networkd-dispat</span><br><span class="line">    1 root      20   0   78020   9156   6644 S   0.0  0.1   0:22.92 systemd</span><br><span class="line">12376 azure     20   0   76632   7456   6420 S   0.0  0.1   0:00.01 systemd</span><br><span class="line">12374 root      20   0  107984   7312   6304 S   0.0  0.1   0:00.00 sshd</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>主要的几个信息：</p>
+<ul>
+<li>VIRT 是<strong>进程虚拟内存</strong>的大小，只要是进程申请过的内存，即便还没有真正分配物理内存，也会计算在内</li>
+<li>RES 是<strong>常驻内存</strong>的大小，也就是进程<strong>实际使用的物理内存</strong>大小，但<strong>不包括 Swap 和共享内存</strong></li>
+<li>SHR 是共享内存的大小，比如与其他进程共同使用的共享内存、加载的动态链接库以及程序的代码段等</li>
+<li>%MEM 是进程使用物理内存占系统总内存的百分比</li>
+</ul>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>虚拟内存通常并不会全部分配物理内存。从上面的输出，你可以发现每个进程的虚拟内存都比常驻内存大得多</li>
+<li>共享内存 SHR 并不一定是共享的，比方说，<strong>程序的代码段、非共享的动态链接库</strong>，也都算在 SHR 里。SHR 也包括了<strong>进程间真正共享的内存</strong>。所以在计算多个进程的内存使用时，不要把所有进程的 SHR 直接相加得出结果</li>
+</ul>
+<h3 id="sar"><a class="markdownIt-Anchor" href="#sar"></a> sar</h3>
+<p>用法： sar -r -S 1</p>
+<p>-r: 表示显示内存使用情况</p>
+<p>kbcommit，表示当前系统负载需要的内存。它实际上是为了保证系统内存不溢出（不超出），对需要内存的估计值。 %commit，就是这个值相对总内存的百分比，因为commit统计的是RAM+swap，所以%commit可能会大于100%</p>
+<p>-S: 表示显示Swap使用情况</p>
+<p>kbswpcad：其实就是swap文件的file cache。 kbswpcad = SwapCached(来自/proc/meminfo)</p>
+<h3 id="vmstat"><a class="markdownIt-Anchor" href="#vmstat"></a> vmstat</h3>
+<p>用法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-f: 显示系统启动到今创建的所有的进程数</span><br><span class="line"></span><br><span class="line">-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）。默认单位为K（1024 bytes）</span><br><span class="line"></span><br><span class="line">-a: 显示活跃和非活跃内存</span><br><span class="line"></span><br><span class="line">-s：内存使用详情</span><br><span class="line"></span><br><span class="line">-m: 显示slab详情</span><br><span class="line"></span><br><span class="line">-d：磁盘读写的详情</span><br><span class="line"></span><br><span class="line">-p：显示指定磁盘分区统计信息</span><br></pre></td></tr></table></figure>
+<h3 id="cachestatcachestat-bpfcc"><a class="markdownIt-Anchor" href="#cachestatcachestat-bpfcc"></a> cachestat/cachestat-bpfcc</h3>
+<p>安装方法： $ sudo apt-key adv --keyserver <a target="_blank" rel="noopener" href="http://keyserver.ubuntu.com">keyserver.ubuntu.com</a> --recv-keys 4052245BD4284CDD $ echo “deb <a target="_blank" rel="noopener" href="https://repo.iovisor.org/apt/xenial">https://repo.iovisor.org/apt/xenial</a> xenial main” | sudo tee /etc/apt/sources.list.d/iovisor.list $ sudo apt-get update $ sudo apt-get install -y bcc-tools libbcc-examples linux-headers-$(uname -r) $ export PATH=$PATH:/usr/share/bcc/tools</p>
+<p>用法</p>
+<p>HITS ，表示page cache命中的次数； MISSES ，表示page caceh未命中的次数； DIRTIES， Number of dirty pages added to the page cache； BUFFERS_MB，表示 Buffers 的大小，以 MB 为单位； CACHED_MB，表示 Cache 的大小，以 MB 为单位； HITRATIO，表示 page cache 命中率；</p>
+<p>提供了整个系统的 page cache 的读写命中情况</p>
+<p>cachetop/cachetop-bpfcc</p>
+<p>用法</p>
+<p>提供了每个进程的 page cache 的读写命中情况</p>
+<h3 id="pcstat"><a class="markdownIt-Anchor" href="#pcstat"></a> pcstat</h3>
+<p>安装方法： $ export GOPATH=~/go $ go get <a target="_blank" rel="noopener" href="http://github.com/tobert/pcstat">github.com/tobert/pcstat</a> $ cp -rfa $GOPATH/bin/pcstat /bin</p>
+<p>用法</p>
+<p>查看文件的缓存大小以及缓存比例：<br />
+$ pcstat /tftpboot/hello</p>
+<p>查看进程打开的所有文件的缓存大小以及缓存比例：<br />
+$ pcstat -pid {pid}</p>
+<h3 id="hcache"><a class="markdownIt-Anchor" href="#hcache"></a> hcache</h3>
+<p>go version &gt; 1.12 【安装】 git clone <a target="_blank" rel="noopener" href="https://github.com/silenceshell/hcache.git">https://github.com/silenceshell/hcache.git</a> cd hcache make build sudo cp hcache /usr/local/bin/</p>
+<p>用法</p>
+<p>输出系统中前10大使用缓存最多的文件：<br />
+hcache --top 10</p>
+<p>只显示基本名字：<br />
+hcache --top 10 -basename</p>
+<h3 id="memleak"><a class="markdownIt-Anchor" href="#memleak"></a> memleak</h3>
+<p>memleak跟踪内存申请和释放请求。 【实现原理】 在跟踪某个进程时，memleak会追踪libc中的分配函数，具体来说包括：malloc、calloc、realloc、valloc、memalign、pvalloc、aligned d_alloc和free； 当跟踪所有进程时，memleak追踪包括kmalloc/kfree、kmem_cache_alloc/kmem_cache_free，以及get_free_pages/free_pages所分配的页面。</p>
+<p>用法</p>
+<p>-a: 表示显示每个内存分配请求的大小以及地址</p>
+<p>-p {pid}：指定要检测的进程</p>
+<p>-c {command}：运行指定的命令并只跟踪其分配，这会跟踪libc分配器。</p>
+<p>-z ｛MIN_SIZE｝：只捕获大于等于MIN_SIZE字节的内存泄露</p>
+<p>-Z {MAX_SIZE}：只捕获小于等于MAX_SIZE字节的内存泄露</p>
+<p>INTERVAL：每隔INTERVAL秒打印未释放的申请及其调用堆栈的摘要。缺省值为5秒。</p>
+<p>每隔１秒打印一次进程31826的内存泄露统计：<br />
+memleak -a -p 31826 1</p>
+<p>限制</p>
+<p>当追踪的进程快速申请和释放内存时，memleak可能会带来很大的开销</p>
+<p>此工具仅适用于Linux 4.6+</p>
+<h3 id="smem"><a class="markdownIt-Anchor" href="#smem"></a> smem</h3>
+<p>用法</p>
+<p>统计物理内存用量，支持的维度：process, user, mapping, systemwide</p>
+<p>-k：显示单位后缀</p>
+<p>-p：用百分比显示</p>
+<p>-u：显示用户占用内存信息swap/rss/uss/pss大小</p>
+<p>-w：显示系统内存用量，包括内核空间和用户空间</p>
+<p>-m：统计mapping所用的物理内存</p>
+<p>$ smem -m -k  Map  PIDs   AVGPSS      PSS  /lib/x86_64-linux-gnu/libc-2.27.so         173    29.0K     5.1M  第一列(Map)： 表示被共享的文件名字； 第二列(PIDs)： 表示上述文件被几个进程共享； 第三列(AVGPSS)： 各个进程平均分摊的内存，AVGPSS＝PSS/PIDs 第四列(PSS)： 文件加载后，占用的物理内存；</p>
+<p>-s {swap/pss/uss/rss}：按照进程对swap/rss/pss/uss的使用量排序</p>
+<h2 id="调优实践"><a class="markdownIt-Anchor" href="#调优实践"></a> 调优实践</h2>
+<h3 id="实践一linux-c语言开发遇到的最常见的内存问题该如何定位解决"><a class="markdownIt-Anchor" href="#实践一linux-c语言开发遇到的最常见的内存问题该如何定位解决"></a> 实践一：linux c语言开发遇到的最常见的内存问题，该如何定位解决？</h3>
+<p><strong>分析过程</strong></p>
+<p>查看系统总体内存用量，确定大致问题：<br />
+vmstat -S K 1</p>
+<p>对使用物理内存最多的20个进程进行监控（间隔１ｓ），确定进程是否存在内存异常：<br />
+watch -n 1 -d “smem -s rss |tail -n 20”</p>
+<p>如果进程使用内存持续增加，进行内存泄露监控：<br />
+memleak -a -p {pid} 1</p>
+<p>对其他内存使用量较高的进程代码进行review，主要关注如下部分：<br />
+- malloc<br />
+- brk()/sbrk()<br />
+- mmap()<br />
+- shmem等</p>
+<p>进行代码层面的性能优化</p>
+<p><strong>环境搭建</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">main.c</span><br><span class="line"><span class="comment">// 斐波那契数列（Fibonacci sequence）</span></span><br><span class="line"><span class="comment">// 1、1、2、3、5、8、13、21、34</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MALLOC_SIZE 256000</span></span><br><span class="line"><span class="type">int</span> *<span class="title function_">fibo</span><span class="params">(<span class="type">int</span> *n0, <span class="type">int</span> *n1)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> *v = (<span class="type">int</span> *) <span class="built_in">malloc</span>(MALLOC_SIZE*<span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">    <span class="built_in">memset</span>(v, <span class="number">0</span>, MALLOC_SIZE*<span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">    *v = *n0 + *n1;</span><br><span class="line">    <span class="keyword">return</span> v;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">do_test</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> n0 = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> n1 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> *v = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">int</span> n = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span> (n = <span class="number">2</span>; n &gt; <span class="number">0</span>; n++) &#123;</span><br><span class="line">        v = fibo(&amp;n0, &amp;n1);</span><br><span class="line">        n0 = n1;</span><br><span class="line">        n1 = *v;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%dth =&gt; %lld\n&quot;</span>, n, *v);</span><br><span class="line">        <span class="comment">//free(v)</span></span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;pid=%d\n&quot;</span>, getpid());</span><br><span class="line">    do_test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实践二spark处理200w笔数据有时候需要几秒有时候需要几十秒原因何在"><a class="markdownIt-Anchor" href="#实践二spark处理200w笔数据有时候需要几秒有时候需要几十秒原因何在"></a> 实践二：spark处理200w笔数据，有时候需要几秒，有时候需要几十秒，原因何在？</h3>
+<p>分析过程</p>
+<p>检查程序执行过程中有没有涉及到文件的操作？<br />
+lsof -p 28161| grep test.csv</p>
+<p>查看文件的缓存命中情况<br />
+pcstat /app/tools/test-tool/data/test.csv</p>
+<p>记录测试结果</p>
+<p>清除文件缓存<br />
+echo 1 &gt; /proc/sys/vm/drop_caches</p>
+<p>查看缓存命中情况</p>
+<p>记录测试结果</p>
+<p>结论：由于文件缓存的作用，性能提升了10倍左右！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">spark-sql&gt; </span><br><span class="line">CREATE table csv</span><br><span class="line">USING csv</span><br><span class="line">OPTIONS (</span><br><span class="line"> header true,</span><br><span class="line">  path &quot;/app/tools/test-tool/data/test.csv&quot;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">spark-sql&gt;</span><br><span class="line">select * from csv where name=&#x27;nam9876&#x27;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">在另一个terminal执行：</span><br><span class="line"># echo 1 &gt; /proc/sys/vm/drop_caches </span><br></pre></td></tr></table></figure>
+<h3 id="调优方法"><a class="markdownIt-Anchor" href="#调优方法"></a> 调优方法</h3>
+<p>应用层面</p>
+<p>尽量使用缓存或者缓冲区来缓存数据</p>
+<p>fluent-bit; flume; spark等</p>
+<p>考虑使用tmpfs替代磁盘目录<br />
+mount -t tmpfs -o size=1G tmpfs /tftpboot/spark</p>
+<p>系统层面</p>
+<p>减少swap使用，比如减少swappiness大小</p>
+<p>限制进程内存资源</p>
+<p>使用HugePage（大页内存，4k-&gt;2M, 1G等），提高TLB的命中率</p>
+<p>通过 /proc/pid/oom_adj ，调整核心应用的 oom_score<br />
+范围 【-17，+15】，值越大越被容易杀死</p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Linux调试原理及方法2——内存占用调优</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="https://www.snowmoon.top/2024/06/01/SnowMoon%E3%81%AE%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%AC%94%E8%AE%B0-Linux-Memory%E5%8D%A0%E7%94%A8%E8%B0%83%E4%BC%98-Processing/">https://www.snowmoon.top/2024/06/01/SnowMoonの嵌入式笔记-Linux-Memory占用调优-Processing/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>雪月</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2024-06-01</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2024-10-19</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/"><div class="tags-punctuation"><svg class="faa-tada icon" style="height:1.1em;width:1.1em;fill:currentColor;position:relative;top:2px;margin-right:3px" aria-hidden="true"><use xlink:href="#icon-sekuaibiaoqian"></use></svg></div>Linux</a><a class="post-meta__tags" href="/tags/Memory/"><div class="tags-punctuation"><svg class="faa-tada icon" style="height:1.1em;width:1.1em;fill:currentColor;position:relative;top:2px;margin-right:3px" aria-hidden="true"><use xlink:href="#icon-sekuaibiaoqian"></use></svg></div>Memory</a><a class="post-meta__tags" href="/tags/Cache/"><div class="tags-punctuation"><svg class="faa-tada icon" style="height:1.1em;width:1.1em;fill:currentColor;position:relative;top:2px;margin-right:3px" aria-hidden="true"><use xlink:href="#icon-sekuaibiaoqian"></use></svg></div>Cache</a></div></div><link rel="stylesheet" href="/css/coin.css" media="defer" onload="this.media='all'"/><div class="post-reward"><button class="tip-button reward-button"><span class="tip-button__text">投喂作者</span><div class="coin-wrapper"><div class="coin"><div class="coin__middle"></div><div class="coin__back"></div><div class="coin__front"></div></div></div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/alipay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/alipay.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></button></div><audio id="coinAudio" src="https://npm.elemecdn.com/akilar-candyassets@1.0.36/audio/aowu.m4a"></audio><script defer="defer" src="/js/coin.js"></script><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/06/01/%E4%B9%A6%E7%B1%8D%E5%AD%98%E6%A1%A3-Linux-kernel-notes-master-Linux%E5%86%85%E6%A0%B8/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_42.webp" onerror="onerror=null;src='/assets/r2.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2024/04/20/SnowMoon%E3%81%AE%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%AC%94%E8%AE%B0-Linux-CPU-%E5%8D%A0%E7%94%A8%E8%B0%83%E4%BC%98/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/202406012053732.webp" onerror="onerror=null;src='/assets/r2.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Linux 性能调优1——CPU</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/09/06/Linux_%E7%BD%91%E7%BB%9C%E8%B0%83%E4%BC%98/" title="Linux——网络调优"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/%E7%BD%91%E7%BB%9C.webp" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2024-10-19</div><div class="title">Linux——网络调优</div></div></a></div><div><a href="/2024/10/19/Linux_IO%E8%B0%83%E4%BC%98/" title="Linux I&#x2F;O调优"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/IO.webp" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2024-10-19</div><div class="title">Linux I&#x2F;O调优</div></div></a></div><div><a href="/2024/04/20/SnowMoon%E3%81%AE%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%AC%94%E8%AE%B0-Linux-CPU-%E5%8D%A0%E7%94%A8%E8%B0%83%E4%BC%98/" title="Linux 性能调优1——CPU"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/202406012053732.webp" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2024-06-02</div><div class="title">Linux 性能调优1——CPU</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><svg class="meta_icon" style="width:22px;height:22px;position:relative;top:5px"><use xlink:href="#icon-mulu1"></use></svg><span style="font-weight:bold">目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#linux-%E8%B0%83%E8%AF%95%E7%B3%BB%E5%88%97%E6%96%87%E7%AB%A0"><span class="toc-text"> Linux 调试系列文章</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E6%80%BB%E8%A7%88"><span class="toc-text"> 调试工具总览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text"> 基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%86%85%E6%A0%B8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-text"> linux内核内存管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-text"> linux进程内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-text"> 虚拟内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="toc-text"> 物理内存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E6%89%80%E7%94%A8%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E7%BB%9F%E8%AE%A1"><span class="toc-text"> 进程所用物理内存大小统计</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="toc-text"> 内存回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%94%B6%E6%97%B6%E6%9C%BA"><span class="toc-text"> 回收时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%94%B6%E6%96%B9%E5%BC%8F"><span class="toc-text"> 回收方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text"> 性能指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E9%87%8F"><span class="toc-text"> 系统内存使用量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="toc-text"> 相关工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-text"> 进程虚拟内存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7-2"><span class="toc-text"> 相关工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%8E%E7%BC%93%E5%86%B2%E5%8C%BA%E5%91%BD%E4%B8%AD%E7%8E%87"><span class="toc-text"> 缓存与缓冲区命中率</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7-3"><span class="toc-text"> 相关工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#swap%E5%88%86%E5%8C%BA%E4%BD%BF%E7%94%A8%E9%87%8F"><span class="toc-text"> swap分区使用量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7-4"><span class="toc-text"> 相关工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E6%83%85%E5%86%B5"><span class="toc-text"> 内存泄露情况</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7-5"><span class="toc-text"> 相关工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E9%A1%B5%E5%BC%82%E5%B8%B8%E4%B8%BB-%E6%AC%A1"><span class="toc-text"> 缺页异常（主、次）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7-6"><span class="toc-text"> 相关工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E6%B1%87%E6%80%BB"><span class="toc-text"> 工具汇总</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#free%E5%91%BD%E4%BB%A4"><span class="toc-text"> free命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#top%E5%91%BD%E4%BB%A4"><span class="toc-text"> top命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sar"><span class="toc-text"> sar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vmstat"><span class="toc-text"> vmstat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cachestatcachestat-bpfcc"><span class="toc-text"> cachestat&#x2F;cachestat-bpfcc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pcstat"><span class="toc-text"> pcstat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hcache"><span class="toc-text"> hcache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#memleak"><span class="toc-text"> memleak</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#smem"><span class="toc-text"> smem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E5%AE%9E%E8%B7%B5"><span class="toc-text"> 调优实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5%E4%B8%80linux-c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E9%81%87%E5%88%B0%E7%9A%84%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98%E8%AF%A5%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E8%A7%A3%E5%86%B3"><span class="toc-text"> 实践一：linux c语言开发遇到的最常见的内存问题，该如何定位解决？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5%E4%BA%8Cspark%E5%A4%84%E7%90%86200w%E7%AC%94%E6%95%B0%E6%8D%AE%E6%9C%89%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%87%A0%E7%A7%92%E6%9C%89%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%87%A0%E5%8D%81%E7%A7%92%E5%8E%9F%E5%9B%A0%E4%BD%95%E5%9C%A8"><span class="toc-text"> 实践二：spark处理200w笔数据，有时候需要几秒，有时候需要几十秒，原因何在？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E4%BC%98%E6%96%B9%E6%B3%95"><span class="toc-text"> 调优方法</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-color: transparent;"><div id="footer-wrap"><div id="ft"><div class="ft-item-1"><div class="t-top"><div class="t-t-l"></div></div></div></div><div class="copyright"><span><b>&copy;2021-2024</b></span><span><b>&nbsp;&nbsp;By 雪月</b></span></div><div id="workboard"></div><p id="ghbdages"></p></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button><button class="share" type="button" title="右键模式" onclick="changeMouseMode()"><i class="fas fa-mouse"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog right_side"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button class="share" type="button" title="分享链接" onclick="share()"><i class="fas fa-share-nodes"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i><span id="percent">0<span>%</span></span></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div class="js-pjax" id="rightMenu"><div class="rightMenu-group rightMenu-small"><a class="rightMenu-item" href="javascript:window.history.back();"><i class="fa fa-arrow-left"></i></a><a class="rightMenu-item" href="javascript:window.history.forward();"><i class="fa fa-arrow-right"></i></a><a class="rightMenu-item" href="javascript:window.location.reload();"><i class="fa fa-refresh"></i></a><a class="rightMenu-item" href="javascript:rmf.scrollToTop();"><i class="fa fa-arrow-up"></i></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-text"><a class="rightMenu-item" href="javascript:rmf.copySelect();"><i class="fa fa-copy"></i><span>复制</span></a><a class="rightMenu-item" href="javascript:window.open(&quot;https://www.baidu.com/s?wd=&quot;+window.getSelection().toString());window.location.reload();"><i class="fa fa-search"></i><span>百度搜索</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-too"><a class="rightMenu-item" href="javascript:window.open(window.getSelection().toString());window.location.reload();"><i class="fa fa-link"></i><span>转到链接</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-paste"><a class="rightMenu-item" href="javascript:rmf.paste()"><i class="fa fa-copy"></i><span>粘贴</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-post"><a class="rightMenu-item" href="#post-comment"><i class="fas fa-comment"></i><span>空降评论</span></a><a class="rightMenu-item" href="javascript:rmf.copyWordsLink()"><i class="fa fa-link"></i><span>复制本文地址</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-to"><a class="rightMenu-item" href="javascript:rmf.openWithNewTab()"><i class="fa fa-window-restore"></i><span>新窗口打开</span></a><a class="rightMenu-item" id="menu-too" href="javascript:rmf.open()"><i class="fa fa-link"></i><span>转到链接</span></a><a class="rightMenu-item" href="javascript:rmf.copyLink()"><i class="fa fa-copy"></i><span>复制链接</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-img"><a class="rightMenu-item" href="javascript:rmf.saveAs()"><i class="fa fa-download"></i><span>保存图片</span></a><a class="rightMenu-item" href="javascript:rmf.openWithNewTab()"><i class="fa fa-window-restore"></i><span>在新窗口打开</span></a><a class="rightMenu-item" href="javascript:rmf.copyLink()"><i class="fa fa-copy"></i><span>复制图片链接</span></a></div><div class="rightMenu-group rightMenu-line"><a class="rightMenu-item" href="javascript:randomPost()"><i class="fa fa-paper-plane"></i><span>随便逛逛</span></a><a class="rightMenu-item" href="javascript:switchNightMode();"><i class="fa fa-moon"></i><span>昼夜切换</span></a><a class="rightMenu-item" href="javascript:toggleWinbox();"><i class="fas fa-cog"></i><span>美化设置</span></a><a class="rightMenu-item" href="javascript:rmf.fullScreen();"><i class="fas fa-expand"></i><span>切换全屏</span></a><a class="rightMenu-item" href="javascript:window.print();"><i class="fa-solid fa-print"></i><span>打印页面</span></a></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.staticfile.org/fancyapps-ui/4.0.31/fancybox.umd.min.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/instant.page/5.1.0/instantpage.min.js" type="module"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vanilla-lazyload/17.3.1/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())
+setTimeout(function(){preloader.endLoading();}, 5000);
+document.getElementById('loading-box').addEventListener('click',()=> {preloader.endLoading()})</script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-comments-rho.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-comments-rho.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.staticfile.org/twikoo/1.6.8/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script><script async src="https://cdn1.tianli0.top/npm/vue@2.6.14/dist/vue.min.js"></script><script async src="https://cdn1.tianli0.top/npm/element-ui@2.15.6/lib/index.js"></script><script async src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script><script defer type="text/javascript" src="https://cdn1.tianli0.top/npm/sweetalert2@8.19.0/dist/sweetalert2.all.js"></script><script async src="//npm.elemecdn.com/pace-js@1.2.4/pace.min.js"></script><script defer src="https://cdn1.tianli0.top/gh/nextapps-de/winbox/dist/winbox.bundle.min.js"></script><script async src="//at.alicdn.com/t/c/font_3586335_hsivh70x0fm.js"></script><script async src="//at.alicdn.com/t/c/font_3636804_gr02jmjr3y9.js"></script><script async src="//at.alicdn.com/t/c/font_3612150_kfv55xn3u2g.js"></script><script async src="https://cdn.wpon.cn/2022-sucai/Gold-ingot.js"></script><canvas id="universe"></canvas><canvas id="snow"></canvas><script defer src="/js/fomal.js"></script><link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdn1.tianli0.top/npm/js-heo@1.0.12/metingjs/Meting.min.js"></script><script src="https://lib.baomitu.com/pjax/0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show","#web_bg",".js-pjax","#bibi","body > title","#app","#tag-echarts","#posts-echart","#categories-echarts"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --> <script data-pjax>if(document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="width:100%;height: auto"><div id="catalog_magnet"><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの生活随笔/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍡 SnowMoonの生活随笔 (4)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの基础教程/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍼 SnowMoonの基础教程 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの计算机基础知识/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍉 SnowMoonの计算机基础知识 (4)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの刷题记录/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍟 SnowMoonの刷题记录 (31)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの嵌入式笔记/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍨 SnowMoonの嵌入式笔记 (4)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><div class="magnet_item"><a class="magnet_link" href="https://www.snowmoon.top/categories/SnowMoonの项目记录/"><div class="magnet_link_context" style=""><span style="font-weight:500;flex:1">🍥 SnowMoonの项目记录 (10)</span><span style="padding:0px 4px;border-radius: 8px;"><i class="fas fa-arrow-circle-right"></i></span></div></a></div><a class="magnet_link_more"  href="https://www.snowmoon.top/categories" style="flex:1;text-align: center;margin-bottom: 10px;">查看更多...</a></div></div>';
+    console.log('已挂载magnet')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script><style>#catalog_magnet{flex-wrap: wrap;display: flex;width:100%;justify-content:space-between;padding: 10px 10px 0 10px;align-content: flex-start;}.magnet_item{flex-basis: calc(50% - 5px);background: #e9e9e9;margin-bottom: 10px;border-radius: 8px;transition: all 0.2s ease-in-out;}.magnet_item:hover{background: var(--text-bg-hover)}.magnet_link_more{color:#555}.magnet_link{color:black}.magnet_link:hover{color:white}@media screen and (max-width: 600px) {.magnet_item {flex-basis: 100%;}}.magnet_link_context{display:flex;padding: 10px;font-size:16px;transition: all 0.2s ease-in-out;}.magnet_link_context:hover{padding: 10px 20px;}</style>
+    <style></style><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/08/09/SnowMoonの项目记录-CSAPPLAB1——Datalab-上/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_13.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-08-09</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/08/09/SnowMoonの项目记录-CSAPPLAB1——Datalab-上/&quot;);" href="javascript:void(0);" alt="">CSAPPLAB1——Datalab(上)</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/08/09/SnowMoonの项目记录-CSAPPLAB1——Datalab-上/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-自建SSR教程/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_19.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-03-04</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-自建SSR教程/&quot;);" href="javascript:void(0);" alt="">自建SSR教程</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-自建SSR教程/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/02/21/SnowMoonの基础教程-next主题美化/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_28.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-02-21</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/02/21/SnowMoonの基础教程-next主题美化/&quot;);" href="javascript:void(0);" alt="">next主题美化——背景图片、动画</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/02/21/SnowMoonの基础教程-next主题美化/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-hexo博客部署到云服务器/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_17.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-03-04</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-hexo博客部署到云服务器/&quot;);" href="javascript:void(0);" alt="">hexo博客部署到云服务器</a><div class="blog-slider__text">再怎么看我也不知道怎么描述它的啦！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2021/03/04/SnowMoonの基础教程-hexo博客部署到云服务器/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2022/08/09/Markdown语法与外挂标签写法汇总/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://haoyu-album.oss-cn-shanghai.aliyuncs.com/cover_47.webp" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-08-09</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2022/08/09/Markdown语法与外挂标签写法汇总/&quot;);" href="javascript:void(0);" alt="">Markdown语法与外挂标签写法汇总</a><div class="blog-slider__text">🥧本文汇总Markdown格式以及外挂标签在网页端的渲染效果，可作为文档进行查询</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2022/08/09/Markdown语法与外挂标签写法汇总/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '200ms');
+    arr[i].setAttribute('data-wow-offset', '30');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
