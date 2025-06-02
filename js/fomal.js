@@ -99,7 +99,7 @@ function getDistance(e1, n1, e2, n2) {
 
 function showWelcome() {
 
-  let dist = getDistance(113.34499552, 23.15537143, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
+  let dist = getDistance(113.90179922, 22.55578912, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
   let pos = ipLoacation.result.ad_info.nation;
   let ip;
   let posdesc;
@@ -232,7 +232,20 @@ function showWelcome() {
           posdesc = "茅台，学生，再塞200。";
           break;
         case "云南省": 
-          posdesc = "玉龙飞舞云缠绕，万仞冰川直耸天。";
+		  switch (ipLoacation.result.ad_info.city) {
+            case "昆明市": 
+              posdesc = "五百里滇池，奔来眼底。披襟岸帻，喜茫茫空阔无边！";
+              break;
+            case "大理市": 
+              posdesc = "苍山不墨千秋画，洱海无弦万古琴。";
+              break;
+            case "丽江市": 
+              posdesc = "玉龙卧雪秋寒早，为访幽境踏栈行。";
+              break;
+            default: 
+              posdesc = "老司机，带带我，我要上昆明！";
+              break;
+          }
           break;
         case "西藏自治区": 
           posdesc = "躺在茫茫草原上，仰望蓝天。";
