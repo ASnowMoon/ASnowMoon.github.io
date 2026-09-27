@@ -68,6 +68,7 @@ function scrollToTop() {
   //----------------------------------------------------------------
 
   /* 欢迎信息 start */
+let ipLocation;
   //get请求
 $.ajax({
   type: 'get',
@@ -78,7 +79,8 @@ $.ajax({
   },
   dataType: 'jsonp',
   success: function (res) {
-    ipLoacation = res;
+    ipLocation = res;
+    showWelcome();
   }
 })
 function getDistance(e1, n1, e2, n2) {
@@ -98,13 +100,15 @@ function getDistance(e1, n1, e2, n2) {
 }
 
 function showWelcome() {
+  const welcomeInfo = document.getElementById("welcome-info");
+  if (!welcomeInfo || !ipLocation || !ipLocation.result || !ipLocation.result.location || !ipLocation.result.ad_info) return;
 
-  let dist = getDistance(113.90179922, 22.55578912, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
-  let pos = ipLoacation.result.ad_info.nation;
+  let dist = getDistance(113.90179922, 22.55578912, ipLocation.result.location.lng, ipLocation.result.location.lat); //这里换成自己的经纬度
+  let pos = ipLocation.result.ad_info.nation;
   let ip;
   let posdesc;
     //根据国家、省份、城市信息自定义欢迎语
-  switch (ipLoacation.result.ad_info.nation) {
+  switch (ipLocation.result.ad_info.nation) {
     case "日本": 
       posdesc = "よろしく，一起去看樱花吗";
       break;
@@ -130,9 +134,9 @@ function showWelcome() {
       posdesc = "拾起一片枫叶赠予你";
       break;
     case "中国": 
-      pos = ipLoacation.result.ad_info.province + " " + ipLoacation.result.ad_info.city + " " + ipLoacation.result.ad_info.district;
-      ip = ipLoacation.result.ip;
-      switch (ipLoacation.result.ad_info.province) {
+      pos = ipLocation.result.ad_info.province + " " + ipLocation.result.ad_info.city + " " + ipLocation.result.ad_info.district;
+      ip = ipLocation.result.ip;
+      switch (ipLocation.result.ad_info.province) {
         case "北京市": 
           posdesc = "北——京——欢迎你~~~";
           break;
@@ -161,7 +165,7 @@ function showWelcome() {
           posdesc = "众所周知，中国只有两个城市。";
           break;
         case "江苏省": 
-          switch (ipLoacation.result.ad_info.city) {
+          switch (ipLocation.result.ad_info.city) {
             case "南京市": 
               posdesc = "这是我挺想去的城市啦。";
               break;
@@ -177,7 +181,7 @@ function showWelcome() {
           posdesc = "东风渐绿西湖柳，雁已还人未南归。";
           break;
         case "河南省": 
-          switch (ipLoacation.result.ad_info.city) {
+          switch (ipLocation.result.ad_info.city) {
             case "郑州市": 
               posdesc = "豫州之域，天地之中。";
               break;
@@ -232,7 +236,7 @@ function showWelcome() {
           posdesc = "茅台，学生，再塞200。";
           break;
         case "云南省": 
-		  switch (ipLoacation.result.ad_info.city) {
+		  switch (ipLocation.result.ad_info.city) {
             case "昆明市": 
               posdesc = "五百里滇池，奔来眼底。披襟岸帻，喜茫茫空阔无边！";
               break;
@@ -297,13 +301,13 @@ function showWelcome() {
 
   try {
       //自定义文本和需要放的位置
-    document.getElementById("welcome-info").innerHTML = 
+    welcomeInfo.innerHTML = 
       `<b><center>🎉 欢迎信息 🎉</center>&emsp;&emsp;欢迎来自 <span style="color:var(--theme-color)">${pos}</span> 的小伙伴，${timeChange}您现在距离站长约 <span style="color:var(--theme-color)">${dist}</span> 公里，当前的IP地址为： <span style="color:var(--theme-color)">${ip}</span>， ${posdesc}</b>`;
   } catch (err) {
       // console.log("Pjax无法获取#welcome-info元素🙄🙄🙄")
   }
 }
-window.onload = showWelcome;
+window.addEventListener('load', showWelcome);
   // 如果使用了pjax在加上下面这行代码
 document.addEventListener('pjax:complete', showWelcome);
 
@@ -358,7 +362,7 @@ function debounce(fn, time) {
   // 复制提醒
 document.addEventListener("copy", function () {
   debounce(function () {
-    new Vue({
+    fomalNotificationBridge({
       data: function () {
         this.$notify({
           title: "哎嘿！复制成功🍬",
@@ -379,7 +383,7 @@ document.addEventListener("copy", function () {
 document.onkeydown = function (e) {
   if (123 == e.keyCode || (e.ctrlKey && e.shiftKey && (74 === e.keyCode || 73 === e.keyCode || 67 === e.keyCode)) || (e.ctrlKey && 85 === e.keyCode)) {
     debounce(function () {
-      new Vue({
+      fomalNotificationBridge({
         data: function () {
           this.$notify({
             title: "你已被发现😜",
@@ -1084,7 +1088,7 @@ function changeMouseMode() {
     mouseMode = "off";
     localStorage.setItem("mouse", "off");
     debounce(function () {
-      new Vue({
+      fomalNotificationBridge({
         data: function () {
           this.$notify({
             title: "切换右键模式成功🍔",
@@ -1102,7 +1106,7 @@ function changeMouseMode() {
     mouseMode = "on";
     localStorage.setItem("mouse", "on");
     debounce(function () {
-      new Vue({
+      fomalNotificationBridge({
         data: function () {
           this.$notify({
             title: "切换右键模式成功🍔",
@@ -1229,13 +1233,13 @@ function switchNightMode() {
       document.getElementById("moon").style.opacity = "1";
     }, 1000);
 
-    activateDarkMode()
-    saveToLocal.set('theme', 'dark', 2)
+    btf.activateDarkMode()
+    btf.saveToLocal.set('theme', 'dark', 2)
       // GLOBAL_CONFIG.Snackbar !== undefined && btf.snackbarShow(GLOBAL_CONFIG.Snackbar.day_to_night)
     document.getElementById('modeicon').setAttribute('xlink:href', '#icon-sun')
       // 延时弹窗提醒
     setTimeout(() => {
-      new Vue({
+      fomalNotificationBridge({
         data: function () {
           this.$notify({
             title: "关灯啦🌙",
@@ -1258,11 +1262,11 @@ function switchNightMode() {
       document.getElementById("moon").style.opacity = "0";
     }, 1000);
 
-    activateLightMode()
-    saveToLocal.set('theme', 'light', 2)
+    btf.activateLightMode()
+    btf.saveToLocal.set('theme', 'light', 2)
     document.querySelector('body').classList.add('DarkMode'), document.getElementById('modeicon').setAttribute('xlink:href', '#icon-moon')
     setTimeout(() => {
-      new Vue({
+      fomalNotificationBridge({
         data: function () {
           this.$notify({
             title: "开灯啦🌞",
@@ -1278,6 +1282,17 @@ function switchNightMode() {
     }, 2000)
   }
     // handle some cases
+  // Butterfly 5.7 keeps theme integrations in globalFn rather than globals.
+  const fomalThemeChange = window.globalFn && window.globalFn.themeChange;
+  if (fomalThemeChange) {
+    const nextMode = nowMode === 'light' ? 'dark' : 'light';
+    Object.keys(fomalThemeChange).forEach((key) => {
+      const handler = fomalThemeChange[key];
+      if (typeof handler !== 'function') return;
+      if (key === 'disqus' || key === 'disqusjs') setTimeout(() => handler(nextMode), 300);
+      else handler(nextMode);
+    });
+  }
   typeof utterancesTheme === 'function' && utterancesTheme()
   typeof FB === 'object' && window.loadFBComment()
   window.DISQUS && document.getElementById('disqus_thread').children.length && setTimeout(() => window.disqusReset(), 200)
@@ -1296,7 +1311,7 @@ function share_() {
     var title = document.title;
     var subTitle = title.endsWith("| SnowMoon🍓") ? title.substring(0, title.length - 14) : title;
     navigator.clipboard.writeText('SnowMoon🍓的站内分享\n标题：' + subTitle + '\n链接：' + url + '\n欢迎来访！🍭🍭🍭');
-    new Vue({
+    fomalNotificationBridge({
       data: function () {
         this.$notify({
           title: "成功复制分享信息🎉",
@@ -2900,7 +2915,7 @@ if (localStorage.getItem("reset_4") == undefined) {
   }
   clearItem();
   setTimeout(function () {
-    new Vue({
+    fomalNotificationBridge({
       data: function () {
         this.$notify({
           title: "提示🍒",
@@ -3187,11 +3202,17 @@ let unsplash = "url(https://source.unsplash.com/random/1920x1080/)";
 if (localStorage.getItem("blogbg") != undefined) {
   setBg(localStorage.getItem("blogbg"));
 } else {
-  document.getElementById("defineBg").innerText = `:root{
-    --default-bg: url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/light.jpg);
-    --darkmode-bg: url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/dark.jpg);
-    --mobileday-bg: url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/m_light.webp);
-    --mobilenight-bg: url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/m_dark.webp);
+  const fomalBackground = window.FOMAL_BACKGROUND || {
+  default: 'url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/light.jpg)',
+  darkmode: 'url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/dark.jpg)',
+  mobileday: 'url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/m_light.webp)',
+  mobilenight: 'url(https://haoyu-album.oss-cn-shanghai.aliyuncs.com/m_dark.webp)'
+};
+document.getElementById("defineBg").innerText = `:root{
+    --default-bg: ${fomalBackground.default};
+    --darkmode-bg: ${fomalBackground.darkmode};
+    --mobileday-bg: ${fomalBackground.mobileday};
+    --mobilenight-bg: ${fomalBackground.mobilenight};
   }`;
 }
   // 切换背景主函数
@@ -3222,7 +3243,7 @@ function getPicture_() {
     var link = "url(" + document.getElementById("pic-link").value + ")";
     changeBg(link);
       // 提示切换成功
-    new Vue({
+    fomalNotificationBridge({
       data: function () {
         this.$notify({
           title: "可以啦🍨",
@@ -3237,7 +3258,7 @@ function getPicture_() {
     })
   }).catch(() => {
       // 无效的图片链接，提示无效
-    new Vue({
+    fomalNotificationBridge({
       data: function () {
         this.$notify({
           title: "链接不对🤣",
@@ -3389,8 +3410,7 @@ function createWinbox() {
 
 
 <h2>二、字体设置</h2>
-<div class="note warning modern"><p>非商免字体未经授权只能个人使用。本站为完全非商业、非盈利性质的网站，平时用于个人学习交流，如有侵权请联系站长删除，谢谢！ —— 致版权方</p>
-</div>
+{% note warning modern %}非商免字体未经授权只能个人使用。本站为完全非商业、非盈利性质的网站，平时用于个人学习交流，如有侵权请联系站长删除，谢谢！ —— 致版权方{% endnote %}
 <p id="swfs">
 <a class="swf" id="swf_ZhuZiAWan" href="javascript:;" rel="noopener external nofollow" style="font-family:'ZhuZiAWan'!important;color:black" onclick="setFont('ZhuZiAWan')">筑紫A丸标准体2.0</a>
 <a class="swf" id="swf_HYTMR" href="javascript:;" rel="noopener external nofollow" style="font-family:'HYTMR'!important;color:black" onclick="setFont('HYTMR')">汉仪唐美人</a>
@@ -3419,68 +3439,97 @@ function createWinbox() {
 <center><button onclick="resetBg()" style="background:var(--theme-color);display:block;width:35%;padding:15px 0;border-radius:30px;color:white;"><i class="fa-solid fa-arrows-rotate"></i>&nbsp;恢复默认背景</button></center>
 
 <h3>1. 二次元</h3>
-<details class="folding-tag" cyan><summary> 查看二次元背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)')"></a></div>
-              </div>
-            </details>
+{% folding cyan, 查看二次元背景 %}
+<div class="bgbox">
+<a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)')"></a>
+
+</div>
+{% endfolding %}
 
 
 <h3>2. 风景</h3>
 
-<details class="folding-tag" cyan><summary> 查看风景背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/fj1.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/fj1.webp)')"></a></div>
-              </div>
-            </details>
+{% folding cyan, 查看风景背景 %}
+<div class="bgbox">
+<a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/fj1.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/fj1.webp)')"></a>
+
+
+</div>
+{% endfolding %}
 
 <h3>3. 萌宠</h3>
 
-<details class="folding-tag" cyan><summary> 查看萌宠背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/mc1.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/mc1.webp)')"></a></div>
-              </div>
-            </details>
+{% folding cyan, 查看萌宠背景 %}
+<div class="bgbox">
+<a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/mc1.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/mc1.webp)')"></a>
+
+</div>
+{% endfolding %}
 
 <h3>4. 渐变色</h3>
-<details class="folding-tag" cyan><summary> 查看渐变色背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to right, #544a7d, #ffd452)" onclick="changeBg('linear-gradient(to right, #544a7d, #ffd452)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4)" onclick="changeBg('linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to left, #654ea3, #eaafc8)" onclick="changeBg('linear-gradient(to left, #654ea3, #eaafc8)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #feac5e, #c779d0, #4bc0c8)" onclick="changeBg('linear-gradient(to top, #feac5e, #c779d0, #4bc0c8)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #d3959b, #bfe6ba)" onclick="changeBg('linear-gradient(to top, #d3959b, #bfe6ba)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #8360c3, #2ebf91)" onclick="changeBg('linear-gradient(to top, #8360c3, #2ebf91)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #108dc7, #ef8e38)" onclick="changeBg('linear-gradient(to top, #108dc7, #ef8e38)')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #355c7d, #6c5b7b, #c06c84)" onclick="changeBg('linear-gradient(to top, #355c7d, #6c5b7b, #c06c84)')"></a></div>
-              </div>
-            </details>
+{% folding cyan, 查看渐变色背景 %}
+<div class="bgbox">
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to right, #544a7d, #ffd452)" onclick="changeBg('linear-gradient(to right, #544a7d, #ffd452)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4)" onclick="changeBg('linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to left, #654ea3, #eaafc8)" onclick="changeBg('linear-gradient(to left, #654ea3, #eaafc8)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #feac5e, #c779d0, #4bc0c8)" onclick="changeBg('linear-gradient(to top, #feac5e, #c779d0, #4bc0c8)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #d3959b, #bfe6ba)" onclick="changeBg('linear-gradient(to top, #d3959b, #bfe6ba)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #8360c3, #2ebf91)" onclick="changeBg('linear-gradient(to top, #8360c3, #2ebf91)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #108dc7, #ef8e38)" onclick="changeBg('linear-gradient(to top, #108dc7, #ef8e38)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: linear-gradient(to top, #355c7d, #6c5b7b, #c06c84)" onclick="changeBg('linear-gradient(to top, #355c7d, #6c5b7b, #c06c84)')"></a>
+</div>
+{% endfolding %}
 
 
 <h3>5. 纯色</h3>
-<details class="folding-tag" cyan><summary> 查看纯色背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ecb1b1" onclick="changeBg('#ecb1b1')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #d3ebac" onclick="changeBg('#d3ebac')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ace9ce" onclick="changeBg('#ace9ce')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #c1ebea" onclick="changeBg('#c1ebea')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #dee7f1" onclick="changeBg('#dee7f1')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #e9e3f2" onclick="changeBg('#e9e3f2')"></a><a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #f7eff5" onclick="changeBg('#f7eff5')"></a><input type="color" id="define_colors" href="javascript:;" rel="noopener external nofollow" class="box" autocomplete="on" value="${defineColor}" oninput="changeBgColor()"></input></div>
-              </div>
-            </details>
+{% folding cyan, 查看纯色背景 %}
+<div class="bgbox">
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ecb1b1" onclick="changeBg('#ecb1b1')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #d3ebac" onclick="changeBg('#d3ebac')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #ace9ce" onclick="changeBg('#ace9ce')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #c1ebea" onclick="changeBg('#c1ebea')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #dee7f1" onclick="changeBg('#dee7f1')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #e9e3f2" onclick="changeBg('#e9e3f2')"></a>
+<a href="javascript:;" rel="noopener external nofollow" class="box" style="background: #f7eff5" onclick="changeBg('#f7eff5')"></a>
+<input type="color" id="define_colors" href="javascript:;" rel="noopener external nofollow" class="box" autocomplete="on" value="${defineColor}" oninput="changeBgColor()"></input>
+</div>
+{% endfolding %}
 
 
 
 <h3>6. 适配手机</h3>
-<details class="folding-tag" cyan><summary> 查看适配手机的背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/mb4.webp)" class="pimgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/mb4.webp)')"></a></div>
-              </div>
-            </details>
+{% folding cyan, 查看适配手机的背景 %}
+<div class="bgbox">
+<a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/mb4.webp)" class="pimgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/mb4.webp)')"></a>
+
+</div>
+{% endfolding %}
 
 
 <h3>7. 壁纸API</h3>
-<details class="folding-tag" cyan><summary> 查看壁纸API系列背景 </summary>
-              <div class='content'>
-              <div class="bgbox"><a id="bingDayBox" rel="noopener external nofollow" style="background-image: ${bingDayBg}" class="box apiBox" onclick="changeBg('${bingDayBg}')"></a><a id="bingHistoryBox" rel="noopener external nofollow" style="background-image: ${bingHistoryBg}" class="box apiBox" onclick="changeBg('${bingHistoryBg}')"></a><a id="EEEDogBox" rel="noopener external nofollow" style="background-image: ${EEEDog}" class="box apiBox" onclick="changeBg('${EEEDog}')"></a><a id="seovxBox" rel="noopener external nofollow" style="background-image: ${seovx}" class="box apiBox" onclick="changeBg('${seovx}')"></a><a id="picsumBox" rel="noopener external nofollow" style="background-image: ${picsum}" class="box apiBox" onclick="changeBg('${picsum}')"></a><a id="waiBizhiBox" rel="noopener external nofollow" style="background-image: ${waiBizhi}" class="box apiBox" onclick="changeBg('${waiBizhi}')"></a><a id="btstuBox" rel="noopener external nofollow" style="background-image: ${btstu}" class="box apiBox" onclick="changeBg('${btstu}')"></a><a id="unsplashBox" rel="noopener external nofollow" style="background-image: ${unsplash}" class="box apiBox" onclick="changeBg('${unsplash}')"></a></div>
-              </div>
-            </details>
+{% folding cyan, 查看壁纸API系列背景 %}
+<div class="bgbox">
+<a id="bingDayBox" rel="noopener external nofollow" style="background-image: ${bingDayBg}" class="box apiBox" onclick="changeBg('${bingDayBg}')"></a>
+<a id="bingHistoryBox" rel="noopener external nofollow" style="background-image: ${bingHistoryBg}" class="box apiBox" onclick="changeBg('${bingHistoryBg}')"></a>
+<a id="EEEDogBox" rel="noopener external nofollow" style="background-image: ${EEEDog}" class="box apiBox" onclick="changeBg('${EEEDog}')"></a>
+<a id="seovxBox" rel="noopener external nofollow" style="background-image: ${seovx}" class="box apiBox" onclick="changeBg('${seovx}')"></a>
+<a id="picsumBox" rel="noopener external nofollow" style="background-image: ${picsum}" class="box apiBox" onclick="changeBg('${picsum}')"></a>
+<a id="waiBizhiBox" rel="noopener external nofollow" style="background-image: ${waiBizhi}" class="box apiBox" onclick="changeBg('${waiBizhi}')"></a>
+<a id="btstuBox" rel="noopener external nofollow" style="background-image: ${btstu}" class="box apiBox" onclick="changeBg('${btstu}')"></a>
+<a id="unsplashBox" rel="noopener external nofollow" style="background-image: ${unsplash}" class="box apiBox" onclick="changeBg('${unsplash}')"></a>
+</div>
+{% endfolding %}
 
 
 <h3>8. 自定义背景</h3>
-<details class="folding-tag" cyan><summary> 设置自定义背景 </summary>
-              <div class='content'>
-              <p><center><input type="text" id="pic-link" size="70%" maxlength="1000" placeholder="请输入有效的图片链接，如 https://source.fomal.cc/img/home_bg.webp"></center></p><p><center><button type="button" onclick="getPicture()" style="background:var(--theme-color);width:35%;padding: 5px 0px 7px 0px;border-radius:30px;color:white;line-height:2;">🌈切换背景🌈</button></center></p>
-              </div>
-            </details>
+{% folding cyan, 设置自定义背景 %}
+<p><center>
+<input type="text" id="pic-link" size="70%" maxlength="1000" placeholder="请输入有效的图片链接，如 https://source.fomal.cc/img/home_bg.webp">
+</center></p>
+<p><center>
+<button type="button" onclick="getPicture()" style="background:var(--theme-color);width:35%;padding: 5px 0px 7px 0px;border-radius:30px;color:white;line-height:2;">🌈切换背景🌈</button>
+</center></p>
+{% endfolding %}
 
 <br>
 <center><div style="font-size:1.2em;color:var(--theme-color);font-weight:bold;">------ ( •̀ ω •́ )y 到底啦 ------</div></center>
